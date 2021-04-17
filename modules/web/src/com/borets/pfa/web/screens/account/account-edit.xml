@@ -16,6 +16,7 @@
         <form id="form" dataContainer="accountDc">
             <column width="350px">
                 <textField id="nameField" property="name"/>
+                <lookupField id="typeField" property="type"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

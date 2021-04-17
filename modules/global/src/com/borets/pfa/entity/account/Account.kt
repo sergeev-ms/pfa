@@ -12,6 +12,15 @@ open class Account : StandardEntity() {
     @Column(name = "NAME")
     var name: String? = null
 
+    @Column(name = "TYPE_")
+    private var type: String? = null
+
+    fun getType(): Type? = type?.let { Type.fromId(it) }
+
+    fun setType(type: Type?) {
+        this.type = type?.id
+    }
+
     companion object {
         private const val serialVersionUID = -5049196871514871532L
     }
