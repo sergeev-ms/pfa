@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CubaPluginProjectSettings">
+    <option name="repeatEntityPackageScreens" value="true" />
+    <option name="groupUpdateScriptsBy" value="MONTH" />
+    <option name="defaultFieldGroupColumnWidth" value="450px" />
     <option name="stateVersion" value="1" />
     <option name="scaffoldingLanguage" value="Kotlin" />
   </component>

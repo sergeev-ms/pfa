@@ -2,6 +2,6 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
     <persistence-unit name="pfa" transaction-type="RESOURCE_LOCAL">
 
-        <class>com.borets.pfa.entity.Account</class>
+        <class>com.borets.pfa.entity.account.Account</class>
     </persistence-unit>
 </persistence>

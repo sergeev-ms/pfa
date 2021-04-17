@@ -1,4 +1,4 @@
-package com.borets.pfa.entity
+package com.borets.pfa.entity.account
 
 import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity

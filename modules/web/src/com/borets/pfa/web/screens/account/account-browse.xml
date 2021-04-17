@@ -6,7 +6,7 @@
         messagesPack="com.borets.pfa.web.screens.account">
     <data readOnly="true">
         <collection id="accountsDc"
-                    class="com.borets.pfa.entity.Account">
+                    class="com.borets.pfa.entity.account.Account">
             <view extends="_local"/>
             <loader id="accountsDl">
                 <query>
