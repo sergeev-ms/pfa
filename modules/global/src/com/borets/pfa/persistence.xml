@@ -3,5 +3,7 @@
     <persistence-unit name="pfa" transaction-type="RESOURCE_LOCAL">
 
         <class>com.borets.pfa.entity.account.Account</class>
+        <class>com.borets.pfa.entity.activity.Activity</class>
+        <class>com.borets.pfa.entity.activity.ActivityDetail</class>
     </persistence-unit>
 </persistence>
