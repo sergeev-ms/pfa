@@ -2,5 +2,8 @@
 <metadata xmlns="http://schemas.haulmont.com/cuba/metadata.xsd">
 
     <metadata-model root-package="com.borets.pfa" namespace="pfa"/>
+    <datatypes>
+        <datatype id="yearMonth" class="com.borets.pfa.datatype.YearMonthDataType"/>
+    </datatypes>
 
 </metadata>
