@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://activityInput.caption"
+        messagesPack="com.borets.pfa.web.screens.activity.activity.input">
+    <data>
+        <keyValueInstance id="activityInputDc">
+            <properties>
+                <property name="account" class="com.borets.pfa.entity.account.Account"/>
+                <property name="year" datatype="int"/>
+                <property name="yearMonth" datatype="yearMonth"/>
+                <property name="recordType" class="com.borets.pfa.entity.activity.RecordType"/>
+            </properties>
+        </keyValueInstance>
+        <keyValueCollection id="detailsDc">
+            <properties>
+                <property name="value" datatype="int"/>
+            </properties>
+        </keyValueCollection>
+        <collection id="accountsDc" class="com.borets.pfa.entity.account.Account" view="_minimal">
+            <loader>
+                <query>from pfa_Account e</query>
+            </loader>
+        </collection>
+    </data>
+    <layout expand="detailsGb" spacing="true">
+        <groupBox id="headerGb" caption="msg://headerGb.caption">
+            <form dataContainer="activityInputDc">
+                <column>
+                    <lookupField id="accountField" property="account" optionsContainer="accountsDc"/>
+                    <lookupField id="yearField" property="year"/>
+                    <lookupField id="yearMonthField" property="yearMonth"/>
+                    <lookupField id="recordTypeField" property="recordType"
+                                 optionsEnum="com.borets.pfa.entity.activity.RecordType"/>
+                </column>
+            </form>
+        </groupBox>
+        <groupBox id="detailsGb" caption="msg://detailsGb.caption" width="100%" expand="detailDg">
+            <dataGrid id="detailDg" dataContainer="detailsDc" editorEnabled="true" width="100%"
+                      editorBuffered="false">
+                <columns>
+                    <column property="value"/>
+                </columns>
+            </dataGrid>
+        </groupBox>
+    </layout>
+</window>
