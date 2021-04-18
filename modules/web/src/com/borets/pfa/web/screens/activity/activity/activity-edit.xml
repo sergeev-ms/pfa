@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        caption="msg://activityEdit.caption"
-        focusComponent="form"
+        caption="msg://activityEdit.caption" focusComponent="form"
         messagesPack="com.borets.pfa.web.screens.activity.activity">
     <data>
-        <instance id="activityDc"
-                  class="com.borets.pfa.entity.activity.Activity">
+        <instance id="activityDc" class="com.borets.pfa.entity.activity.Activity">
             <view extends="_local">
                 <property name="account" view="_minimal"/>
-                <property name="details" view="_minimal"/>
+                <property name="details" view="_local"/>
             </view>
             <loader/>
             <collection id="detailsDc" property="details"/>
         </instance>
     </data>
-    <dialogMode height="600"
-                width="800"/>
-    <layout expand="editActions" spacing="true">
+    <dialogMode height="600" width="800"/>
+    <layout expand="detailsBox" spacing="true">
         <form id="form" dataContainer="activityDc">
             <column width="450px">
                 <pickerField id="accountField" property="account">
@@ -28,14 +25,19 @@
                 <textField id="yearField" property="year"/>
             </column>
         </form>
-        <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.activity/Activity.details">
-            <table id="detailsTable" dataContainer="detailsDc" width="100%" height="200px">
+        <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.activity/Activity.details" expand="detailsTable">
+            <table id="detailsTable" dataContainer="detailsDc" width="100%">
                 <actions>
                     <action id="create" type="create"/>
                     <action id="edit" type="edit"/>
                     <action id="remove" type="remove"/>
                 </actions>
                 <columns>
+                    <column id="recordType"/>
+                    <column id="contractType"/>
+                    <column id="jobType"/>
+                    <column id="month"/>
+                    <column id="value"/>
                 </columns>
                 <buttonsPanel>
                     <button action="detailsTable.create"/>
