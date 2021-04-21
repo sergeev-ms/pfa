@@ -46,9 +46,10 @@ create table PFA_ACTIVITY_DETAIL (
     RECORD_TYPE varchar(50),
     CONTRACT_TYPE varchar(50),
     JOB_TYPE varchar(50),
-    YEAR_ integer,
-    MONTH_ integer,
-    VALUE_ decimal(19, 2),
+    WELL_EQUIP varchar(50),
+    WELL_TAG varchar(50),
+    YEAR_MONTH_ varchar(10),
+    VALUE_ integer,
     ACTIVITY_ID varchar(36) not null,
     --
     primary key (ID)

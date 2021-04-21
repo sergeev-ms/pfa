@@ -3,7 +3,7 @@
 
     <metadata-model root-package="com.borets.pfa" namespace="pfa"/>
     <datatypes>
-        <datatype id="yearMonth" class="com.borets.pfa.datatype.YearMonthDataType"/>
+        <datatype id="yearMonth" class="com.borets.pfa.datatype.YearMonthDataType" sqlType="varchar(10)"/>
     </datatypes>
 
 </metadata>

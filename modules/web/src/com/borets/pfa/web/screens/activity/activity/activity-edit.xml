@@ -36,7 +36,6 @@
                     <column id="recordType"/>
                     <column id="contractType"/>
                     <column id="jobType"/>
-                    <column id="month"/>
                     <column id="value"/>
                 </columns>
                 <buttonsPanel>

@@ -1,7 +1,8 @@
 package com.borets.pfa.entity.activity
 
+import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.cuba.core.entity.StandardEntity
-import java.math.BigDecimal
+import java.time.YearMonth
 import javax.persistence.*
 
 @Table(name = "PFA_ACTIVITY_DETAIL")
@@ -16,18 +17,34 @@ open class ActivityDetail : StandardEntity() {
     @Column(name = "JOB_TYPE")
     private var jobType: String? = null
 
-    @Column(name = "YEAR_")
-    var year: Int? = null
+    @Column(name = "WELL_EQUIP")
+    private var wellEquip: String? = null
 
-    @Column(name = "MONTH_")
-    var month: Int? = null
+    @Column(name = "WELL_TAG")
+    private var wellTag: String? = null
+
+    @MetaProperty(datatype = "yearMonth")
+    @Column(name = "YEAR_MONTH_")
+    var yearMonth: YearMonth? = null
 
     @Column(name = "VALUE_")
-    var value: BigDecimal? = null
+    var value: Int? = null
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ACTIVITY_ID")
     var activity: Activity? = null
+
+    fun getWellTag(): WellTag? = wellTag?.let { WellTag.fromId(it) }
+
+    fun setWellTag(wellTag: WellTag?) {
+        this.wellTag = wellTag?.id
+    }
+
+    fun getWellEquip(): WellEquip? = wellEquip?.let { WellEquip.fromId(it) }
+
+    fun setWellEquip(wellEquip: WellEquip?) {
+        this.wellEquip = wellEquip?.id
+    }
 
     fun getJobType(): JobType? = jobType?.let { JobType.fromId(it) }
 

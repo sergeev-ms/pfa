@@ -18,8 +18,6 @@
                 <lookupField id="recordTypeField" property="recordType"/>
                 <lookupField id="contractTypeField" property="contractType"/>
                 <lookupField id="jobTypeField" property="jobType"/>
-                <textField id="yearField" property="year"/>
-                <textField id="monthField" property="month"/>
                 <textField id="valueField" property="value"/>
             </column>
         </form>
