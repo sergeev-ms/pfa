@@ -1,22 +1,18 @@
 package com.borets.pfa.web.screens.activity.activity.input
 
-import com.borets.pfa.datatype.YearMonthDataType
-import com.haulmont.chile.core.datatypes.Datatype
-import com.haulmont.chile.core.datatypes.DatatypeRegistry
-import com.haulmont.chile.core.model.MetaPropertyPath
 import com.haulmont.cuba.core.app.keyvalue.KeyValueMetaProperty
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.Metadata
 import com.haulmont.cuba.core.global.TimeSource
+import com.haulmont.cuba.core.global.UserSessionSource
 import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.*
-import com.haulmont.cuba.gui.components.data.ValueSource
 import com.haulmont.cuba.gui.components.data.options.ListOptions
 import com.haulmont.cuba.gui.model.KeyValueCollectionContainer
 import com.haulmont.cuba.gui.screen.*
 import com.haulmont.cuba.web.gui.components.renderers.WebComponentRenderer
-import java.math.BigDecimal
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @UiController("pfa_ActivityInput")
@@ -25,6 +21,12 @@ import javax.inject.Inject
 class ActivityInput : Screen() {
     @Inject
     private lateinit var timeSource: TimeSource
+    @Inject
+    private lateinit var uiComponents: UiComponents
+    @Inject
+    private lateinit var userSessionSource: UserSessionSource
+    @Inject
+    private lateinit var metadata: Metadata
 
     @Inject
     private lateinit var detailsDc: KeyValueCollectionContainer
@@ -32,20 +34,12 @@ class ActivityInput : Screen() {
     @Inject
     private lateinit var yearField: LookupField<Int>
 
+
     @Inject
     private lateinit var yearMonthField: LookupField<YearMonth>
 
     @Inject
     private lateinit var detailDg: DataGrid<KeyValueEntity>
-
-    @Inject
-    private lateinit var metadata: Metadata
-
-    @Inject
-    private lateinit var datatypeRegistry: DatatypeRegistry
-
-    @Inject
-    private lateinit var uiComponents: UiComponents
 
 
     @Subscribe
@@ -119,9 +113,8 @@ class ActivityInput : Screen() {
                     })
                     .apply {
                         renderer = WebComponentRenderer<KeyValueEntity>()
+                        caption = month.format(DateTimeFormatter.ofPattern("MMM yy", userSessionSource.locale))
                     }
-
-
         }
     }
 
