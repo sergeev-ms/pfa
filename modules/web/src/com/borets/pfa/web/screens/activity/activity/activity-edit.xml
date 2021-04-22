@@ -37,6 +37,7 @@
                     <column id="recordType"/>
                     <column id="contractType"/>
                     <column id="jobType"/>
+                    <column id="yearMonth"/>
                     <column id="value"/>
                 </columns>
                 <buttonsPanel>
