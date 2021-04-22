@@ -1,4 +1,3 @@
-
 buildscript {
     ext.cubaVersion = '7.2.13'
     ext.kotlinVersion = '1.3.61'
@@ -10,7 +9,7 @@ buildscript {
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
-        
+
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
@@ -42,7 +41,7 @@ dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.4.1'
+def mssql = 'com.microsoft.sqlserver:mssql-jdbc:7.2.2.jre8'
 
 configure([globalModule, coreModule, webModule]) {
     apply(plugin: 'java')
@@ -51,12 +50,12 @@ configure([globalModule, coreModule, webModule]) {
     apply(plugin: 'org.jetbrains.kotlin.jvm')
 
     dependencies {
-            testCompile('org.junit.jupiter:junit-jupiter-api:5.5.2')
-            testCompile('org.junit.jupiter:junit-jupiter-engine:5.5.2')
-            testCompile('org.junit.vintage:junit-vintage-engine:5.5.2')  
-            compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-            compile("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-        }
+        testCompile('org.junit.jupiter:junit-jupiter-api:5.5.2')
+        testCompile('org.junit.jupiter:junit-jupiter-engine:5.5.2')
+        testCompile('org.junit.vintage:junit-vintage-engine:5.5.2')
+        compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+        compile("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    }
 
     task sourceJar(type: Jar) {
         from file('src')
@@ -68,14 +67,14 @@ configure([globalModule, coreModule, webModule]) {
 
     artifacts {
         archives sourceJar
-    } 
+    }
     test {
         useJUnitPlatform()
     }
 
     compileKotlin {
         kotlinOptions {
-            jvmTarget=11
+            jvmTarget = 11
             freeCompilerArgs = ['-Xjvm-default=enable']
         }
     }
@@ -107,8 +106,8 @@ configure(coreModule) {
     dependencies {
         compile(globalModule)
         compileOnly(servletApi)
-        jdbc(hsql)
-        testRuntime(hsql)
+        jdbc(mssql) { exclude(group: 'com.microsoft.azure', module: 'azure-keyvault') }
+        testRuntime(mssql) { exclude(group: 'com.microsoft.azure', module: 'azure-keyvault') }
     }
 
     task cleanConf(description: 'Cleans up conf directory', type: Delete) {
