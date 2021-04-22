@@ -34,8 +34,11 @@
                                  optionsEnum="com.borets.pfa.entity.activity.RecordType"/>
                 </column>
                 <column>
-                    <lookupField id="yearField" property="year"/>
+                    <lookupField id="yearField" property="year" required="true"/>
                     <lookupField id="yearMonthField" property="yearMonth"/>
+                </column>
+                <column width="150px">
+                    <linkButton id="showPrevDataBtn" caption="msg://showPrevDataBtn.caption"/>
                 </column>
             </form>
         </groupBox>

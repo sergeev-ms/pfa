@@ -11,6 +11,16 @@
             <loader id="activitiesDl">
                 <query>
                     <![CDATA[select e from pfa_Activity e]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>e.account = :account</c:where>
+                            </c:jpql>
+                            <c:jpql>
+                                <c:where>e.year = :year</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
                 </query>
             </loader>
         </collection>

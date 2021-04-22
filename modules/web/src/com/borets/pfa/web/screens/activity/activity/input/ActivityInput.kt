@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.app.keyvalue.KeyValueMetaProperty
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.*
 import com.haulmont.cuba.gui.Notifications
+import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.components.data.ValueSource
@@ -18,12 +19,6 @@ import com.haulmont.cuba.web.gui.components.renderers.WebComponentRenderer
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-
-private val mutableList: MutableList<YearMonth>
-    get() {
-        val months = mutableListOf<YearMonth>()
-        return months
-    }
 
 @UiController("pfa_ActivityInput")
 @UiDescriptor("activity-input.xml")
@@ -39,6 +34,12 @@ class ActivityInput : Screen() {
     private lateinit var dataManager: DataManager
     @Inject
     private lateinit var screenValidation: ScreenValidation
+    @Inject
+    private lateinit var notifications: Notifications
+    @Inject
+    private lateinit var messageBundle: MessageBundle
+    @Inject
+    private lateinit var screenBuilders: ScreenBuilders
 
     @Inject
     private lateinit var activityInputDc: KeyValueContainer
@@ -56,14 +57,9 @@ class ActivityInput : Screen() {
     private lateinit var createActivityBtn: Button
 
     private val months = mutableListOf<YearMonth>()
-
     private val commitContext : CommitContext = CommitContext()
+    private val prevValuesMap : MutableMap<String, Int> = mutableMapOf()
 
-    @Inject
-    private lateinit var notifications: Notifications
-
-    @Inject
-    private lateinit var messageBundle: MessageBundle
 
 
     @Subscribe
@@ -92,7 +88,7 @@ class ActivityInput : Screen() {
     @Subscribe("yearMonthField")
     private fun onYearMonthFieldValueChange(event: HasValue.ValueChangeEvent<YearMonth>) {
         event.value?.let {
-            addMonthsToDetails(it, 12)
+            addMonthsToDetails(it, 14)
         }
     }
 
@@ -140,6 +136,7 @@ class ActivityInput : Screen() {
                                     event.item.setValue(month.toString(), it.value)
                                 }
                                 value = event.item.getValue(month.toString())
+                                inputPrompt = getFieldInputPrompt(event.item, month.toString())
                             }
                             return textField
                         }
@@ -162,12 +159,8 @@ class ActivityInput : Screen() {
 
     @Subscribe("createActivityBtn")
     private fun onCreateActivityClick(event: Button.ClickEvent) {
-        screenValidation.validateUiComponents(headerForm).also {
-            if (!it.isEmpty) {
-                screenValidation.showValidationErrors(this, it)
-                return
-            }
-        }
+        if (!validateScreen())
+            return
 
         val activity = createActivity(activityInputDc.item)
         createDetails(activity)
@@ -178,6 +171,15 @@ class ActivityInput : Screen() {
                 .withCaption(messageBundle.getMessage("successNotification.caption"))
                 .show()
 
+    }
+
+    private fun validateScreen() : Boolean {
+        screenValidation.validateUiComponents(headerForm).also {
+            return if (!it.isEmpty) {
+                screenValidation.showValidationErrors(this, it)
+                false
+            } else true
+        }
     }
 
     private fun createActivity(item: KeyValueEntity) : Activity {
@@ -209,6 +211,38 @@ class ActivityInput : Screen() {
                 }
             }
         }
+    }
+
+    @Subscribe("showPrevDataBtn")
+    private fun onShowPrevDataBtnClick(event: Button.ClickEvent) {
+        if (!validateScreen())
+            return
+
+        screenBuilders.lookup(Activity::class.java, this)
+                .withOpenMode(OpenMode.DIALOG)
+                .withOptions(MapScreenOptions(mapOf(
+                        Pair("account", activityInputDc.item.getValue("account")),
+                        Pair("year", activityInputDc.item.getValue("year"))))
+                )
+                .withSelectHandler { fillPrevData(it.first()) }
+                .show()
+    }
+
+    private fun getFieldInputPrompt(item: KeyValueEntity, toString: String): String? {
+        return prevValuesMap["prompt"]?.toString()
+    }
+
+    private fun fillPrevData(prevActivity: Activity) {
+        prevValuesMap["prompt"] = 0
+        detailDg.repaint()
+
+//        prevActivity.details?.forEach {
+//            detailDg.items.get
+//
+//
+//            it.getYearMonth()
+//            it.value
+//        }
     }
 
 }
