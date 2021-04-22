@@ -16,6 +16,9 @@ open class Activity : StandardEntity() {
     @JoinColumn(name = "ACCOUNT_ID")
     var account: Account? = null
 
+    @Column(name = "RECORD_TYPE")
+    private var recordType: String? = null
+
     @Column(name = "YEAR_")
     var year: Int? = null
 
@@ -23,6 +26,12 @@ open class Activity : StandardEntity() {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "activity")
     var details: MutableList<ActivityDetail>? = mutableListOf()
+
+    fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
+
+    fun setRecordType(recordType: RecordType?) {
+        this.recordType = recordType?.id
+    }
 
     companion object {
         private const val serialVersionUID = -6451509841681104317L

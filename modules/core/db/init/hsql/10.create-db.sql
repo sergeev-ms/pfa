@@ -27,6 +27,7 @@ create table PFA_ACTIVITY (
     DELETED_BY varchar(50),
     --
     ACCOUNT_ID varchar(36),
+    RECORD_TYPE varchar(50),
     YEAR_ integer,
     --
     primary key (ID)
@@ -48,7 +49,8 @@ create table PFA_ACTIVITY_DETAIL (
     JOB_TYPE varchar(50),
     WELL_EQUIP varchar(50),
     WELL_TAG varchar(50),
-    YEAR_MONTH_ varchar(10),
+    YEAR_ integer,
+    MONTH_ integer,
     VALUE_ integer,
     ACTIVITY_ID varchar(36) not null,
     --

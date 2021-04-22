@@ -1,6 +1,7 @@
 package com.borets.pfa.entity.activity
 
 import com.haulmont.chile.core.annotations.MetaProperty
+import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity
 import java.time.YearMonth
 import javax.persistence.*
@@ -23,9 +24,18 @@ open class ActivityDetail : StandardEntity() {
     @Column(name = "WELL_TAG")
     private var wellTag: String? = null
 
-    @MetaProperty(datatype = "yearMonth")
-    @Column(name = "YEAR_MONTH_")
-    var yearMonth: YearMonth? = null
+    @NumberFormat(pattern = "####")
+    @Column(name = "YEAR_")
+    var year: Int? = null
+
+    @NumberFormat(pattern = "0#")
+    @Column(name = "MONTH_")
+    var month: Int? = null
+
+    @Transient
+    @MetaProperty(related = ["month", "year"], datatype = "yearMonth")
+    private var yearMonth: YearMonth? = null
+
 
     @Column(name = "VALUE_")
     var value: Int? = null
@@ -33,6 +43,17 @@ open class ActivityDetail : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ACTIVITY_ID")
     var activity: Activity? = null
+
+    fun getYearMonth(): YearMonth? {
+        return if (year != null && month != null) {
+            YearMonth.of(year!!, month!!)
+        } else null
+    }
+    fun setYearMonth(yearMonth: YearMonth?) {
+        year = yearMonth?.year
+        month = yearMonth?.monthValue
+    }
+
 
     fun getWellTag(): WellTag? = wellTag?.let { WellTag.fromId(it) }
 
