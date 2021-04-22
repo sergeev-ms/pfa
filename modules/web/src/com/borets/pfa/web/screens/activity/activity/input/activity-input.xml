@@ -13,7 +13,10 @@
         </keyValueInstance>
         <keyValueCollection id="detailsDc">
             <properties>
-                <property name="value" datatype="int"/>
+                <property name="jobType" class="com.borets.pfa.entity.activity.JobType"/>
+                <property name="wellTag" class="com.borets.pfa.entity.activity.WellTag"/>
+                <property name="wellEquip" class="com.borets.pfa.entity.activity.WellEquip"/>
+                <property name="contractType" class="com.borets.pfa.entity.activity.ContractType"/>
             </properties>
         </keyValueCollection>
         <collection id="accountsDc" class="com.borets.pfa.entity.account.Account" view="_minimal">
@@ -24,23 +27,32 @@
     </data>
     <layout expand="detailsGb" spacing="true">
         <groupBox id="headerGb" caption="msg://headerGb.caption">
-            <form dataContainer="activityInputDc">
+            <form dataContainer="activityInputDc" id="headerForm">
                 <column>
-                    <lookupField id="accountField" property="account" optionsContainer="accountsDc"/>
+                    <lookupField id="accountField" property="account" optionsContainer="accountsDc" required="true"/>
+                    <lookupField id="recordTypeField" property="recordType" required="true"
+                                 optionsEnum="com.borets.pfa.entity.activity.RecordType"/>
+                </column>
+                <column>
                     <lookupField id="yearField" property="year"/>
                     <lookupField id="yearMonthField" property="yearMonth"/>
-                    <lookupField id="recordTypeField" property="recordType"
-                                 optionsEnum="com.borets.pfa.entity.activity.RecordType"/>
                 </column>
             </form>
         </groupBox>
         <groupBox id="detailsGb" caption="msg://detailsGb.caption" width="100%" expand="detailDg">
-            <dataGrid id="detailDg" dataContainer="detailsDc" editorEnabled="true" width="100%"
-                      editorBuffered="false">
+            <dataGrid id="detailDg" dataContainer="detailsDc" editorEnabled="false" width="100%"
+                      editorBuffered="false" selectionMode="NONE">
                 <columns>
-                    <column property="value"/>
+                    <column property="jobType" editable="false"/>
+                    <column property="wellTag" editable="false"/>
+                    <column property="wellEquip" editable="false"/>
+                    <column property="contractType" editable="false"/>
                 </columns>
             </dataGrid>
         </groupBox>
+        <hbox id="editActions" spacing="true">
+            <button id="createActivityBtn" caption="msg://createActivityBtn.caption"/>
+            <button id="closeBtn" caption="msg://closeBtn.caption"/>
+        </hbox>
     </layout>
 </window>

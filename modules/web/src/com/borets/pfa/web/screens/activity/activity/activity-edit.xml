@@ -23,6 +23,7 @@
                     </actions>
                 </pickerField>
                 <textField id="yearField" property="year"/>
+                <lookupField id="recordTypeField" property="recordType"/>
             </column>
         </form>
         <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.activity/Activity.details" expand="detailsTable">

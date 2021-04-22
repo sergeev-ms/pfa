@@ -34,7 +34,7 @@ open class ActivityDetail : StandardEntity() {
 
     @Transient
     @MetaProperty(related = ["month", "year"], datatype = "yearMonth")
-    private var yearMonth: YearMonth? = null
+    private var yearMonth: String? = null
 
 
     @Column(name = "VALUE_")
