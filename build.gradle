@@ -63,11 +63,21 @@ configure([globalModule, coreModule, webModule]) {
         classifier = 'sources'
     }
 
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
     artifacts {
         archives sourceJar
     } 
     test {
         useJUnitPlatform()
+    }
+
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget=11
+            freeCompilerArgs = ['-Xjvm-default=enable']
+        }
     }
 }
 
