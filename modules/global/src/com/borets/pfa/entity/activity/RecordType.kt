@@ -7,7 +7,7 @@ enum class RecordType(private val id: String) : EnumClass<String> {
     Q1("Q1"),
     Q2("Q2"),
     Q3("Q3"),
-    Q4("Q3"),
+    Q4("Q4"),
     FORECAST("FC");
 
     override fun getId() = id
