@@ -35,8 +35,10 @@
                 </actions>
                 <columns>
                     <column id="recordType"/>
-                    <column id="contractType"/>
                     <column id="jobType"/>
+                    <column id="wellTag"/>
+                    <column id="wellEquip"/>
+                    <column id="contractType"/>
                     <column id="yearMonth"/>
                     <column id="value"/>
                 </columns>
