@@ -6,12 +6,9 @@ import org.junit.jupiter.api.extension.ExtensionContext
 open class PfaTestContainer : TestContainer() {
 
     init {
-        appComponents = mutableListOf(
-                // list add-ons here:
-                // "com.haulmont.reports",
-                // "com.haulmont.addon.bproc",
-                "com.haulmont.cuba"
-        )
+        appComponents = listOf(
+                "com.haulmont.cuba",
+                "com.haulmont.addon.helium")
         appPropertiesFiles = mutableListOf(
                 // List the files defined in your web.xml
                 // in appPropertiesConfig context parameter of the core module
