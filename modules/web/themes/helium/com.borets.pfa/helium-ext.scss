@@ -1,0 +1,16 @@
+/* Define your theme modifications inside next mixin */
+@mixin com_borets_pfa-helium-ext {
+  /* Basic */
+  --primary-color: #0097D8;
+  --primary-color_rgb: 0, 151, 216;
+
+  /* Common */
+  --primary-color-shade-1: #0084BD;
+  --primary-color-shade-2: #0076A8;
+  --primary-dim-color: #2EC0FF;
+
+  &.dark {
+    /* Common */
+    --primary-dim-color: #195b7c;
+  }
+}
