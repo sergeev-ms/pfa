@@ -1,9 +1,14 @@
 package com.borets.pfa.entity.account
 
+import com.borets.pfa.entity.DimCustomers
+import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity
+import com.haulmont.cuba.core.entity.annotation.SystemLevel
+import java.math.BigDecimal
 import javax.persistence.Column
 import javax.persistence.Table
+import javax.persistence.Transient
 
 @NamePattern(value = "%s|name")
 @Table(name = "PFA_ACCOUNT")
@@ -14,6 +19,18 @@ open class Account : StandardEntity() {
 
     @Column(name = "TYPE_")
     private var type: String? = null
+
+    @SystemLevel
+    @Column(name = "CUSTOMER_ID", precision = 7, scale = 0)
+    var customerId: BigDecimal? = null
+
+    @Transient
+    @MetaProperty(related = ["customerId"])
+    var customer: DimCustomers? = null
+
+    @Transient
+    @MetaProperty
+    var customers: MutableList<DimCustomers>? = mutableListOf()
 
     fun getType(): Type? = type?.let { Type.fromId(it) }
 

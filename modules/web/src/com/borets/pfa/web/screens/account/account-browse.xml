@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
-        caption="msg://accountBrowse.caption"
-        focusComponent="accountsTable"
+        caption="msg://accountBrowse.caption" focusComponent="accountsTable"
         messagesPack="com.borets.pfa.web.screens.account">
     <data readOnly="true">
-        <collection id="accountsDc"
-                    class="com.borets.pfa.entity.account.Account">
-            <view extends="_local"/>
+        <collection id="accountsDc" class="com.borets.pfa.entity.account.Account">
+            <view extends="_local">
+                <property name="customer"/>
+            </view>
             <loader id="accountsDl">
                 <query>
                     <![CDATA[select e from pfa_Account e]]>
@@ -15,18 +15,12 @@
             </loader>
         </collection>
     </data>
-    <dialogMode height="600"
-                width="800"/>
-    <layout expand="accountsTable"
-            spacing="true">
-        <filter id="filter"
-                applyTo="accountsTable"
-                dataLoader="accountsDl">
+    <dialogMode height="600" width="800"/>
+    <layout expand="accountsTable" spacing="true">
+        <filter id="filter" applyTo="accountsTable" dataLoader="accountsDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="accountsTable"
-                    width="100%"
-                    dataContainer="accountsDc">
+        <groupTable id="accountsTable" width="100%" dataContainer="accountsDc">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
@@ -35,10 +29,10 @@
             <columns>
                 <column id="name"/>
                 <column id="type"/>
+                <column id="customer"/>
             </columns>
             <rowsCount/>
-            <buttonsPanel id="buttonsPanel"
-                          alwaysVisible="true">
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
                 <button id="createBtn" action="accountsTable.create"/>
                 <button id="editBtn" action="accountsTable.edit"/>
                 <button id="removeBtn" action="accountsTable.remove"/>

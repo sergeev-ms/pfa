@@ -4,5 +4,6 @@
         <item screen="pfa_Account.browse" caption="mainMsg://menu_config.pfa_Account.browse"/>
         <item screen="pfa_Activity.browse" caption="mainMsg://menu_config.pfa_Activity.browse"/>
         <item screen="pfa_ActivityInput" caption="mainMsg://menu_config.pfa_ActivityInput"/>
+        <item screen="pfa_DimCustomers.browse" caption="mainMsg://menu_config.pfa_DimCustomers.browse"/>
     </menu>
 </menu-config>

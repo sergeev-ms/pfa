@@ -11,6 +11,7 @@ create table PFA_ACCOUNT (
     --
     NAME varchar(255),
     TYPE_ varchar(50),
+    CUSTOMER_ID decimal(7),
     --
     primary key nonclustered (ID)
 )^
