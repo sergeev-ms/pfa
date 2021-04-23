@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://analyticSetBrowse.caption"
+        focusComponent="analyticSetsTable"
+        messagesPack="com.borets.pfa.web.screens.analytic.analyticset">
+    <data readOnly="true">
+        <collection id="analyticSetsDc"
+                    class="com.borets.pfa.entity.analytic.AnalyticSet">
+            <view extends="_local"/>
+            <loader id="analyticSetsDl">
+                <query>
+                    <![CDATA[select e from pfa_AnalyticSet e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="analyticSetsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="analyticSetsTable"
+                dataLoader="analyticSetsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="analyticSetsTable"
+                    width="100%"
+                    dataContainer="analyticSetsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="contractType"/>
+                <column id="jobType"/>
+                <column id="wellEquip"/>
+                <column id="wellTag"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="analyticSetsTable.create"/>
+                <button id="editBtn" action="analyticSetsTable.edit"/>
+                <button id="removeBtn" action="analyticSetsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
