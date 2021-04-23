@@ -1,5 +1,6 @@
 package com.borets.pfa.web.screens.activity.activity.input
 
+import com.borets.pfa.config.ActivityInputConfig
 import com.borets.pfa.entity.activity.*
 import com.borets.pfa.entity.analytic.AnalyticSet
 import com.haulmont.cuba.core.entity.KeyValueEntity
@@ -37,6 +38,8 @@ class ActivityInput : Screen() {
     private lateinit var messageBundle: MessageBundle
     @Inject
     private lateinit var screenBuilders: ScreenBuilders
+    @Inject
+    private lateinit var activityInputConfig: ActivityInputConfig
 
     @Inject
     private lateinit var activityInputDc: KeyValueContainer
@@ -85,7 +88,7 @@ class ActivityInput : Screen() {
     @Subscribe("yearMonthField")
     private fun onYearMonthFieldValueChange(event: HasValue.ValueChangeEvent<YearMonth>) {
         event.value?.let {
-            addMonthsToDetails(it, 14)
+            addMonthsToDetails(it, activityInputConfig.getDefaultMonthQty())
         }
     }
 
