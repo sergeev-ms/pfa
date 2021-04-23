@@ -1,4 +1,4 @@
-package com.borets.pfa.entity
+package com.borets.pfa.entity.customer
 
 import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.BaseDbGeneratedIdEntity

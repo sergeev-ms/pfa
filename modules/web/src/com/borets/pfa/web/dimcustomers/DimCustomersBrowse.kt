@@ -1,6 +1,6 @@
 package com.borets.pfa.web.dimcustomers
 
-import com.borets.pfa.entity.DimCustomers
+import com.borets.pfa.entity.customer.DimCustomers
 import com.haulmont.cuba.gui.screen.*
 
 @UiController("pfa_DimCustomers.browse")

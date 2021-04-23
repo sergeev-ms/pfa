@@ -1,6 +1,6 @@
 package com.borets.pfa.entity.account
 
-import com.borets.pfa.entity.DimCustomers
+import com.borets.pfa.entity.customer.DimCustomers
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity

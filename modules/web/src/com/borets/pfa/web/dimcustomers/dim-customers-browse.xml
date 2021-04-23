@@ -4,7 +4,7 @@
         caption="msg://dimCustomersBrowse.caption" focusComponent="dimCustomersesTable"
         messagesPack="com.borets.pfa.web.dimcustomers">
     <data readOnly="true">
-        <collection id="dimCustomersesDc" class="com.borets.pfa.entity.DimCustomers" view="_local">
+        <collection id="dimCustomersesDc" class="com.borets.pfa.entity.customer.DimCustomers" view="_local">
             <loader id="dimCustomersesDl">
                 <query>
                     <![CDATA[select e from pfa_DimCustomers e]]>
