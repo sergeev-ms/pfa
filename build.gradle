@@ -187,13 +187,10 @@ restart.finalizedBy start
 task buildWarTest(type: CubaWarBuilding) {
     includeJdbcDriver = true
     appProperties = ['cuba.automaticDatabaseUpdate': true,
-                     'cuba.dataSource.username'    : 'wedb_service',
-                     'cuba.dataSource.password'    : 'Fj99ZGKG2p1',
-                     'cuba.dataSource.dbName'      : 'pfa',
-                     'cuba.dataSource.host'        : 'us-cuba-db',
-                     'cuba.dataSource.port'        : '',
-                     'cuba.dataSourceProvider'     : 'application',
-                     'cuba.webAppUrl': 'http://us-cuba-test.us.borets.gc/pfa',]
+                     'cuba.dataSourceProvider'     : 'jndi',
+                     'cuba.webAppUrl'              : 'http://us-cuba-test.us.borets.gc/pfa']
     webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
     logbackConfigurationFile = 'etc/war-logback.xml'
+    includeContextXml = true
+    coreContextXmlPath = 'modules/core/web/META-INF/war-context.xml'
 }

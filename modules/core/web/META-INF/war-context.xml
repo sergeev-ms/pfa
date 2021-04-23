@@ -1,0 +1,19 @@
+<Context antiResourceLocking="true">
+
+    <!-- Database connection -->
+    <Resource
+      name="jdbc/CubaDS"
+      type="javax.sql.DataSource"
+      maxTotal="20"
+      maxIdle="2"
+      maxWaitMillis="5000"
+      driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+      url="jdbc:sqlserver://us-cuba-db;databaseName=pfa"
+      username="wedb_service"
+      password="Fj99ZGKG2p1"
+      validationQuery="select 1"/>
+
+    <!-- Switch off session serialization -->
+    <Manager pathname=""/>
+
+</Context>
