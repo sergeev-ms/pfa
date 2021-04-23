@@ -2,17 +2,13 @@ package com.borets.pfa.web.screens.activity.activity.input
 
 import com.borets.pfa.entity.activity.*
 import com.borets.pfa.entity.analytic.AnalyticSet
-import com.haulmont.cuba.core.app.keyvalue.KeyValueMetaProperty
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.*
 import com.haulmont.cuba.gui.Notifications
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.*
-import com.haulmont.cuba.gui.components.data.ValueSource
 import com.haulmont.cuba.gui.components.data.options.ListOptions
-import com.haulmont.cuba.gui.components.data.value.ContainerValueSource
-import com.haulmont.cuba.gui.model.DataContext
 import com.haulmont.cuba.gui.model.KeyValueCollectionContainer
 import com.haulmont.cuba.gui.model.KeyValueContainer
 import com.haulmont.cuba.gui.screen.*
@@ -59,7 +55,7 @@ class ActivityInput : Screen() {
 
     private val months = mutableListOf<YearMonth>()
     private val commitContext : CommitContext = CommitContext()
-    private val prevValuesMap : MutableMap<String, Int> = mutableMapOf()
+    private var prevActivity : Activity? = null
 
 
 
@@ -128,15 +124,14 @@ class ActivityInput : Screen() {
                     object : DataGrid.ColumnGenerator<KeyValueEntity, Component> {
                         override fun getValue(event: DataGrid.ColumnGeneratorEvent<KeyValueEntity>): Component {
                             @Suppress("UnstableApiUsage")
-                            val textField = uiComponents.create(TextField.TYPE_INTEGER).apply {
+                            return uiComponents.create(TextField.TYPE_INTEGER).apply {
                                 setWidth("50px")
                                 addValueChangeListener {
                                     event.item.setValue(month.toString(), it.value)
                                 }
                                 value = event.item.getValue(month.toString())
-                                inputPrompt = getFieldInputPrompt(event.item, month.toString())
+                                getFieldInputPrompt(event.item, month)?.let { inputPrompt = it }
                             }
-                            return textField
                         }
 
                         override fun getType(): Class<Component> {
@@ -198,7 +193,7 @@ class ActivityInput : Screen() {
                         this.activity = activity
                         this.setYearMonth(yearMonth)
                         this.setJobType(kvEntity.getValue("jobType"))
-                        this.setWellTag(kvEntity.getValue("welTag"))
+                        this.setWellTag(kvEntity.getValue("wellTag"))
                         this.setWellEquip(kvEntity.getValue("wellEquip"))
                         this.setContractType(kvEntity.getValue("contractType"))
                         this.setRecordType(activity.getRecordType())
@@ -226,21 +221,22 @@ class ActivityInput : Screen() {
                 .show()
     }
 
-    private fun getFieldInputPrompt(item: KeyValueEntity, toString: String): String? {
-        return prevValuesMap["prompt"]?.toString()
+    private fun getFieldInputPrompt(item: KeyValueEntity, yearMonth: YearMonth): String? {
+        return prevActivity?.details?.find {
+            it.getYearMonth() == yearMonth
+                    && it.getContractType() == item.getValue<ContractType>("contractType")
+                    && it.getWellTag() == item.getValue<WellTag>("wellTag")
+                    && it.getJobType() == item.getValue<JobType>("jobType")
+                    && it.getWellEquip() == item.getValue<WellEquip>("wellEquip")
+        }?.value?.toString()
     }
 
     private fun fillPrevData(prevActivity: Activity) {
-        prevValuesMap["prompt"] = 0
-        detailDg.repaint()
+        dataManager.reload(prevActivity, ViewBuilder.of(Activity::class.java)
+                .add("details") { it.addView(View.LOCAL) }.build())
+                .also { this.prevActivity  = it }
 
-//        prevActivity.details?.forEach {
-//            detailDg.items.get
-//
-//
-//            it.getYearMonth()
-//            it.value
-//        }
+        detailDg.repaint()
     }
 
 }
