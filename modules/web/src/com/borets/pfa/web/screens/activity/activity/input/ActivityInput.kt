@@ -1,6 +1,7 @@
 package com.borets.pfa.web.screens.activity.activity.input
 
 import com.borets.pfa.entity.activity.*
+import com.borets.pfa.entity.analytic.AnalyticSet
 import com.haulmont.cuba.core.app.keyvalue.KeyValueMetaProperty
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.*
@@ -99,21 +100,18 @@ class ActivityInput : Screen() {
     }
 
     private fun initRows() {
-        JobType.values().forEach { jobType ->
-            WellTag.values().forEach { wellTag ->
-                WellEquip.values().forEach { wellEquip ->
-                    ContractType.values().forEach { contractType ->
-                        val element = KeyValueEntity().apply {
-                            setValue("jobType", jobType)
-                            setValue("wellTag", wellTag)
-                            setValue("wellEquip", wellEquip)
-                            setValue("contractType", contractType)
-                        }
-                        detailsDc.mutableItems.add(element)
+        dataManager.load(AnalyticSet::class.java)
+                .view(View.LOCAL)
+                .list()
+                .forEach {
+                    val element = KeyValueEntity().apply {
+                        setValue("jobType", it.getJobType())
+                        setValue("wellTag", it.getWellTag())
+                        setValue("wellEquip", it.getWellEquip())
+                        setValue("contractType", it.getContractType())
                     }
+                    detailsDc.mutableItems.add(element)
                 }
-            }
-        }
     }
 
 
