@@ -93,3 +93,39 @@ create table PFA_REVENUE_TYPE (
     primary key nonclustered (ID)
 )^
 -- end PFA_REVENUE_TYPE
+-- begin PFA_PRICE_LIST
+create table PFA_PRICE_LIST (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY varchar(50),
+    --
+    ACCOUNT_ID uniqueidentifier,
+    RECORD_TYPE varchar(50),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_PRICE_LIST
+-- begin PFA_PRICE_LIST_DETAIL
+create table PFA_PRICE_LIST_DETAIL (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY varchar(50),
+    --
+    PRICE_LIST_ID uniqueidentifier not null,
+    ANALYTIC_ID uniqueidentifier,
+    REVENUE_TYPE_ID uniqueidentifier,
+    VALUE_ decimal(19, 2),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_PRICE_LIST_DETAIL

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://priceListDetailEdit.caption" focusComponent="form"
+        messagesPack="com.borets.pfa.web.screens.price.pricelistdetail">
+    <data>
+        <instance id="priceListDetailDc" class="com.borets.pfa.entity.price.PriceListDetail">
+            <view extends="_local">
+                <property name="analytic" view="_minimal"/>
+                <property name="revenueType" view="_minimal"/>
+            </view>
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="priceListDetailDc">
+            <column width="450px">
+                <pickerField id="analyticField" property="analytic">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <pickerField id="revenueTypeField" property="revenueType">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <textField id="valueField" property="value"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

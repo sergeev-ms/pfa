@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://priceListBrowse.caption" focusComponent="priceListsTable"
+        messagesPack="com.borets.pfa.web.screens.price.pricelist">
+    <data readOnly="true">
+        <collection id="priceListsDc" class="com.borets.pfa.entity.price.PriceList">
+            <view extends="_local">
+                <property name="account" view="_minimal"/>
+            </view>
+            <loader id="priceListsDl">
+                <query>
+                    <![CDATA[select e from pfa_PriceList e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="priceListsTable" spacing="true">
+        <filter id="filter" applyTo="priceListsTable" dataLoader="priceListsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="priceListsTable" width="100%" dataContainer="priceListsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="account"/>
+                <column id="recordType"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
+                <button id="createBtn" action="priceListsTable.create"/>
+                <button id="editBtn" action="priceListsTable.edit"/>
+                <button id="removeBtn" action="priceListsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

@@ -7,5 +7,7 @@
         <class>com.borets.pfa.entity.activity.ActivityDetail</class>
         <class>com.borets.pfa.entity.analytic.AnalyticSet</class>
         <class>com.borets.pfa.entity.price.RevenueType</class>
+        <class>com.borets.pfa.entity.price.PriceList</class>
+        <class>com.borets.pfa.entity.price.PriceListDetail</class>
     </persistence-unit>
 </persistence>
