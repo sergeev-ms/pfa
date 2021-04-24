@@ -55,17 +55,30 @@ class ActivityInput : Screen() {
     private lateinit var headerForm: Form
     @Inject
     private lateinit var createActivityBtn: Button
+    @Inject
+    private lateinit var filterJobTypeField: LookupField<JobType>
+    @Inject
+    private lateinit var filterWellTagField: LookupField<WellTag>
+    @Inject
+    private lateinit var filterWellEquipField: LookupField<WellEquip>
+    @Inject
+    private lateinit var filterContractTypeField: LookupField<ContractType>
+
 
     private val months = mutableListOf<YearMonth>()
     private val commitContext : CommitContext = CommitContext()
     private var prevActivity : Activity? = null
-
+    private lateinit var backupItems : List<KeyValueEntity>
 
 
     @Subscribe
     private fun onAfterInit(event: AfterInitEvent) {
         initYearsRange()
         initRows()
+        filterJobTypeField.addValueChangeListener { filterChanged() }
+        filterWellTagField.addValueChangeListener { filterChanged() }
+        filterWellEquipField.addValueChangeListener { filterChanged() }
+        filterContractTypeField.addValueChangeListener { filterChanged() }
     }
 
     @Subscribe
@@ -111,6 +124,7 @@ class ActivityInput : Screen() {
                     }
                     detailsDc.mutableItems.add(element)
                 }
+        backupItems = detailsDc.items.toList()
     }
 
 
@@ -189,7 +203,7 @@ class ActivityInput : Screen() {
     }
 
     private fun createDetails(activity: Activity) {
-        detailsDc.items.forEach { kvEntity ->
+        backupItems.forEach { kvEntity ->
             months.forEach { yearMonth ->
                 kvEntity.getValue<Int?>(yearMonth.toString())?.let {
                     dataManager.create(ActivityDetail::class.java).apply {
@@ -241,6 +255,36 @@ class ActivityInput : Screen() {
 
         detailDg.repaint()
     }
+
+    @Subscribe("filterJobTypeField")
+    private fun onFilterJobTypeValueChange(event: HasValue.ValueChangeEvent<JobType>) {
+        backupItems
+                .filter { it.getValue<JobType>("jobType") != event.value }
+                .forEach { detailsDc.mutableItems.remove(it) }
+
+        filterJobTypeField
+    }
+
+    private fun filterChanged() {
+        var detailsForFiltering = backupItems.toMutableList()
+
+        filterJobTypeField.value?.let {
+            detailsForFiltering.removeIf { kvEntity -> kvEntity.getValue<JobType>("jobType") != it }
+        }
+        filterWellTagField.value?.let {
+            detailsForFiltering.removeIf { kvEntity -> kvEntity.getValue<WellTag>("wellTag") != it }
+        }
+        filterWellEquipField.value?.let {
+            detailsForFiltering.removeIf { kvEntity -> kvEntity.getValue<WellEquip>("wellEquip") != it }
+        }
+        filterContractTypeField.value?.let {
+            detailsForFiltering.removeIf { kvEntity -> kvEntity.getValue<ContractType>("contractType") != it }
+        }
+
+        detailsDc.mutableItems.clear()
+        detailsDc.mutableItems.addAll(detailsForFiltering)
+    }
+
 
 }
 

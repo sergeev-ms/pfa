@@ -42,7 +42,21 @@
                 </column>
             </form>
         </groupBox>
-        <groupBox id="detailsGb" caption="msg://detailsGb.caption" width="100%" expand="detailDg">
+        <groupBox id="detailsGb" caption="msg://detailsGb.caption" width="100%" expand="detailDg" spacing="true">
+            <form>
+                <column>
+                    <lookupField id="filterJobTypeField" optionsEnum="com.borets.pfa.entity.activity.JobType" caption="msg://filterJobType.caption"/>
+                </column>
+                <column>
+                    <lookupField id="filterWellTagField" optionsEnum="com.borets.pfa.entity.activity.WellTag" caption="msg://filterWellTag.caption"/>
+                </column>
+                <column>
+                    <lookupField id="filterWellEquipField" optionsEnum="com.borets.pfa.entity.activity.WellEquip" caption="msg://filterWellEquip.caption"/>
+                </column>
+                <column>
+                    <lookupField id="filterContractTypeField" optionsEnum="com.borets.pfa.entity.activity.ContractType" caption="msg://filterContractType.caption"/>
+                </column>
+            </form>
             <dataGrid id="detailDg" dataContainer="detailsDc" editorEnabled="false" width="100%"
                       editorBuffered="false" selectionMode="NONE">
                 <columns>
