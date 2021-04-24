@@ -6,5 +6,6 @@
         <class>com.borets.pfa.entity.activity.Activity</class>
         <class>com.borets.pfa.entity.activity.ActivityDetail</class>
         <class>com.borets.pfa.entity.analytic.AnalyticSet</class>
+        <class>com.borets.pfa.entity.price.RevenueType</class>
     </persistence-unit>
 </persistence>
