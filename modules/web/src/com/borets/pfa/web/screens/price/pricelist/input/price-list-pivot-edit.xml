@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://priceListPivotEdit.caption" focusComponent="form"
+        messagesPack="com.borets.pfa.web.screens.price.pricelist">
+    <data>
+        <instance id="priceListDc" class="com.borets.pfa.entity.price.PriceList">
+            <view extends="_local">
+                <property name="account" view="_minimal"/>
+                <property name="details" view="_minimal">
+                    <property name="analytic" view="_minimal">
+                        <property name="contractType"/>
+                        <property name="jobType"/>
+                        <property name="wellEquip"/>
+                        <property name="wellTag"/>
+                    </property>
+                    <property name="revenueType" view="_minimal"/>
+                    <property name="value"/>
+                </property>
+            </view>
+            <loader/>
+            <collection id="detailsDc" property="details"/>
+        </instance>
+        <keyValueCollection id="detailsPivotDc"/>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="priceListDc">
+            <column width="450px">
+                <pickerField id="accountField" property="account">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <lookupField id="recordTypeField" property="recordType"/>
+            </column>
+        </form>
+        <groupBox id="detailsBox">
+            <grid id="pivotGrid" spacing="true">
+                <columns>
+                    <column/>
+                </columns>
+                <rows>
+                    <row/>
+                </rows>
+            </grid>
+        </groupBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
