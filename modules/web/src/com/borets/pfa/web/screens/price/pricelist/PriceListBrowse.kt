@@ -19,11 +19,28 @@ class PriceListBrowse : StandardLookup<PriceList>() {
     @Inject
     private lateinit var priceListsTable: GroupTable<PriceList>
 
-    @Subscribe("priceListsTable.openPivot")
-    private fun onPriceListsTableOpenPivot(event: Action.ActionPerformedEvent) {
+    @Subscribe("priceListsTable.openPlain")
+    private fun onPriceListsTableOpenPlain(event: Action.ActionPerformedEvent) {
+        screenBuilders.editor(priceListsTable)
+            .editEntity(priceListsTable.singleSelected!!)
+            .show()
+    }
+
+    @Subscribe("priceListsTable.edit")
+    private fun onPriceListsTableEdit(event: Action.ActionPerformedEvent) {
         screenBuilders.editor(priceListsTable)
             .editEntity(priceListsTable.singleSelected!!)
             .withScreenClass(PriceListPivotEdit::class.java)
             .show()
     }
+
+    @Subscribe("priceListsTable.create")
+    private fun onPriceListsTableCreate(event: Action.ActionPerformedEvent) {
+        screenBuilders.editor(priceListsTable)
+            .newEntity()
+            .withScreenClass(PriceListPivotEdit::class.java)
+            .show()
+    }
+
+
 }

@@ -22,7 +22,7 @@
         </instance>
     </data>
     <dialogMode height="600" width="800"/>
-    <layout expand="editActions" spacing="true">
+    <layout expand="detailsBox" spacing="true">
         <form id="form" dataContainer="priceListDc">
             <column width="450px">
                 <pickerField id="accountField" property="account">
@@ -34,8 +34,8 @@
                 <lookupField id="recordTypeField" property="recordType"/>
             </column>
         </form>
-        <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.price/PriceList.details">
-            <table id="detailsTable" dataContainer="detailsDc" width="100%" height="200px">
+        <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.price/PriceList.details" expand="detailsTable">
+            <table id="detailsTable" dataContainer="detailsDc" width="100%">
                 <actions>
                     <action id="create" type="create"/>
                     <action id="edit" type="edit"/>

@@ -25,7 +25,7 @@
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
-                <action id="openPivot" caption="Pivot" trackSelection="true"/>
+                <action id="openPlain" caption="msg://priceListsTable.openPlain.caption" trackSelection="true"/>
             </actions>
             <columns>
                 <column id="account"/>
