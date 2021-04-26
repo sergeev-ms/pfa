@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://priceListPivotEdit.caption" focusComponent="form"
-        messagesPack="com.borets.pfa.web.screens.price.pricelist">
+        messagesPack="com.borets.pfa.web.screens.price.pricelist.input">
     <data>
         <instance id="priceListDc" class="com.borets.pfa.entity.price.PriceList">
             <view extends="_local">
@@ -35,7 +35,15 @@
                 <lookupField id="recordTypeField" property="recordType"/>
             </column>
         </form>
-        <groupBox id="detailsBox">
+        <groupBox id="detailsBox" spacing="true">
+            <groupBox id="filterGb" caption="msg://filterGb.caption" collapsable="true">
+                <hbox spacing="true">
+                    <lookupField id="filterJobTypeField" optionsEnum="com.borets.pfa.entity.activity.JobType" inputPrompt="msg://filterJobType.caption"/>
+                    <lookupField id="filterWellTagField" optionsEnum="com.borets.pfa.entity.activity.WellTag" inputPrompt="msg://filterWellTag.caption"/>
+                    <lookupField id="filterWellEquipField" optionsEnum="com.borets.pfa.entity.activity.WellEquip" inputPrompt="msg://filterWellEquip.caption"/>
+                    <lookupField id="filterContractTypeField" optionsEnum="com.borets.pfa.entity.activity.ContractType" inputPrompt="msg://filterContractType.caption"/>
+                </hbox>
+            </groupBox>
             <grid id="pivotGrid" spacing="true">
                 <columns>
                     <column/>

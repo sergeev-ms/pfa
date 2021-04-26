@@ -1,6 +1,7 @@
 package com.borets.pfa.web.screens.price.pricelist.input
 
 import com.borets.pfa.entity.activity.ContractType
+import com.borets.pfa.entity.activity.JobType
 import com.borets.pfa.entity.activity.WellEquip
 import com.borets.pfa.entity.activity.WellTag
 import com.borets.pfa.entity.analytic.AnalyticSet
@@ -40,12 +41,27 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
 
     @Inject
     private lateinit var pivotGrid: GridLayout
+    @Inject
+    private lateinit var filterContractTypeField: LookupField<ContractType>
+    @Inject
+    private lateinit var filterJobTypeField: LookupField<JobType>
+    @Inject
+    private lateinit var filterWellEquipField: LookupField<WellEquip>
+    @Inject
+    private lateinit var filterWellTagField: LookupField<WellTag>
+
 
     private var pivotStaticProperties = mapOf(
         Pair("contractType", ContractType::class), Pair("jobType", ContractType::class),
         Pair("wellEquip", WellEquip::class), Pair("wellTag", WellTag::class))
 
     private var pivotGridRows = 1 //cause we have to skip header row
+
+
+    @Subscribe
+    private fun onAfterInit(event: AfterInitEvent) {
+        initFilter()
+    }
 
     @Subscribe
     private fun onBeforeShow(event: BeforeShowEvent) {
@@ -171,6 +187,7 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
             CollectionChangeType.ADD_ITEMS -> {
                 addRows(event.changes)
             }
+            else -> {} //todo:
         }
     }
 
@@ -206,5 +223,34 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
             }
         }
         detail!!.value = value
+    }
+
+    private fun initFilter() {
+        listOf(filterContractTypeField, filterJobTypeField, filterWellEquipField, filterWellTagField).forEach { field ->
+            field.addValueChangeListener { _ ->
+                detailsPivotDc.items.forEachIndexed { index, keyValueEntity ->
+                    val isContract = filterContractTypeField.value?.let {
+                        keyValueEntity.getValueEx<ContractType>("analytic.contractType") == it
+                    } ?: true
+                    val isJobType = filterJobTypeField.value?.let {
+                        keyValueEntity.getValueEx<JobType>("analytic.jobType") == it
+                    } ?: true
+                    val isWellEquip = filterWellEquipField.value?.let {
+                        keyValueEntity.getValueEx<WellEquip>("analytic.wellEquip") == it
+                    } ?: true
+                    val isWellTag = filterWellTagField.value?.let {
+                        keyValueEntity.getValueEx<WellTag>("analytic.wellTag") == it
+                    } ?: true
+
+                    setPivotRowVisibility(index + 1, isContract && isJobType && isWellEquip && isWellTag)
+                }
+            }
+        }
+    }
+
+    private fun setPivotRowVisibility(rowIndex: Int, visible: Boolean) {
+        for (colIndex in 0 until pivotGrid.columns) {
+            pivotGrid.getComponentNN(colIndex, rowIndex).isVisible = visible
+        }
     }
 }
