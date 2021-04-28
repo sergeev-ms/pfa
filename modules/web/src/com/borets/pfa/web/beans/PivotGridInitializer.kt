@@ -1,11 +1,9 @@
 package com.borets.pfa.web.beans
 
-import com.borets.pfa.entity.analytic.AnalyticSet
-import com.haulmont.chile.core.datatypes.DatatypeRegistry
 import com.haulmont.cuba.core.app.keyvalue.KeyValueMetaClass
 import com.haulmont.cuba.core.entity.KeyValueEntity
-import com.haulmont.cuba.core.global.Messages
 import com.haulmont.cuba.gui.UiComponents
+import com.haulmont.cuba.gui.components.Component.*
 import com.haulmont.cuba.gui.components.Field
 import com.haulmont.cuba.gui.components.GridLayout
 import com.haulmont.cuba.gui.components.Label
@@ -20,7 +18,6 @@ import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 import javax.inject.Inject
-import kotlin.reflect.KClass
 
 @Component(PivotGridInitializer.NAME)
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
@@ -29,24 +26,22 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         const val NAME = "pfa_PivotGridInitializer"
     }
 
+    private var hackCounter: Int = 0
+
     @Inject
     private lateinit var dataComponents: DataComponents
-    @Inject
-    private lateinit var messages: Messages
     @Inject
     private lateinit var uiComponents: UiComponents
 
     lateinit var kvCollectionContainer: KeyValueCollectionContainer
         private set
 
-    lateinit var pivotStaticProperties: Map<String, KClass<out Any>>
+    private lateinit var pivotStaticProperties: List<StaticPropertyData>
 
     private lateinit var storeFunction: (Any, String, Any?) -> Unit
 
     private var pivotGridRows = 1 //cause we have to skip header row
 
-    @Inject
-    private lateinit var datatypeRegistry: DatatypeRegistry
 
     @PostConstruct
     fun postConstruct() {
@@ -68,33 +63,37 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
 
     }
 
-    fun initStaticPivotProperties(pivotStaticProperties: Map<String, KClass<out Any>>) {
-        this.pivotStaticProperties = pivotStaticProperties
+    fun initStaticPivotProperties(properties: List<StaticPropertyData>) {
+        this.pivotStaticProperties = properties
+        addKvContainerProperties(properties)
 
-        initStaticColumnsCaptions(pivotStaticProperties)
-
-        pivotStaticProperties.forEach { (property, clazz) ->
-            kvCollectionContainer.addProperty(property, clazz.java)
-        }
-        //fixme: hardcoded
-        kvCollectionContainer.addProperty("analytic", AnalyticSet::class.java)
-    }
-
-    private fun initStaticColumnsCaptions(pivotStaticProperties: Map<String, KClass<out Any>>) {
-        pivotGrid.columns = pivotStaticProperties.size
-        var colsStartPosition = 0
-        pivotStaticProperties.forEach { (property, _) ->
-            val caption = messages.getMessage(AnalyticSet::class.java, "AnalyticSet.${property}")
-            addColumnCaption(caption, colsStartPosition++)
+        properties.filter { it.visible }.forEach {
+            addColumnCaption(it.caption)
         }
     }
+
+    private fun addColumnCaption(caption: String) {
+        if (this.hackCounter > 0) { //because grid layout decoratively initialized with 1 column
+            pivotGrid.columns++
+        }
+        hackCounter++
+        @Suppress("UnstableApiUsage")
+        uiComponents.create(Label.TYPE_STRING).apply {
+            this.value = caption
+            this.addStyleName(ValoTheme.LABEL_H3)
+            this.alignment = Alignment.MIDDLE_CENTER
+        }.let {
+            pivotGrid.add(it, pivotGrid.columns - 1, 0)
+        }
+    }
+
 
     private fun addColumnCaption(caption: String, startPosition: Int) {
         @Suppress("UnstableApiUsage")
         uiComponents.create(Label.TYPE_STRING).apply {
             this.value = caption
             this.addStyleName(ValoTheme.LABEL_H3)
-            this.alignment = com.haulmont.cuba.gui.components.Component.Alignment.MIDDLE_CENTER
+            this.alignment = Alignment.MIDDLE_CENTER
         }.let {
             pivotGrid.add(it, startPosition, 0)
         }
@@ -107,35 +106,52 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
     private fun addRows(changes: Collection<KeyValueEntity>) {
         pivotGrid.rows = pivotGrid.rows + changes.size
         changes.forEach {
-            addColumns(it)
+            addStaticColumns(it)
             pivotGridRows++
         }
     }
 
-    private fun addColumns(keyValueEntity: KeyValueEntity) {
+    private fun addStaticColumns(keyValueEntity: KeyValueEntity) {
         var cols = 0
-        pivotStaticProperties.forEach { (property, _) ->
-            @Suppress("UnstableApiUsage")
-            uiComponents.create(Label.TYPE_STRING).apply {
-                this.alignment = com.haulmont.cuba.gui.components.Component.Alignment.MIDDLE_LEFT
-                this.value = keyValueEntity.getValue(property)
-            }.also {
-                pivotGrid.add(it, cols++, pivotGridRows)
+        pivotStaticProperties.filter { it.visible }.forEach { staticData ->
+            val component: com.haulmont.cuba.gui.components.Component
+            if (staticData.fieldType == null) {
+                @Suppress("UnstableApiUsage")
+                component = uiComponents.create(Label.TYPE_STRING).apply {
+                    this.alignment = Alignment.MIDDLE_LEFT
+                    this.value = keyValueEntity.getValue(staticData.property)
+                }
+            } else {
+                //todo:
+                @Suppress("UnstableApiUsage")
+                component = uiComponents.create(staticData.fieldType!!).apply {
+                    this.value = keyValueEntity.getValue(staticData.property)
+                    staticData.fieldWidth?.let { this.setWidth(it) }
+                }
             }
-        }
-    }
-
-    fun <T> initDynamicColumnsCaptions(properties: List<DynamicPropertyData<T>>) {
-        var startCol = pivotGrid.columns
-        pivotGrid.columns += properties.size
-        properties.forEach {
-            addColumnCaption(it.caption, startCol++)
+            pivotGrid.add(component, cols++, pivotGridRows)
         }
     }
 
     fun <T> initDynamicDcPivotProperties(properties: List<DynamicPropertyData<T>>){
+        addKvContainerProperties(properties)
+
+        initDynamicColumnsCaptions(properties)
+
+        initDynamicPivotPropertiesFields(properties)
+    }
+
+    private fun addKvContainerProperties(properties : List<KvContainerProperty>) {
         properties.forEach {
             kvCollectionContainer.addProperty(it.property, it.clazz)
+        }
+    }
+
+    private fun <T> initDynamicColumnsCaptions(properties: List<DynamicPropertyData<T>>) {
+        var startCol = pivotGrid.columns
+        pivotGrid.columns += properties.size
+        properties.forEach {
+            addColumnCaption(it.caption, startCol++)
         }
     }
 
@@ -145,15 +161,16 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
 
     fun <T> initDynamicPivotPropertiesFields(dynamicProperties: List<DynamicPropertyData<T>>) {
         val skipRows = 1 //avoid captions
-        val skipColumns = pivotStaticProperties.size //avoid static fields
+        val skipColumns = pivotStaticProperties.filter { it.visible }.size //avoid static fields
         kvCollectionContainer.items.forEachIndexed { rowIndex, keyValueEntity ->
             dynamicProperties.forEachIndexed { colIndex, propertyData ->
                 @Suppress("UnstableApiUsage")
                 val field = uiComponents.create(propertyData.fieldType).apply {
                     val container = KeyValueContainerImpl(kvCollectionContainer.entityMetaClass as KeyValueMetaClass).apply {
                         setItem(keyValueEntity)
-                        addItemPropertyChangeListener {
-                            storeFunction.invoke(it.item.getValue<Any>("analytic")!! , it.property, it.value)
+                        addItemPropertyChangeListener { event ->
+                            val keyProperty = event.item.getValue<Any>(pivotStaticProperties.find { it.key }!!.property)
+                            storeFunction.invoke(keyProperty!!, event.property, event.value)
                         }
                     }
                     this.valueSource = ContainerValueSource(container, propertyData.property)
@@ -171,11 +188,27 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
     }
 
 
+
+    class StaticPropertyData(
+        override val property: String,
+        val caption: String,
+        val key : Boolean = false,
+        override val clazz: Class<*>,
+        var fieldType: Class<out Field<*>>?,
+        var fieldWidth: String?,
+        val visible: Boolean = true
+    ) : KvContainerProperty
+
     class DynamicPropertyData<T>(
-        var property: String,
+        override val property: String,
         var caption: String,
-        var clazz: Class<T>,
+        override val clazz: Class<T>,
         var fieldType: Class<out Field<*>>,
         var fieldWidth: String
-    )
+    ) : KvContainerProperty
+
+    interface KvContainerProperty {
+        val property: String
+        val clazz: Class<*>
+    }
 }

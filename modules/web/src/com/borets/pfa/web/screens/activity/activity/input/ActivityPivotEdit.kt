@@ -4,12 +4,13 @@ import com.borets.pfa.config.ActivityInputConfig
 import com.borets.pfa.entity.activity.*
 import com.borets.pfa.entity.analytic.AnalyticSet
 import com.borets.pfa.web.beans.PivotGridInitializer
-import com.google.common.reflect.TypeToken
+import com.borets.pfa.web.beans.PivotGridInitializer.DynamicPropertyData
+import com.borets.pfa.web.beans.PivotGridInitializer.StaticPropertyData
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.AppBeans
 import com.haulmont.cuba.core.global.DataManager
+import com.haulmont.cuba.core.global.Messages
 import com.haulmont.cuba.core.global.TimeSource
-import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.GridLayout
 import com.haulmont.cuba.gui.components.LookupField
 import com.haulmont.cuba.gui.components.TextField
@@ -29,10 +30,22 @@ import javax.inject.Inject
 class ActivityPivotEdit : StandardEditor<Activity>() {
     @Inject
     private lateinit var dataManager: DataManager
+    @Inject
+    private lateinit var dataContext: DataContext
+    @Inject
+    private lateinit var messages: Messages
+    @Inject
+    private lateinit var timeSource: TimeSource
+    @Inject
+    private lateinit var userSession: UserSession
+    @Inject
+    private lateinit var activityInputConfig: ActivityInputConfig
+
+    @Inject
+    private lateinit var detailsDc: CollectionPropertyContainer<ActivityDetail>
 
     @Inject
     private lateinit var pivotGrid: GridLayout
-
     @Inject
     private lateinit var filterWellEquipField: LookupField<WellEquip>
     @Inject
@@ -44,24 +57,6 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
 
     private lateinit var pivotGridHelper : PivotGridInitializer
 
-    @Inject
-    private lateinit var activityInputConfig: ActivityInputConfig
-
-    @Inject
-    private lateinit var timeSource: TimeSource
-
-    @Inject
-    private lateinit var userSession: UserSession
-
-    @Inject
-    private lateinit var detailsDc: CollectionPropertyContainer<ActivityDetail>
-
-    @Inject
-    private lateinit var dataContext: DataContext
-
-    @Inject
-    private lateinit var uiComponents: UiComponents
-
 
     @Subscribe
     private fun onAfterInit(event: AfterInitEvent) {
@@ -71,18 +66,31 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
 
     @Subscribe
     private fun onBeforeShow(event: BeforeShowEvent) {
-        val pivotStaticProperties = mapOf(
-            Pair("contractType", ContractType::class), Pair("jobType", ContractType::class),
-            Pair("wellEquip", WellEquip::class), Pair("wellTag", WellTag::class))
+        val pivotStaticProperties = listOf(
+            StaticPropertyData("analytic", "", true, AnalyticSet::class.java, null, null, false),
+
+            StaticPropertyData("contractType", messages.getMessage(AnalyticSet::class.java, "AnalyticSet.contractType"),
+                false, ContractType::class.java, null, null, true),
+            StaticPropertyData("jobType", messages.getMessage(AnalyticSet::class.java, "AnalyticSet.jobType"),
+                true, JobType::class.java, null, null, true),
+            StaticPropertyData("wellEquip", messages.getMessage(AnalyticSet::class.java, "AnalyticSet.wellEquip"),
+                true, WellEquip::class.java, null, null, true),
+            StaticPropertyData("wellTag", messages.getMessage(AnalyticSet::class.java, "AnalyticSet.wellTag"),
+                true, WellTag::class.java, null, null, true)
+        )
+
+
 
         pivotGridHelper.initStaticPivotProperties(pivotStaticProperties)
+
         pivotGridHelper.initStaticPivotPropertiesValues(initKvEntities())
-        pivotGridHelper.setStoreFunction() { analytic : Any, property : String, value : Any? ->
-            var detail = detailsDc.mutableItems.find { it.analytic == analytic && property == it.getYearMonth().toString() }
+
+        pivotGridHelper.setStoreFunction() { key : Any, property : String, value : Any? ->
+            var detail = detailsDc.mutableItems.find { it.analytic == key && property == it.getYearMonth().toString() }
             if (detail == null) {
                 detail = dataContext.create(ActivityDetail::class.java).apply {
                     this.activity = editedEntity
-                    this.analytic = analytic as AnalyticSet
+                    this.analytic = key as AnalyticSet
                     this.setYearMonth(YearMonth.parse(property))
                 }
             }
@@ -103,12 +111,11 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
             months.add(startMonth.plusMonths(monthNumber.toLong()))
         }
         months.map {
-               PivotGridInitializer.DynamicPropertyData<Int>(it.toString(),
+               DynamicPropertyData(it.toString(),
                 it.format(DateTimeFormatter.ofPattern("MMM yy", userSession.locale)),
                 Int::class.javaObjectType, TextField::class.java, "60px")
 
         }.let { dynamicProperties ->
-            pivotGridHelper.initDynamicColumnsCaptions(dynamicProperties)
             pivotGridHelper.initDynamicDcPivotProperties(dynamicProperties)
             pivotGridHelper.initDynamicPropertiesValues { kvDc : KeyValueCollectionContainer ->
                 detailsDc.items.forEach { detail ->
@@ -119,10 +126,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
                     }
                 }
             }
-            pivotGridHelper.initDynamicPivotPropertiesFields(dynamicProperties)
         }
-
-
     }
 
     private fun initKvEntities(): List<KeyValueEntity> {
@@ -130,14 +134,12 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
             .list()
             .map {
                 KeyValueEntity().apply {
+                    this.setValue("analytic", it)
                     this.setValue("contractType", it.getContractType())
                     this.setValue("jobType", it.getJobType())
                     this.setValue("wellEquip", it.getWellEquip())
                     this.setValue("wellTag", it.getWellTag())
-                    //fixme: hardcoded
-                    this.setValue("analytic", it)
                 }
-
             }
     }
 
