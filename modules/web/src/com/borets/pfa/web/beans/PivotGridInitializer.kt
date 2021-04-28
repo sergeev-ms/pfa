@@ -2,14 +2,18 @@ package com.borets.pfa.web.beans
 
 import com.borets.pfa.entity.analytic.AnalyticSet
 import com.haulmont.chile.core.datatypes.DatatypeRegistry
+import com.haulmont.cuba.core.app.keyvalue.KeyValueMetaClass
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.Messages
 import com.haulmont.cuba.gui.UiComponents
-import com.haulmont.cuba.gui.components.*
-import com.haulmont.cuba.gui.components.data.HasValueSource
+import com.haulmont.cuba.gui.components.Field
+import com.haulmont.cuba.gui.components.GridLayout
+import com.haulmont.cuba.gui.components.Label
+import com.haulmont.cuba.gui.components.data.value.ContainerValueSource
 import com.haulmont.cuba.gui.model.CollectionChangeType
 import com.haulmont.cuba.gui.model.DataComponents
 import com.haulmont.cuba.gui.model.KeyValueCollectionContainer
+import com.haulmont.cuba.gui.model.impl.KeyValueContainerImpl
 import com.vaadin.ui.themes.ValoTheme
 import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.context.annotation.Scope
@@ -140,20 +144,21 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
     }
 
     fun <T> initDynamicPivotPropertiesFields(dynamicProperties: List<DynamicPropertyData<T>>) {
-
         val skipRows = 1 //avoid captions
         val skipColumns = pivotStaticProperties.size //avoid static fields
         kvCollectionContainer.items.forEachIndexed { rowIndex, keyValueEntity ->
             dynamicProperties.forEachIndexed { colIndex, propertyData ->
                 @Suppress("UnstableApiUsage")
                 val field = uiComponents.create(propertyData.fieldType).apply {
-                    this.value = keyValueEntity.getValue<T>(propertyData.property)?.toString()
-                    this.setWidth(propertyData.fieldWidth)
-                    this.addValueChangeListener {
-                        keyValueEntity.setValue(propertyData.property, it.value)
-                        storeFunction.invoke(keyValueEntity.getValue<AnalyticSet>("analytic")!! , propertyData.property, it.value)
-                        return@addValueChangeListener
+                    val container = KeyValueContainerImpl(kvCollectionContainer.entityMetaClass as KeyValueMetaClass).apply {
+                        setItem(keyValueEntity)
+                        addItemPropertyChangeListener {
+                            storeFunction.invoke(it.item.getValue<Any>("analytic")!! , it.property, it.value)
+                        }
                     }
+                    this.valueSource = ContainerValueSource(container, propertyData.property)
+                    this.setWidth(propertyData.fieldWidth)
+
                 }
                 pivotGrid.add(field, colIndex + skipColumns, rowIndex + skipRows)
             }
@@ -170,7 +175,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         var property: String,
         var caption: String,
         var clazz: Class<T>,
-        var fieldType: Class<out HasValue<*>>,
+        var fieldType: Class<out Field<*>>,
         var fieldWidth: String
     )
 }
