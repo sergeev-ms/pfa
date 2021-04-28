@@ -1,5 +1,6 @@
 package com.borets.pfa.entity.activity
 
+import com.borets.pfa.entity.analytic.AnalyticSet
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity
@@ -23,6 +24,10 @@ open class ActivityDetail : StandardEntity() {
 
     @Column(name = "WELL_TAG")
     private var wellTag: String? = null
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ANALYTIC_ID")
+    var analytic: AnalyticSet? = null
 
     @NumberFormat(pattern = "####")
     @Column(name = "YEAR_")

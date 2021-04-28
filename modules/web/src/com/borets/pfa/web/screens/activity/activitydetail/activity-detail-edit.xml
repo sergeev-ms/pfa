@@ -6,7 +6,9 @@
     <data>
         <instance id="activityDetailDc"
                   class="com.borets.pfa.entity.activity.ActivityDetail">
-            <view extends="_local"/>
+            <view extends="_local">
+                <property name="analytic" view="_minimal"/>
+            </view>
             <loader/>
         </instance>
     </data>
@@ -20,6 +22,7 @@
                 <lookupField property="wellTag"/>
                 <lookupField property="wellEquip"/>
                 <lookupField id="contractTypeField" property="contractType"/>
+                <pickerField id="analyticField" property="analytic"/>
                 <textField id="yearMonthField" property="yearMonth"/>
                 <textField id="valueField" property="value"/>
             </column>

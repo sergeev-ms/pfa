@@ -35,6 +35,7 @@
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
+                <action id="openPlain" caption="openPlain"/>
             </actions>
             <columns>
                 <column id="account"/>

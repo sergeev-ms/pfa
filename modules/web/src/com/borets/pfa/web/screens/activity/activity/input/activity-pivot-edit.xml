@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://activityPivotEdit.caption"
+        focusComponent="form"
+        messagesPack="com.borets.pfa.web.screens.activity.activity.input">
+    <data>
+        <instance id="activityDc" class="com.borets.pfa.entity.activity.Activity">
+            <view extends="_local">
+                <property name="account" view="_minimal"/>
+                <property name="details" view="_local">
+                    <property name="analytic"/>
+                    <property name="yearMonth"/>
+                </property>
+            </view>
+            <loader/>
+            <collection id="detailsDc" property="details"/>
+        </instance>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="activityDc">
+            <column width="450px">
+                <pickerField id="accountField" property="account">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <lookupField id="recordTypeField" property="recordType"/>
+                <textField id="yearField" property="year"/>
+            </column>
+        </form>
+        <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.activity/Activity.details" spacing="true">
+            <groupBox id="filterGb" caption="msg://filterGb.caption" collapsable="true">
+                <hbox spacing="true">
+                    <lookupField id="filterJobTypeField" optionsEnum="com.borets.pfa.entity.activity.JobType" inputPrompt="msg://filterJobType.caption"/>
+                    <lookupField id="filterWellTagField" optionsEnum="com.borets.pfa.entity.activity.WellTag" inputPrompt="msg://filterWellTag.caption"/>
+                    <lookupField id="filterWellEquipField" optionsEnum="com.borets.pfa.entity.activity.WellEquip" inputPrompt="msg://filterWellEquip.caption"/>
+                    <lookupField id="filterContractTypeField" optionsEnum="com.borets.pfa.entity.activity.ContractType" inputPrompt="msg://filterContractType.caption"/>
+                </hbox>
+            </groupBox>
+            <grid id="pivotGrid" spacing="true">
+                <columns>
+                    <column/>
+                </columns>
+                <rows>
+                    <row/>
+                </rows>
+            </grid>
+        </groupBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

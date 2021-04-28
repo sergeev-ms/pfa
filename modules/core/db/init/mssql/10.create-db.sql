@@ -50,6 +50,7 @@ create table PFA_ACTIVITY_DETAIL (
     JOB_TYPE varchar(50),
     WELL_EQUIP varchar(50),
     WELL_TAG varchar(50),
+    ANALYTIC_ID uniqueidentifier,
     YEAR_ integer,
     MONTH_ integer,
     VALUE_ integer,
