@@ -20,7 +20,6 @@
             <loader/>
             <collection id="detailsDc" property="details"/>
         </instance>
-        <keyValueCollection id="detailsPivotDc"/>
     </data>
     <dialogMode height="600" width="800"/>
     <layout expand="editActions" spacing="true">
