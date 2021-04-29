@@ -31,7 +31,6 @@
                 <column id="name"/>
                 <column id="type"/>
                 <column id="customer"/>
-                <column id="parent"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">
