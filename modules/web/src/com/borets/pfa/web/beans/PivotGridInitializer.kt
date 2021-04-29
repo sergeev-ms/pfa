@@ -3,7 +3,7 @@ package com.borets.pfa.web.beans
 import com.haulmont.cuba.core.app.keyvalue.KeyValueMetaClass
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.gui.UiComponents
-import com.haulmont.cuba.gui.components.Component.*
+import com.haulmont.cuba.gui.components.Component.Alignment
 import com.haulmont.cuba.gui.components.Field
 import com.haulmont.cuba.gui.components.GridLayout
 import com.haulmont.cuba.gui.components.Label
@@ -11,6 +11,7 @@ import com.haulmont.cuba.gui.components.data.value.ContainerValueSource
 import com.haulmont.cuba.gui.model.CollectionChangeType
 import com.haulmont.cuba.gui.model.DataComponents
 import com.haulmont.cuba.gui.model.KeyValueCollectionContainer
+import com.haulmont.cuba.gui.model.KeyValueContainer
 import com.haulmont.cuba.gui.model.impl.KeyValueContainerImpl
 import com.vaadin.ui.themes.ValoTheme
 import org.springframework.beans.factory.config.BeanDefinition
@@ -30,18 +31,20 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
 
     @Inject
     private lateinit var dataComponents: DataComponents
+
     @Inject
     private lateinit var uiComponents: UiComponents
-
     lateinit var kvCollectionContainer: KeyValueCollectionContainer
         private set
 
-    private lateinit var pivotStaticProperties: List<StaticPropertyData>
+    private var staticProperties: List<StaticPropertyData>? = null
+    private var dynamicProperties: List<DynamicPropertyData<*>>? = null
 
-    private lateinit var storeFunction: (Any, String, Any?) -> Unit
+    private var storeFunction: ((Any, String, Any?) -> Unit)? = null
 
     private var pivotGridRows = 1 //cause we have to skip header row
 
+    private val containerList: MutableList<KeyValueContainer> = mutableListOf()
 
     @PostConstruct
     fun postConstruct() {
@@ -64,7 +67,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
     }
 
     fun initStaticPivotProperties(properties: List<StaticPropertyData>) {
-        this.pivotStaticProperties = properties
+        this.staticProperties = properties
         addKvContainerProperties(properties)
 
         properties.filter { it.visible }.forEach {
@@ -99,7 +102,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         }
     }
 
-    fun initStaticPivotPropertiesValues(initialEntities: List<KeyValueEntity>) {
+    fun setStaticPivotPropertiesValues(initialEntities: List<KeyValueEntity>) {
         kvCollectionContainer.mutableItems.addAll(initialEntities)
     }
 
@@ -113,7 +116,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
 
     private fun addStaticColumns(keyValueEntity: KeyValueEntity) {
         var cols = 0
-        pivotStaticProperties.filter { it.visible }.forEach { staticData ->
+        staticProperties!!.filter { it.visible }.forEach { staticData ->
             val component: com.haulmont.cuba.gui.components.Component
             if (staticData.fieldType == null) {
                 @Suppress("UnstableApiUsage")
@@ -133,12 +136,29 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         }
     }
 
-    fun <T> initDynamicDcPivotProperties(properties: List<DynamicPropertyData<T>>){
+    fun <T> initDynamicProperties(properties: List<DynamicPropertyData<T>>){
+        if (this.dynamicProperties != null) {
+            cleanDynamic()
+        }
+
+        this.dynamicProperties = properties
+
         addKvContainerProperties(properties)
 
-        initDynamicColumnsCaptions(properties)
+        initDynamicColumnsCaptions()
+        initDynamicPivotPropertiesFields()
+    }
 
-        initDynamicPivotPropertiesFields(properties)
+    private fun cleanDynamic() {
+        val staticPropertiesSize = staticProperties!!.filter { it.visible }.size
+        for (colIndex in 0 until  dynamicProperties!!.size) {
+            for (rowIndex in 0..kvCollectionContainer.items.size) {
+                pivotGrid.getComponentNN(staticPropertiesSize + colIndex, rowIndex).let {
+                    pivotGrid.remove(it)
+                }
+            }
+        }
+        pivotGrid.columns = staticPropertiesSize
     }
 
     private fun addKvContainerProperties(properties : List<KvContainerProperty>) {
@@ -147,40 +167,49 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         }
     }
 
-    private fun <T> initDynamicColumnsCaptions(properties: List<DynamicPropertyData<T>>) {
+    private fun initDynamicColumnsCaptions() {
         var startCol = pivotGrid.columns
-        pivotGrid.columns += properties.size
-        properties.forEach {
+        pivotGrid.columns += this.dynamicProperties!!.size
+        this.dynamicProperties!!.forEach {
             addColumnCaption(it.caption, startCol++)
         }
     }
 
-    fun initDynamicPropertiesValues(function: (KeyValueCollectionContainer) -> Unit) {
+    fun setDynamicPropertiesValues(function: (KeyValueCollectionContainer) -> Unit) {
         function.invoke(kvCollectionContainer)
     }
 
-    fun <T> initDynamicPivotPropertiesFields(dynamicProperties: List<DynamicPropertyData<T>>) {
+    private fun initDynamicPivotPropertiesFields() {
         val skipRows = 1 //avoid captions
-        val skipColumns = pivotStaticProperties.filter { it.visible }.size //avoid static fields
+        val skipColumns = staticProperties!!.filter { it.visible }.size //avoid static fields
+
         kvCollectionContainer.items.forEachIndexed { rowIndex, keyValueEntity ->
-            dynamicProperties.forEachIndexed { colIndex, propertyData ->
+            this.dynamicProperties!!.forEachIndexed { colIndex, propertyData ->
                 @Suppress("UnstableApiUsage")
                 val field = uiComponents.create(propertyData.fieldType).apply {
-                    val container = KeyValueContainerImpl(kvCollectionContainer.entityMetaClass as KeyValueMetaClass).apply {
-                        setItem(keyValueEntity)
-                        addItemPropertyChangeListener { event ->
-                            val keyProperty = event.item.getValue<Any>(pivotStaticProperties.find { it.key }!!.property)
-                            storeFunction.invoke(keyProperty!!, event.property, event.value)
-                        }
-                    }
-                    this.valueSource = ContainerValueSource(container, propertyData.property)
+                    this.valueSource = ContainerValueSource(getInstanceContainer(keyValueEntity), propertyData.property)
                     this.setWidth(propertyData.fieldWidth)
-
                 }
                 pivotGrid.add(field, colIndex + skipColumns, rowIndex + skipRows)
             }
         }
+    }
 
+    private fun getInstanceContainer(keyValueEntity: KeyValueEntity): KeyValueContainer {
+        return containerList.find { it.item == keyValueEntity } ?: createInstanceContainer(keyValueEntity)
+    }
+
+    private fun createInstanceContainer(keyValueEntity: KeyValueEntity): KeyValueContainer {
+        val key = staticProperties!!.find { it.key }!!.property
+        return KeyValueContainerImpl(kvCollectionContainer.entityMetaClass as KeyValueMetaClass).apply {
+            setItem(keyValueEntity)
+            addItemPropertyChangeListener { event ->
+                val keyProperty = event.item.getValue<Any>(key)
+                storeFunction!!.invoke(keyProperty!!, event.property, event.value)
+            }
+        }.also {
+            containerList.add(it)
+        }
     }
 
     fun setStoreFunction(function: (Any, String, Any?) -> Unit) {

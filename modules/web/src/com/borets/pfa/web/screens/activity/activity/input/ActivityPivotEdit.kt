@@ -12,6 +12,7 @@ import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Messages
 import com.haulmont.cuba.core.global.TimeSource
 import com.haulmont.cuba.gui.components.GridLayout
+import com.haulmont.cuba.gui.components.HasValue
 import com.haulmont.cuba.gui.components.LookupField
 import com.haulmont.cuba.gui.components.TextField
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
@@ -83,7 +84,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
 
         pivotGridHelper.initStaticPivotProperties(pivotStaticProperties)
 
-        pivotGridHelper.initStaticPivotPropertiesValues(initKvEntities())
+        pivotGridHelper.setStaticPivotPropertiesValues(initKvEntities())
 
         pivotGridHelper.setStoreFunction() { key : Any, property : String, value : Any? ->
             var detail = detailsDc.mutableItems.find { it.analytic == key && property == it.getYearMonth().toString() }
@@ -100,12 +101,19 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
 
     @Subscribe
     private fun onAfterShow(event: AfterShowEvent) {
-        initDynamicPivotProperties()
+        initDynamic(editedEntity.year)
     }
 
-    private fun initDynamicPivotProperties() {
+    @Subscribe("yearField")
+    private fun onYearFieldValueChange(event: HasValue.ValueChangeEvent<Integer>) {
+        if (event.isUserOriginated)
+            initDynamic(event.value as Int)
+    }
+
+
+    private fun initDynamic(year: Int?) {
         val monthQty = activityInputConfig.getDefaultMonthQty()
-        val startMonth = YearMonth.of(editedEntity.year ?: timeSource.now().year, 1)
+        val startMonth = YearMonth.of(year ?: timeSource.now().year, 1)
         val months : MutableList<YearMonth> = mutableListOf()
         for (monthNumber in 0..monthQty) {
             months.add(startMonth.plusMonths(monthNumber.toLong()))
@@ -116,8 +124,8 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
                 Int::class.javaObjectType, TextField::class.java, "60px")
 
         }.let { dynamicProperties ->
-            pivotGridHelper.initDynamicDcPivotProperties(dynamicProperties)
-            pivotGridHelper.initDynamicPropertiesValues { kvDc : KeyValueCollectionContainer ->
+            pivotGridHelper.initDynamicProperties(dynamicProperties)
+            pivotGridHelper.setDynamicPropertiesValues { kvDc : KeyValueCollectionContainer ->
                 detailsDc.items.forEach { detail ->
                     detail.value?.let { value ->
                         kvDc.items
