@@ -18,10 +18,6 @@
         <form id="form" dataContainer="activityDetailDc">
             <column width="450px">
                 <lookupField id="recordTypeField" property="recordType"/>
-                <lookupField id="jobTypeField" property="jobType"/>
-                <lookupField property="wellTag"/>
-                <lookupField property="wellEquip"/>
-                <lookupField id="contractTypeField" property="contractType"/>
                 <pickerField id="analyticField" property="analytic"/>
                 <textField id="yearMonthField" property="yearMonth"/>
                 <textField id="valueField" property="value"/>

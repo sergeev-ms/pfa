@@ -46,10 +46,6 @@ create table PFA_ACTIVITY_DETAIL (
     DELETED_BY varchar(50),
     --
     RECORD_TYPE varchar(50),
-    CONTRACT_TYPE varchar(50),
-    JOB_TYPE varchar(50),
-    WELL_EQUIP varchar(50),
-    WELL_TAG varchar(50),
     ANALYTIC_ID uniqueidentifier,
     YEAR_ integer,
     MONTH_ integer,

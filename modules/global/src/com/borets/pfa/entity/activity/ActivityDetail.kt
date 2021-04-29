@@ -13,18 +13,6 @@ open class ActivityDetail : StandardEntity() {
     @Column(name = "RECORD_TYPE")
     private var recordType: String? = null
 
-    @Column(name = "CONTRACT_TYPE")
-    private var contractType: String? = null
-
-    @Column(name = "JOB_TYPE")
-    private var jobType: String? = null
-
-    @Column(name = "WELL_EQUIP")
-    private var wellEquip: String? = null
-
-    @Column(name = "WELL_TAG")
-    private var wellTag: String? = null
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ANALYTIC_ID")
     var analytic: AnalyticSet? = null
@@ -33,7 +21,7 @@ open class ActivityDetail : StandardEntity() {
     @Column(name = "YEAR_")
     var year: Int? = null
 
-    @NumberFormat(pattern = "0#")
+//    @NumberFormat(pattern = "0#")
     @Column(name = "MONTH_")
     var month: Int? = null
 
@@ -59,30 +47,6 @@ open class ActivityDetail : StandardEntity() {
         month = yearMonth?.monthValue
     }
 
-
-    fun getWellTag(): WellTag? = wellTag?.let { WellTag.fromId(it) }
-
-    fun setWellTag(wellTag: WellTag?) {
-        this.wellTag = wellTag?.id
-    }
-
-    fun getWellEquip(): WellEquip? = wellEquip?.let { WellEquip.fromId(it) }
-
-    fun setWellEquip(wellEquip: WellEquip?) {
-        this.wellEquip = wellEquip?.id
-    }
-
-    fun getJobType(): JobType? = jobType?.let { JobType.fromId(it) }
-
-    fun setJobType(jobType: JobType?) {
-        this.jobType = jobType?.id
-    }
-
-    fun getContractType(): ContractType? = contractType?.let { ContractType.fromId(it) }
-
-    fun setContractType(contractType: ContractType?) {
-        this.contractType = contractType?.id
-    }
 
     fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
 
