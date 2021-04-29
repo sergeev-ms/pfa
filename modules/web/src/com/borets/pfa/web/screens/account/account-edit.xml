@@ -8,6 +8,7 @@
                   class="com.borets.pfa.entity.account.Account">
             <view extends="_local">
                 <property name="customer"/>
+                <property name="parent" view="_minimal"/>
             </view>
             <loader/>
         </instance>
@@ -20,6 +21,7 @@
                 <textField id="nameField" property="name"/>
                 <lookupField id="typeField" property="type"/>
                 <pickerField property="customer"/>
+                <pickerField id="parentField" property="parent"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

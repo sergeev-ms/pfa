@@ -6,9 +6,7 @@ import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity
 import com.haulmont.cuba.core.entity.annotation.SystemLevel
 import java.math.BigDecimal
-import javax.persistence.Column
-import javax.persistence.Table
-import javax.persistence.Transient
+import javax.persistence.*
 
 @NamePattern(value = "%s|name")
 @Table(name = "PFA_ACCOUNT")
@@ -19,6 +17,10 @@ open class Account : StandardEntity() {
 
     @Column(name = "TYPE_")
     private var type: String? = null
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_ID")
+    var parent: Account? = null
 
     @SystemLevel
     @Column(name = "CUSTOMER_ID", precision = 7, scale = 0)

@@ -7,6 +7,7 @@
         <collection id="accountsDc" class="com.borets.pfa.entity.account.Account">
             <view extends="_local">
                 <property name="customer"/>
+                <property name="parent" view="_minimal"/>
             </view>
             <loader id="accountsDl">
                 <query>
@@ -20,7 +21,7 @@
         <filter id="filter" applyTo="accountsTable" dataLoader="accountsDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="accountsTable" width="100%" dataContainer="accountsDc">
+        <treeTable id="accountsTable" width="100%" dataContainer="accountsDc" hierarchyProperty="parent">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
@@ -30,6 +31,7 @@
                 <column id="name"/>
                 <column id="type"/>
                 <column id="customer"/>
+                <column id="parent"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">
@@ -37,7 +39,7 @@
                 <button id="editBtn" action="accountsTable.edit"/>
                 <button id="removeBtn" action="accountsTable.remove"/>
             </buttonsPanel>
-        </groupTable>
+        </treeTable>
         <hbox id="lookupActions" spacing="true" visible="false">
             <button action="lookupSelectAction"/>
             <button action="lookupCancelAction"/>
