@@ -8,6 +8,10 @@
             <view extends="_local">
                 <property name="customer"/>
                 <property name="parent" view="_minimal"/>
+                <property name="actualRevision" view="_local">
+                    <property name="manager"/>
+                    <property name="yearMonth"/>
+                </property>
             </view>
             <loader id="accountsDl">
                 <query>
@@ -29,8 +33,10 @@
             </actions>
             <columns>
                 <column id="name"/>
-                <column id="type"/>
                 <column id="customer"/>
+                <column id="actualRevision.type"/>
+                <column id="actualRevision.manager"/>
+                <column id="actualRevision.yearMonth"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">

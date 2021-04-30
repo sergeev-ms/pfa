@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://accountRevisionBrowse.caption" focusComponent="accountRevisionsTable"
+        messagesPack="com.borets.pfa.web.screens.account.accountrevision">
+    <data readOnly="true">
+        <collection id="accountRevisionsDc" class="com.borets.pfa.entity.account.AccountRevision">
+            <view extends="_local">
+                <property name="manager" view="_minimal"/>
+                <property name="createTs"/>
+                <property name="createdBy"/>
+            </view>
+            <loader id="accountRevisionsDl">
+                <query>
+                    <![CDATA[select e from pfa_AccountRevision e order by e.createTs DESC]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>e.account = :account</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="accountRevisionsTable" spacing="true">
+        <filter id="filter" applyTo="accountRevisionsTable" dataLoader="accountRevisionsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="accountRevisionsTable" width="100%" dataContainer="accountRevisionsDc">
+            <actions>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="yearMonth"/>
+                <column id="type"/>
+                <column id="manager"/>
+                <column id="createTs"/>
+                <column id="createdBy"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
+                <button id="editBtn" action="accountRevisionsTable.edit"/>
+                <button id="removeBtn" action="accountRevisionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

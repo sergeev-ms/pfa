@@ -10,9 +10,9 @@ create table PFA_ACCOUNT (
     DELETED_BY varchar(50),
     --
     NAME varchar(255),
-    TYPE_ varchar(50),
     PARENT_ID uniqueidentifier,
     CUSTOMER_ID decimal(7),
+    ACTUAL_REVISION_ID uniqueidentifier,
     --
     primary key nonclustered (ID)
 )^
@@ -129,3 +129,23 @@ create table PFA_PRICE_LIST_DETAIL (
     primary key nonclustered (ID)
 )^
 -- end PFA_PRICE_LIST_DETAIL
+-- begin PFA_ACCOUNT_REVISION
+create table PFA_ACCOUNT_REVISION (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY varchar(50),
+    --
+    YEAR_ integer,
+    MONTH_ integer,
+    MANAGER_ID uniqueidentifier,
+    TYPE_ varchar(50),
+    ACCOUNT_ID uniqueidentifier not null,
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_ACCOUNT_REVISION

@@ -1,11 +1,15 @@
 package com.borets.pfa.entity.account
 
 import com.borets.pfa.entity.customer.DimCustomers
+import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity
+import com.haulmont.cuba.core.entity.annotation.OnDelete
 import com.haulmont.cuba.core.entity.annotation.SystemLevel
+import com.haulmont.cuba.core.global.DeletePolicy
 import java.math.BigDecimal
+import java.time.YearMonth
 import javax.persistence.*
 
 @NamePattern(value = "%s|name")
@@ -14,9 +18,6 @@ import javax.persistence.*
 open class Account : StandardEntity() {
     @Column(name = "NAME")
     var name: String? = null
-
-    @Column(name = "TYPE_")
-    private var type: String? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
@@ -30,14 +31,19 @@ open class Account : StandardEntity() {
     @MetaProperty(related = ["customerId"])
     var customer: DimCustomers? = null
 
-    @Transient
-    @MetaProperty
-    var customers: MutableList<DimCustomers>? = mutableListOf()
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "account")
+    var revisions: MutableList<AccountRevision>? = mutableListOf()
 
-    fun getType(): Type? = type?.let { Type.fromId(it) }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ACTUAL_REVISION_ID")
+    var actualRevision: AccountRevision? = null
 
-    fun setType(type: Type?) {
-        this.type = type?.id
+    fun getType(): Type? = actualRevision?.getType()
+
+    fun getYearMonth(): YearMonth? {
+        return actualRevision?.getYearMonth()
     }
 
     companion object {

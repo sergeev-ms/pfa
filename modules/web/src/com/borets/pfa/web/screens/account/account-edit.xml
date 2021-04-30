@@ -1,29 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        caption="msg://accountEdit.caption"
-        focusComponent="form"
+        caption="msg://accountEdit.caption" focusComponent="form"
         messagesPack="com.borets.pfa.web.screens.account">
     <data>
-        <instance id="accountDc"
-                  class="com.borets.pfa.entity.account.Account">
+        <instance id="accountDc" class="com.borets.pfa.entity.account.Account">
             <view extends="_local">
                 <property name="customer"/>
                 <property name="parent" view="_minimal"/>
+                <property name="actualRevision" view="_local">
+                    <property name="manager"/>
+                </property>
             </view>
             <loader/>
+            <instance id="actualRevisionDc" property="actualRevision"/>
         </instance>
     </data>
-    <dialogMode height="600"
-                width="800"/>
+    <dialogMode height="600" width="800"/>
     <layout expand="editActions" spacing="true">
-        <form id="form" dataContainer="accountDc">
-            <column width="350px">
-                <textField id="nameField" property="name"/>
-                <lookupField id="typeField" property="type"/>
-                <pickerField property="customer"/>
-                <pickerField id="parentField" property="parent"/>
-            </column>
-        </form>
+        <tabSheet>
+            <tab id="generalTab" caption="msg://generalTab.caption" spacing="true" margin="true,false,false,false">
+                <groupBox id="accountDataGb" caption="msg://accountDataGb.caption">
+                    <form id="form" dataContainer="accountDc">
+                        <column width="350px">
+                            <textField id="nameField" property="name"/>
+                            <pickerField property="customer"/>
+                            <pickerField id="parentField" property="parent"/>
+                        </column>
+                        <column width="350px">
+                            <textField id="yearMonthField" property="yearMonth" editable="false" dataContainer="actualRevisionDc" stylename="borderless"/>
+                            <lookupField id="typeField" property="type" editable="false" dataContainer="actualRevisionDc" stylename="borderless"/>
+                            <textField id="managerField" property="manager" editable="false" dataContainer="actualRevisionDc" stylename="borderless"/>
+                        </column>
+                        <column width="250px">
+                            <linkButton id="createRevisionBtn" caption="msg://createRevisionBtn.caption" icon="CREATE_ACTION"/>
+                            <linkButton id="showRevisionsBtn" caption="msg://showRevisionsBtn.caption" icon="HISTORY"/>
+                        </column>
+                    </form>
+                </groupBox>
+            </tab>
+            <tab id="marketDataTab" caption="msg://marketDataTab.caption"/>
+        </tabSheet>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
             <button id="closeBtn" action="windowClose"/>

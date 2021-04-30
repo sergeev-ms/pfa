@@ -9,5 +9,6 @@
         <class>com.borets.pfa.entity.price.RevenueType</class>
         <class>com.borets.pfa.entity.price.PriceList</class>
         <class>com.borets.pfa.entity.price.PriceListDetail</class>
+        <class>com.borets.pfa.entity.account.AccountRevision</class>
     </persistence-unit>
 </persistence>
