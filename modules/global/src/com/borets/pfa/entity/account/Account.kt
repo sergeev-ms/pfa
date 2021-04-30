@@ -1,5 +1,6 @@
 package com.borets.pfa.entity.account
 
+import com.borets.pfa.entity.account.marketdata.MarketData
 import com.borets.pfa.entity.customer.DimCustomers
 import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.chile.core.annotations.MetaProperty
@@ -39,6 +40,15 @@ open class Account : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACTUAL_REVISION_ID")
     var actualRevision: AccountRevision? = null
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "account")
+    var marketDetails: MutableList<MarketData>? = mutableListOf()
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ACTUAL_MARKET_DETAIL_ID")
+    var actualMarketDetail: MarketData? = null
 
     fun getType(): Type? = actualRevision?.getType()
 

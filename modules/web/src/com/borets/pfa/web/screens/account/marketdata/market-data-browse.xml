@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://marketDataBrowse.caption" focusComponent="marketDatasTable"
+        messagesPack="com.borets.pfa.web.screens.account.marketdata.marketdata">
+    <data readOnly="true">
+        <collection id="marketDatasDc" class="com.borets.pfa.entity.account.marketdata.MarketData">
+            <view extends="_local">
+                <property name="yearMonth"/>
+                <property name="createTs"/>
+                <property name="createdBy"/>
+            </view>
+            <loader id="marketDatasDl">
+                <query>
+                    <![CDATA[select e from pfa_MarketData e]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>e.account = :account</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="marketDatasTable" spacing="true">
+        <filter id="filter" applyTo="marketDatasTable" dataLoader="marketDatasDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="marketDatasTable" width="100%" dataContainer="marketDatasDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="yearMonth"/>
+                <column id="contractType"/>
+                <column id="applicationType"/>
+                <column id="fieldType"/>
+                <column id="runsNumber"/>
+                <column id="firstRunDuration"/>
+                <column id="secondRunDuration"/>
+                <column id="thirdRunDuration"/>
+                <column id="thirdPlusRunDuration"/>
+                <column id="trl"/>
+                <column id="arl"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
+                <button id="createBtn" action="marketDatasTable.create"/>
+                <button id="editBtn" action="marketDatasTable.edit"/>
+                <button id="removeBtn" action="marketDatasTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

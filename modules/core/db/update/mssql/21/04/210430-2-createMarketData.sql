@@ -1,0 +1,2 @@
+alter table PFA_MARKET_DATA add constraint FK_PFA_MARKET_DATA_ON_ACCOUNT foreign key (ACCOUNT_ID) references PFA_ACCOUNT(ID);
+create index IDX_PFA_MARKET_DATA_ON_ACCOUNT on PFA_MARKET_DATA (ACCOUNT_ID);

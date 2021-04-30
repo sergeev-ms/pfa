@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://marketDataEdit.caption" focusComponent="form"
+        messagesPack="com.borets.pfa.web.screens.account.marketdata">
+    <data>
+        <instance id="marketDataDc" class="com.borets.pfa.entity.account.marketdata.MarketData">
+            <view extends="_local">
+                <property name="yearMonth"/>
+            </view>
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="marketDataDc">
+                <column width="250px">
+                    <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption"/>
+                    <lookupField id="contractTypeField" property="contractType" required="true"/>
+                    <lookupField id="applicationTypeField" property="applicationType" required="true"/>
+                    <lookupField id="fieldTypeField" property="fieldType" required="true"/>
+                    <textField id="trlField" property="trl" required="true"/>
+                    <textField id="arlField" property="arl" required="true"/>
+                </column>
+                <column width="250px">
+                    <lookupField id="runsNumberField" property="runsNumber" required="true"/>
+                    <textField id="firstRunDurationField" property="firstRunDuration" required="true"/>
+                    <textField id="secondRunDurationField" property="secondRunDuration" required="true"/>
+                    <textField id="thirdRunDurationField" property="thirdRunDuration" required="true"/>
+                    <textField id="thirdPlusRunDurationField" property="thirdPlusRunDuration" required="true"/>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

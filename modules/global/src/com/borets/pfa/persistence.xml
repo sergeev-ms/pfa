@@ -10,5 +10,6 @@
         <class>com.borets.pfa.entity.price.PriceList</class>
         <class>com.borets.pfa.entity.price.PriceListDetail</class>
         <class>com.borets.pfa.entity.account.AccountRevision</class>
+        <class>com.borets.pfa.entity.account.marketdata.MarketData</class>
     </persistence-unit>
 </persistence>

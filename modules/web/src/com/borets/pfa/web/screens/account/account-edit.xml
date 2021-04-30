@@ -10,9 +10,14 @@
                 <property name="actualRevision" view="_local">
                     <property name="manager"/>
                 </property>
+                <property name="actualMarketDetail" view="_local">
+                    <property name="createdBy"/>
+                    <property name="createTs"/>
+                </property>
             </view>
             <loader/>
             <instance id="actualRevisionDc" property="actualRevision"/>
+            <instance id="actualMarketDataDc" property="actualMarketDetail"/>
         </instance>
     </data>
     <dialogMode height="600" width="800"/>
@@ -20,13 +25,13 @@
         <tabSheet>
             <tab id="generalTab" caption="msg://generalTab.caption" spacing="true" margin="true,false,false,false">
                 <groupBox id="accountDataGb" caption="msg://accountDataGb.caption">
-                    <form id="form" dataContainer="accountDc">
-                        <column width="350px">
+                    <form id="form" dataContainer="accountDc" childrenCaptionWidth="170px">
+                        <column width="250px">
                             <textField id="nameField" property="name"/>
                             <pickerField property="customer"/>
                             <pickerField id="parentField" property="parent"/>
                         </column>
-                        <column width="350px">
+                        <column width="250px">
                             <textField id="yearMonthField" property="yearMonth" editable="false" dataContainer="actualRevisionDc" stylename="borderless"/>
                             <lookupField id="typeField" property="type" editable="false" dataContainer="actualRevisionDc" stylename="borderless"/>
                             <textField id="managerField" property="manager" editable="false" dataContainer="actualRevisionDc" stylename="borderless"/>
@@ -36,6 +41,31 @@
                             <linkButton id="showRevisionsBtn" caption="msg://showRevisionsBtn.caption" icon="HISTORY"/>
                         </column>
                     </form>
+                </groupBox>
+                <groupBox id="marketDataGb" caption="msg://marketDataGb.caption">
+                <form id="actualMarketForm" dataContainer="actualMarketDataDc" childrenCaptionWidth="170px">
+                    <column width="250px">
+                        <textField property="contractType" editable="false"/>
+                        <textField property="applicationType" editable="false"/>
+                        <textField property="fieldType" editable="false"/>
+                        <textField property="trl" editable="false"/>
+                        <textField property="arl" editable="false"/>
+                    </column>
+                    <column width="250px">
+                        <textField property="runsNumber" editable="false"/>
+                        <textField property="firstRunDuration" editable="false"/>
+                        <textField property="secondRunDuration" editable="false"/>
+                        <textField property="thirdRunDuration" editable="false"/>
+                        <textField property="thirdPlusRunDuration" editable="false"/>
+                    </column>
+                    <column width="250px">
+                        <textField property="yearMonth" editable="false"/>
+                        <textField property="createdBy" editable="false"/>
+                        <textField property="createTs" editable="false"/>
+                        <linkButton id="createMarketDataBtn" caption="msg://createMarketDataBtn.caption" icon="CREATE_ACTION"/>
+                        <linkButton id="showMarketDetailsBtn" caption="msg://showMarketDetailsBtn.caption" icon="HISTORY"/>
+                    </column>
+                </form>
                 </groupBox>
             </tab>
             <tab id="marketDataTab" caption="msg://marketDataTab.caption"/>
