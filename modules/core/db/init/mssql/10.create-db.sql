@@ -104,6 +104,8 @@ create table PFA_PRICE_LIST (
     --
     ACCOUNT_ID uniqueidentifier,
     RECORD_TYPE varchar(50),
+    YEAR_ integer,
+    MONTH_ integer,
     --
     primary key nonclustered (ID)
 )^

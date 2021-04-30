@@ -13,15 +13,17 @@ import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.AppBeans
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Messages
-import com.haulmont.cuba.gui.components.CurrencyField
-import com.haulmont.cuba.gui.components.GridLayout
-import com.haulmont.cuba.gui.components.LookupField
-import com.haulmont.cuba.gui.components.TextField
+import com.haulmont.cuba.gui.components.*
+import com.haulmont.cuba.gui.components.data.value.ContainerValueSource
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
+import com.haulmont.cuba.gui.model.InstanceContainer
 import com.haulmont.cuba.gui.model.KeyValueCollectionContainer
 import com.haulmont.cuba.gui.screen.*
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.ZoneId
 import java.util.*
 import javax.inject.Inject
 
@@ -54,15 +56,49 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
 
     private lateinit var pivotGridHelper: PivotGridInitializer
 
+    //    @Inject
+//    private lateinit var yearMonthField: LookupField<YearMonth>
+    @Inject
+    private lateinit var yearMonthField: DatePicker<Date>
+
+    @Inject
+    private lateinit var priceListDc: InstanceContainer<PriceList>
+
 
     @Subscribe
     private fun onAfterInit(event: AfterInitEvent) {
         pivotGridHelper = AppBeans.getPrototype(PivotGridInitializer::class.java, pivotGrid)
         initFilter()
+
     }
 
     @Subscribe
     private fun onBeforeShow(event: BeforeShowEvent) {
+        initPivotGrid()
+    }
+
+    @Subscribe
+    private fun onAfterShow(event: AfterShowEvent) {
+        initDynamic()
+        editedEntity.getYearMonth()?.let {
+            yearMonthField.value = Date.from(it
+                .atDay(1)
+                .atStartOfDay(ZoneId.systemDefault())
+                .toInstant());
+        }
+    }
+
+    @Subscribe("yearMonthField")
+    private fun onYearMonthFieldValueChange(event: HasValue.ValueChangeEvent<Date>) {
+        event.value.let {
+            var yearMonth: YearMonth? = null
+            if (it != null)
+                yearMonth = YearMonth.from(it.toInstant().atZone(ZoneId.systemDefault()))
+            editedEntity.setYearMonth(yearMonth)
+        }
+    }
+
+    private fun initPivotGrid() {
         val pivotStaticProperties = listOf(
             PivotGridInitializer.StaticPropertyData("analytic", "", true, AnalyticSet::class.java, null, null, false),
 
@@ -90,8 +126,9 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
 
         pivotGridHelper.setStaticPivotPropertiesValues(initKvEntities())
 
-        pivotGridHelper.setStoreFunction() { key : Any, property : String, value : Any? ->
-            var detail = detailsDc.mutableItems.find { it.analytic == key && property == it.revenueType!!.id.toString() }
+        pivotGridHelper.setStoreFunction() { key: Any, property: String, value: Any? ->
+            var detail =
+                detailsDc.mutableItems.find { it.analytic == key && property == it.revenueType!!.id.toString() }
             if (detail == null) {
                 detail = dataContext.create(PriceListDetail::class.java).apply {
                     this.priceList = editedEntity
@@ -101,11 +138,6 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
             }
             detail!!.value = value as BigDecimal?
         }
-    }
-
-    @Subscribe
-    private fun onAfterShow(event: AfterShowEvent) {
-        initDynamic()
     }
 
     private fun initDynamic() {
@@ -165,4 +197,5 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
             }
         }
     }
+
 }
