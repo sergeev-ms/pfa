@@ -3,7 +3,9 @@ package com.borets.pfa.entity.account.marketdata
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.activity.ContractType
 import com.haulmont.chile.core.annotations.MetaProperty
+import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity
+import java.math.BigDecimal
 import java.time.YearMonth
 import javax.persistence.*
 
@@ -54,6 +56,46 @@ open class MarketData : StandardEntity() {
 
     @Column(name = "ARL")
     var arl: Int? = null
+
+    @Column(name = "WELL_COUNT")
+    var wellCount: Int? = null
+
+    @NumberFormat(pattern = "#%")
+    @Column(name = "CONVERSION_RATE")
+    var conversionRate: BigDecimal? = null
+
+    @Column(name = "OIL_PERMITS")
+    var oilPermits: Int? = null
+
+    @Column(name = "RIG_QTY")
+    var rigQty: Int? = null
+
+    @Column(name = "DUC_QTY")
+    var ducQty: Int? = null
+
+    @NumberFormat(pattern = "#%")
+    @Column(name = "COMPLETION")
+    var completion: BigDecimal? = null
+
+    @NumberFormat(pattern = "#%")
+    @Column(name = "ACTIVITY_RATE")
+    var activityRate: BigDecimal? = null
+
+    @Column(name = "BUDGET")
+    var budget: Int? = null
+
+    @NumberFormat(pattern = "#%")
+    @Column(name = "B_SHARE")
+    var bShare: BigDecimal? = null
+
+    @Column(name = "WELL_MONITOR_QTY")
+    var wellMonitorQty: Int? = null
+
+    @Column(name = "B_WELL_COUNT")
+    var bWellCount: Int? = null
+
+    @Column(name = "RENTAL_CAPEX")
+    var rentalCapex: Int? = null
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ACCOUNT_ID")

@@ -4,10 +4,16 @@ import com.haulmont.cuba.gui.screen.*
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.marketdata.MarketData
+import com.haulmont.cuba.core.global.DatatypeFormatter
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.Button
+import com.haulmont.cuba.gui.components.GroupBoxLayout
 import com.haulmont.cuba.gui.model.DataContext
+import com.haulmont.cuba.gui.model.InstanceContainer
 import com.haulmont.cuba.gui.model.InstancePropertyContainer
+import com.haulmont.cuba.gui.screen.Target
+import com.haulmont.cuba.security.global.UserSession
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @UiController("pfa_Account.edit")
@@ -25,6 +31,15 @@ class AccountEdit : StandardEditor<Account>() {
 
     @Inject
     private lateinit var actualMarketDataDc: InstancePropertyContainer<MarketData>
+
+    @Inject
+    private lateinit var marketDataGb: GroupBoxLayout
+
+    @Inject
+    private lateinit var userSession: UserSession
+
+    @Inject
+    private lateinit var datatypeFormatter: DatatypeFormatter
 
     @Subscribe("createRevisionBtn")
     private fun onCreateRevisionBtnClick(event: Button.ClickEvent) {
@@ -80,4 +95,15 @@ class AccountEdit : StandardEditor<Account>() {
             .withOptions(MapScreenOptions(mutableMapOf(Pair("account", editedEntity)) as Map<String, Any>))
             .show()
     }
+
+    @Subscribe(id = "actualMarketDataDc", target = Target.DATA_CONTAINER)
+    private fun onActualMarketDataDcItemChange(event: InstanceContainer.ItemChangeEvent<MarketData>) {
+        event.item?.let {
+            marketDataGb.caption = marketDataGb.caption?.format(
+                it.getYearMonth()?.format(DateTimeFormatter.ofPattern("MMM yyyy", userSession.locale)))
+            marketDataGb.contextHelpText = "Updated by ${it.createdBy} at ${datatypeFormatter.formatDateTime(it.createTs)}"
+        }
+    }
+
+
 }

@@ -13,8 +13,8 @@
     <dialogMode height="600" width="800"/>
     <layout expand="scrollBox" spacing="true">
         <scrollBox id="scrollBox" spacing="true">
-            <form id="form" dataContainer="marketDataDc">
-                <column width="250px">
+            <form id="form" dataContainer="marketDataDc" width="100%">
+                <column width="100%">
                     <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption"/>
                     <lookupField id="contractTypeField" property="contractType" required="true"/>
                     <lookupField id="applicationTypeField" property="applicationType" required="true"/>
@@ -22,12 +22,28 @@
                     <textField id="trlField" property="trl" required="true"/>
                     <textField id="arlField" property="arl" required="true"/>
                 </column>
-                <column width="250px">
+                <column width="100%">
                     <lookupField id="runsNumberField" property="runsNumber" required="true"/>
                     <textField id="firstRunDurationField" property="firstRunDuration" required="true"/>
                     <textField id="secondRunDurationField" property="secondRunDuration" required="true"/>
                     <textField id="thirdRunDurationField" property="thirdRunDuration" required="true"/>
                     <textField id="thirdPlusRunDurationField" property="thirdPlusRunDuration" required="true"/>
+                </column>
+                <column width="100%">
+                    <textField id="wellCountField" property="wellCount" required="true"/>
+                    <textField id="conversionRateField" property="conversionRate" required="true"/>
+                    <textField id="oilPermitsField" property="oilPermits" required="true"/>
+                    <textField id="rigQtyField" property="rigQty" required="true"/>
+                    <textField id="ducQtyField" property="ducQty" required="true"/>
+                </column>
+                <column width="100%">
+                    <textField id="completionField" property="completion" required="true"/>
+                    <currencyField id="activityRateField" property="activityRate" required="true" currency="$"/>
+                    <textField id="budgetField" property="budget" required="true"/>
+                    <textField id="bShareField" property="bShare" required="true"/>
+                    <textField id="wellMonitorQtyField" property="wellMonitorQty" required="true"/>
+                    <textField id="bWellCountField" property="bWellCount" required="true"/>
+                    <currencyField id="rentalCapexField" property="rentalCapex" required="true" currency="$"/>
                 </column>
             </form>
         </scrollBox>
