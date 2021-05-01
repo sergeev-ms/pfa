@@ -9,6 +9,8 @@
                 <property name="parent" view="_minimal"/>
                 <property name="actualRevision" view="_local">
                     <property name="manager"/>
+                    <property name="createdBy"/>
+                    <property name="createTs"/>
                 </property>
                 <property name="actualMarketDetail" view="_local">
                     <property name="createdBy"/>
@@ -24,23 +26,24 @@
     <layout expand="editActions" spacing="true">
         <tabSheet>
             <tab id="generalTab" caption="msg://generalTab.caption" spacing="true" margin="true,false,false,false">
-                <groupBox id="accountDataGb" caption="msg://accountDataGb.caption">
+                <groupBox id="accountDataGb" caption="msg://accountDataGb.caption" spacing="true">
                     <form id="form" dataContainer="accountDc" childrenCaptionWidth="170px" width="100%">
                         <column width="100%">
                             <textField id="nameField" property="name"/>
                             <pickerField property="customer"/>
+                        </column>
+                        <column width="100%">
                             <pickerField id="parentField" property="parent"/>
+                            <textField id="typeField" property="type" editable="false" dataContainer="actualRevisionDc"/>
                         </column>
                         <column width="100%">
-                            <textField id="yearMonthField" property="yearMonth" editable="false" dataContainer="actualRevisionDc" stylename="borderless"/>
-                            <lookupField id="typeField" property="type" editable="false" dataContainer="actualRevisionDc" stylename="borderless"/>
-                            <textField id="managerField" property="manager" editable="false" dataContainer="actualRevisionDc" stylename="borderless"/>
-                        </column>
-                        <column width="100%">
-                            <linkButton id="createRevisionBtn" caption="msg://createRevisionBtn.caption" icon="CREATE_ACTION"/>
-                            <linkButton id="showRevisionsBtn" caption="msg://showRevisionsBtn.caption" icon="HISTORY"/>
+                            <textField id="managerField" property="manager" editable="false" dataContainer="actualRevisionDc"/>
                         </column>
                     </form>
+                    <hbox spacing="true" align="MIDDLE_RIGHT">
+                        <linkButton id="createRevisionBtn" caption="msg://createRevisionBtn.caption" icon="CREATE_ACTION"/>
+                        <linkButton id="showRevisionsBtn" caption="msg://showRevisionsBtn.caption" icon="HISTORY"/>
+                    </hbox>
                 </groupBox>
                 <groupBox id="marketDataGb" caption="msg://marketDataGb.caption" spacing="true">
                     <form id="actualMarketForm" dataContainer="actualMarketDataDc" childrenCaptionWidth="170px" width="100%">

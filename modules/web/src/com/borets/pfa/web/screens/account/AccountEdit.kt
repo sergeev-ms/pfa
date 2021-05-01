@@ -41,6 +41,9 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var datatypeFormatter: DatatypeFormatter
 
+    @Inject
+    private lateinit var accountDataGb: GroupBoxLayout
+
     @Subscribe("createRevisionBtn")
     private fun onCreateRevisionBtnClick(event: Button.ClickEvent) {
 
@@ -94,6 +97,15 @@ class AccountEdit : StandardEditor<Account>() {
         screenBuilders.lookup(MarketData::class.java, this)
             .withOptions(MapScreenOptions(mutableMapOf(Pair("account", editedEntity)) as Map<String, Any>))
             .show()
+    }
+
+    @Subscribe(id = "actualRevisionDc", target = Target.DATA_CONTAINER)
+    private fun onActualRevisionDcItemChange(event: InstanceContainer.ItemChangeEvent<AccountRevision>) {
+        event.item?.let {
+            accountDataGb.caption = accountDataGb.caption?.format(
+                it.getYearMonth()?.format(DateTimeFormatter.ofPattern("MMM yyyy", userSession.locale)))
+            accountDataGb.contextHelpText = "Updated by ${it.createdBy} at ${datatypeFormatter.formatDateTime(it.createTs)}"
+        }
     }
 
     @Subscribe(id = "actualMarketDataDc", target = Target.DATA_CONTAINER)
