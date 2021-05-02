@@ -190,3 +190,38 @@ create table PFA_MARKET_DATA (
     primary key nonclustered (ID)
 )^
 -- end PFA_MARKET_DATA
+-- begin PFA_EQUIPMENT_TYPE
+create table PFA_EQUIPMENT_TYPE (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY varchar(50),
+    --
+    NAME varchar(255),
+    CATEGORY_ID uniqueidentifier,
+    MANDATORY tinyint,
+    REVENUE_TYPE_ID uniqueidentifier,
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_EQUIPMENT_TYPE
+-- begin PFA_EQUIPMENT_CATEGORY
+create table PFA_EQUIPMENT_CATEGORY (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY varchar(50),
+    --
+    NAME varchar(255),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_EQUIPMENT_CATEGORY

@@ -8,6 +8,8 @@
             <item screen="pfa_AnalyticSet.browse" caption="mainMsg://menu_config.pfa_AnalyticSet.browse"/>
             <item screen="pfa_RevenueType.browse" caption="mainMsg://menu_config.pfa_RevenueType.browse"/>
             <item screen="pfa_DimCustomers.browse" caption="mainMsg://menu_config.pfa_DimCustomers.browse"/>
+            <item screen="pfa_EquipmentType.browse" caption="mainMsg://menu_config.pfa_EquipmentType.browse"/>
+            <item screen="pfa_EquipmentCategory.browse" caption="mainMsg://menu_config.pfa_EquipmentCategory.browse"/>
         </menu>
     </menu>
 </menu-config>

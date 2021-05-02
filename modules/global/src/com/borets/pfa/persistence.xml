@@ -11,5 +11,7 @@
         <class>com.borets.pfa.entity.price.PriceListDetail</class>
         <class>com.borets.pfa.entity.account.AccountRevision</class>
         <class>com.borets.pfa.entity.account.marketdata.MarketData</class>
+        <class>com.borets.pfa.entity.account.appdata.EquipmentType</class>
+        <class>com.borets.pfa.entity.account.appdata.EquipmentCategory</class>
     </persistence-unit>
 </persistence>
