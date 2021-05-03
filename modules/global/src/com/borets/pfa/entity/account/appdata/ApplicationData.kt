@@ -2,8 +2,11 @@ package com.borets.pfa.entity.account.appdata
 
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.account.system.SystemStd
+import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.cuba.core.entity.StandardEntity
+import com.haulmont.cuba.core.entity.annotation.OnDelete
+import com.haulmont.cuba.core.global.DeletePolicy
 import java.time.YearMonth
 import javax.persistence.*
 
@@ -32,6 +35,11 @@ open class ApplicationData : StandardEntity() {
     )
     @ManyToMany
     var systems: MutableList<SystemStd>? = mutableListOf()
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "applicationData")
+    var breakdowns: MutableList<EquipmentBreakdown>? = mutableListOf()
 
     fun getYearMonth(): YearMonth? {
         return if (year != null && month != null) {

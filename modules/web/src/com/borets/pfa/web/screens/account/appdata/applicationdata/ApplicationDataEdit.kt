@@ -2,8 +2,15 @@ package com.borets.pfa.web.screens.account.appdata.applicationdata
 
 import com.haulmont.cuba.gui.screen.*
 import com.borets.pfa.entity.account.appdata.ApplicationData
+import com.borets.pfa.entity.account.appdata.EquipmentBreakdown
+import com.borets.pfa.entity.account.appdata.EquipmentType
+import com.haulmont.cuba.core.global.DataManager
+import com.haulmont.cuba.core.global.EntityStates
+import com.haulmont.cuba.core.global.PersistenceHelper
 import com.haulmont.cuba.gui.components.DatePicker
 import com.haulmont.cuba.gui.components.HasValue
+import com.haulmont.cuba.gui.model.CollectionPropertyContainer
+import com.haulmont.cuba.gui.model.DataContext
 import java.time.YearMonth
 import java.time.ZoneId
 import java.util.*
@@ -15,7 +22,19 @@ import javax.inject.Inject
 @LoadDataBeforeShow
 class ApplicationDataEdit : StandardEditor<ApplicationData>() {
     @Inject
+    private lateinit var entityStates: EntityStates
+    @Inject
+    private lateinit var dataContext: DataContext
+    @Inject
+    private lateinit var dataManager: DataManager
+
+    @Inject
+    private lateinit var breakdownsDc: CollectionPropertyContainer<EquipmentBreakdown>
+
+    @Inject
     private lateinit var yearMonthField: DatePicker<Date>
+
+
 
     @Subscribe
     private fun onAfterShow(event: AfterShowEvent) {
@@ -25,8 +44,10 @@ class ApplicationDataEdit : StandardEditor<ApplicationData>() {
                 .atStartOfDay(ZoneId.systemDefault())
                 .toInstant());
         }
+        if (entityStates.isNew(editedEntity)) {
+            createBreakdowns()
+        }
     }
-
 
     @Subscribe("yearMonthField")
     private fun onYearMonthFieldValueChange(event: HasValue.ValueChangeEvent<Date>) {
@@ -36,5 +57,18 @@ class ApplicationDataEdit : StandardEditor<ApplicationData>() {
                 yearMonth = YearMonth.from(it.toInstant().atZone(ZoneId.systemDefault()))
             editedEntity.setYearMonth(yearMonth)
         }
+    }
+
+
+    private fun createBreakdowns() {
+        val breakdowns = dataManager.load(EquipmentType::class.java)
+            .list()
+            .map {
+                dataContext.create(EquipmentBreakdown::class.java).apply {
+                    this.applicationData = editedEntity
+                    this.equipmentType = it
+                }
+            }
+        breakdownsDc.mutableItems.addAll(breakdowns)
     }
 }

@@ -127,7 +127,7 @@ class AccountEdit : StandardEditor<Account>() {
     @Subscribe(id = "actualAppDetailDc", target = Target.DATA_CONTAINER)
     private fun onActualAppDetailDcItemChange(event: InstanceContainer.ItemChangeEvent<ApplicationData>) {
         event.item?.let {
-            appDataGb.caption = marketDataGb.caption?.format(
+            appDataGb.caption = appDataGb.caption?.format(
                 it.getYearMonth()?.format(DateTimeFormatter.ofPattern("MMM yyyy", userSession.locale)))
             appDataGb.contextHelpText = "Updated by ${it.createdBy} at ${datatypeFormatter.formatDateTime(it.createTs)}"
         }
