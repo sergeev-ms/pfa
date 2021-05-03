@@ -13,5 +13,7 @@
         <class>com.borets.pfa.entity.account.marketdata.MarketData</class>
         <class>com.borets.pfa.entity.account.appdata.EquipmentType</class>
         <class>com.borets.pfa.entity.account.appdata.EquipmentCategory</class>
+        <class>com.borets.pfa.entity.account.system.SystemStd</class>
+        <class>com.borets.pfa.entity.account.system.SystemDetail</class>
     </persistence-unit>
 </persistence>

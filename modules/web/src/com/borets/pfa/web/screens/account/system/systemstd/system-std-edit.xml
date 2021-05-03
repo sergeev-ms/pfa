@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://systemStdEdit.caption" focusComponent="form"
+        messagesPack="com.borets.pfa.web.screens.account.system.systemstd">
+    <data>
+        <instance id="systemStdDc" class="com.borets.pfa.entity.account.system.SystemStd">
+            <view extends="_local">
+                <property name="details" view="_local">
+                    <property name="equipmentType" view="_minimal">
+                        <property name="category"/>
+                    </property>
+                </property>
+            </view>
+            <loader/>
+            <collection id="detailsDc" property="details"/>
+        </instance>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="detailsBox" spacing="true">
+        <groupBox id="generalGb" caption="msg://generalGb.caption">
+            <form id="form" dataContainer="systemStdDc" width="100%">
+                <column width="100%">
+                    <textField id="systemIdField" property="systemId"/>
+                    <lookupField id="casingSizeField" property="casingSize"/>
+                    <lookupField id="casingWeightField" property="casingWeight"/>
+                </column>
+                <column width="100%">
+                    <textField id="pumpField" property="pump"/>
+                    <textField id="motorPowerField" property="motorPower"/>
+                    <textField id="headField" property="head"/>
+                </column>
+                <column width="100%">
+                    <textField id="motorField" property="motor"/>
+                    <textField id="commentField" property="comment"/>
+                </column>
+            </form>
+        </groupBox>
+        <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.account.system/SystemStd.details" expand="detailsTable">
+            <table id="detailsTable" dataContainer="detailsDc" width="100%" editable="true">
+                <actions>
+                    <action id="create" type="create"/>
+                    <action id="edit" type="edit"/>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <columns>
+                    <column id="equipmentType" editable="true"/>
+                    <column id="equipmentType.category"/>
+                    <column id="partNumber" editable="true"/>
+                    <column id="qty" editable="true"/>
+                </columns>
+                <buttonsPanel>
+                    <button action="detailsTable.create"/>
+                    <button action="detailsTable.edit"/>
+                    <button action="detailsTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://systemStdBrowse.caption" focusComponent="systemStdsTable"
+        messagesPack="com.borets.pfa.web.screens.account.system.systemstd">
+    <data readOnly="true">
+        <collection id="systemStdsDc" class="com.borets.pfa.entity.account.system.SystemStd">
+            <view extends="_local"/>
+            <loader id="systemStdsDl">
+                <query>
+                    <![CDATA[select e from pfa_SystemStd e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="systemStdsTable" spacing="true">
+        <filter id="filter" applyTo="systemStdsTable" dataLoader="systemStdsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="systemStdsTable" width="100%" dataContainer="systemStdsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="systemId"/>
+                <column id="casingSize"/>
+                <column id="casingWeight"/>
+                <column id="pump"/>
+                <column id="motorPower"/>
+                <column id="head"/>
+                <column id="motor"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
+                <button id="createBtn" action="systemStdsTable.create"/>
+                <button id="editBtn" action="systemStdsTable.edit"/>
+                <button id="removeBtn" action="systemStdsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
