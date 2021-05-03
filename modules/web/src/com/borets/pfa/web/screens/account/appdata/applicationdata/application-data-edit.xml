@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://applicationDataEdit.caption" focusComponent="form"
+        messagesPack="com.borets.pfa.web.screens.account.appdata.applicationdata">
+    <data>
+        <instance id="applicationDataDc" class="com.borets.pfa.entity.account.appdata.ApplicationData">
+            <view extends="_local">
+                <property name="yearMonth"/>
+                <property name="systems"/>
+            </view>
+            <loader/>
+            <collection id="systemsDc" property="systems"/>
+        </instance>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="applicationDataDc">
+            <column width="450px">
+                <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption"/>
+            </column>
+        </form>
+        <groupBox id="systemsGb" caption="msg://systemsGb.caption">
+            <table id="systemsTable" dataContainer="systemsDc" width="100%">
+                <actions>
+                    <action id="create" type="create"/>
+                    <action id="add" type="add"/>
+                    <action id="edit" type="edit"/>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <columns>
+                    <column id="systemId"/>
+                    <column id="casingSize"/>
+                    <column id="casingWeight"/>
+                    <column id="pump"/>
+                    <column id="motor"/>
+                    <column id="motorPower"/>
+                    <column id="head"/>
+                </columns>
+                <rows/>
+                <buttonsPanel>
+                    <button action="systemsTable.create"/>
+                    <button action="systemsTable.add"/>
+                    <button action="systemsTable.edit"/>
+                    <button action="systemsTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

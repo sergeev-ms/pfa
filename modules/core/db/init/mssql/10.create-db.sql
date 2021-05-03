@@ -14,6 +14,7 @@ create table PFA_ACCOUNT (
     CUSTOMER_ID decimal(7),
     ACTUAL_REVISION_ID uniqueidentifier,
     ACTUAL_MARKET_DETAIL_ID uniqueidentifier,
+    ACTUAL_APP_DETAIL_ID uniqueidentifier,
     --
     primary key nonclustered (ID)
 )^
@@ -267,3 +268,28 @@ create table PFA_SYSTEM_DETAIL (
     primary key nonclustered (ID)
 )^
 -- end PFA_SYSTEM_DETAIL
+-- begin PFA_APPLICATION_DATA
+create table PFA_APPLICATION_DATA (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY varchar(50),
+    --
+    YEAR_ integer,
+    MONTH_ integer,
+    ACCOUNT_ID uniqueidentifier not null,
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_APPLICATION_DATA
+-- begin PFA_APPLICATION_DATA_SYSTEM_STD_LINK
+create table PFA_APPLICATION_DATA_SYSTEM_STD_LINK (
+    APPLICATION_DATA_ID uniqueidentifier,
+    SYSTEM_STD_ID uniqueidentifier,
+    primary key (APPLICATION_DATA_ID, SYSTEM_STD_ID)
+)^
+-- end PFA_APPLICATION_DATA_SYSTEM_STD_LINK

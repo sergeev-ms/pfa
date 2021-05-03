@@ -3,6 +3,7 @@ package com.borets.pfa.web.screens.account
 import com.haulmont.cuba.gui.screen.*
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.account.AccountRevision
+import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.marketdata.MarketData
 import com.haulmont.cuba.core.global.DatatypeFormatter
 import com.haulmont.cuba.gui.ScreenBuilders
@@ -43,6 +44,12 @@ class AccountEdit : StandardEditor<Account>() {
 
     @Inject
     private lateinit var accountDataGb: GroupBoxLayout
+
+    @Inject
+    private lateinit var actualAppDetailDc: InstancePropertyContainer<ApplicationData>
+
+    @Inject
+    private lateinit var appDataGb: GroupBoxLayout
 
     @Subscribe("createRevisionBtn")
     private fun onCreateRevisionBtnClick(event: Button.ClickEvent) {
@@ -115,6 +122,43 @@ class AccountEdit : StandardEditor<Account>() {
                 it.getYearMonth()?.format(DateTimeFormatter.ofPattern("MMM yyyy", userSession.locale)))
             marketDataGb.contextHelpText = "Updated by ${it.createdBy} at ${datatypeFormatter.formatDateTime(it.createTs)}"
         }
+    }
+
+    @Subscribe(id = "actualAppDetailDc", target = Target.DATA_CONTAINER)
+    private fun onActualAppDetailDcItemChange(event: InstanceContainer.ItemChangeEvent<ApplicationData>) {
+        event.item?.let {
+            appDataGb.caption = marketDataGb.caption?.format(
+                it.getYearMonth()?.format(DateTimeFormatter.ofPattern("MMM yyyy", userSession.locale)))
+            appDataGb.contextHelpText = "Updated by ${it.createdBy} at ${datatypeFormatter.formatDateTime(it.createTs)}"
+        }
+    }
+
+
+    @Subscribe("createAppDataBtn")
+    private fun onCreateAppDataBtnClick(event: Button.ClickEvent) {
+        screenBuilders.editor(ApplicationData::class.java, this)
+            .newEntity()
+            .withParentDataContext(dataContext)
+            .withInitializer {
+                it.account = editedEntity
+            }
+            .withOpenMode(OpenMode.NEW_TAB)
+            .build()
+            .also {
+                it.addAfterCloseListener { event ->
+                    if (event.closeAction == WINDOW_COMMIT_AND_CLOSE_ACTION) {
+                        @Suppress("UNCHECKED_CAST")
+                        actualAppDetailDc.setItem((event.screen as StandardEditor<ApplicationData>).editedEntity)
+                    }
+                }
+            }.show()
+    }
+
+    @Subscribe("showAppDetailsBtn")
+    private fun onShowAppDetailsBtnClick(event: Button.ClickEvent) {
+        screenBuilders.lookup(ApplicationData::class.java, this)
+            .withOptions(MapScreenOptions(mutableMapOf(Pair("account", editedEntity)) as Map<String, Any>))
+            .show()
     }
 
 

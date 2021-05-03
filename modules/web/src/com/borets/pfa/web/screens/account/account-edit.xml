@@ -16,10 +16,19 @@
                     <property name="createdBy"/>
                     <property name="createTs"/>
                 </property>
+                <property name="actualAppDetail" view="_minimal">
+                    <property name="yearMonth"/>
+                    <property name="systems" view="_local"/>
+                    <property name="createdBy"/>
+                    <property name="createTs"/>
+                </property>
             </view>
             <loader/>
             <instance id="actualRevisionDc" property="actualRevision"/>
             <instance id="actualMarketDataDc" property="actualMarketDetail"/>
+            <instance id="actualAppDetailDc" property="actualAppDetail">
+                <collection id="systemsDc" property="systems"/>
+            </instance>
         </instance>
     </data>
     <dialogMode height="600" width="800"/>
@@ -84,7 +93,30 @@
                     </hbox>
                 </groupBox>
             </tab>
-            <tab id="marketDataTab" caption="msg://marketDataTab.caption"/>
+            <tab id="appDataTab" caption="msg://appDataTab.caption" spacing="true"
+                 margin="true,false,false,false" expand="appDataGb">
+                <groupBox id="appDataGb" caption="msg://appDataGb.caption" spacing="true" expand="systemsTable">
+                    <table id="systemsTable" dataContainer="systemsDc" width="100%">
+                        <columns>
+                            <column id="systemId"/>
+                            <column id="casingSize"/>
+                            <column id="casingWeight"/>
+                            <column id="pump"/>
+                            <column id="motor"/>
+                            <column id="motorPower"/>
+                            <column id="head"/>
+                        </columns>
+                        <rows/>
+                        <actions>
+                            <action id="edit" type="edit"/>
+                        </actions>
+                    </table>
+                    <hbox spacing="true" align="MIDDLE_RIGHT">
+                        <linkButton id="createAppDataBtn" caption="msg://createAppDataBtn.caption" icon="CREATE_ACTION"/>
+                        <linkButton id="showAppDetailsBtn" caption="msg://showAppDetailsBtn.caption" icon="HISTORY"/>
+                    </hbox>
+                </groupBox>
+            </tab>
         </tabSheet>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>

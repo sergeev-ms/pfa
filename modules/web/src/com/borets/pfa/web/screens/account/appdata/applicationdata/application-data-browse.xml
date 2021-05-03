@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://applicationDataBrowse.caption" focusComponent="applicationDatasTable"
+        messagesPack="com.borets.pfa.web.screens.account.appdata.applicationdata">
+    <data readOnly="true">
+        <collection id="applicationDatasDc" class="com.borets.pfa.entity.account.appdata.ApplicationData">
+            <view extends="_local">
+                <property name="yearMonth"/>
+                <property name="createdBy"/>
+                <property name="createTs"/>
+            </view>
+            <loader id="applicationDatasDl">
+                <query>
+                    <![CDATA[select e from pfa_ApplicationData e]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>e.account = :account</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="applicationDatasTable" spacing="true">
+        <filter id="filter" applyTo="applicationDatasTable" dataLoader="applicationDatasDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="applicationDatasTable" width="100%" dataContainer="applicationDatasDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="yearMonth"/>
+                <column id="createTs"/>
+                <column id="createdBy"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
+                <button id="createBtn" action="applicationDatasTable.create"/>
+                <button id="editBtn" action="applicationDatasTable.edit"/>
+                <button id="removeBtn" action="applicationDatasTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

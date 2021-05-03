@@ -15,5 +15,6 @@
         <class>com.borets.pfa.entity.account.appdata.EquipmentCategory</class>
         <class>com.borets.pfa.entity.account.system.SystemStd</class>
         <class>com.borets.pfa.entity.account.system.SystemDetail</class>
+        <class>com.borets.pfa.entity.account.appdata.ApplicationData</class>
     </persistence-unit>
 </persistence>
