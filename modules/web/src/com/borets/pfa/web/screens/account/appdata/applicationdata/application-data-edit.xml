@@ -56,7 +56,6 @@
                 <groupBox id="breakdownsGb" caption="msg://breakdownsGb.caption">
                     <table id="breakdownsTable" dataContainer="breakdownsDc" width="100%" editable="true">
                         <actions>
-                            <action id="create" type="create"/>
                             <action id="edit" type="edit"/>
                             <action id="remove" type="remove"/>
                         </actions>
@@ -67,8 +66,6 @@
                         </columns>
                         <rows/>
                         <buttonsPanel>
-                            <button action="breakdownsTable.create"/>
-                            <button action="breakdownsTable.add"/>
                             <button action="breakdownsTable.edit"/>
                             <button action="breakdownsTable.remove"/>
                         </buttonsPanel>
