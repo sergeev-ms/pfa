@@ -10,9 +10,7 @@ import com.borets.pfa.entity.price.PriceListDetail
 import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.web.beans.PivotGridInitializer
 import com.haulmont.cuba.core.entity.KeyValueEntity
-import com.haulmont.cuba.core.global.AppBeans
-import com.haulmont.cuba.core.global.DataManager
-import com.haulmont.cuba.core.global.Messages
+import com.haulmont.cuba.core.global.*
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.components.data.value.ContainerValueSource
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
@@ -39,6 +37,10 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     private lateinit var messages: Messages
     @Inject
     private lateinit var dataContext: DataContext
+    @Inject
+    private lateinit var entityStates: EntityStates
+    @Inject
+    private lateinit var metadataTools: MetadataTools
 
     @Inject
     private lateinit var detailsDc: CollectionPropertyContainer<PriceListDetail>
@@ -53,16 +55,10 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     private lateinit var filterWellEquipField: LookupField<WellEquip>
     @Inject
     private lateinit var filterWellTagField: LookupField<WellTag>
-
-    private lateinit var pivotGridHelper: PivotGridInitializer
-
-    //    @Inject
-//    private lateinit var yearMonthField: LookupField<YearMonth>
     @Inject
     private lateinit var yearMonthField: DatePicker<Date>
 
-    @Inject
-    private lateinit var priceListDc: InstanceContainer<PriceList>
+    private lateinit var pivotGridHelper: PivotGridInitializer
 
 
     @Subscribe
@@ -80,11 +76,12 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     @Subscribe
     private fun onAfterShow(event: AfterShowEvent) {
         initDynamic()
+        setWindowCaption()
         editedEntity.getYearMonth()?.let {
             yearMonthField.value = Date.from(it
                 .atDay(1)
                 .atStartOfDay(ZoneId.systemDefault())
-                .toInstant());
+                .toInstant())
         }
     }
 
@@ -126,7 +123,7 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
 
         pivotGridHelper.setStaticPivotPropertiesValues(initKvEntities())
 
-        pivotGridHelper.setStoreFunction() { key: Any, property: String, value: Any? ->
+        pivotGridHelper.setStoreFunction { key: Any, property: String, value: Any? ->
             var detail =
                 detailsDc.mutableItems.find { it.analytic == key && property == it.revenueType!!.id.toString() }
             if (detail == null) {
@@ -195,6 +192,12 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
                     pivotGridHelper.setPivotRowVisibility(index + 1, isContract && isJobType && isWellEquip && isWellTag)
                 }
             }
+        }
+    }
+
+    private fun setWindowCaption() {
+        if (!entityStates.isNew(editedEntity)) {
+            window.caption = metadataTools.getInstanceName(editedEntity)
         }
     }
 

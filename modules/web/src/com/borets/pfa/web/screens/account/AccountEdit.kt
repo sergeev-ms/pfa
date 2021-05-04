@@ -6,6 +6,8 @@ import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.marketdata.MarketData
 import com.haulmont.cuba.core.global.DatatypeFormatter
+import com.haulmont.cuba.core.global.EntityStates
+import com.haulmont.cuba.core.global.MetadataTools
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.Button
 import com.haulmont.cuba.gui.components.GroupBoxLayout
@@ -26,30 +28,35 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var dataContext: DataContext
     @Inject
     private lateinit var screenBuilders: ScreenBuilders
-
     @Inject
-    private lateinit var actualRevisionDc: InstancePropertyContainer<AccountRevision>
-
+    private lateinit var entityStates: EntityStates
     @Inject
-    private lateinit var actualMarketDataDc: InstancePropertyContainer<MarketData>
-
-    @Inject
-    private lateinit var marketDataGb: GroupBoxLayout
-
+    private lateinit var metadataTools: MetadataTools
     @Inject
     private lateinit var userSession: UserSession
-
     @Inject
     private lateinit var datatypeFormatter: DatatypeFormatter
 
     @Inject
-    private lateinit var accountDataGb: GroupBoxLayout
-
+    private lateinit var actualRevisionDc: InstancePropertyContainer<AccountRevision>
+    @Inject
+    private lateinit var actualMarketDataDc: InstancePropertyContainer<MarketData>
     @Inject
     private lateinit var actualAppDetailDc: InstancePropertyContainer<ApplicationData>
 
     @Inject
+    private lateinit var marketDataGb: GroupBoxLayout
+    @Inject
+    private lateinit var accountDataGb: GroupBoxLayout
+    @Inject
     private lateinit var appDataGb: GroupBoxLayout
+
+
+    @Subscribe
+    private fun onAfterShow(event: AfterShowEvent) {
+        setWindowCaption()
+    }
+
 
     @Subscribe("createRevisionBtn")
     private fun onCreateRevisionBtnClick(event: Button.ClickEvent) {
@@ -161,5 +168,9 @@ class AccountEdit : StandardEditor<Account>() {
             .show()
     }
 
-
+    private fun setWindowCaption() {
+        if (!entityStates.isNew(editedEntity)) {
+            window.caption = metadataTools.getInstanceName(editedEntity)
+        }
+    }
 }
