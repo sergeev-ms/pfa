@@ -30,6 +30,7 @@
             <columns>
                 <column id="account"/>
                 <column id="recordType"/>
+                <column id="yearMonth"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">

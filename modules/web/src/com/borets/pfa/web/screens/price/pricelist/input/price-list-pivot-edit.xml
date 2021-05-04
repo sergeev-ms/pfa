@@ -23,24 +23,25 @@
     </data>
     <dialogMode height="600" width="800"/>
     <layout expand="editActions" spacing="true">
-        <form id="form" dataContainer="priceListDc">
-            <column width="350px">
-                <pickerField id="accountField" property="account" required="true">
-                    <actions>
-                        <action id="lookup" type="picker_lookup"/>
-                        <action id="clear" type="picker_clear"/>
-                    </actions>
-                </pickerField>
-            </column>
-            <column width="350px">
-                <lookupField id="recordTypeField" property="recordType" required="true"/>
-                <!--                <lookupField id="yearMonthField" caption="msg://yearMonthField.caption" property="yearMonth"/>-->
-            </column>
-            <column width="350px">
-                <datePicker id="yearMonthField" caption="msg://yearMonthField.caption" resolution="MONTH"/>
-            </column>
-        </form>
-        <groupBox id="detailsBox" spacing="true">
+        <groupBox id="generalTab" caption="msg://generalTab.caption">
+            <form id="form" dataContainer="priceListDc" width="100%" childrenCaptionWidth="100px">
+                <column width="100%">
+                    <pickerField id="accountField" property="account" required="true">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                </column>
+                <column width="100%">
+                    <lookupField id="recordTypeField" property="recordType" required="true"/>
+                </column>
+                <column width="100%">
+                    <datePicker id="yearMonthField" caption="msg://yearMonthField.caption" resolution="MONTH"/>
+                </column>
+            </form>
+        </groupBox>
+        <groupBox id="detailsBox" spacing="true" caption="msg://detailsBox.caption">
             <groupBox id="filterGb" caption="msg://filterGb.caption" collapsable="true">
                 <hbox spacing="true">
                     <lookupField id="filterJobTypeField" optionsEnum="com.borets.pfa.entity.activity.JobType" inputPrompt="msg://filterJobType.caption"/>
@@ -49,14 +50,16 @@
                     <lookupField id="filterContractTypeField" optionsEnum="com.borets.pfa.entity.activity.ContractType" inputPrompt="msg://filterContractType.caption"/>
                 </hbox>
             </groupBox>
-            <grid id="pivotGrid" spacing="true">
-                <columns>
-                    <column/>
-                </columns>
-                <rows>
-                    <row/>
-                </rows>
-            </grid>
+            <scrollBox width="100%">
+                <grid id="pivotGrid" spacing="true">
+                    <columns>
+                        <column/>
+                    </columns>
+                    <rows>
+                        <row/>
+                    </rows>
+                </grid>
+            </scrollBox>
         </groupBox>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
