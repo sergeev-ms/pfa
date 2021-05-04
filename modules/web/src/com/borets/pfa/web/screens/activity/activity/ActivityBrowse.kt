@@ -1,13 +1,13 @@
 package com.borets.pfa.web.screens.activity.activity
 
-import com.haulmont.cuba.gui.screen.*
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.web.screens.activity.activity.input.ActivityPivotEdit
-import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
+import com.haulmont.cuba.core.global.Metadata
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.Action
 import com.haulmont.cuba.gui.components.GroupTable
 import com.haulmont.cuba.gui.model.CollectionLoader
+import com.haulmont.cuba.gui.screen.*
 import javax.inject.Inject
 
 @UiController("pfa_Activity.browse")
@@ -17,6 +17,8 @@ import javax.inject.Inject
 class ActivityBrowse : StandardLookup<Activity>() {
     @Inject
     private lateinit var screenBuilders: ScreenBuilders
+    @Inject
+    private lateinit var metadata: Metadata
 
     @Inject
     private lateinit var activitiesDl: CollectionLoader<Activity>
@@ -45,6 +47,14 @@ class ActivityBrowse : StandardLookup<Activity>() {
     private fun onActivitiesTableOpenPlain(event: Action.ActionPerformedEvent) {
         screenBuilders.editor(activitiesTable)
             .editEntity(activitiesTable.singleSelected!!)
+            .show()
+    }
+
+    @Subscribe("activitiesTable.create")
+    private fun onActivitiesTableCreate(event: Action.ActionPerformedEvent) {
+        screenBuilders.editor(activitiesTable)
+            .newEntity()
+            .withScreenClass(ActivityPivotEdit::class.java)
             .show()
     }
 }
