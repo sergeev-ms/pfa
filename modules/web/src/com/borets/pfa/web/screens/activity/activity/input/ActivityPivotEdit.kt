@@ -7,10 +7,7 @@ import com.borets.pfa.web.beans.PivotGridInitializer
 import com.borets.pfa.web.beans.PivotGridInitializer.DynamicPropertyData
 import com.borets.pfa.web.beans.PivotGridInitializer.StaticPropertyData
 import com.haulmont.cuba.core.entity.KeyValueEntity
-import com.haulmont.cuba.core.global.AppBeans
-import com.haulmont.cuba.core.global.DataManager
-import com.haulmont.cuba.core.global.Messages
-import com.haulmont.cuba.core.global.TimeSource
+import com.haulmont.cuba.core.global.*
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
@@ -43,6 +40,10 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     private lateinit var userSession: UserSession
     @Inject
     private lateinit var activityInputConfig: ActivityInputConfig
+    @Inject
+    private lateinit var metadataTools: MetadataTools
+    @Inject
+    private lateinit var entityStates: EntityStates
 
     @Inject
     private lateinit var detailsDc: CollectionPropertyContainer<ActivityDetail>
@@ -116,6 +117,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
             )
             initDynamic(it)
         }
+        setWindowCaption()
     }
 
     @Subscribe("yearField")
@@ -132,6 +134,16 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
         }
     }
 
+    private fun setWindowCaption() {
+        val value : String =
+            if (entityStates.isNew(editedEntity)) {
+                "New"
+            } else {
+                metadataTools.getInstanceName(editedEntity)
+            }
+        window.caption = window.caption?.format(value)
+    }
+
 
     private fun initDynamic(year: Int?) {
         val monthQty = activityInputConfig.getDefaultMonthQty()
@@ -141,7 +153,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
             months.add(startMonth.plusMonths(monthNumber.toLong()))
         }
         months.map {
-               DynamicPropertyData(it.toString(),
+            DynamicPropertyData(it.toString(),
                 it.format(DateTimeFormatter.ofPattern("MMM yy", userSession.locale)),
                 Int::class.javaObjectType, TextField::class.java, "60px")
 
@@ -196,6 +208,4 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
             }
         }
     }
-
-
 }
