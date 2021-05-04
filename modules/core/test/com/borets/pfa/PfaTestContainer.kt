@@ -7,8 +7,10 @@ open class PfaTestContainer : TestContainer() {
 
     init {
         appComponents = listOf(
-                "com.haulmont.cuba",
-                "com.haulmont.addon.helium")
+            "com.haulmont.cuba",
+            "com.haulmont.addon.helium",
+            "com.haulmont.addon.admintools"
+        )
         appPropertiesFiles = mutableListOf(
                 // List the files defined in your web.xml
                 // in appPropertiesConfig context parameter of the core module

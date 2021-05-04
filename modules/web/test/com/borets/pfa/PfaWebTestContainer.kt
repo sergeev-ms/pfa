@@ -7,8 +7,10 @@ open class PfaWebTestContainer : TestContainer() {
 
     init {
         appComponents = listOf(
-                "com.haulmont.cuba",
-                "com.haulmont.addon.helium")
+            "com.haulmont.cuba",
+            "com.haulmont.addon.helium",
+            "com.haulmont.addon.admintools"
+        )
         appPropertiesFiles = Arrays.asList( // List the files defined in your web.xml
                 // in appPropertiesConfig context parameter of the web module
                 "com/borets/pfa/web-app.properties",  // Add this file which is located in CUBA and defines some properties
