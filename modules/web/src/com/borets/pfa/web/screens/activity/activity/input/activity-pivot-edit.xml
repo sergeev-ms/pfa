@@ -18,18 +18,24 @@
     </data>
     <dialogMode height="600" width="800"/>
     <layout expand="editActions" spacing="true">
-        <form id="form" dataContainer="activityDc">
-            <column width="450px">
-                <pickerField id="accountField" property="account">
-                    <actions>
-                        <action id="lookup" type="picker_lookup"/>
-                        <action id="clear" type="picker_clear"/>
-                    </actions>
-                </pickerField>
-                <lookupField id="recordTypeField" property="recordType"/>
-                <textField id="yearField" property="year"/>
-            </column>
-        </form>
+        <groupBox id="generalGb" caption="msg://generalGb.caption">
+            <form id="form" dataContainer="activityDc" width="100%" childrenCaptionWidth="100px">
+                <column width="100%">
+                    <pickerField id="accountField" property="account">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                </column>
+                <column width="100%">
+                    <lookupField id="recordTypeField" property="recordType"/>
+                </column>
+                <column width="100%">
+                    <datePicker id="yearField" caption="msg://yearField.caption" resolution="YEAR"/>
+                </column>
+            </form>
+        </groupBox>
         <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.activity/Activity.details" spacing="true">
             <groupBox id="filterGb" caption="msg://filterGb.caption" collapsable="true">
                 <hbox spacing="true">
@@ -39,14 +45,16 @@
                     <lookupField id="filterContractTypeField" optionsEnum="com.borets.pfa.entity.activity.ContractType" inputPrompt="msg://filterContractType.caption"/>
                 </hbox>
             </groupBox>
-            <grid id="pivotGrid" spacing="true">
-                <columns>
-                    <column/>
-                </columns>
-                <rows>
-                    <row/>
-                </rows>
-            </grid>
+            <scrollBox width="100%">
+                <grid id="pivotGrid" spacing="true">
+                    <columns>
+                        <column/>
+                    </columns>
+                    <rows>
+                        <row/>
+                    </rows>
+                </grid>
+            </scrollBox>
         </groupBox>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>

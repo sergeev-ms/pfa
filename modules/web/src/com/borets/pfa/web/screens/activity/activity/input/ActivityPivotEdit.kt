@@ -11,17 +11,19 @@ import com.haulmont.cuba.core.global.AppBeans
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Messages
 import com.haulmont.cuba.core.global.TimeSource
-import com.haulmont.cuba.gui.components.GridLayout
-import com.haulmont.cuba.gui.components.HasValue
-import com.haulmont.cuba.gui.components.LookupField
-import com.haulmont.cuba.gui.components.TextField
+import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
+import com.haulmont.cuba.gui.model.InstanceContainer
 import com.haulmont.cuba.gui.model.KeyValueCollectionContainer
 import com.haulmont.cuba.gui.screen.*
+import com.haulmont.cuba.gui.screen.Target
 import com.haulmont.cuba.security.global.UserSession
+import java.time.LocalDate
 import java.time.YearMonth
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
 
 @UiController("pfa_ActivityPivot.edit")
@@ -55,6 +57,8 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     private lateinit var filterContractTypeField: LookupField<ContractType>
     @Inject
     private lateinit var filterWellTagField: LookupField<WellTag>
+    @Inject
+    private lateinit var yearField: DatePicker<Date>
 
     private lateinit var pivotGridHelper : PivotGridInitializer
 
@@ -101,13 +105,31 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
 
     @Subscribe
     private fun onAfterShow(event: AfterShowEvent) {
-        initDynamic(editedEntity.year)
+        editedEntity.year?.let {
+            yearField.value = Date.from(
+                LocalDate.now()
+                    .withYear(it)
+                    .withMonth(1)
+                    .withDayOfYear(1)
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+            )
+            initDynamic(it)
+        }
     }
 
     @Subscribe("yearField")
-    private fun onYearFieldValueChange(event: HasValue.ValueChangeEvent<Integer>) {
-        if (event.isUserOriginated)
+    private fun onYearMonthFieldValueChange(event: HasValue.ValueChangeEvent<Date>) {
+        event.value.let {
+            editedEntity.year = it!!.toInstant()!!.atZone(ZoneId.systemDefault()).year
+        }
+    }
+
+    @Subscribe(id = "activityDc", target = Target.DATA_CONTAINER)
+    private fun onActivityDcItemPropertyChange(event: InstanceContainer.ItemPropertyChangeEvent<Activity>) {
+        if (event.property == "year" && event.value != null) {
             initDynamic(event.value as Int)
+        }
     }
 
 
