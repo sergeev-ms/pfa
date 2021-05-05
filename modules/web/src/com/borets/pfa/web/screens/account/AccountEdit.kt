@@ -60,12 +60,13 @@ class AccountEdit : StandardEditor<Account>() {
 
     @Subscribe("createRevisionBtn")
     private fun onCreateRevisionBtnClick(event: Button.ClickEvent) {
-
         screenBuilders.editor(AccountRevision::class.java, this)
             .newEntity()
             .withParentDataContext(dataContext)
             .withInitializer {
                 it.account = editedEntity
+                it.manager = editedEntity.actualRevision?.manager
+                it.setType(editedEntity.actualRevision?.getType())
             }
             .withOpenMode(OpenMode.DIALOG)
             .build()
@@ -91,8 +92,11 @@ class AccountEdit : StandardEditor<Account>() {
         screenBuilders.editor(MarketData::class.java, this)
             .newEntity()
             .withParentDataContext(dataContext)
-            .withInitializer {
-                it.account = editedEntity
+            .withInitializer { new ->
+                new.account = editedEntity
+                editedEntity.actualMarketDetail?.let { actual ->
+                    new.copyFrom(actual)
+                }
             }
             .withOpenMode(OpenMode.NEW_TAB)
             .build()
@@ -172,5 +176,30 @@ class AccountEdit : StandardEditor<Account>() {
         if (!entityStates.isNew(editedEntity)) {
             window.caption = metadataTools.getInstanceName(editedEntity)
         }
+    }
+
+    private inline fun MarketData.copyFrom(other : MarketData) {
+        this.setContractType(other.getContractType())
+        this.setApplicationType(other.getApplicationType())
+        this.setFieldType(other.getFieldType())
+        this.trl = other.trl
+        this.arl = other.arl
+        this.setRunsNumber(other.getRunsNumber())
+        this.firstRunDuration = other.firstRunDuration
+        this.secondRunDuration = other.secondRunDuration
+        this.thirdRunDuration = other.thirdRunDuration
+        this.thirdPlusRunDuration = other.thirdPlusRunDuration
+        this.wellCount = other.wellCount
+        this.conversionRate = other.conversionRate
+        this.oilPermits = other.oilPermits
+        this.rigQty = other.rigQty
+        this.ducQty = other.ducQty
+        this.completion = other.completion
+        this.activityRate = other.activityRate
+        this.budget = other.budget
+        this.bShare = other.bShare
+        this.wellMonitorQty = other.wellMonitorQty
+        this.bWellCount = other.bWellCount
+        this.rentalCapex = other.rentalCapex
     }
 }
