@@ -17,15 +17,15 @@
         </instance>
     </data>
     <dialogMode height="600" width="800"/>
-    <layout expand="editActions" spacing="true">
+    <layout expand="tabSheet" spacing="true">
         <form id="form" dataContainer="applicationDataDc">
             <column width="450px">
                 <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption"/>
             </column>
         </form>
-        <tabSheet>
-            <tab id="systemsTab" caption="msg://systemsTab.caption" margin="true,false,false,false">
-                <groupBox id="systemsGb" caption="msg://systemsGb.caption">
+        <tabSheet id="tabSheet">
+            <tab id="systemsTab" caption="msg://systemsTab.caption" margin="true,false,false,false" expand="systemsGb">
+                <groupBox id="systemsGb" caption="msg://systemsGb.caption" expand="systemsTable">
                     <table id="systemsTable" dataContainer="systemsDc" width="100%">
                         <actions>
                             <action id="create" type="create"/>
@@ -52,23 +52,15 @@
                     </table>
                 </groupBox>
             </tab>
-            <tab id="breakdownTab" caption="msg://breakdownTab.caption" margin="true,false,false,false">
-                <groupBox id="breakdownsGb" caption="msg://breakdownsGb.caption">
+            <tab id="breakdownTab" caption="msg://breakdownTab.caption" margin="true,false,false,false" expand="breakdownsGb">
+                <groupBox id="breakdownsGb" caption="msg://breakdownsGb.caption" expand="breakdownsTable">
                     <table id="breakdownsTable" dataContainer="breakdownsDc" width="100%" editable="true">
-                        <actions>
-                            <action id="edit" type="edit"/>
-                            <action id="remove" type="remove"/>
-                        </actions>
                         <columns>
                             <column id="equipmentType"/>
                             <column id="firstRunValue" editable="true" required="true"/>
                             <column id="sequentRunValue" editable="true" required="true"/>
                         </columns>
                         <rows/>
-                        <buttonsPanel>
-                            <button action="breakdownsTable.edit"/>
-                            <button action="breakdownsTable.remove"/>
-                        </buttonsPanel>
                     </table>
                 </groupBox>
             </tab>
