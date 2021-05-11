@@ -9,7 +9,9 @@ open class PfaTestContainer : TestContainer() {
         appComponents = listOf(
             "com.haulmont.cuba",
             "com.haulmont.addon.helium",
-            "com.haulmont.addon.admintools"
+            "com.haulmont.addon.admintools",
+            "com.haulmont.addon.ldap",
+            "com.borets.addon.pn"
         )
         appPropertiesFiles = mutableListOf(
                 // List the files defined in your web.xml

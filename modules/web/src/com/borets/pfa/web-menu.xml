@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
-    <menu id="application-pfa" insertBefore="administration" caption="mainMsg://menu_config.application-pfa">
+    <menu id="application-pfa" insertBefore="application-pn" caption="mainMsg://menu_config.application-pfa">
         <item screen="pfa_Account.browse" caption="mainMsg://menu_config.pfa_Account.browse"/>
         <item screen="pfa_Activity.browse" caption="mainMsg://menu_config.pfa_Activity.browse"/>
         <item screen="pfa_PriceList.browse" caption="mainMsg://menu_config.pfa_PriceList.browse"/>

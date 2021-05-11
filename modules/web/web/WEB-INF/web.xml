@@ -16,8 +16,8 @@
     <!--Application components-->
     <context-param>
         <param-name>appComponents</param-name>
-        <param-value>com.haulmont.cuba com.haulmont.addon.helium com.haulmont.addon.admintools
-            com.haulmont.addon.ldap</param-value>
+        <param-value>com.haulmont.cuba com.haulmont.addon.helium com.haulmont.addon.admintools com.haulmont.addon.ldap
+            com.borets.addon.pn</param-value>
     </context-param>
     <listener>
         <listener-class>com.vaadin.server.communication.JSR356WebsocketInitializer</listener-class>
