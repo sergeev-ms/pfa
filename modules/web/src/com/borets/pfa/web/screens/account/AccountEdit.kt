@@ -5,6 +5,7 @@ import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.marketdata.MarketData
+import com.borets.pfa.web.screens.account.appdata.applicationdata.ApplicationDataFragment
 import com.haulmont.cuba.core.global.DatatypeFormatter
 import com.haulmont.cuba.core.global.EntityStates
 import com.haulmont.cuba.core.global.MetadataTools
@@ -42,7 +43,7 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var actualMarketDataDc: InstancePropertyContainer<MarketData>
     @Inject
-    private lateinit var actualAppDetailDc: InstancePropertyContainer<ApplicationData>
+    private lateinit var applicationDataDc: InstancePropertyContainer<ApplicationData>
 
     @Inject
     private lateinit var marketDataGb: GroupBoxLayout
@@ -50,11 +51,14 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var accountDataGb: GroupBoxLayout
     @Inject
     private lateinit var appDataGb: GroupBoxLayout
+    @Inject
+    private lateinit var applicationDataFragment: ApplicationDataFragment
 
 
     @Subscribe
     private fun onAfterShow(event: AfterShowEvent) {
         setWindowCaption()
+        applicationDataFragment.setEditable(false)
     }
 
 
@@ -135,7 +139,7 @@ class AccountEdit : StandardEditor<Account>() {
         }
     }
 
-    @Subscribe(id = "actualAppDetailDc", target = Target.DATA_CONTAINER)
+    @Subscribe(id = "applicationDataDc", target = Target.DATA_CONTAINER)
     private fun onActualAppDetailDcItemChange(event: InstanceContainer.ItemChangeEvent<ApplicationData>) {
         event.item?.let {
             appDataGb.caption = appDataGb.caption?.format(
@@ -159,7 +163,7 @@ class AccountEdit : StandardEditor<Account>() {
                 it.addAfterCloseListener { event ->
                     if (event.closeAction == WINDOW_COMMIT_AND_CLOSE_ACTION) {
                         @Suppress("UNCHECKED_CAST")
-                        actualAppDetailDc.setItem((event.screen as StandardEditor<ApplicationData>).editedEntity)
+                        applicationDataDc.setItem((event.screen as StandardEditor<ApplicationData>).editedEntity)
                     }
                 }
             }.show()

@@ -6,8 +6,8 @@ import java.math.BigDecimal
 import javax.persistence.*
 
 @Table(name = "PFA_EQUIPMENT_BREAKDOWN")
-@javax.persistence.Entity(name = "pfa_EquipmentBreakdown")
-open class EquipmentBreakdown : StandardEntity() {
+@Entity(name = "pfa_EquipmentUtilization")
+open class EquipmentUtilization : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EQUIPMENT_TYPE_ID")
     var equipmentType: EquipmentType? = null

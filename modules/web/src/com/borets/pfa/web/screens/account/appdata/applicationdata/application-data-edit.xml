@@ -7,64 +7,23 @@
             <view extends="_local">
                 <property name="yearMonth"/>
                 <property name="systems"/>
-                <property name="breakdowns" view="_local">
+                <property name="utilization" view="_local">
                     <property name="equipmentType"/>
                 </property>
             </view>
             <loader/>
             <collection id="systemsDc" property="systems"/>
-            <collection id="breakdownsDc" property="breakdowns"/>
+            <collection id="breakdownsDc" property="utilization"/>
         </instance>
     </data>
     <dialogMode height="600" width="800"/>
-    <layout expand="tabSheet" spacing="true">
+    <layout expand="applicationDateFragment" spacing="true">
         <form id="form" dataContainer="applicationDataDc">
             <column width="450px">
                 <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption" stylename="custom-height"/>
             </column>
         </form>
-        <tabSheet id="tabSheet">
-            <tab id="systemsTab" caption="msg://systemsTab.caption" margin="true,false,false,false" expand="systemsGb">
-                <groupBox id="systemsGb" caption="msg://systemsGb.caption" expand="systemsTable">
-                    <table id="systemsTable" dataContainer="systemsDc" width="100%">
-                        <actions>
-                            <action id="create" type="create"/>
-                            <action id="add" type="add"/>
-                            <action id="edit" type="edit"/>
-                            <action id="remove" type="remove"/>
-                        </actions>
-                        <columns>
-                            <column id="systemId"/>
-                            <column id="casingSize"/>
-                            <column id="casingWeight"/>
-                            <column id="pump"/>
-                            <column id="motor"/>
-                            <column id="motorPower"/>
-                            <column id="head"/>
-                        </columns>
-                        <rows/>
-                        <buttonsPanel>
-                            <button action="systemsTable.create"/>
-                            <button action="systemsTable.add"/>
-                            <button action="systemsTable.edit"/>
-                            <button action="systemsTable.remove"/>
-                        </buttonsPanel>
-                    </table>
-                </groupBox>
-            </tab>
-            <tab id="breakdownTab" caption="msg://breakdownTab.caption" margin="true,false,false,false" expand="breakdownsGb">
-                <groupBox id="breakdownsGb" caption="msg://breakdownsGb.caption" expand="breakdownsTable">
-                    <table id="breakdownsTable" dataContainer="breakdownsDc" width="100%" editable="true">
-                        <columns>
-                            <column id="equipmentType"/>
-                            <column id="firstRunValue" editable="true" required="true"/>
-                            <column id="sequentRunValue" editable="true" required="true"/>
-                        </columns>
-                        <rows/>
-                    </table>
-                </groupBox>
-            </tab>
-        </tabSheet>
+        <fragment id="applicationDateFragment" screen="pfa_ApplicationDataFragment"/>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
             <button id="closeBtn" action="windowClose"/>

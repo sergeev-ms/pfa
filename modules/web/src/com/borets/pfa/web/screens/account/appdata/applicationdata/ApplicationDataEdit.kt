@@ -2,11 +2,10 @@ package com.borets.pfa.web.screens.account.appdata.applicationdata
 
 import com.haulmont.cuba.gui.screen.*
 import com.borets.pfa.entity.account.appdata.ApplicationData
-import com.borets.pfa.entity.account.appdata.EquipmentBreakdown
+import com.borets.pfa.entity.account.appdata.EquipmentUtilization
 import com.borets.pfa.entity.account.appdata.EquipmentType
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.EntityStates
-import com.haulmont.cuba.core.global.PersistenceHelper
 import com.haulmont.cuba.gui.components.DatePicker
 import com.haulmont.cuba.gui.components.HasValue
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
@@ -29,7 +28,7 @@ class ApplicationDataEdit : StandardEditor<ApplicationData>() {
     private lateinit var dataManager: DataManager
 
     @Inject
-    private lateinit var breakdownsDc: CollectionPropertyContainer<EquipmentBreakdown>
+    private lateinit var breakdownsDc: CollectionPropertyContainer<EquipmentUtilization>
 
     @Inject
     private lateinit var yearMonthField: DatePicker<Date>
@@ -64,7 +63,7 @@ class ApplicationDataEdit : StandardEditor<ApplicationData>() {
         val breakdowns = dataManager.load(EquipmentType::class.java)
             .list()
             .map {
-                dataContext.create(EquipmentBreakdown::class.java).apply {
+                dataContext.create(EquipmentUtilization::class.java).apply {
                     this.applicationData = editedEntity
                     this.equipmentType = it
                 }
