@@ -293,8 +293,9 @@ create table PFA_APPLICATION_DATA_SYSTEM_STD_LINK (
     primary key (APPLICATION_DATA_ID, SYSTEM_STD_ID)
 )^
 -- end PFA_APPLICATION_DATA_SYSTEM_STD_LINK
--- begin PFA_EQUIPMENT_BREAKDOWN
-create table PFA_EQUIPMENT_BREAKDOWN (
+
+-- begin PFA_EQUIPMENT_UTILIZATION
+create table PFA_EQUIPMENT_UTILIZATION (
     ID uniqueidentifier,
     VERSION integer not null,
     CREATE_TS datetime2,
@@ -311,4 +312,4 @@ create table PFA_EQUIPMENT_BREAKDOWN (
     --
     primary key nonclustered (ID)
 )^
--- end PFA_EQUIPMENT_BREAKDOWN
+-- end PFA_EQUIPMENT_UTILIZATION

@@ -1,0 +1,1 @@
+drop table PFA_EQUIPMENT_BREAKDOWN__U73573 ;

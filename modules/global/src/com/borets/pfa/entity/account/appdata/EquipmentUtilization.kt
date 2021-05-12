@@ -5,7 +5,7 @@ import com.haulmont.cuba.core.entity.StandardEntity
 import java.math.BigDecimal
 import javax.persistence.*
 
-@Table(name = "PFA_EQUIPMENT_BREAKDOWN")
+@Table(name = "PFA_EQUIPMENT_UTILIZATION")
 @Entity(name = "pfa_EquipmentUtilization")
 open class EquipmentUtilization : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY)
