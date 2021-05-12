@@ -9,11 +9,20 @@
                     <property name="equipmentType" view="_minimal">
                         <property name="category"/>
                     </property>
+                    <property name="partNumber" view="_minimal"/>
                 </property>
             </view>
             <loader/>
             <collection id="detailsDc" property="details"/>
         </instance>
+        <collection id="equipmentTypesDc" class="com.borets.pfa.entity.account.appdata.EquipmentType">
+            <view extends="_minimal">
+                <property name="category" view="_minimal"/>
+            </view>
+            <loader id="equipmentTypesDl">
+                <query>from pfa_EquipmentType e</query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600" width="800"/>
     <layout expand="detailsBox" spacing="true">
@@ -43,10 +52,10 @@
                     <action id="remove" type="remove"/>
                 </actions>
                 <columns>
-                    <column id="equipmentType" editable="true"/>
+                    <column id="equipmentType" generator="equipmentTypeGenerator" required="true"/>
                     <column id="equipmentType.category"/>
-                    <column id="partNumber" editable="true"/>
-                    <column id="qty" editable="true"/>
+                    <column id="partNumber" generator="partNumberGenerator" required="true"/>
+                    <column id="qty" editable="true" required="true"/>
                 </columns>
                 <buttonsPanel>
                     <button action="detailsTable.create"/>

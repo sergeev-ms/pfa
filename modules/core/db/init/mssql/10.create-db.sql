@@ -261,7 +261,7 @@ create table PFA_SYSTEM_DETAIL (
     DELETED_BY varchar(50),
     --
     EQUIPMENT_TYPE_ID uniqueidentifier,
-    PART_NUMBER varchar(255),
+    PART_NUMBER_ID uniqueidentifier,
     QTY integer,
     SYSTEM_ID uniqueidentifier not null,
     --

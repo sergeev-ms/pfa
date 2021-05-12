@@ -1,5 +1,6 @@
 package com.borets.pfa.entity.account.system
 
+import com.borets.addon.pn.entity.Part
 import com.borets.pfa.entity.account.appdata.EquipmentType
 import com.haulmont.cuba.core.entity.StandardEntity
 import javax.persistence.*
@@ -11,8 +12,9 @@ open class SystemDetail : StandardEntity() {
     @JoinColumn(name = "EQUIPMENT_TYPE_ID")
     var equipmentType: EquipmentType? = null
 
-    @Column(name = "PART_NUMBER")
-    var partNumber: String? = null
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PART_NUMBER_ID")
+    var partNumber: Part? = null
 
     @Column(name = "QTY")
     var qty: Int? = null
