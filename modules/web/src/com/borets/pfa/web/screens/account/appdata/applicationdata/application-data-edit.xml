@@ -20,7 +20,7 @@
     <layout expand="tabSheet" spacing="true">
         <form id="form" dataContainer="applicationDataDc">
             <column width="450px">
-                <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption"/>
+                <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption" stylename="custom-height"/>
             </column>
         </form>
         <tabSheet id="tabSheet">

@@ -15,7 +15,7 @@
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="accountRevisionDc">
             <column width="450px">
-                <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption"/>
+                <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption" stylename="custom-height"/>
                 <pickerField id="managerField" property="manager" required="true">
                     <actions>
                         <action id="lookup" type="picker_lookup"/>

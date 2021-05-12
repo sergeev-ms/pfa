@@ -1,0 +1,13 @@
+@mixin date-picker {
+  .v-inline-datefield.custom-height {
+    .v-inline-datefield-calendarpanel {
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
+
+    td[class*="year"] button,
+    td[class*="month"] button {
+      height: round($v-unit-size * 0.65); // or simply hard-code '22px'
+    }
+  }
+}

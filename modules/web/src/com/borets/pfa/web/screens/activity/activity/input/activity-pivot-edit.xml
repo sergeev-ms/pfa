@@ -32,7 +32,7 @@
                     <lookupField id="recordTypeField" property="recordType"/>
                 </column>
                 <column width="100%">
-                    <datePicker id="yearField" caption="msg://yearField.caption" resolution="YEAR"/>
+                    <datePicker id="yearField" caption="msg://yearField.caption" resolution="YEAR" stylename="custom-height"/>
                 </column>
             </form>
         </groupBox>

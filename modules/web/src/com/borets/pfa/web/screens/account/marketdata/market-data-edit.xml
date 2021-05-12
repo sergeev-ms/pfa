@@ -15,7 +15,7 @@
         <scrollBox id="scrollBox" spacing="true">
             <form id="form" dataContainer="marketDataDc" width="100%">
                 <column width="100%">
-                    <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption"/>
+                    <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption" stylename="custom-height"/>
                     <lookupField id="contractTypeField" property="contractType" required="true"/>
                     <lookupField id="applicationTypeField" property="applicationType" required="true"/>
                     <lookupField id="fieldTypeField" property="fieldType" required="true"/>

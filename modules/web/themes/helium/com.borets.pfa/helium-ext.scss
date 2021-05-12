@@ -1,3 +1,5 @@
+@import "custom-date-picker";
+
 /* Define your theme modifications inside next mixin */
 @mixin com_borets_pfa-helium-ext {
   /* Basic */
@@ -13,4 +15,6 @@
     /* Common */
     --primary-dim-color: #195b7c;
   }
+
+  @include date-picker;
 }
