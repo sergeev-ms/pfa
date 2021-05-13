@@ -1,7 +1,6 @@
 package com.borets.pfa.entity.account.appdata
 
 import com.borets.pfa.entity.account.Account
-import com.borets.pfa.entity.account.system.SystemStd
 import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.cuba.core.entity.StandardEntity
@@ -27,14 +26,6 @@ open class ApplicationData : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ACCOUNT_ID")
     var account: Account? = null
-
-    @JoinTable(
-        name = "PFA_APPLICATION_DATA_SYSTEM_STD_LINK",
-        joinColumns = [JoinColumn(name = "APPLICATION_DATA_ID")],
-        inverseJoinColumns = [JoinColumn(name = "SYSTEM_STD_ID")]
-    )
-    @ManyToMany
-    var systems: MutableList<SystemStd>? = mutableListOf()
 
     @Composition
     @OnDelete(DeletePolicy.CASCADE)

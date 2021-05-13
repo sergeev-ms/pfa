@@ -6,7 +6,6 @@
         <instance id="applicationDataDc" class="com.borets.pfa.entity.account.appdata.ApplicationData">
             <view extends="_local">
                 <property name="yearMonth"/>
-                <property name="systems"/>
                 <property name="systemAllocations" view="_local">
                     <property name="system" view="_local"/>
                 </property>
@@ -15,7 +14,6 @@
                 </property>
             </view>
             <loader/>
-            <collection id="systemsDc" property="systems"/>
             <collection id="breakdownsDc" property="utilization"/>
         </instance>
     </data>
