@@ -2,38 +2,32 @@
 <fragment xmlns="http://schemas.haulmont.com/cuba/screen/fragment.xsd">
     <data>
         <instance id="applicationDataDc" class="com.borets.pfa.entity.account.appdata.ApplicationData" provided="true">
-            <collection id="systemsDc" property="systems"/>
+            <collection id="systemsAllocationDc" property="systemAllocations"/>
             <collection id="utilizationDc" property="utilization"/>
         </instance>
     </data>
     <layout expand="tabSheet">
         <tabSheet id="tabSheet">
             <tab id="systemsTab" caption="msg://systemsTab.caption" margin="true,false,false,false" expand="systemsGb">
-                <groupBox id="systemsGb" caption="msg://systemsGb.caption" expand="systemsTable">
-                    <table id="systemsTable" dataContainer="systemsDc" width="100%">
+                <groupBox id="systemsGb" caption="msg://systemsGb.caption" expand="systemsAllocationGrid">
+                    <dataGrid id="systemsAllocationGrid" dataContainer="systemsAllocationDc" width="100%" editorEnabled="true"
+                              editorBuffered="true">
                         <actions>
-                            <action id="create" type="create"/>
-                            <action id="add" type="add"/>
-                            <action id="edit" type="edit"/>
+                            <action id="create" type="create" caption="msg://systemsAllocationGrid.create.caption"/>
                             <action id="remove" type="remove"/>
                         </actions>
                         <columns>
-                            <column id="systemId"/>
-                            <column id="casingSize"/>
-                            <column id="casingWeight"/>
-                            <column id="pump"/>
-                            <column id="motor"/>
-                            <column id="motorPower"/>
-                            <column id="head"/>
+                            <column property="system.systemId" editable="false"/>
+                            <column id="run1" property="run1" editable="true"/>
+                            <column id="run2" property="run2" editable="true"/>
+                            <column id="run3" property="run3" editable="true"/>
+                            <column id="run3plus" property="run3plus" editable="true"/>
                         </columns>
-                        <rows/>
-                        <buttonsPanel id="systemsTableBtnPanel">
-                            <button action="systemsTable.create"/>
-                            <button action="systemsTable.add"/>
-                            <button action="systemsTable.edit"/>
-                            <button action="systemsTable.remove"/>
+                        <buttonsPanel id="systemsAllocationGridPanel">
+                            <button action="systemsAllocationGrid.create"/>
+                            <button action="systemsAllocationGrid.remove"/>
                         </buttonsPanel>
-                    </table>
+                    </dataGrid>
                 </groupBox>
             </tab>
             <tab id="utilizationTab" caption="msg://utilizationTab.caption" margin="true,false,false,false" expand="utilizationGb">

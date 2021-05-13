@@ -7,6 +7,9 @@
             <view extends="_local">
                 <property name="yearMonth"/>
                 <property name="systems"/>
+                <property name="systemAllocations" view="_local">
+                    <property name="system" view="_local"/>
+                </property>
                 <property name="utilization" view="_local">
                     <property name="equipmentType"/>
                 </property>

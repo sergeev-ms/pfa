@@ -4,6 +4,7 @@ import com.haulmont.cuba.gui.screen.*
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.appdata.ApplicationData
+import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.marketdata.MarketData
 import com.borets.pfa.web.screens.account.appdata.applicationdata.ApplicationDataFragment
 import com.haulmont.cuba.core.global.DatatypeFormatter
@@ -54,11 +55,15 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var applicationDataFragment: ApplicationDataFragment
 
+    @Subscribe
+    private fun onAfterInit(event: AfterInitEvent) {
+        applicationDataFragment.setEditable(false)
+    }
+
 
     @Subscribe
     private fun onAfterShow(event: AfterShowEvent) {
         setWindowCaption()
-        applicationDataFragment.setEditable(false)
     }
 
 
@@ -156,6 +161,7 @@ class AccountEdit : StandardEditor<Account>() {
             .withParentDataContext(dataContext)
             .withInitializer {
                 it.account = editedEntity
+                it.copyFrom(applicationDataDc.item)
             }
             .withOpenMode(OpenMode.NEW_TAB)
             .build()
@@ -183,27 +189,25 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     private inline fun MarketData.copyFrom(other : MarketData) {
-        this.setContractType(other.getContractType())
-        this.setApplicationType(other.getApplicationType())
-        this.setFieldType(other.getFieldType())
-        this.trl = other.trl
-        this.arl = other.arl
-        this.setRunsNumber(other.getRunsNumber())
-        this.firstRunDuration = other.firstRunDuration
-        this.secondRunDuration = other.secondRunDuration
-        this.thirdRunDuration = other.thirdRunDuration
-        this.thirdPlusRunDuration = other.thirdPlusRunDuration
-        this.wellCount = other.wellCount
-        this.conversionRate = other.conversionRate
-        this.oilPermits = other.oilPermits
-        this.rigQty = other.rigQty
-        this.ducQty = other.ducQty
-        this.completion = other.completion
-        this.activityRate = other.activityRate
-        this.budget = other.budget
-        this.bShare = other.bShare
-        this.wellMonitorQty = other.wellMonitorQty
-        this.bWellCount = other.bWellCount
-        this.rentalCapex = other.rentalCapex
+        listOf("contractType", "applicationType", "fieldType", "trl", "arl", "runsNumber", "firstRunDuration",
+            "secondRunDuration", "thirdRunDuration", "thirdPlusRunDuration", "wellCount", "conversionRate", "oilPermits", "rigQty", "ducQty",
+            "completion", "activityRate", "budget", "bShare", "wellMonitorQty", "bWellCount", "rentalCapex")
+            .forEach {
+                this.setValue(it, other.getValue(it))
+            }
+    }
+
+    private inline fun ApplicationData.copyFrom(other : ApplicationData) {
+        val newSystemAllocationList = other.systemAllocations?.map { otherSystemAllocation ->
+            val newSystemAllocation = dataContext.create(SystemAllocation::class.java)
+            newSystemAllocation.applicationData = this
+            newSystemAllocation.system = otherSystemAllocation.system
+            newSystemAllocation.run1 = otherSystemAllocation.run1
+            newSystemAllocation.run2 = otherSystemAllocation.run2
+            newSystemAllocation.run3 = otherSystemAllocation.run3
+            newSystemAllocation.run3plus = otherSystemAllocation.run3plus
+            return@map newSystemAllocation
+        }
+        this.systemAllocations = newSystemAllocationList?.toMutableList()
     }
 }

@@ -19,6 +19,9 @@
                 <property name="actualAppDetail" view="_minimal">
                     <property name="yearMonth"/>
                     <property name="systems" view="_local"/>
+                    <property name="systemAllocations" view="_local">
+                        <property name="system" view="_local"/>
+                    </property>
                     <property name="utilization" view="_local">
                         <property name="equipmentType"/>
                     </property>

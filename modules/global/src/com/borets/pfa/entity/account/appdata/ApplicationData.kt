@@ -39,6 +39,11 @@ open class ApplicationData : StandardEntity() {
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "applicationData")
+    var systemAllocations: MutableList<SystemAllocation>? = mutableListOf()
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "applicationData")
     var utilization: MutableList<EquipmentUtilization>? = mutableListOf()
 
     fun getYearMonth(): YearMonth? {

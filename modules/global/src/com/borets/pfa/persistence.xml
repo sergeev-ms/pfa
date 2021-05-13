@@ -17,5 +17,6 @@
         <class>com.borets.pfa.entity.account.system.SystemDetail</class>
         <class>com.borets.pfa.entity.account.appdata.ApplicationData</class>
         <class>com.borets.pfa.entity.account.appdata.EquipmentUtilization</class>
+        <class>com.borets.pfa.entity.account.appdata.SystemAllocation</class>
     </persistence-unit>
 </persistence>

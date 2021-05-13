@@ -1,0 +1,39 @@
+package com.borets.pfa.entity.account.appdata
+
+import com.borets.pfa.entity.account.system.SystemStd
+import com.haulmont.chile.core.annotations.NumberFormat
+import com.haulmont.cuba.core.entity.StandardEntity
+import java.math.BigDecimal
+import javax.persistence.*
+
+@Table(name = "PFA_SYSTEM_ALLOCATION")
+@Entity(name = "pfa_SystemAllocation")
+open class SystemAllocation : StandardEntity() {
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "APPLICATION_DATA_ID")
+    var applicationData: ApplicationData? = null
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SYSTEM_ID")
+    var system: SystemStd? = null
+
+    @NumberFormat(pattern = "#%")
+    @Column(name = "RUN1")
+    var run1: BigDecimal? = null
+
+    @NumberFormat(pattern = "#%")
+    @Column(name = "RUN2")
+    var run2: BigDecimal? = null
+
+    @NumberFormat(pattern = "#%")
+    @Column(name = "RUN3")
+    var run3: BigDecimal? = null
+
+    @NumberFormat(pattern = "#%")
+    @Column(name = "RUN3_PLUS")
+    var run3plus: BigDecimal? = null
+
+    companion object {
+        private const val serialVersionUID = 5378292270482296206L
+    }
+}
