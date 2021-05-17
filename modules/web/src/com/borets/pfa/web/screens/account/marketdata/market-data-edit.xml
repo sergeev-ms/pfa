@@ -38,8 +38,8 @@
                 </column>
                 <column width="100%">
                     <textField id="completionField" property="completion" required="true"/>
-                    <currencyField id="activityRateField" property="activityRate" required="true" currency="$"/>
-                    <textField id="budgetField" property="budget" required="true"/>
+                    <textField id="activityRateField" property="activityRate" required="true"/>
+                    <currencyField id="budgetField" property="budget" required="true" currency="$"/>
                     <textField id="bShareField" property="bShare" required="true"/>
                     <textField id="wellMonitorQtyField" property="wellMonitorQty" required="true"/>
                     <textField id="bWellCountField" property="bWellCount" required="true"/>
