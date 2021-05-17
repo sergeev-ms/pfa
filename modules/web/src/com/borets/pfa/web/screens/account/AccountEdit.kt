@@ -161,7 +161,7 @@ class AccountEdit : StandardEditor<Account>() {
             .withParentDataContext(dataContext)
             .withInitializer {
                 it.account = editedEntity
-                it.copyFrom(applicationDataDc.item)
+                editedEntity.actualAppDetail?.let { currentAppData -> it.copyFrom(currentAppData) }
             }
             .withOpenMode(OpenMode.NEW_TAB)
             .build()
