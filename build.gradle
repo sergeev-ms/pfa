@@ -128,6 +128,8 @@ configure(coreModule) {
         compileOnly(servletApi)
         jdbc(mssql) { exclude(group: 'com.microsoft.azure', module: 'azure-keyvault') }
         testRuntime(mssql) { exclude(group: 'com.microsoft.azure', module: 'azure-keyvault') }
+        compile group: 'org.springframework.kafka', name: 'spring-kafka', version: '2.6.2'
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
     }
 
     task cleanConf(description: 'Cleans up conf directory', type: Delete) {
@@ -223,7 +225,9 @@ task buildWarTest(type: CubaWarBuilding) {
     includeJdbcDriver = true
     appProperties = ['cuba.automaticDatabaseUpdate': true,
                      'cuba.dataSourceProvider'     : 'jndi',
-                     'cuba.webAppUrl'              : 'http://us-cuba-test.us.borets.gc/pfa']
+                     'cuba.webAppUrl'              : 'http://us-cuba-test.us.borets.gc/pfa',
+                     'pfa.kafka.consumer.topics'   : 'part-numbers-test',
+                     'pfa.kafka.consumer.group'    : 'pfa-test']
     webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
     logbackConfigurationFile = 'etc/war-logback.xml'
     includeContextXml = true
