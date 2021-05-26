@@ -12,6 +12,12 @@ open class RevenueType : StandardEntity() {
     @Column(name = "NAME")
     var name: String? = null
 
+    @Column(name = "FULL_NAME")
+    var fullName: String? = null
+
+    @Column(name = "ORDER_")
+    var order: Int? = 0
+
     companion object {
         private const val serialVersionUID = -6915504526183386564L
     }

@@ -89,6 +89,8 @@ create table PFA_REVENUE_TYPE (
     DELETED_BY varchar(50),
     --
     NAME varchar(255),
+    FULL_NAME varchar(255),
+    ORDER_ integer,
     --
     primary key nonclustered (ID)
 )^
