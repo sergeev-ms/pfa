@@ -164,6 +164,7 @@ create table PFA_MARKET_DATA (
     --
     YEAR_ integer,
     MONTH_ integer,
+    RECORD_TYPE varchar(50),
     CONTRACT_TYPE varchar(50),
     APPLICATION_TYPE varchar(50),
     FIELD_TYPE varchar(50),
