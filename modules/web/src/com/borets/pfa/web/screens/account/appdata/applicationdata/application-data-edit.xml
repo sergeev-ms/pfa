@@ -21,7 +21,11 @@
     <layout expand="applicationDateFragment" spacing="true">
         <form id="form" dataContainer="applicationDataDc">
             <column width="450px">
-                <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption" stylename="custom-height"/>
+                <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption"
+                            stylename="custom-height"/>
+            </column>
+            <column width="450px">
+                <lookupField id="recordTypeField" property="recordType" required="true"/>
             </column>
         </form>
         <fragment id="applicationDateFragment" screen="pfa_ApplicationDataFragment"/>

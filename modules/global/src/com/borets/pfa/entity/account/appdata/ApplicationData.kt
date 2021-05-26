@@ -1,6 +1,7 @@
 package com.borets.pfa.entity.account.appdata
 
 import com.borets.pfa.entity.account.Account
+import com.borets.pfa.entity.activity.RecordType
 import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.cuba.core.entity.StandardEntity
@@ -23,6 +24,9 @@ open class ApplicationData : StandardEntity() {
     @MetaProperty(related = ["month", "year"], datatype = "yearMonth")
     private var yearMonth: String? = null
 
+    @Column(name = "RECORD_TYPE")
+    private var recordType: String? = null
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ACCOUNT_ID")
     var account: Account? = null
@@ -36,6 +40,12 @@ open class ApplicationData : StandardEntity() {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "applicationData")
     var utilization: MutableList<EquipmentUtilization>? = mutableListOf()
+
+    fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
+
+    fun setRecordType(recordType: RecordType?) {
+        this.recordType = recordType?.id
+    }
 
     fun getYearMonth(): YearMonth? {
         return if (year != null && month != null) {

@@ -283,6 +283,7 @@ create table PFA_APPLICATION_DATA (
     --
     YEAR_ integer,
     MONTH_ integer,
+    RECORD_TYPE varchar(50),
     ACCOUNT_ID uniqueidentifier not null,
     --
     primary key nonclustered (ID)

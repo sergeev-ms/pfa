@@ -37,6 +37,7 @@
             </actions>
             <columns>
                 <column id="yearMonth"/>
+                <column id="recordType"/>
                 <column id="createTs"/>
                 <column id="createdBy"/>
             </columns>
