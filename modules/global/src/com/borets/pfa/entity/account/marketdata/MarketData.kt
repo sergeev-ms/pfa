@@ -88,6 +88,9 @@ open class MarketData : StandardEntity() {
     @Column(name = "B_SHARE")
     var bShare: BigDecimal? = null
 
+    @Column(name = "IS_WELL_MONITOR")
+    var isWellMonitor: Boolean? = false
+
     @Column(name = "WELL_MONITOR_QTY")
     var wellMonitorQty: Int? = null
 

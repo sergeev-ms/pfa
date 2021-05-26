@@ -87,6 +87,7 @@
                             <textField id="activityRateField" property="activityRate" editable="false"/>
                             <currencyField id="budgetField" property="budget" editable="false" currency="$"/>
                             <textField id="bShareField" property="bShare" editable="false"/>
+                            <checkBox id="isWellMonitorField" property="isWellMonitor" editable="false"/>
                             <textField id="wellMonitorQtyField" property="wellMonitorQty" editable="false"/>
                             <textField id="bWellCountField" property="bWellCount" editable="false"/>
                             <currencyField id="rentalCapexField" property="rentalCapex" editable="false" currency="$"/>

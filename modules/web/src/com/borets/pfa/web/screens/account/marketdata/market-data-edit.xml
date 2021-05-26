@@ -41,6 +41,7 @@
                     <textField id="activityRateField" property="activityRate" required="true"/>
                     <currencyField id="budgetField" property="budget" required="true" currency="$"/>
                     <textField id="bShareField" property="bShare" required="true"/>
+                    <checkBox id="isWellMonitorField" property="isWellMonitor"/>
                     <textField id="wellMonitorQtyField" property="wellMonitorQty" required="true"/>
                     <textField id="bWellCountField" property="bWellCount" required="true"/>
                     <currencyField id="rentalCapexField" property="rentalCapex" required="true" currency="$"/>

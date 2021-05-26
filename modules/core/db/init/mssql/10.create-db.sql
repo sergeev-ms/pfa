@@ -183,6 +183,7 @@ create table PFA_MARKET_DATA (
     ACTIVITY_RATE decimal(19, 2),
     BUDGET integer,
     B_SHARE decimal(19, 2),
+    IS_WELL_MONITOR tinyint,
     WELL_MONITOR_QTY integer,
     B_WELL_COUNT integer,
     RENTAL_CAPEX integer,
