@@ -2,7 +2,7 @@
 @Field private CommitContext commitContext = new CommitContext()
 @Field private int year = 2021
 @Field private int month = 1
-@Field private String pathName = 'C:/Temp/Forms Price 19APR_only_data_import.XLSX'
+@Field private String pathName = 'D:/LoadToPFA/Price_load.xlsx'
 
 
 import com.borets.pfa.entity.account.Account
@@ -118,8 +118,7 @@ private Account getAccount(String accountName) {
             .orElseGet {
                 def account = (dataManager as DataManager).create(Account.class)
                 account.name = accountName
-                commitContext.addInstanceToCommit(account)
-                return account
+                return dataManager.commit(account)
             }
 }
 
@@ -166,10 +165,10 @@ private RevenueType getRevenueType(String name) {
             .parameter('revenueName', name)
             .optional()
             .orElseGet {
+                log.debug("revenueType ${name} was not fount. create new one")
                 def revenueType = (dataManager as DataManager).create(RevenueType.class)
                 revenueType.name = name
-                commitContext.addInstanceToCommit(revenueType)
-                return revenueType
+                return dataManager.commit(revenueType)
             }
 }
 

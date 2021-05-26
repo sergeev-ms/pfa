@@ -108,8 +108,7 @@ private Account getAccount(String accountName) {
             .orElseGet {
                 def account = (dataManager as DataManager).create(Account.class)
                 account.name = accountName
-                commitContext.addInstanceToCommit(account)
-                return account
+                return dataManager.commit(account)
             }
 }
 
