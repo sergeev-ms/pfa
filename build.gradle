@@ -231,5 +231,18 @@ task buildWarTest(type: CubaWarBuilding) {
     webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
     logbackConfigurationFile = 'etc/war-logback.xml'
     includeContextXml = true
+    coreContextXmlPath = 'modules/core/web/META-INF/war-context-test.xml'
+}
+
+task buildWar(type: CubaWarBuilding) {
+    includeJdbcDriver = true
+    appProperties = ['cuba.automaticDatabaseUpdate'   : true,
+                     'cuba.dataSourceProvider'        : 'jndi',
+                     'cuba.webAppUrl'                 : 'http://us-pro.us.borets.gc/pfa',
+                     'pfa.kafka.consumer.topics'      : 'part-numbers',
+                     'pfa.kafka.parts.consumer.group' : 'pfa']
+    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
+    logbackConfigurationFile = 'etc/war-logback.xml'
+    includeContextXml = true
     coreContextXmlPath = 'modules/core/web/META-INF/war-context.xml'
 }
