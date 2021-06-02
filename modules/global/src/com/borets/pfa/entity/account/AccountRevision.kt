@@ -1,8 +1,8 @@
 package com.borets.pfa.entity.account
 
+import com.borets.pfa.entity.Employee
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.cuba.core.entity.StandardEntity
-import com.haulmont.cuba.security.entity.User
 import java.time.YearMonth
 import javax.persistence.*
 
@@ -21,7 +21,7 @@ open class AccountRevision : StandardEntity() {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MANAGER_ID")
-    var manager: User? = null
+    var manager: Employee? = null
 
     @Column(name = "TYPE_")
     private var type: String? = null

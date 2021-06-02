@@ -18,5 +18,6 @@
         <class>com.borets.pfa.entity.account.appdata.ApplicationData</class>
         <class>com.borets.pfa.entity.account.appdata.EquipmentUtilization</class>
         <class>com.borets.pfa.entity.account.appdata.SystemAllocation</class>
+        <class>com.borets.pfa.entity.Employee</class>
     </persistence-unit>
 </persistence>

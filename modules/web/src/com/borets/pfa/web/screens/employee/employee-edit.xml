@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://employeeEdit.caption" focusComponent="form"
+        messagesPack="com.borets.pfa.web.screens.employee">
+    <data>
+        <instance id="employeeDc" class="com.borets.pfa.entity.Employee">
+            <view extends="_local"/>
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="employeeDc">
+            <column width="450px">
+                <textField id="lastNameField" property="lastName" required="true"/>
+                <textField id="firstNameField" property="firstName" required="true"/>
+                <textField id="nameField" property="name" editable="false"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
