@@ -2,6 +2,23 @@
 <project version="4">
   <component name="CubaPluginProjectSettings">
     <option name="repeatEntityPackageScreens" value="true" />
+    <option name="hotDeploySrcDirectories">
+      <list>
+        <option value="modules\global\src" />
+        <option value="modules\core\src" />
+        <option value="modules\global\src" />
+        <option value="modules\web\src" />
+      </list>
+    </option>
+    <option name="hotDeployDstDirectories">
+      <list>
+        <option value="deploy\app_home\ROOT-core\conf" />
+        <option value="deploy\app_home\ROOT-core\conf" />
+        <option value="deploy\app_home\ROOT\conf" />
+        <option value="deploy\app_home\ROOT\conf" />
+      </list>
+    </option>
+    <option name="useNvarcharForMssql" value="true" />
     <option name="groupUpdateScriptsBy" value="MONTH" />
     <option name="defaultFieldGroupColumnWidth" value="450px" />
     <option name="stateVersion" value="1" />
