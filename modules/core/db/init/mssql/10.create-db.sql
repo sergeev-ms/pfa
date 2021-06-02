@@ -89,6 +89,8 @@ create table PFA_REVENUE_TYPE (
     DELETED_BY varchar(50),
     --
     NAME varchar(255),
+    FULL_NAME varchar(255),
+    ORDER_ integer,
     --
     primary key nonclustered (ID)
 )^
@@ -164,6 +166,7 @@ create table PFA_MARKET_DATA (
     --
     YEAR_ integer,
     MONTH_ integer,
+    RECORD_TYPE varchar(50),
     CONTRACT_TYPE varchar(50),
     APPLICATION_TYPE varchar(50),
     FIELD_TYPE varchar(50),
@@ -282,6 +285,7 @@ create table PFA_APPLICATION_DATA (
     --
     YEAR_ integer,
     MONTH_ integer,
+    RECORD_TYPE varchar(50),
     ACCOUNT_ID uniqueidentifier not null,
     --
     primary key nonclustered (ID)

@@ -2,6 +2,7 @@ package com.borets.pfa.entity.account.marketdata
 
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.activity.ContractType
+import com.borets.pfa.entity.activity.RecordType
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity
@@ -26,6 +27,9 @@ open class MarketData : StandardEntity() {
     @MetaProperty(related = ["month", "year"], datatype = "yearMonth")
     private var yearMonth: String? = null
 
+
+    @Column(name = "RECORD_TYPE")
+    private var recordType: String? = null
 
     @Column(name = "CONTRACT_TYPE")
     private var contractType: String? = null
@@ -90,6 +94,7 @@ open class MarketData : StandardEntity() {
 
     @Column(name = "IS_WELL_MONITOR")
     var isWellMonitor: Boolean? = false
+        private set
 
     @Column(name = "WELL_MONITOR_QTY")
     var wellMonitorQty: Int? = null
@@ -103,6 +108,12 @@ open class MarketData : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ACCOUNT_ID")
     var account: Account? = null
+
+    fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
+
+    fun setRecordType(recordType: RecordType?) {
+        this.recordType = recordType?.id
+    }
 
     fun getRunsNumber(): RunsNumber? = runsNumber?.let { RunsNumber.fromId(it) }
 

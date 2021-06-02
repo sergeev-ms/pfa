@@ -27,6 +27,8 @@
             </actions>
             <columns>
                 <column id="name"/>
+                <column id="fullName"/>
+                <column id="order"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">
