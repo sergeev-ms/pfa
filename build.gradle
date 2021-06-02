@@ -236,11 +236,16 @@ task buildWarTest(type: CubaWarBuilding) {
 
 task buildWar(type: CubaWarBuilding) {
     includeJdbcDriver = true
-    appProperties = ['cuba.automaticDatabaseUpdate'   : true,
-                     'cuba.dataSourceProvider'        : 'jndi',
-                     'cuba.webAppUrl'                 : 'http://us-pro.us.borets.gc/pfa',
-                     'pfa.kafka.consumer.topics'      : 'part-numbers',
-                     'pfa.kafka.parts.consumer.group' : 'pfa']
+    appProperties = ['cuba.automaticDatabaseUpdate'       : true,
+                     'cuba.dataSourceProvider'            : 'jndi',
+                     'cuba.webAppUrl'                     : 'http://us-pro.us.borets.gc/pfa',
+                     'pfa.kafka.consumer.topics'          : 'part-numbers',
+                     'pfa.kafka.parts.consumer.group'     : 'pfa',
+                     'cuba.web.productionMode'            : true,
+                     'cuba.performanceLogDisabled'        : true,
+                     'cuba.web.loginDialogDefaultUser'    : '<disabled>',
+                     'cuba.web.loginDialogDefaultPassword': '<disabled>',
+                     'cuba.bruteForceProtection.enabled'  : true]
     webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
     logbackConfigurationFile = 'etc/war-logback.xml'
     includeContextXml = true
