@@ -94,6 +94,7 @@ open class MarketData : StandardEntity() {
 
     @Column(name = "IS_WELL_MONITOR")
     var isWellMonitor: Boolean? = false
+        private set
 
     @Column(name = "WELL_MONITOR_QTY")
     var wellMonitorQty: Int? = null
@@ -107,6 +108,9 @@ open class MarketData : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ACCOUNT_ID")
     var account: Account? = null
+
+    @Column(name = "NEW_WELL_YEAR")
+    var newWellYear: Int? = null
 
     fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
 

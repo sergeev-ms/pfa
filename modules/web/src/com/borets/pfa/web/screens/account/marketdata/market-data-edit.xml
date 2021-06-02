@@ -33,6 +33,7 @@
                 </column>
                 <column width="100%">
                     <textField id="wellCountField" property="wellCount" required="true"/>
+                    <textField id="newWellYearField" property="newWellYear" required="true"/>
                     <textField id="conversionRateField" property="conversionRate" required="true"/>
                     <textField id="oilPermitsField" property="oilPermits" required="true"/>
                     <textField id="rigQtyField" property="rigQty" required="true"/>
