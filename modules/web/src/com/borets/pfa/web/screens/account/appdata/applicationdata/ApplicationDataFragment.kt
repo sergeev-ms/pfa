@@ -37,7 +37,7 @@ class ApplicationDataFragment : ScreenFragment() {
     private lateinit var systemsAllocationGridPanel: ButtonsPanel
 
     @Subscribe("systemsAllocationGrid.create")
-    private fun onSystemsAllocationGridCreate(event: Action.ActionPerformedEvent) {
+    private fun onSystemsAllocationGridCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.lookup(SystemStd::class.java, this)
             .withSelectHandler {
                 dataContext.create(SystemAllocation::class.java).apply {

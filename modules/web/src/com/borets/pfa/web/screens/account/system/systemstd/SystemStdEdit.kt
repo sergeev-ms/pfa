@@ -42,7 +42,7 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
 
 
     @Subscribe("detailsTable.create")
-    private fun onDetailsTableCreate(event: Action.ActionPerformedEvent) {
+    private fun onDetailsTableCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         dataContext.create(SystemDetail::class.java).apply {
             this.system = editedEntity
         }.let {

@@ -56,19 +56,19 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var applicationDataFragment: ApplicationDataFragment
 
     @Subscribe
-    private fun onAfterInit(event: AfterInitEvent) {
+    private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
         applicationDataFragment.setEditable(false)
     }
 
 
     @Subscribe
-    private fun onAfterShow(event: AfterShowEvent) {
+    private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
         setWindowCaption()
     }
 
 
     @Subscribe("createRevisionBtn")
-    private fun onCreateRevisionBtnClick(event: Button.ClickEvent) {
+    private fun onCreateRevisionBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
         screenBuilders.editor(AccountRevision::class.java, this)
             .newEntity()
             .withParentDataContext(dataContext)
@@ -90,14 +90,14 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Subscribe("showRevisionsBtn")
-    private fun onShowRevisionsBtnClick(event: Button.ClickEvent) {
+    private fun onShowRevisionsBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
         screenBuilders.lookup(AccountRevision::class.java, this)
             .withOptions(MapScreenOptions(mutableMapOf(Pair("account", editedEntity)) as Map<String, Any>))
             .show()
     }
 
     @Subscribe("createMarketDataBtn")
-    private fun onCreateMarketDataBtnClick(event: Button.ClickEvent) {
+    private fun onCreateMarketDataBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
         screenBuilders.editor(MarketData::class.java, this)
             .newEntity()
             .withParentDataContext(dataContext)
@@ -120,7 +120,7 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Subscribe("showMarketDetailsBtn")
-    private fun onShowMarketDetailsBtnClick(event: Button.ClickEvent) {
+    private fun onShowMarketDetailsBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
         screenBuilders.lookup(MarketData::class.java, this)
             .withOptions(MapScreenOptions(mutableMapOf(Pair("account", editedEntity)) as Map<String, Any>))
             .show()
@@ -155,7 +155,7 @@ class AccountEdit : StandardEditor<Account>() {
 
 
     @Subscribe("createAppDataBtn")
-    private fun onCreateAppDataBtnClick(event: Button.ClickEvent) {
+    private fun onCreateAppDataBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
         screenBuilders.editor(ApplicationData::class.java, this)
             .newEntity()
             .withParentDataContext(dataContext)
@@ -176,7 +176,7 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Subscribe("showAppDetailsBtn")
-    private fun onShowAppDetailsBtnClick(event: Button.ClickEvent) {
+    private fun onShowAppDetailsBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
         screenBuilders.lookup(ApplicationData::class.java, this)
             .withOptions(MapScreenOptions(mutableMapOf(Pair("account", editedEntity)) as Map<String, Any>))
             .show()

@@ -62,19 +62,19 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
 
 
     @Subscribe
-    private fun onAfterInit(event: AfterInitEvent) {
+    private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
         pivotGridHelper = AppBeans.getPrototype(PivotGridInitializer::class.java, pivotGrid)
         initFilter()
 
     }
 
     @Subscribe
-    private fun onBeforeShow(event: BeforeShowEvent) {
+    private fun onBeforeShow(@Suppress("UNUSED_PARAMETER") event: BeforeShowEvent) {
         initPivotGrid()
     }
 
     @Subscribe
-    private fun onAfterShow(event: AfterShowEvent) {
+    private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
         initDynamic()
         setWindowCaption()
         editedEntity.getYearMonth()?.let {

@@ -20,14 +20,14 @@ class PriceListBrowse : StandardLookup<PriceList>() {
     private lateinit var priceListsTable: GroupTable<PriceList>
 
     @Subscribe("priceListsTable.openPlain")
-    private fun onPriceListsTableOpenPlain(event: Action.ActionPerformedEvent) {
+    private fun onPriceListsTableOpenPlain(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(priceListsTable)
             .editEntity(priceListsTable.singleSelected!!)
             .show()
     }
 
     @Subscribe("priceListsTable.edit")
-    private fun onPriceListsTableEdit(event: Action.ActionPerformedEvent) {
+    private fun onPriceListsTableEdit(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(priceListsTable)
             .editEntity(priceListsTable.singleSelected!!)
             .withScreenClass(PriceListPivotEdit::class.java)
@@ -35,7 +35,7 @@ class PriceListBrowse : StandardLookup<PriceList>() {
     }
 
     @Subscribe("priceListsTable.create")
-    private fun onPriceListsTableCreate(event: Action.ActionPerformedEvent) {
+    private fun onPriceListsTableCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(priceListsTable)
             .newEntity()
             .withScreenClass(PriceListPivotEdit::class.java)

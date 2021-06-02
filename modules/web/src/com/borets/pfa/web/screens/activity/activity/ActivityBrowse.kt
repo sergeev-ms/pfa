@@ -36,7 +36,7 @@ class ActivityBrowse : StandardLookup<Activity>() {
     }
 
     @Subscribe("activitiesTable.edit")
-    private fun onActivitiesTableEdit(event: Action.ActionPerformedEvent) {
+    private fun onActivitiesTableEdit(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(activitiesTable)
             .editEntity(activitiesTable.singleSelected!!)
             .withScreenClass(ActivityPivotEdit::class.java)
@@ -44,14 +44,14 @@ class ActivityBrowse : StandardLookup<Activity>() {
     }
 
     @Subscribe("activitiesTable.openPlain")
-    private fun onActivitiesTableOpenPlain(event: Action.ActionPerformedEvent) {
+    private fun onActivitiesTableOpenPlain(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(activitiesTable)
             .editEntity(activitiesTable.singleSelected!!)
             .show()
     }
 
     @Subscribe("activitiesTable.create")
-    private fun onActivitiesTableCreate(event: Action.ActionPerformedEvent) {
+    private fun onActivitiesTableCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(activitiesTable)
             .newEntity()
             .withScreenClass(ActivityPivotEdit::class.java)

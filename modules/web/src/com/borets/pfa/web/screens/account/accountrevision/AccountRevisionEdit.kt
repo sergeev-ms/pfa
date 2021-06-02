@@ -18,7 +18,7 @@ class AccountRevisionEdit : StandardEditor<AccountRevision>() {
     private lateinit var yearMonthField: DatePicker<Date>
 
     @Subscribe
-    private fun onAfterShow(event: AfterShowEvent) {
+    private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
         editedEntity.getYearMonth()?.let {
             yearMonthField.value = Date.from(it
                 .atDay(1)
