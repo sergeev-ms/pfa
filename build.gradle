@@ -225,7 +225,8 @@ task buildWarTest(type: CubaWarBuilding) {
     includeJdbcDriver = true
     appProperties = ['cuba.automaticDatabaseUpdate'   : true,
                      'cuba.dataSourceProvider'        : 'jndi',
-                     'cuba.webAppUrl'                 : 'http://us-cuba-test.us.borets.gc/pfa',
+                     'cuba.webHostName'               : 'us-cuba-test.us.borets.gc',
+                     'cuba.webPort'                   : '90',
                      'pfa.kafka.consumer.topics'      : 'part-numbers-test',
                      'pfa.kafka.parts.consumer.group' : 'pfa-test']
     webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
@@ -238,7 +239,9 @@ task buildWar(type: CubaWarBuilding) {
     includeJdbcDriver = true
     appProperties = ['cuba.automaticDatabaseUpdate'       : true,
                      'cuba.dataSourceProvider'            : 'jndi',
-                     'cuba.webAppUrl'                     : 'http://us-pro.us.borets.gc/pfa',
+                     'cuba.webHostName'                   : 'us-pro.us.borets.gc',
+                     'cuba.webPort'                       : '80',
+                     'cuba.webAppUrl'                     : 'http://us-pro.us.borets.gc',
                      'pfa.kafka.consumer.topics'          : 'part-numbers',
                      'pfa.kafka.parts.consumer.group'     : 'pfa',
                      'cuba.web.productionMode'            : true,
