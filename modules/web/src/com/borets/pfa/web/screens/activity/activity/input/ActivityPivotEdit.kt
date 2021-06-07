@@ -154,7 +154,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
         }
         months.map {
             DynamicPropertyData(it.toString(),
-                it.format(DateTimeFormatter.ofPattern("MMM yy", userSession.locale)),
+                it.format(DateTimeFormatter.ofPattern("MMM yy", userSession.locale)), null,
                 Int::class.javaObjectType, TextField::class.java, "60px")
 
         }.let { dynamicProperties ->

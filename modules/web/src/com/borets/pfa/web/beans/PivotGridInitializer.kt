@@ -91,15 +91,16 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
     }
 
 
-    private fun addColumnCaption(caption: String, startPosition: Int) {
+    private fun addColumnCaption(caption: String, startPosition: Int) : Label<String> {
         @Suppress("UnstableApiUsage")
-        uiComponents.create(Label.TYPE_STRING).apply {
+        val label = uiComponents.create(Label.TYPE_STRING).apply {
             this.value = caption
             this.addStyleName(ValoTheme.LABEL_H3)
             this.alignment = Alignment.MIDDLE_CENTER
-        }.let {
-            pivotGrid.add(it, startPosition, 0)
         }
+
+        pivotGrid.add(label, startPosition, 0)
+        return label
     }
 
     fun setStaticPivotPropertiesValues(initialEntities: List<KeyValueEntity>) {
@@ -171,7 +172,8 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         var startCol = pivotGrid.columns
         pivotGrid.columns += this.dynamicProperties!!.size
         this.dynamicProperties!!.forEach {
-            addColumnCaption(it.caption, startCol++)
+            val label = addColumnCaption(it.caption, startCol++)
+            label.description = it.description
         }
     }
 
@@ -231,6 +233,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
     class DynamicPropertyData<T>(
         override val property: String,
         var caption: String,
+        val description: String?,
         override val clazz: Class<T>,
         var fieldType: Class<out Field<*>>,
         var fieldWidth: String
