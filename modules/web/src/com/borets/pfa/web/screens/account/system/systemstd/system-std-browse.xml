@@ -5,17 +5,26 @@
         messagesPack="com.borets.pfa.web.screens.account.system.systemstd">
     <data readOnly="true">
         <collection id="systemStdsDc" class="com.borets.pfa.entity.account.system.SystemStd">
-            <view extends="_local"/>
             <loader id="systemStdsDl">
                 <query>
                     <![CDATA[select e from pfa_SystemStd e]]>
                 </query>
             </loader>
+            <view extends="_local">
+                <property name="pumpModel"/>
+                <property name="depth"/>
+                <property name="sealConfig"/>
+                <property name="pumpConfig"/>
+                <property name="pumpMaterials"/>
+                <property name="sealMaterials"/>
+                <property name="motorMaterials"/>
+            </view>
         </collection>
     </data>
     <dialogMode height="600" width="800"/>
     <layout expand="systemStdsTable" spacing="true">
-        <filter id="filter" applyTo="systemStdsTable" dataLoader="systemStdsDl">
+        <filter id="filter" applyTo="systemStdsTable" dataLoader="systemStdsDl" applyImmediately="true" columnsCount="4">
+            <property name=""/>
             <properties include=".*"/>
         </filter>
         <groupTable id="systemStdsTable" width="100%" dataContainer="systemStdsDc">
@@ -29,7 +38,12 @@
                 <column id="casingSize"/>
                 <column id="casingWeight"/>
                 <column id="pumpModel"/>
-                <column id="motorType"/>
+                <column id="depth"/>
+                <column id="sealConfig"/>
+                <column id="pumpConfig"/>
+                <column id="pumpMaterials"/>
+                <column id="sealMaterials"/>
+                <column id="motorMaterials"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">
