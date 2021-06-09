@@ -11,6 +11,16 @@
                     </property>
                     <property name="partNumber" view="_minimal"/>
                 </property>
+                <property name="pumpModel"/>
+                <property name="depth"/>
+                <property name="motorType"/>
+                <property name="intakeConfig"/>
+                <property name="vaproConfig"/>
+                <property name="sealConfig"/>
+                <property name="pumpConfig"/>
+                <property name="pumpMaterials"/>
+                <property name="sealMaterials"/>
+                <property name="motorMaterials"/>
             </view>
             <loader/>
             <collection id="detailsDc" property="details"/>
@@ -20,7 +30,47 @@
                 <property name="category" view="_minimal"/>
             </view>
             <loader id="equipmentTypesDl">
-                <query>from pfa_EquipmentType e</query>
+                <query>from pfa_EquipmentType e order by e.name</query>
+            </loader>
+        </collection>
+        <collection id="pumpTypeOptionsDc" class="com.borets.pfa.entity.account.system.classification.PumpType" view="_minimal">
+            <loader id="pumpTypeOptionsDl">
+                <query>from pfa_PumpType e order by e.name</query>
+            </loader>
+        </collection>
+        <collection id="depthOptionsDc" class="com.borets.pfa.entity.account.system.classification.Depth" view="_minimal">
+            <loader id="depthOptionsDl">
+                <query>from pfa_Depth e order by e.name</query>
+            </loader>
+        </collection>
+        <collection id="motorTypeOptionsDc" class="com.borets.pfa.entity.account.system.classification.MotorType" view="_minimal">
+            <loader id="motorTypeOptionsDl">
+                <query>from pfa_MotorType e order by e.name</query>
+            </loader>
+        </collection>
+        <collection id="intakeConfigOptionsDc" class="com.borets.pfa.entity.account.system.classification.IntakeConfig" view="_minimal">
+            <loader id="intakeConfigOptionsDl">
+                <query>from pfa_IntakeConfig e order by e.name</query>
+            </loader>
+        </collection>
+        <collection id="vaproConfigOptionsDc" class="com.borets.pfa.entity.account.system.classification.VaproConfig" view="_minimal">
+            <loader id="vaproConfigOptionsDl">
+                <query>from pfa_VaproConfig e order by e.name</query>
+            </loader>
+        </collection>
+        <collection id="sealConfigOptionsDc" class="com.borets.pfa.entity.account.system.classification.SealConfig" view="_minimal">
+            <loader id="sealConfigOptionsDl">
+                <query>from pfa_SealConfig e order by e.name</query>
+            </loader>
+        </collection>
+        <collection id="pumpConfigOptionsDc" class="com.borets.pfa.entity.account.system.classification.PumpConfig" view="_minimal">
+            <loader id="pumpConfigOptionsDl">
+                <query>from pfa_PumpConfig e order by e.name</query>
+            </loader>
+        </collection>
+        <collection id="materialsOptionsDc" class="com.borets.pfa.entity.account.system.classification.Materials" view="_minimal">
+            <loader id="materialsConfigOptionsDl">
+                <query>from pfa_Materials e order by e.name</query>
             </loader>
         </collection>
     </data>
@@ -30,16 +80,24 @@
             <form id="form" dataContainer="systemStdDc" width="100%">
                 <column width="100%">
                     <textField id="systemIdField" property="systemId"/>
-                    <lookupField id="casingSizeField" property="casingSize"/>
-                    <lookupField id="casingWeightField" property="casingWeight"/>
+                    <lookupField id="casingSizeField" property="casingSize" required="true"/>
+                    <lookupField id="casingWeightField" property="casingWeight" required="true"/>
+                    <lookupField id="pumpModelField" property="pumpModel" optionsContainer="pumpTypeOptionsDc" required="true"/>
                 </column>
                 <column width="100%">
-                    <textField id="pumpField" property="pump"/>
-                    <textField id="motorPowerField" property="motorPower"/>
-                    <textField id="headField" property="head"/>
+                    <lookupField id="depthField" property="depth" optionsContainer="depthOptionsDc" required="true"/>
+                    <lookupField id="motorTypeField" property="motorType" optionsContainer="motorTypeOptionsDc" required="true"/>
+                    <lookupField id="intakeConfigField" property="intakeConfig" optionsContainer="intakeConfigOptionsDc" required="true"/>
                 </column>
                 <column width="100%">
-                    <textField id="motorField" property="motor"/>
+                    <lookupField id="vaproConfigField" property="vaproConfig" optionsContainer="vaproConfigOptionsDc" required="true"/>
+                    <lookupField id="sealConfigField" property="sealConfig" optionsContainer="sealConfigOptionsDc" required="true"/>
+                    <lookupField id="pumpConfigField" property="pumpConfig" optionsContainer="pumpConfigOptionsDc" required="true"/>
+                </column>
+                <column width="100%">
+                    <lookupField id="pumpMaterialsField" property="pumpMaterials" optionsContainer="materialsOptionsDc" required="true"/>
+                    <lookupField id="sealMaterialsField" property="sealMaterials" optionsContainer="materialsOptionsDc" required="true"/>
+                    <lookupField id="motorMaterialsField" property="motorMaterials" optionsContainer="materialsOptionsDc" required="true"/>
                     <textField id="commentField" property="comment"/>
                 </column>
             </form>

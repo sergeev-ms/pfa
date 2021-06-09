@@ -1,41 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
-        caption="msg://systemStdBrowse.caption" focusComponent="systemStdsTable"
-        messagesPack="com.borets.pfa.web.screens.account.system.systemstd">
+        caption="msg://pumpConfigBrowse.caption" focusComponent="pumpConfigsTable"
+        messagesPack="com.borets.pfa.web.screens.account.system.classification.pumpconfig">
     <data readOnly="true">
-        <collection id="systemStdsDc" class="com.borets.pfa.entity.account.system.SystemStd">
+        <collection id="pumpConfigsDc" class="com.borets.pfa.entity.account.system.classification.PumpConfig">
             <view extends="_local"/>
-            <loader id="systemStdsDl">
+            <loader id="pumpConfigsDl">
                 <query>
-                    <![CDATA[select e from pfa_SystemStd e]]>
+                    <![CDATA[select e from pfa_PumpConfig e]]>
                 </query>
             </loader>
         </collection>
     </data>
     <dialogMode height="600" width="800"/>
-    <layout expand="systemStdsTable" spacing="true">
-        <filter id="filter" applyTo="systemStdsTable" dataLoader="systemStdsDl">
+    <layout expand="pumpConfigsTable" spacing="true">
+        <filter id="filter" applyTo="pumpConfigsTable" dataLoader="pumpConfigsDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="systemStdsTable" width="100%" dataContainer="systemStdsDc">
+        <groupTable id="pumpConfigsTable" width="100%" dataContainer="pumpConfigsDc">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="systemId"/>
-                <column id="casingSize"/>
-                <column id="casingWeight"/>
-                <column id="pumpModel"/>
-                <column id="motorType"/>
+                <column id="name"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">
-                <button id="createBtn" action="systemStdsTable.create"/>
-                <button id="editBtn" action="systemStdsTable.edit"/>
-                <button id="removeBtn" action="systemStdsTable.remove"/>
+                <button id="createBtn" action="pumpConfigsTable.create"/>
+                <button id="editBtn" action="pumpConfigsTable.edit"/>
+                <button id="removeBtn" action="pumpConfigsTable.remove"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">

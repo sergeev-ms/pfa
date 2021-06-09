@@ -19,5 +19,13 @@
         <class>com.borets.pfa.entity.account.appdata.EquipmentUtilization</class>
         <class>com.borets.pfa.entity.account.appdata.SystemAllocation</class>
         <class>com.borets.pfa.entity.Employee</class>
+        <class>com.borets.pfa.entity.account.system.classification.PumpType</class>
+        <class>com.borets.pfa.entity.account.system.classification.MotorType</class>
+        <class>com.borets.pfa.entity.account.system.classification.VaproConfig</class>
+        <class>com.borets.pfa.entity.account.system.classification.SealConfig</class>
+        <class>com.borets.pfa.entity.account.system.classification.IntakeConfig</class>
+        <class>com.borets.pfa.entity.account.system.classification.PumpConfig</class>
+        <class>com.borets.pfa.entity.account.system.classification.Materials</class>
+        <class>com.borets.pfa.entity.account.system.classification.Depth</class>
     </persistence-unit>
 </persistence>

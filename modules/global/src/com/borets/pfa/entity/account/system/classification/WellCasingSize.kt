@@ -1,4 +1,4 @@
-package com.borets.pfa.entity.account.system
+package com.borets.pfa.entity.account.system.classification
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass
 

@@ -12,6 +12,16 @@
             <item screen="pfa_EquipmentCategory.browse" caption="mainMsg://menu_config.pfa_EquipmentCategory.browse"/>
             <item screen="pfa_SystemStd.browse" caption="mainMsg://menu_config.pfa_SystemStd.browse"/>
             <item screen="pfa_Employee.browse" caption="mainMsg://menu_config.pfa_Employee.browse"/>
+            <menu id="system-classification" caption="mainMsg://menu_config.system-classification">
+                <item screen="pfa_PumpType.browse" caption="mainMsg://menu_config.pfa_PumpType.browse"/>
+                <item screen="pfa_Depth.browse" caption="mainMsg://menu_config.pfa_Depth.browse"/>
+                <item screen="pfa_MotorType.browse" caption="mainMsg://menu_config.pfa_MotorType.browse"/>
+                <item screen="pfa_IntakeConfig.browse" caption="mainMsg://menu_config.pfa_IntakeConfig.browse"/>
+                <item screen="pfa_VaproConfig.browse" caption="mainMsg://menu_config.pfa_VaproConfig.browse"/>
+                <item screen="pfa_SealConfig.browse" caption="mainMsg://menu_config.pfa_SealConfig.browse"/>
+                <item screen="pfa_PumpConfig.browse" caption="mainMsg://menu_config.pfa_PumpConfig.browse"/>
+                <item screen="pfa_Materials.browse" caption="mainMsg://menu_config.pfa_Materials.browse"/>
+            </menu>
         </menu>
     </menu>
 </menu-config>

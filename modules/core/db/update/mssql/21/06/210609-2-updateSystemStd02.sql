@@ -1,0 +1,2 @@
+alter table PFA_SYSTEM_STD add constraint FK_PFA_SYSTEM_STD_ON_MOTOR_TYPE foreign key (MOTOR_TYPE_ID) references PFA_MOTOR_TYPE(ID);
+create index IDX_PFA_SYSTEM_STD_ON_MOTOR_TYPE on PFA_SYSTEM_STD (MOTOR_TYPE_ID);

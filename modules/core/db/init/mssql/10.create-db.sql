@@ -229,10 +229,16 @@ create table PFA_SYSTEM_STD (
     SYSTEM_ID nvarchar(255),
     CASING_SIZE nvarchar(50),
     CASING_WEIGHT nvarchar(50),
-    PUMP nvarchar(255),
-    MOTOR_POWER integer,
-    HEAD integer,
-    MOTOR nvarchar(255),
+    PUMP_TYPE_ID uniqueidentifier,
+    DEPTH_ID uniqueidentifier,
+    MOTOR_TYPE_ID uniqueidentifier,
+    INTAKE_CONFIG_ID uniqueidentifier,
+    VAPRO_CONFIG_ID uniqueidentifier,
+    SEAL_CONFIG_ID uniqueidentifier,
+    PUMP_CONFIG_ID uniqueidentifier,
+    PUMP_MATERIALS_ID uniqueidentifier,
+    SEAL_MATERIALS_ID uniqueidentifier,
+    MOTOR_MATERIALS_ID uniqueidentifier,
     COMMENT_ nvarchar(255),
     --
     primary key nonclustered (ID)
@@ -350,3 +356,131 @@ create table PFA_EMPLOYEE (
     primary key nonclustered (ID)
 )^
 -- end PFA_EMPLOYEE
+-- begin PFA_DEPTH
+create table PFA_DEPTH (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    NAME nvarchar(255),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_DEPTH
+-- begin PFA_MATERIALS
+create table PFA_MATERIALS (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    NAME nvarchar(255),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_MATERIALS
+-- begin PFA_PUMP_CONFIG
+create table PFA_PUMP_CONFIG (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    NAME nvarchar(255),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_PUMP_CONFIG
+-- begin PFA_INTAKE_CONFIG
+create table PFA_INTAKE_CONFIG (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    NAME nvarchar(255),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_INTAKE_CONFIG
+-- begin PFA_SEAL_CONFIG
+create table PFA_SEAL_CONFIG (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    NAME nvarchar(255),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_SEAL_CONFIG
+-- begin PFA_VAPRO_CONFIG
+create table PFA_VAPRO_CONFIG (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    NAME nvarchar(255),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_VAPRO_CONFIG
+-- begin PFA_MOTOR_TYPE
+create table PFA_MOTOR_TYPE (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    NAME nvarchar(255),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_MOTOR_TYPE
+-- begin PFA_PUMP_TYPE
+create table PFA_PUMP_TYPE (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    NAME nvarchar(255),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_PUMP_TYPE
