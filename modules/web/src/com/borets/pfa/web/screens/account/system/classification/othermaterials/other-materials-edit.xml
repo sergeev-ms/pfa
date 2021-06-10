@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        caption="msg://materialsEdit.caption" focusComponent="form"
-        messagesPack="com.borets.pfa.web.screens.account.system.classification.materials">
+        caption="msg://otherMaterialsEdit.caption" focusComponent="form"
+        messagesPack="com.borets.pfa.web.screens.account.system.classification.othermaterials">
     <data>
-        <instance id="materialsDc" class="com.borets.pfa.entity.account.system.classification.Materials">
+        <instance id="otherMaterialsDc" class="com.borets.pfa.entity.account.system.classification.OtherMaterials">
             <view extends="_local"/>
             <loader/>
         </instance>
     </data>
     <dialogMode height="600" width="800"/>
     <layout expand="editActions" spacing="true">
-        <form id="form" dataContainer="materialsDc">
+        <form id="form" dataContainer="otherMaterialsDc">
             <column width="450px">
                 <textField id="nameField" property="name"/>
             </column>

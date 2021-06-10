@@ -8,7 +8,7 @@ import com.haulmont.cuba.core.global.DeletePolicy
 import javax.persistence.*
 
 @Table(name = "PFA_SYSTEM_STD")
-@javax.persistence.Entity(name = "pfa_SystemStd")
+@Entity(name = "pfa_SystemStd")
 open class SystemStd : StandardEntity() {
     @Column(name = "SYSTEM_ID")
     var systemId: String? = null
@@ -49,15 +49,15 @@ open class SystemStd : StandardEntity() {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PUMP_MATERIALS_ID")
-    var pumpMaterials: Materials? = null
+    var pumpMaterials: PumpMaterials? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SEAL_MATERIALS_ID")
-    var sealMaterials: Materials? = null
+    var sealMaterials: OtherMaterials? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MOTOR_MATERIALS_ID")
-    var motorMaterials: Materials? = null
+    var motorMaterials: OtherMaterials? = null
 
     @Column(name = "COMMENT_")
     var comment: String? = null

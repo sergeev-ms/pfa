@@ -382,6 +382,7 @@ create table PFA_MATERIALS (
     UPDATED_BY nvarchar(50),
     DELETE_TS datetime2,
     DELETED_BY nvarchar(50),
+    DTYPE nvarchar(31),
     --
     NAME nvarchar(255),
     --

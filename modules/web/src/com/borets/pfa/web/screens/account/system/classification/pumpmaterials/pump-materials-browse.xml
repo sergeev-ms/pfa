@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://pumpMaterialsBrowse.caption"
+        focusComponent="pumpMaterialsTable"
+        messagesPack="com.borets.pfa.web.screens.account.system.classification.pumpmaterials">
+    <data readOnly="true">
+        <collection id="pumpMaterialsDc" class="com.borets.pfa.entity.account.system.classification.PumpMaterials">
+            <view extends="_local"/>
+            <loader id="pumpMaterialsDl">
+                <query>
+                    <![CDATA[select e from pfa_PumpMaterials e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="pumpMaterialsTable" spacing="true">
+        <filter id="filter" applyTo="pumpMaterialsTable" dataLoader="pumpMaterialsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="pumpMaterialsTable" width="100%" dataContainer="pumpMaterialsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
+                <button id="createBtn" action="pumpMaterialsTable.create"/>
+                <button id="editBtn" action="pumpMaterialsTable.edit"/>
+                <button id="removeBtn" action="pumpMaterialsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

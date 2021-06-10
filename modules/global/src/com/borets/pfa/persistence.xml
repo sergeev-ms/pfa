@@ -27,5 +27,7 @@
         <class>com.borets.pfa.entity.account.system.classification.PumpConfig</class>
         <class>com.borets.pfa.entity.account.system.classification.Materials</class>
         <class>com.borets.pfa.entity.account.system.classification.Depth</class>
+        <class>com.borets.pfa.entity.account.system.classification.PumpMaterials</class>
+        <class>com.borets.pfa.entity.account.system.classification.OtherMaterials</class>
     </persistence-unit>
 </persistence>

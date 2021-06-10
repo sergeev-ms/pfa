@@ -68,9 +68,14 @@
                 <query>from pfa_PumpConfig e order by e.name</query>
             </loader>
         </collection>
-        <collection id="materialsOptionsDc" class="com.borets.pfa.entity.account.system.classification.Materials" view="_minimal">
+        <collection id="materialsOptionsDc" class="com.borets.pfa.entity.account.system.classification.OtherMaterials" view="_minimal">
             <loader id="materialsConfigOptionsDl">
-                <query>from pfa_Materials e order by e.name</query>
+                <query>from pfa_OtherMaterials e order by e.name</query>
+            </loader>
+        </collection>
+        <collection id="pumpMaterialsOptionsDc" class="com.borets.pfa.entity.account.system.classification.PumpMaterials" view="_minimal">
+            <loader id="pumpMaterialsConfigOptionsDl">
+                <query>from pfa_PumpMaterials e order by e.name</query>
             </loader>
         </collection>
     </data>
@@ -95,7 +100,7 @@
                     <lookupField id="pumpConfigField" property="pumpConfig" optionsContainer="pumpConfigOptionsDc" required="true"/>
                 </column>
                 <column width="100%">
-                    <lookupField id="pumpMaterialsField" property="pumpMaterials" optionsContainer="materialsOptionsDc" required="true"/>
+                    <lookupField id="pumpMaterialsField" property="pumpMaterials" optionsContainer="pumpMaterialsOptionsDc" required="true"/>
                     <lookupField id="sealMaterialsField" property="sealMaterials" optionsContainer="materialsOptionsDc" required="true"/>
                     <lookupField id="motorMaterialsField" property="motorMaterials" optionsContainer="materialsOptionsDc" required="true"/>
                     <textField id="commentField" property="comment"/>

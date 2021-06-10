@@ -3,12 +3,13 @@ package com.borets.pfa.entity.account.system.classification
 import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity
 import javax.persistence.Column
+import javax.persistence.Entity
 import javax.persistence.Table
 
 @NamePattern(value = "%s|name")
 @Table(name = "PFA_MATERIALS")
-@javax.persistence.Entity(name = "pfa_Materials")
-open class Materials : StandardEntity() {
+@Entity(name = "pfa_Materials")
+abstract class Materials : StandardEntity() {
     @Column(name = "NAME")
     var name: String? = null
 

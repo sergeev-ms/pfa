@@ -23,7 +23,8 @@
     </data>
     <dialogMode height="600" width="800"/>
     <layout expand="systemStdsTable" spacing="true">
-        <filter id="filter" applyTo="systemStdsTable" dataLoader="systemStdsDl" applyImmediately="true" columnsCount="4">
+        <filter id="filter" applyTo="systemStdsTable" dataLoader="systemStdsDl" applyImmediately="true" columnsCount="4"
+                windowCaptionUpdateEnabled="false" collapsed="false">
             <property name=""/>
             <properties include=".*"/>
         </filter>
