@@ -84,7 +84,6 @@
         <groupBox id="generalGb" caption="msg://generalGb.caption">
             <form id="form" dataContainer="systemStdDc" width="100%">
                 <column width="100%">
-                    <textField id="systemIdField" property="systemId"/>
                     <lookupField id="casingSizeField" property="casingSize" required="true"/>
                     <lookupField id="casingWeightField" property="casingWeight" required="true"/>
                     <lookupField id="pumpModelField" property="pumpModel" optionsContainer="pumpTypeOptionsDc" required="true"/>

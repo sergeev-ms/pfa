@@ -18,6 +18,9 @@
                 <property name="pumpMaterials"/>
                 <property name="sealMaterials"/>
                 <property name="motorMaterials"/>
+                <property name="motorType"/>
+                <property name="intakeConfig"/>
+                <property name="vaproConfig"/>
             </view>
         </collection>
     </data>
@@ -35,11 +38,14 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="systemId"/>
+                <column id="systemId" collapsed="true"/>
                 <column id="casingSize"/>
                 <column id="casingWeight"/>
                 <column id="pumpModel"/>
                 <column id="depth"/>
+                <column id="motorType"/>
+                <column id="intakeConfig"/>
+                <column id="vaproConfig"/>
                 <column id="sealConfig"/>
                 <column id="pumpConfig"/>
                 <column id="pumpMaterials"/>
