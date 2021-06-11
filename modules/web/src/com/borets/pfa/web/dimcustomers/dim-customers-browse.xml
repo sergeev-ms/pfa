@@ -7,7 +7,7 @@
         <collection id="dimCustomersesDc" class="com.borets.pfa.entity.customer.DimCustomers" view="_local">
             <loader id="dimCustomersesDl">
                 <query>
-                    <![CDATA[select e from pfa_DimCustomers e]]>
+                    <![CDATA[select e from pfa_DimCustomers e order by e.customerName]]>
                 </query>
             </loader>
         </collection>
@@ -26,7 +26,9 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="customerNo"/>
+                <column id="customerNo">
+                    <formatter class="com.haulmont.cuba.gui.components.formatters.NumberFormatter" format="#"/>
+                </column>
                 <column id="customerName"/>
                 <column id="country"/>
                 <column id="tag"/>
