@@ -227,7 +227,7 @@ task buildWarTest(type: CubaWarBuilding) {
                      'cuba.dataSourceProvider'        : 'jndi',
                      'cuba.webHostName'               : 'us-cuba-test.us.borets.gc',
                      'cuba.webPort'                   : '90',
-                     'pfa.kafka.consumer.topics'      : 'part-numbers-test',
+                     'pfa.kafka.parts.consumer.topics': 'part-numbers-test',
                      'pfa.kafka.parts.consumer.group' : 'pfa-test']
     webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
     logbackConfigurationFile = 'etc/war-logback.xml'
@@ -241,8 +241,8 @@ task buildWar(type: CubaWarBuilding) {
                      'cuba.dataSourceProvider'            : 'jndi',
                      'cuba.webHostName'                   : 'us-pro.us.borets.gc',
                      'cuba.webPort'                       : '80',
-                     'cuba.webAppUrl'                     : 'http://us-pro.us.borets.gc',
-                     'pfa.kafka.consumer.topics'          : 'part-numbers',
+                     'cuba.webAppUrl'                     : 'http://us-borets-pro.us.borets.gc',
+                     'pfa.kafka.parts.consumer.topics'    : 'part-numbers',
                      'pfa.kafka.parts.consumer.group'     : 'pfa',
                      'cuba.web.productionMode'            : true,
                      'cuba.performanceLogDisabled'        : true,
