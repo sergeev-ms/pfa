@@ -78,7 +78,7 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
             this.setSearchExecutor { searchString, _ ->
                 val escapeForLike = QueryUtils.escapeForLike(searchString)
                 return@setSearchExecutor dataManager.load(Part::class.java)
-                    .query("from pn_Part e where e.wtPartNumber like :searchString")
+                    .query("from pn_Part e where e.wtPartNumber like :searchString OR e.name like :searchString")
                     .parameter("searchString", "%${escapeForLike}%")
                     .list() as List<Any>
             }
