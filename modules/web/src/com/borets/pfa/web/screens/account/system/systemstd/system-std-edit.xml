@@ -110,8 +110,8 @@
             <table id="detailsTable" dataContainer="detailsDc" width="100%" editable="true">
                 <actions>
                     <action id="create" type="create"/>
-                    <action id="edit" type="edit"/>
                     <action id="remove" type="remove"/>
+                    <action id="copy" trackSelection="true" caption="msg://detailsTable.copy.caption" icon="COPY"/>
                 </actions>
                 <columns>
                     <column id="equipmentType" generator="equipmentTypeGenerator" required="true"/>
@@ -121,9 +121,10 @@
                 </columns>
                 <buttonsPanel>
                     <button action="detailsTable.create"/>
-                    <button action="detailsTable.edit"/>
+                    <button action="detailsTable.copy"/>
                     <button action="detailsTable.remove"/>
                 </buttonsPanel>
+                <rowsCount/>
             </table>
         </groupBox>
         <hbox id="editActions" spacing="true">
