@@ -11,7 +11,8 @@ open class PfaWebTestContainer : TestContainer() {
             "com.haulmont.addon.helium",
             "com.haulmont.addon.admintools",
             "com.haulmont.addon.ldap",
-            "com.borets.addon.pn"
+            "com.borets.addon.pn",
+            "com.borets.addon.mu"
         )
         appPropertiesFiles = Arrays.asList( // List the files defined in your web.xml
                 // in appPropertiesConfig context parameter of the web module
