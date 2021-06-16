@@ -2,11 +2,11 @@
 @Field private CommitContext commitContext = new CommitContext()
 @Field private int year = 2021
 @Field private int month = 1
-@Field private String pathName = 'D:/LoadToPFA/Price_load.xlsx'
+@Field private String pathName = 'D:/LoadToPFA/price/Price_source_tr.xlsx'
+@Field private int sheetIndex = 1
 
 
 import com.borets.pfa.entity.account.Account
-import com.borets.pfa.entity.activity.*
 import com.borets.pfa.entity.analytic.AnalyticSet
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
@@ -23,7 +23,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 def skipFirstRow = true
-def sheetIndex = 0
 
 final File file = new File(pathName)
 Workbook workbook = new XSSFWorkbook(file)
