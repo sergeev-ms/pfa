@@ -209,7 +209,7 @@ create table PFA_SYSTEM_DETAIL (
     --
     EQUIPMENT_TYPE_ID uniqueidentifier,
     PART_NUMBER_ID uniqueidentifier,
-    QTY integer,
+    LENGTH decimal(19,6),
     SYSTEM_ID uniqueidentifier not null,
     --
     primary key nonclustered (ID)

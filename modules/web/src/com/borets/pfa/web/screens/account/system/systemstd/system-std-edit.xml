@@ -117,7 +117,7 @@
                     <column id="equipmentType" generator="equipmentTypeGenerator" required="true"/>
                     <column id="equipmentType.category"/>
                     <column id="partNumber" generator="partNumberGenerator" required="true"/>
-                    <column id="qty" editable="true" required="true"/>
+                    <column id="length" generator="lengthGenerator" width="100px" caption="msg://detailsTable.length.caption"/>
                 </columns>
                 <buttonsPanel>
                     <button action="detailsTable.create"/>
