@@ -35,6 +35,7 @@
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
+                <action id="copy" trackSelection="true" icon="COPY" caption="msg://systemStdsTable.copy.caption"/>
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
@@ -56,6 +57,7 @@
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">
                 <button id="createBtn" action="systemStdsTable.create"/>
                 <button id="editBtn" action="systemStdsTable.edit"/>
+                <button id="copyBtn" action="systemStdsTable.copy"/>
                 <button id="removeBtn" action="systemStdsTable.remove"/>
             </buttonsPanel>
         </groupTable>
