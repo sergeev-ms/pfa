@@ -19,7 +19,18 @@
                 <property name="actualAppDetail" view="_minimal">
                     <property name="yearMonth"/>
                     <property name="systemAllocations" view="_local">
-                        <property name="system" view="_local"/>
+                        <property name="system" view="_local">
+                            <property name="pumpModel" view="_minimal"/>
+                            <property name="depth" view="_minimal"/>
+                            <property name="motorType" view="_minimal"/>
+                            <property name="intakeConfig" view="_minimal"/>
+                            <property name="vaproConfig" view="_minimal"/>
+                            <property name="sealConfig" view="_minimal"/>
+                            <property name="pumpConfig" view="_minimal"/>
+                            <property name="pumpMaterials" view="_minimal"/>
+                            <property name="sealMaterials" view="_minimal"/>
+                            <property name="motorMaterials" view="_minimal"/>
+                        </property>
                     </property>
                     <property name="utilization" view="_local">
                         <property name="equipmentType"/>

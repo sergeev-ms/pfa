@@ -17,7 +17,18 @@
                             <action id="remove" type="remove"/>
                         </actions>
                         <columns>
-                            <column property="system.systemId" editable="false"/>
+                            <column property="system.casingSize" editable="false"/>
+                            <column property="system.casingWeight" editable="false"/>
+                            <column property="system.pumpModel" editable="false"/>
+                            <column property="system.depth" editable="false"/>
+                            <column property="system.motorType" editable="false"/>
+                            <column property="system.intakeConfig" editable="false"/>
+                            <column property="system.vaproConfig" editable="false"/>
+                            <column property="system.sealConfig" editable="false"/>
+                            <column property="system.pumpConfig" editable="false"/>
+                            <column property="system.pumpMaterials" editable="false"/>
+                            <column property="system.sealMaterials" editable="false"/>
+                            <column property="system.motorMaterials" editable="false"/>
                             <column id="run1" property="run1" editable="true"/>
                             <column id="run2" property="run2" editable="true"/>
                             <column id="run3" property="run3" editable="true"/>
