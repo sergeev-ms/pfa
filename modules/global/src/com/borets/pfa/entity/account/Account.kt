@@ -16,7 +16,7 @@ import java.time.YearMonth
 import javax.persistence.*
 
 @PublishEntityChangedEvents
-@NamePattern(value = "%s|name")
+@NamePattern(value = "%s|clientCard")
 @Table(name = "PFA_ACCOUNT")
 @Entity(name = "pfa_Account")
 open class Account : StandardEntity() {

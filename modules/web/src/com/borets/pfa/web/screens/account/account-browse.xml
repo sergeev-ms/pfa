@@ -33,7 +33,8 @@
             </actions>
             <columns>
                 <column id="clientCard"/>
-                <column id="name" collapsed="true"/>
+                <column id="name"/>
+                <column id="parent"/>
                 <column id="customer"/>
                 <column id="actualRevision.type"/>
                 <column id="actualRevision.manager"/>
