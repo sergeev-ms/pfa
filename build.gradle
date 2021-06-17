@@ -19,7 +19,7 @@ buildscript {
             }
         }
 
-        maven {18-30
+        maven {
             url 'https://maven.pkg.github.com/borets-com/maven'
             credentials {
                 username(project.findProperty("github.user") ?: System.getenv("GITHUB_USER"))
