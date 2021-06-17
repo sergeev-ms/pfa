@@ -52,6 +52,7 @@
                 <column id="pumpMaterials"/>
                 <column id="sealMaterials"/>
                 <column id="motorMaterials"/>
+                <column id="comment"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">

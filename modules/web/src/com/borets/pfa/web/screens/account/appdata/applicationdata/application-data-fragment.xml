@@ -29,6 +29,7 @@
                             <column property="system.pumpMaterials" editable="false"/>
                             <column property="system.sealMaterials" editable="false"/>
                             <column property="system.motorMaterials" editable="false"/>
+                            <column property="system.comment" editable="false"/>
                             <column id="run1" property="run1" editable="true"/>
                             <column id="run2" property="run2" editable="true"/>
                             <column id="run3" property="run3" editable="true"/>
