@@ -8,15 +8,17 @@ import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity
 import com.haulmont.cuba.core.entity.annotation.OnDelete
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents
 import com.haulmont.cuba.core.entity.annotation.SystemLevel
 import com.haulmont.cuba.core.global.DeletePolicy
 import java.math.BigDecimal
 import java.time.YearMonth
 import javax.persistence.*
 
+@PublishEntityChangedEvents
 @NamePattern(value = "%s|name")
 @Table(name = "PFA_ACCOUNT")
-@javax.persistence.Entity(name = "pfa_Account")
+@Entity(name = "pfa_Account")
 open class Account : StandardEntity() {
     @Column(name = "NAME")
     var name: String? = null
@@ -24,6 +26,9 @@ open class Account : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
     var parent: Account? = null
+
+    @Column(name = "CLIENT_CARD")
+    var clientCard: String? = null
 
     @SystemLevel
     @Column(name = "CUSTOMER_ID", precision = 7, scale = 0)
