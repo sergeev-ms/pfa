@@ -7,6 +7,7 @@
 
 
 import com.borets.pfa.entity.account.Account
+import com.borets.pfa.entity.activity.*
 import com.borets.pfa.entity.analytic.AnalyticSet
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
