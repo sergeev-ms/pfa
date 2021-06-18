@@ -20,7 +20,9 @@ open class AccountChangedListener {
         val account = transactionalDataManager.load(event.entityId)
             .view {
                 it.addAll("name", "clientCard")
-                    .add("parent", View.MINIMAL)
+                    .add("parent") {parentVb -> parentVb.addView(View.MINIMAL)
+                        .add("name")
+                    }
             }
             .one()
         if (account.parent != null) {
