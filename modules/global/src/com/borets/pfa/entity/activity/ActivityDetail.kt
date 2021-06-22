@@ -10,8 +10,6 @@ import javax.persistence.*
 @Table(name = "PFA_ACTIVITY_DETAIL")
 @javax.persistence.Entity(name = "pfa_ActivityDetail")
 open class ActivityDetail : StandardEntity() {
-    @Column(name = "RECORD_TYPE")
-    private var recordType: String? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ANALYTIC_ID")
@@ -47,12 +45,6 @@ open class ActivityDetail : StandardEntity() {
         month = yearMonth?.monthValue
     }
 
-
-    fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
-
-    fun setRecordType(recordType: RecordType?) {
-        this.recordType = recordType?.id
-    }
 
     companion object {
         private const val serialVersionUID = 5034053048652285158L

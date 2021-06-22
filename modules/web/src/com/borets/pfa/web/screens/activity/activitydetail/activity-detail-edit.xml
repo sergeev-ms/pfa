@@ -17,7 +17,6 @@
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="activityDetailDc">
             <column width="450px">
-                <lookupField id="recordTypeField" property="recordType"/>
                 <pickerField id="analyticField" property="analytic"/>
                 <textField id="yearMonthField" property="yearMonth"/>
                 <textField id="valueField" property="value"/>
