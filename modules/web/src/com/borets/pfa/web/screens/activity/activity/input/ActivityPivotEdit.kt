@@ -1,6 +1,5 @@
 package com.borets.pfa.web.screens.activity.activity.input
 
-import com.borets.pfa.config.ActivityInputConfig
 import com.borets.pfa.entity.activity.*
 import com.borets.pfa.entity.analytic.AnalyticSet
 import com.borets.pfa.web.beans.PivotGridInitializer
@@ -16,11 +15,8 @@ import com.haulmont.cuba.gui.model.KeyValueCollectionContainer
 import com.haulmont.cuba.gui.screen.*
 import com.haulmont.cuba.gui.screen.Target
 import com.haulmont.cuba.security.global.UserSession
-import java.time.LocalDate
-import java.time.YearMonth
-import java.time.ZoneId
+import java.time.*
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 
 @UiController("pfa_ActivityPivot.edit")
@@ -35,11 +31,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     @Inject
     private lateinit var messages: Messages
     @Inject
-    private lateinit var timeSource: TimeSource
-    @Inject
     private lateinit var userSession: UserSession
-    @Inject
-    private lateinit var activityInputConfig: ActivityInputConfig
     @Inject
     private lateinit var metadataTools: MetadataTools
     @Inject
@@ -58,8 +50,6 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     private lateinit var filterContractTypeField: LookupField<ContractType>
     @Inject
     private lateinit var filterWellTagField: LookupField<WellTag>
-    @Inject
-    private lateinit var yearField: DatePicker<Date>
 
     private lateinit var pivotGridHelper : PivotGridInitializer
 
@@ -105,32 +95,24 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     }
 
     @Subscribe
+    private fun onInitEntity(event: InitEntityEvent<Activity>) {
+        event.entity.periodFrom = YearMonth.now().withMonth(1).atDay(1)
+        event.entity.periodTo = YearMonth.now().withMonth(12).atEndOfMonth()
+    }
+
+
+    @Subscribe
     private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
-        editedEntity.year?.let {
-            yearField.value = Date.from(
-                LocalDate.now()
-                    .withYear(it)
-                    .withMonth(1)
-                    .withDayOfYear(1)
-                    .atStartOfDay(ZoneId.systemDefault())
-                    .toInstant()
-            )
-            initDynamic(it)
-        }
+        initDynamic()
+
         setWindowCaption()
     }
 
-    @Subscribe("yearField")
-    private fun onYearMonthFieldValueChange(event: HasValue.ValueChangeEvent<Date>) {
-        event.value.let {
-            editedEntity.year = it!!.toInstant()!!.atZone(ZoneId.systemDefault()).year
-        }
-    }
 
     @Subscribe(id = "activityDc", target = Target.DATA_CONTAINER)
     private fun onActivityDcItemPropertyChange(event: InstanceContainer.ItemPropertyChangeEvent<Activity>) {
-        if (event.property == "year" && event.value != null) {
-            initDynamic(event.value as Int)
+        if ((event.property == "validFrom" || event.property == "validTo") && event.value != null) {
+            initDynamic()
         }
     }
 
@@ -145,18 +127,20 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     }
 
 
-    private fun initDynamic(year: Int?) {
-        val monthQty = activityInputConfig.getDefaultMonthQty()
-        val startMonth = YearMonth.of(year ?: timeSource.now().year, 1)
-        val months : MutableList<YearMonth> = mutableListOf()
-        for (monthNumber in 0..monthQty) {
-            months.add(startMonth.plusMonths(monthNumber.toLong()))
-        }
-        months.map {
-            DynamicPropertyData(it.toString(),
-                it.format(DateTimeFormatter.ofPattern("MMM yy", userSession.locale)), null,
-                Int::class.javaObjectType, TextField::class.java, "60px")
+    private fun initDynamic() {
+        var startMonth = YearMonth.from(editedEntity.periodFrom)
+        val endMonth = YearMonth.from(editedEntity.periodTo)
 
+        val months : MutableList<YearMonth> = mutableListOf()
+
+        while (startMonth <= endMonth) {
+            months.add(startMonth)
+            startMonth = startMonth.plus(Period.ofMonths(1))
+        }
+
+        months.map {
+            DynamicPropertyData(it.toString(), it.format(DateTimeFormatter.ofPattern("MMM yy", userSession.locale)), null,
+                Int::class.javaObjectType, TextField::class.java, "60px")
         }.let { dynamicProperties ->
             pivotGridHelper.initDynamicProperties(dynamicProperties)
             pivotGridHelper.setDynamicPropertiesValues { kvDc : KeyValueCollectionContainer ->

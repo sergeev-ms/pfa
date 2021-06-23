@@ -40,6 +40,7 @@
             <columns>
                 <column id="account"/>
                 <column id="year"/>
+                <column id="month"/>
                 <column id="recordType"/>
             </columns>
             <rowsCount/>

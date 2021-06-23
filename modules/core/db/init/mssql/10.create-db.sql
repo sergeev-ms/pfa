@@ -31,6 +31,9 @@ create table PFA_ACTIVITY (
     ACCOUNT_ID uniqueidentifier,
     RECORD_TYPE nvarchar(50),
     YEAR_ integer,
+    MONTH_ integer,
+    PERIOD_FROM datetime2,
+    PERIOD_TO datetime2,
     --
     primary key nonclustered (ID)
 )^
