@@ -58,7 +58,13 @@
                             <pickerField property="customer"/>
                         </column>
                         <column width="100%">
-                            <pickerField id="parentField" property="parent"/>
+                            <pickerField id="parentField" property="parent">
+                                <actions>
+                                    <action id="open" type="picker_open"/>
+                                    <action id="clear" type="picker_clear"/>
+                                    <action id="lookup" type="picker_lookup"/>
+                                </actions>
+                            </pickerField>
                             <textField id="typeField" property="type" editable="false" dataContainer="actualRevisionDc"/>
                         </column>
                         <column width="100%">
