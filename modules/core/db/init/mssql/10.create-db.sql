@@ -46,7 +46,6 @@ create table PFA_ACTIVITY_DETAIL (
     DELETE_TS datetime2,
     DELETED_BY nvarchar(50),
     --
-    RECORD_TYPE nvarchar(50),
     ANALYTIC_ID uniqueidentifier,
     YEAR_ integer,
     MONTH_ integer,
