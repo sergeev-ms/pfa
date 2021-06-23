@@ -1,0 +1,1 @@
+exec sp_rename 'PFA_ACCOUNT.CLIENT_CARD', 'CLIENT_CARD__U44001', 'COLUMN' ^

@@ -107,7 +107,6 @@ create table PFA_ACCOUNT (
     --
     NAME nvarchar(255),
     PARENT_ID uniqueidentifier,
-    CLIENT_CARD nvarchar(255),
     CUSTOMER_ID decimal(7),
     ACTUAL_REVISION_ID uniqueidentifier,
     ACTUAL_MARKET_DETAIL_ID uniqueidentifier,

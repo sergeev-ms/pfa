@@ -16,7 +16,7 @@ import java.time.YearMonth
 import javax.persistence.*
 
 @PublishEntityChangedEvents
-@NamePattern(value = "%s|clientCard")
+@NamePattern(value = "%s|name")
 @Table(name = "PFA_ACCOUNT")
 @Entity(name = "pfa_Account")
 open class Account : StandardEntity() {
@@ -26,9 +26,6 @@ open class Account : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
     var parent: Account? = null
-
-    @Column(name = "CLIENT_CARD")
-    var clientCard: String? = null
 
     @SystemLevel
     @Column(name = "CUSTOMER_ID", precision = 7, scale = 0)

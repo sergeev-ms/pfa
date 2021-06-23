@@ -32,7 +32,6 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="clientCard"/>
                 <column id="name"/>
                 <column id="parent"/>
                 <column id="customer"/>
