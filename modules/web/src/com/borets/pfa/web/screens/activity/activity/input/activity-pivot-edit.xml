@@ -21,7 +21,7 @@
         <groupBox id="generalGb" caption="msg://generalGb.caption">
             <form id="form" dataContainer="activityDc" width="100%" childrenCaptionWidth="100px">
                 <column width="100%">
-                    <pickerField id="accountField" property="account">
+                    <pickerField id="accountField" property="account" required="true">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>
                             <action id="clear" type="picker_clear"/>
@@ -29,7 +29,7 @@
                     </pickerField>
                 </column>
                 <column width="100%">
-                    <lookupField id="recordTypeField" property="recordType"/>
+                    <lookupField id="recordTypeField" property="recordType" required="true"/>
                 </column>
                 <column width="100%">
                     <datePicker id="validFromField" property="periodFrom" resolution="MONTH" stylename="custom-height"/>
