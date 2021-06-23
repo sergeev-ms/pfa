@@ -31,12 +31,6 @@ open class MarketData : StandardEntity() {
     @Column(name = "RECORD_TYPE")
     private var recordType: String? = null
 
-    @Column(name = "CONTRACT_TYPE")
-    private var contractType: String? = null
-
-    @Column(name = "APPLICATION_TYPE")
-    private var applicationType: String? = null
-
     @Column(name = "FIELD_TYPE")
     private var fieldType: String? = null
 
@@ -127,18 +121,6 @@ open class MarketData : StandardEntity() {
 
     fun setFieldType(fieldType: FieldType?) {
         this.fieldType = fieldType?.id
-    }
-
-    fun getApplicationType(): ApplicationType? = applicationType?.let { ApplicationType.fromId(it) }
-
-    fun setApplicationType(applicationType: ApplicationType?) {
-        this.applicationType = applicationType?.id
-    }
-
-    fun getContractType(): ContractType? = contractType?.let { ContractType.fromId(it) }
-
-    fun setContractType(contractType: ContractType?) {
-        this.contractType = contractType?.id
     }
 
     fun getYearMonth(): YearMonth? {

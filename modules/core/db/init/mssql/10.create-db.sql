@@ -114,6 +114,8 @@ create table PFA_ACCOUNT (
     ACTUAL_REVISION_ID uniqueidentifier,
     ACTUAL_MARKET_DETAIL_ID uniqueidentifier,
     ACTUAL_APP_DETAIL_ID uniqueidentifier,
+    CONTRACT_TYPE nvarchar(50),
+    APPLICATION_TYPE nvarchar(50),
     --
     primary key nonclustered (ID)
 )^
@@ -151,8 +153,6 @@ create table PFA_MARKET_DATA (
     YEAR_ integer,
     MONTH_ integer,
     RECORD_TYPE nvarchar(50),
-    CONTRACT_TYPE nvarchar(50),
-    APPLICATION_TYPE nvarchar(50),
     FIELD_TYPE nvarchar(50),
     RUNS_NUMBER nvarchar(50),
     F_RUN_DURATION integer,

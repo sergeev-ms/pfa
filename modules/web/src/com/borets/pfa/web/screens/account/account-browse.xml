@@ -33,6 +33,8 @@
             </actions>
             <columns>
                 <column id="name"/>
+                <column id="contractType"/>
+                <column id="applicationType"/>
                 <column id="parent" collapsed="true"/>
                 <column id="customer" collapsed="true"/>
                 <column id="actualRevision.type"/>

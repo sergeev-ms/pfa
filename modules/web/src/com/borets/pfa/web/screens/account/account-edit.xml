@@ -55,6 +55,7 @@
                     <form id="form" dataContainer="accountDc" childrenCaptionWidth="170px" width="100%">
                         <column width="100%">
                             <textField id="nameField" property="name"/>
+                            <lookupField property="contractType"/>
                             <pickerField property="customer"/>
                         </column>
                         <column width="100%">
@@ -65,9 +66,10 @@
                                     <action id="lookup" type="picker_lookup"/>
                                 </actions>
                             </pickerField>
-                            <textField id="typeField" property="type" editable="false" dataContainer="actualRevisionDc"/>
+                            <lookupField property="applicationType"/>
                         </column>
                         <column width="100%">
+                            <textField id="typeField" property="type" editable="false" dataContainer="actualRevisionDc"/>
                             <textField id="managerField" property="manager" editable="false" dataContainer="actualRevisionDc"/>
                         </column>
                     </form>
@@ -79,8 +81,6 @@
                 <groupBox id="marketDataGb" caption="msg://marketDataGb.caption" spacing="true">
                     <form id="actualMarketForm" dataContainer="actualMarketDataDc" childrenCaptionWidth="170px" width="100%">
                         <column width="100%">
-                            <textField property="contractType" editable="false"/>
-                            <textField property="applicationType" editable="false"/>
                             <textField property="fieldType" editable="false"/>
                             <textField property="trl" editable="false"/>
                             <textField property="arl" editable="false"/>
