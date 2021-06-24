@@ -24,6 +24,15 @@ open class EquipmentUtilization : StandardEntity() {
     @JoinColumn(name = "APPLICATION_DATA_ID")
     var applicationData: ApplicationData? = null
 
+    @Column(name = "REVENUE_MODE")
+    private var revenueMode: String? = null
+
+    fun getRevenueMode(): RevenueMode? = revenueMode?.let { RevenueMode.fromId(it) }
+
+    fun setRevenueMode(revenueMode: RevenueMode?) {
+        this.revenueMode = revenueMode?.id
+    }
+
     companion object {
         private const val serialVersionUID = -2509087691919503194L
     }

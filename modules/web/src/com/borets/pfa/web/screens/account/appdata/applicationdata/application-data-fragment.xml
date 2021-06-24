@@ -49,6 +49,7 @@
                             <column id="equipmentType"/>
                             <column id="firstRunValue" editable="true" required="true"/>
                             <column id="sequentRunValue" editable="true" required="true"/>
+                            <column id="revenueMode" editable="true" required="true"/>
                         </columns>
                         <rows/>
                     </table>

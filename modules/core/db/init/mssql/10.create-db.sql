@@ -280,6 +280,7 @@ create table PFA_EQUIPMENT_UTILIZATION (
     FIRST_RUN_VALUE decimal(19, 2),
     SEQUENT_RUN_VALUE decimal(19, 2),
     APPLICATION_DATA_ID uniqueidentifier not null,
+    REVENUE_MODE nvarchar(50),
     --
     primary key nonclustered (ID)
 )^

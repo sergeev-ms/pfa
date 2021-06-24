@@ -1,0 +1,1 @@
+alter table PFA_EQUIPMENT_UTILIZATION add REVENUE_MODE nvarchar(50) ;
