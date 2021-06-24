@@ -37,14 +37,7 @@
             </actions>
             <columns>
                 <column id="yearMonth"/>
-                <column id="contractType"/>
-                <column id="applicationType"/>
                 <column id="fieldType"/>
-                <column id="runsNumber"/>
-                <column id="firstRunDuration"/>
-                <column id="secondRunDuration"/>
-                <column id="thirdRunDuration"/>
-                <column id="thirdPlusRunDuration"/>
                 <column id="trl"/>
                 <column id="arl"/>
             </columns>
