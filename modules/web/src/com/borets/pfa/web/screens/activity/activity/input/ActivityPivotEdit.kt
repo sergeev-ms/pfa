@@ -111,7 +111,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
 
     @Subscribe(id = "activityDc", target = Target.DATA_CONTAINER)
     private fun onActivityDcItemPropertyChange(event: InstanceContainer.ItemPropertyChangeEvent<Activity>) {
-        if ((event.property == "validFrom" || event.property == "validTo") && event.value != null) {
+        if ((event.property == "periodFrom" || event.property == "periodTo") && event.value != null) {
             initDynamic()
         }
     }
