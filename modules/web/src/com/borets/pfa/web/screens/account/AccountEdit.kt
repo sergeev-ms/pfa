@@ -189,7 +189,7 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     private inline fun MarketData.copyFrom(other : MarketData) {
-        listOf("contractType", "applicationType", "fieldType", "trl", "arl", "runsNumber", "firstRunDuration",
+        listOf("fieldType", "trl", "arl", "runsNumber", "firstRunDuration",
             "secondRunDuration", "thirdRunDuration", "thirdPlusRunDuration", "wellCount", "conversionRate", "oilPermits", "rigQty", "ducQty",
             "completion", "activityRate", "budget", "bShare", "wellMonitorQty", "bWellCount", "rentalCapex")
             .forEach {
