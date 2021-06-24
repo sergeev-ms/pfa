@@ -7,7 +7,18 @@
             <view extends="_local">
                 <property name="yearMonth"/>
                 <property name="systemAllocations" view="_local">
-                    <property name="system" view="_local"/>
+                    <property name="system" view="_local">
+                        <property name="pumpModel"/>
+                        <property name="depth"/>
+                        <property name="motorType"/>
+                        <property name="pumpConfig"/>
+                        <property name="intakeConfig"/>
+                        <property name="vaproConfig"/>
+                        <property name="sealConfig"/>
+                        <property name="pumpMaterials"/>
+                        <property name="sealMaterials"/>
+                        <property name="motorMaterials"/>
+                    </property>
                 </property>
                 <property name="utilization" view="_local">
                     <property name="equipmentType"/>
