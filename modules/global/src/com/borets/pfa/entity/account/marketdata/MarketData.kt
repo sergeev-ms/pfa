@@ -1,7 +1,6 @@
 package com.borets.pfa.entity.account.marketdata
 
 import com.borets.pfa.entity.account.Account
-import com.borets.pfa.entity.activity.ContractType
 import com.borets.pfa.entity.activity.RecordType
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.chile.core.annotations.NumberFormat
@@ -88,6 +87,7 @@ open class MarketData : StandardEntity() {
 
     @Column(name = "IS_WELL_MONITOR")
     var isWellMonitor: Boolean? = false
+        private set
 
     @Column(name = "WELL_MONITOR_QTY")
     var wellMonitorQty: Int? = null
@@ -104,6 +104,10 @@ open class MarketData : StandardEntity() {
 
     @Column(name = "NEW_WELL_YEAR")
     var newWellYear: Int? = null
+
+    @NumberFormat(pattern = "#%")
+    @Column(name = "WELL_CHECK_RATE")
+    var wellCheckRate: BigDecimal? = null
 
     fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
 

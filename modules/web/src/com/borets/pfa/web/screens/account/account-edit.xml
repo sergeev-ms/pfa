@@ -84,6 +84,7 @@
                             <textField property="fieldType" editable="false"/>
                             <textField property="trl" editable="false"/>
                             <textField property="arl" editable="false"/>
+                            <textField property="wellCheckRate" editable="false"/>
                         </column>
                         <column width="100%">
                             <textField property="runsNumber" editable="false"/>

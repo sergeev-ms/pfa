@@ -176,6 +176,7 @@ create table PFA_MARKET_DATA (
     RENTAL_CAPEX integer,
     ACCOUNT_ID uniqueidentifier not null,
     NEW_WELL_YEAR integer,
+    WELL_CHECK_RATE decimal(19, 2),
     --
     primary key nonclustered (ID)
 )^
