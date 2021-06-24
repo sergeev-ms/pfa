@@ -1,12 +1,14 @@
 package com.borets.pfa.web.screens.account.appdata.applicationdata
 
 import com.borets.pfa.entity.account.appdata.ApplicationData
+import com.borets.pfa.entity.account.appdata.EquipmentUtilization
 import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.system.SystemStd
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.Action
 import com.haulmont.cuba.gui.components.ButtonsPanel
 import com.haulmont.cuba.gui.components.DataGrid
+import com.haulmont.cuba.gui.components.Table
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
 import com.haulmont.cuba.gui.model.InstanceContainer
@@ -35,6 +37,8 @@ class ApplicationDataFragment : ScreenFragment() {
     private lateinit var systemsAllocationGrid: DataGrid<SystemAllocation>
     @Inject
     private lateinit var systemsAllocationGridPanel: ButtonsPanel
+    @Inject
+    private lateinit var utilizationTable: Table<EquipmentUtilization>
 
     @Subscribe("systemsAllocationGrid.create")
     private fun onSystemsAllocationGridCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
@@ -57,6 +61,8 @@ class ApplicationDataFragment : ScreenFragment() {
         }
 
         systemsAllocationGrid.isEditorEnabled = false
+
+        utilizationTable.isEditable = editable
     }
 
 //    @Subscribe
