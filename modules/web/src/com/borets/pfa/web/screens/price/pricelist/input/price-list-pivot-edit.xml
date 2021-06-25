@@ -5,7 +5,9 @@
     <data>
         <instance id="priceListDc" class="com.borets.pfa.entity.price.PriceList">
             <view extends="_local">
-                <property name="account" view="_minimal"/>
+                <property name="account" view="_minimal">
+                    <property name="contractType"/>
+                </property>
                 <property name="details" view="_minimal">
                     <property name="analytic" view="_minimal">
                         <property name="contractType"/>
@@ -32,6 +34,9 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
+                </column>
+                <column width="100%">
+                    <textField property="account.contractType"/>
                 </column>
                 <column width="100%">
                     <lookupField id="recordTypeField" property="recordType" required="true"/>

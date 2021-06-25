@@ -6,7 +6,9 @@
     <data>
         <instance id="activityDc" class="com.borets.pfa.entity.activity.Activity">
             <view extends="_local">
-                <property name="account" view="_minimal"/>
+                <property name="account" view="_minimal">
+                    <property name="contractType"/>
+                </property>
                 <property name="details" view="_local">
                     <property name="analytic"/>
                     <property name="yearMonth"/>
@@ -27,6 +29,9 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
+                </column>
+                <column width="100%">
+                    <textField property="account.contractType"/>
                 </column>
                 <column width="100%">
                     <lookupField id="recordTypeField" property="recordType" required="true"/>
