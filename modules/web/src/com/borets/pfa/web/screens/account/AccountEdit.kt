@@ -6,16 +6,15 @@ import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.marketdata.MarketData
+import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.web.screens.account.appdata.applicationdata.ApplicationDataFragment
+import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
 import com.haulmont.cuba.core.global.DatatypeFormatter
 import com.haulmont.cuba.core.global.EntityStates
 import com.haulmont.cuba.core.global.MetadataTools
 import com.haulmont.cuba.gui.ScreenBuilders
-import com.haulmont.cuba.gui.components.Button
-import com.haulmont.cuba.gui.components.GroupBoxLayout
-import com.haulmont.cuba.gui.model.DataContext
-import com.haulmont.cuba.gui.model.InstanceContainer
-import com.haulmont.cuba.gui.model.InstancePropertyContainer
+import com.haulmont.cuba.gui.components.*
+import com.haulmont.cuba.gui.model.*
 import com.haulmont.cuba.gui.screen.Target
 import com.haulmont.cuba.security.global.UserSession
 import java.time.format.DateTimeFormatter
@@ -24,7 +23,7 @@ import javax.inject.Inject
 @UiController("pfa_Account.edit")
 @UiDescriptor("account-edit.xml")
 @EditedEntityContainer("accountDc")
-@LoadDataBeforeShow
+//@LoadDataBeforeShow
 class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var dataContext: DataContext
@@ -55,9 +54,23 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var applicationDataFragment: ApplicationDataFragment
 
+    @Inject
+    private lateinit var priceListsTable: Table<PriceList>
+
+    @Inject
+    private lateinit var accountDl: InstanceLoader<Account>
+
+    @Inject
+    private lateinit var priceListsDl: CollectionLoader<PriceList>
+
     @Subscribe
     private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
         applicationDataFragment.setEditable(false)
+    }
+
+    @Subscribe
+    private fun onBeforeShow(event: BeforeShowEvent) {
+        accountDl.load()
     }
 
 
@@ -210,4 +223,22 @@ class AccountEdit : StandardEditor<Account>() {
         }
         this.systemAllocations = newSystemAllocationList?.toMutableList()
     }
+
+    @Subscribe("priceListsTable.view")
+    private fun onPriceListsTableView(event: Action.ActionPerformedEvent) {
+        screenBuilders.editor(priceListsTable)
+            .withScreenClass(PriceListPivotEdit::class.java)
+            .editEntity(priceListsTable.singleSelected!!)
+            .show()
+    }
+
+    @Subscribe("tabSheet")
+    private fun onTabSheetSelectedTabChange(event: TabSheet.SelectedTabChangeEvent) {
+        if ("priceListsTab" == event.selectedTab.name) {
+            priceListsDl.setParameter("container_accountDc", editedEntity)
+            priceListsDl.load()
+        }
+    }
+
+
 }

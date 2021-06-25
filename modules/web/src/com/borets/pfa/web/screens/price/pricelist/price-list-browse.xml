@@ -6,7 +6,9 @@
     <data readOnly="true">
         <collection id="priceListsDc" class="com.borets.pfa.entity.price.PriceList">
             <view extends="_local">
-                <property name="account" view="_minimal"/>
+                <property name="account" view="_minimal">
+                    <property name="parent" view="_minimal"/>
+                </property>
             </view>
             <loader id="priceListsDl">
                 <query>
@@ -29,6 +31,7 @@
             </actions>
             <columns>
                 <column id="account"/>
+                <column id="account.parent"/>
                 <column id="recordType"/>
                 <column id="yearMonth"/>
             </columns>

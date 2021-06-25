@@ -39,13 +39,21 @@
                     <property name="createTs"/>
                 </property>
             </view>
-            <loader/>
+            <loader id="accountDl"/>
             <instance id="actualRevisionDc" property="actualRevision"/>
             <instance id="actualMarketDataDc" property="actualMarketDetail"/>
             <instance id="applicationDataDc" property="actualAppDetail">
                 <collection id="utilizationDc" property="utilization"/>
             </instance>
         </instance>
+        <collection id="priceListsDc" class="com.borets.pfa.entity.price.PriceList">
+            <view extends="_local">
+                <property name="createTs"/>
+            </view>
+            <loader id="priceListsDl">
+                <query>where e.account = :container_accountDc order by e.createTs desc</query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600" width="800"/>
     <layout expand="tabSheet" spacing="true">
@@ -128,6 +136,20 @@
                     <linkButton id="createAppDataBtn" caption="msg://createAppDataBtn.caption" icon="CREATE_ACTION"/>
                     <linkButton id="showAppDetailsBtn" caption="msg://showAppDetailsBtn.caption" icon="HISTORY"/>
                 </hbox>
+            </tab>
+            <tab id="priceListsTab" caption="msg://priceListsTab.caption" expand="priceListsTable"
+                 spacing="true" margin="true,false,false,false" >
+                <table id="priceListsTable" dataContainer="priceListsDc" width="100%">
+                    <columns>
+                        <column id="recordType"/>
+                        <column id="yearMonth"/>
+                        <column id="createTs"/>
+                    </columns>
+                    <actions>
+                        <action id="view" trackSelection="true" caption="msg://priceListsTable.view.caption"/>
+                    </actions>
+                    <rowsCount/>
+                </table>
             </tab>
         </tabSheet>
         <hbox id="editActions" spacing="true">
