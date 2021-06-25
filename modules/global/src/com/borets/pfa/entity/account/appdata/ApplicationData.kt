@@ -36,6 +36,7 @@ open class ApplicationData : StandardEntity() {
     @OneToMany(mappedBy = "applicationData")
     var systemAllocations: MutableList<SystemAllocation>? = mutableListOf()
 
+    @OrderBy("order")
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "applicationData")

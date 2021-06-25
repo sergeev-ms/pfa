@@ -61,6 +61,7 @@ class ApplicationDataEdit : StandardEditor<ApplicationData>() {
 
     private fun createBreakdowns() {
         val breakdowns = dataManager.load(EquipmentType::class.java)
+            .query("order by e.order")
             .list()
             .map {
                 dataContext.create(EquipmentUtilization::class.java).apply {

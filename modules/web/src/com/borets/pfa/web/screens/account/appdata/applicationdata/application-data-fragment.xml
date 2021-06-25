@@ -44,7 +44,7 @@
             </tab>
             <tab id="utilizationTab" caption="msg://utilizationTab.caption" margin="true,false,false,false" expand="utilizationGb">
                 <groupBox id="utilizationGb" caption="msg://utilizationGb.caption" expand="utilizationTable">
-                    <table id="utilizationTable" dataContainer="utilizationDc" width="100%" editable="true">
+                    <table id="utilizationTable" dataContainer="utilizationDc" width="100%" editable="true" sortable="false">
                         <columns>
                             <column id="equipmentType"/>
                             <column id="revenueMode" editable="true" required="true"/>

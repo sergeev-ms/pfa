@@ -282,6 +282,7 @@ create table PFA_EQUIPMENT_UTILIZATION (
     SEQUENT_RUN_VALUE decimal(19, 2),
     APPLICATION_DATA_ID uniqueidentifier not null,
     REVENUE_MODE nvarchar(50),
+    ORDER_ integer,
     --
     primary key nonclustered (ID)
 )^
@@ -317,6 +318,7 @@ create table PFA_EQUIPMENT_TYPE (
     CATEGORY_ID uniqueidentifier,
     MANDATORY tinyint,
     REVENUE_TYPE_ID uniqueidentifier,
+    ORDER_ integer,
     --
     primary key nonclustered (ID)
 )^

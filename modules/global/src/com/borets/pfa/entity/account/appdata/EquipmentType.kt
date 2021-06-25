@@ -23,6 +23,9 @@ open class EquipmentType : StandardEntity() {
     @JoinColumn(name = "REVENUE_TYPE_ID")
     var revenueType: RevenueType? = null
 
+    @Column(name = "ORDER_")
+    var order: Int? = null
+
     companion object {
         private const val serialVersionUID = 526520663372571176L
     }

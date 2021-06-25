@@ -24,6 +24,7 @@
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
+                <textField id="orderField" property="order"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">
