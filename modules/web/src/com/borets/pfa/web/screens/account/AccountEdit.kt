@@ -6,8 +6,10 @@ import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.marketdata.MarketData
+import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.web.screens.account.appdata.applicationdata.ApplicationDataFragment
+import com.borets.pfa.web.screens.activity.activity.input.ActivityPivotEdit
 import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
 import com.haulmont.cuba.core.global.DatatypeFormatter
 import com.haulmont.cuba.core.global.EntityStates
@@ -62,6 +64,12 @@ class AccountEdit : StandardEditor<Account>() {
 
     @Inject
     private lateinit var priceListsDl: CollectionLoader<PriceList>
+
+    @Inject
+    private lateinit var activityPlansTable: Table<Activity>
+
+    @Inject
+    private lateinit var activityPlansDl: CollectionLoader<Activity>
 
     @Subscribe
     private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
@@ -232,11 +240,25 @@ class AccountEdit : StandardEditor<Account>() {
             .show()
     }
 
+    @Subscribe("activityPlansTable.view")
+    private fun onActivityPlansTableView(event: Action.ActionPerformedEvent) {
+        screenBuilders.editor(activityPlansTable)
+            .withScreenClass(ActivityPivotEdit::class.java)
+            .editEntity(activityPlansTable.singleSelected!!)
+            .show()
+    }
+
     @Subscribe("tabSheet")
     private fun onTabSheetSelectedTabChange(event: TabSheet.SelectedTabChangeEvent) {
-        if ("priceListsTab" == event.selectedTab.name) {
-            priceListsDl.setParameter("container_accountDc", editedEntity)
-            priceListsDl.load()
+        when (event.selectedTab.name) {
+            "priceListsTab" -> {
+                priceListsDl.setParameter("container_accountDc", editedEntity)
+                priceListsDl.load()
+            }
+            "activityPlansTab" -> {
+                activityPlansDl.setParameter("container_accountDc", editedEntity)
+                activityPlansDl.load()
+            }
         }
     }
 

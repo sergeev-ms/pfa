@@ -54,6 +54,14 @@
                 <query>where e.account = :container_accountDc order by e.createTs desc</query>
             </loader>
         </collection>
+        <collection id="activityPlansDc" class="com.borets.pfa.entity.activity.Activity">
+            <view extends="_local">
+                <property name="createTs"/>
+            </view>
+            <loader id="activityPlansDl">
+                <query>where e.account = :container_accountDc order by e.createTs desc</query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600" width="800"/>
     <layout expand="tabSheet" spacing="true">
@@ -147,6 +155,20 @@
                     </columns>
                     <actions>
                         <action id="view" trackSelection="true" caption="msg://priceListsTable.view.caption"/>
+                    </actions>
+                    <rowsCount/>
+                </table>
+            </tab>
+            <tab id="activityPlansTab" caption="msg://activityPlansTab.caption" expand="activityPlansTable"
+                 spacing="true" margin="true,false,false,false" >
+                <table id="activityPlansTable" dataContainer="activityPlansDc" width="100%">
+                    <columns>
+                        <column id="recordType"/>
+                        <column id="yearMonth"/>
+                        <column id="createTs"/>
+                    </columns>
+                    <actions>
+                        <action id="view" trackSelection="true" caption="msg://activityPlansTable.view.caption"/>
                     </actions>
                     <rowsCount/>
                 </table>
