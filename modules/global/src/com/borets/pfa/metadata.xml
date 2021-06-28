@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <metadata xmlns="http://schemas.haulmont.com/cuba/metadata.xsd">
 
-    <metadata-model root-package="com.borets.pfa" namespace="pfa"/>
     <datatypes>
         <datatype id="yearMonth" class="com.borets.pfa.datatype.YearMonthDataType" sqlType="varchar(10)"/>
     </datatypes>
 
+    <metadata-model root-package="com.borets.pfa" namespace="pfa"/>
 </metadata>
