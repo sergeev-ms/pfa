@@ -14,11 +14,11 @@ open class EquipmentUtilization : StandardEntity() {
 
     @NumberFormat(pattern = "#%")
     @Column(name = "FIRST_RUN_VALUE")
-    var firstRunValue: BigDecimal? = null
+    var firstRunValue: BigDecimal? = BigDecimal.ZERO
 
     @NumberFormat(pattern = "#%")
     @Column(name = "SEQUENT_RUN_VALUE")
-    var sequentRunValue: BigDecimal? = null
+    var sequentRunValue: BigDecimal? = BigDecimal.ZERO
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "APPLICATION_DATA_ID")
