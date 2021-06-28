@@ -72,22 +72,38 @@ class ApplicationDataFragment : ScreenFragment() {
     private fun performSystemAllocationValidation(): ValidationErrors {
         val validationErrors = ValidationErrors()
 
-        val sumRun1 = applicationDataDc.item.systemAllocations!!.sumOf { it.run1!! }
-        val sumRun2 = applicationDataDc.item.systemAllocations!!.sumOf { it.run2!! }
-        val sumRun3 = applicationDataDc.item.systemAllocations!!.sumOf { it.run3!! }
-        val sumRun3plus = applicationDataDc.item.systemAllocations!!.sumOf { it.run3plus!! }
+        val systemAllocations = applicationDataDc.itemOrNull?.systemAllocations
+        if (!systemAllocations.isNullOrEmpty()) {
+            val sumRun1 = systemAllocations.sumOf { it.run1!! }
+            val sumRun2 = systemAllocations.sumOf { it.run2!! }
+            val sumRun3 = systemAllocations.sumOf { it.run3!! }
+            val sumRun3plus = systemAllocations.sumOf { it.run3plus!! }
 
-        if (sumRun1.toInt() != 1) {
-            validationErrors.add(systemsAllocationGrid as Component, messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "1st Run"))
-        }
-        if (sumRun2.toInt() != 1) {
-            validationErrors.add(systemsAllocationGrid as Component, messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "2st Run"))
-        }
-        if (sumRun3.toInt() != 1) {
-            validationErrors.add(systemsAllocationGrid as Component, messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "3st Run"))
-        }
-        if (sumRun3plus.toInt() != 1) {
-            validationErrors.add(systemsAllocationGrid as Component, messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "3+ Run"))
+
+            if (sumRun1.toInt() != 1) {
+                validationErrors.add(
+                    systemsAllocationGrid as Component,
+                    messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "1st Run")
+                )
+            }
+            if (sumRun2.toInt() != 1) {
+                validationErrors.add(
+                    systemsAllocationGrid as Component,
+                    messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "2st Run")
+                )
+            }
+            if (sumRun3.toInt() != 1) {
+                validationErrors.add(
+                    systemsAllocationGrid as Component,
+                    messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "3st Run")
+                )
+            }
+            if (sumRun3plus.toInt() != 1) {
+                validationErrors.add(
+                    systemsAllocationGrid as Component,
+                    messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "3+ Run")
+                )
+            }
         }
         return validationErrors
     }
