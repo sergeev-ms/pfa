@@ -40,16 +40,16 @@
                     </buttonsPanel>
                 </dataGrid>
             </tab>
-            <tab id="utilizationTab" caption="msg://utilizationTab.caption" margin="true,false,false,false" expand="utilizationTable">
-                <table id="utilizationTable" dataContainer="utilizationDc" width="100%" editable="true" sortable="false">
+            <tab id="utilizationTab" caption="msg://utilizationTab.caption" margin="true,false,false,false" expand="utilizationDg">
+                <dataGrid id="utilizationDg" dataContainer="utilizationDc" width="100%"  sortable="false" reorderingAllowed="false" editorBuffered="false"
+                          editorEnabled="true" columnsCollapsingAllowed="false">
                     <columns>
-                        <column id="equipmentType"/>
-                        <column id="revenueMode" editable="true" required="true"/>
-                        <column id="firstRunValue" editable="true" required="true"/>
-                        <column id="sequentRunValue" editable="true" required="true"/>
+                        <column property="equipmentType" editable="false"/>
+                        <column property="revenueMode"/>
+                        <column property="firstRunValue"/>
+                        <column property="sequentRunValue"/>
                     </columns>
-                    <rows/>
-                </table>
+                </dataGrid>
             </tab>
         </tabSheet>
     </layout>
