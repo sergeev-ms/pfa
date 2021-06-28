@@ -19,19 +19,19 @@ open class SystemAllocation : StandardEntity() {
 
     @NumberFormat(pattern = "#%")
     @Column(name = "RUN1")
-    var run1: BigDecimal? = null
+    var run1: BigDecimal? = BigDecimal.ZERO
 
     @NumberFormat(pattern = "#%")
     @Column(name = "RUN2")
-    var run2: BigDecimal? = null
+    var run2: BigDecimal? = BigDecimal.ZERO
 
     @NumberFormat(pattern = "#%")
     @Column(name = "RUN3")
-    var run3: BigDecimal? = null
+    var run3: BigDecimal? = BigDecimal.ZERO
 
     @NumberFormat(pattern = "#%")
     @Column(name = "RUN3_PLUS")
-    var run3plus: BigDecimal? = null
+    var run3plus: BigDecimal? = BigDecimal.ZERO
 
     companion object {
         private const val serialVersionUID = 5378292270482296206L

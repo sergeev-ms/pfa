@@ -5,17 +5,14 @@ import com.borets.pfa.entity.account.appdata.EquipmentUtilization
 import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.system.SystemStd
 import com.haulmont.cuba.gui.ScreenBuilders
-import com.haulmont.cuba.gui.components.Action
-import com.haulmont.cuba.gui.components.ButtonsPanel
-import com.haulmont.cuba.gui.components.DataGrid
+import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
 import com.haulmont.cuba.gui.model.InstanceContainer
-import com.haulmont.cuba.gui.screen.ScreenFragment
-import com.haulmont.cuba.gui.screen.Subscribe
-import com.haulmont.cuba.gui.screen.UiController
-import com.haulmont.cuba.gui.screen.UiDescriptor
+import com.haulmont.cuba.gui.screen.*
+import com.haulmont.cuba.gui.screen.Target
 import javax.inject.Inject
+
 
 @UiController("pfa_ApplicationDataFragment")
 @UiDescriptor("application-data-fragment.xml")
@@ -37,6 +34,9 @@ class ApplicationDataFragment : ScreenFragment() {
     private lateinit var systemsAllocationGridPanel: ButtonsPanel
     @Inject
     private lateinit var utilizationDg: DataGrid<EquipmentUtilization>
+
+    @Inject
+    private lateinit var messageBundle: MessageBundle
 
 
     @Subscribe("systemsAllocationGrid.create")
@@ -62,4 +62,35 @@ class ApplicationDataFragment : ScreenFragment() {
         systemsAllocationGrid.isEditorEnabled = editable
         utilizationDg.isEditorEnabled = editable
     }
+
+    @Subscribe(target = Target.PARENT_CONTROLLER)
+    private fun onValidation(event: StandardEditor.ValidationEvent) {
+        val errors: ValidationErrors = performSystemAllocationValidation()
+        event.addErrors(errors)
+    }
+
+    private fun performSystemAllocationValidation(): ValidationErrors {
+        val validationErrors = ValidationErrors()
+
+        val sumRun1 = applicationDataDc.item.systemAllocations!!.sumOf { it.run1!! }
+        val sumRun2 = applicationDataDc.item.systemAllocations!!.sumOf { it.run2!! }
+        val sumRun3 = applicationDataDc.item.systemAllocations!!.sumOf { it.run3!! }
+        val sumRun3plus = applicationDataDc.item.systemAllocations!!.sumOf { it.run3plus!! }
+
+        if (sumRun1.toInt() != 1) {
+            validationErrors.add(systemsAllocationGrid as Component, messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "1st Run"))
+        }
+        if (sumRun2.toInt() != 1) {
+            validationErrors.add(systemsAllocationGrid as Component, messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "2st Run"))
+        }
+        if (sumRun3.toInt() != 1) {
+            validationErrors.add(systemsAllocationGrid as Component, messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "3st Run"))
+        }
+        if (sumRun3plus.toInt() != 1) {
+            validationErrors.add(systemsAllocationGrid as Component, messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "3+ Run"))
+        }
+        return validationErrors
+    }
+
+
 }
