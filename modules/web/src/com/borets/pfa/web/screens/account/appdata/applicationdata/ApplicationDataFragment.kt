@@ -40,12 +40,15 @@ class ApplicationDataFragment : ScreenFragment() {
     private fun onSystemsAllocationGridCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.lookup(SystemStd::class.java, this)
             .withSelectHandler {
-                dataContext.create(SystemAllocation::class.java).apply {
-                    this.applicationData = applicationDataDc.item
-                    this.system = it.first()
-                }.also {
-                    systemsAllocationDc.mutableItems.add(it)
-                }}
+                it.map { selectedSystem ->
+                    dataContext.create(SystemAllocation::class.java).apply {
+                        this.applicationData = applicationDataDc.item
+                        this.system = selectedSystem
+                    }
+                }.let { selectedSystemsWrap ->
+                    systemsAllocationDc.mutableItems.addAll(selectedSystemsWrap)
+                }
+            }
             .show()
     }
 

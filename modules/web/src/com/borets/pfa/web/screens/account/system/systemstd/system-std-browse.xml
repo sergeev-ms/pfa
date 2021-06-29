@@ -31,7 +31,7 @@
             <property name=""/>
             <properties include=".*"/>
         </filter>
-        <groupTable id="systemStdsTable" width="100%" dataContainer="systemStdsDc">
+        <groupTable id="systemStdsTable" width="100%" dataContainer="systemStdsDc" multiselect="true">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
