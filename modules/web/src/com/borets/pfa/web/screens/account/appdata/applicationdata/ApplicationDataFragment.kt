@@ -1,7 +1,6 @@
 package com.borets.pfa.web.screens.account.appdata.applicationdata
 
 import com.borets.pfa.entity.account.appdata.ApplicationData
-import com.borets.pfa.entity.account.appdata.EquipmentUtilization
 import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.system.SystemStd
 import com.haulmont.cuba.gui.ScreenBuilders
@@ -32,8 +31,6 @@ class ApplicationDataFragment : ScreenFragment() {
     private lateinit var systemsAllocationGrid: DataGrid<SystemAllocation>
     @Inject
     private lateinit var systemsAllocationGridPanel: ButtonsPanel
-    @Inject
-    private lateinit var utilizationDg: DataGrid<EquipmentUtilization>
 
     @Inject
     private lateinit var messageBundle: MessageBundle
@@ -60,7 +57,6 @@ class ApplicationDataFragment : ScreenFragment() {
         }
 
         systemsAllocationGrid.isEditorEnabled = editable
-        utilizationDg.isEditorEnabled = editable
     }
 
     @Subscribe(target = Target.PARENT_CONTROLLER)

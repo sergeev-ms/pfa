@@ -3,55 +3,39 @@
     <data>
         <instance id="applicationDataDc" class="com.borets.pfa.entity.account.appdata.ApplicationData" provided="true">
             <collection id="systemsAllocationDc" property="systemAllocations"/>
-            <collection id="utilizationDc" property="utilization"/>
         </instance>
     </data>
-    <layout expand="tabSheet">
-        <tabSheet id="tabSheet">
-            <tab id="systemsTab" caption="msg://systemsTab.caption" margin="true,false,false,false" expand="systemsAllocationGrid">
-                <dataGrid id="systemsAllocationGrid" dataContainer="systemsAllocationDc" width="100%" editorEnabled="true"
-                          editorBuffered="false">
-                    <actions>
-                        <action id="create" type="create" caption="msg://systemsAllocationGrid.create.caption"/>
-                        <action id="remove" type="remove"/>
-                    </actions>
-                    <columns>
-                        <column property="system.casingSize" editable="false"/>
-                        <column property="system.casingWeight" editable="false"/>
-                        <column property="system.pumpModel" editable="false"/>
-                        <column property="system.depth" editable="false"/>
-                        <column property="system.motorType" editable="false"/>
-                        <column property="system.intakeConfig" editable="false"/>
-                        <column property="system.vaproConfig" editable="false"/>
-                        <column property="system.sealConfig" editable="false"/>
-                        <column property="system.pumpConfig" editable="false"/>
-                        <column property="system.pumpMaterials" editable="false"/>
-                        <column property="system.sealMaterials" editable="false"/>
-                        <column property="system.motorMaterials" editable="false"/>
-                        <column property="system.comment" editable="false"/>
-                        <column id="run1" property="run1" editable="true"/>
-                        <column id="run2" property="run2" editable="true"/>
-                        <column id="run3" property="run3" editable="true"/>
-                        <column id="run3plus" property="run3plus" editable="true"/>
-                    </columns>
-                    <buttonsPanel id="systemsAllocationGridPanel">
-                        <button action="systemsAllocationGrid.create"/>
-                        <button action="systemsAllocationGrid.remove"/>
-                    </buttonsPanel>
-                </dataGrid>
-            </tab>
-            <tab id="utilizationTab" caption="msg://utilizationTab.caption" margin="true,false,false,false" expand="utilizationDg">
-                <dataGrid id="utilizationDg" dataContainer="utilizationDc" width="100%"  sortable="false" reorderingAllowed="false" editorBuffered="false"
-                          editorEnabled="true" columnsCollapsingAllowed="false">
-                    <columns>
-                        <column property="equipmentType" editable="false"/>
-                        <column property="revenueMode"/>
-                        <column property="firstRunValue"/>
-                        <column property="sequentRunValue"/>
-                    </columns>
-                </dataGrid>
-            </tab>
-        </tabSheet>
+    <layout expand="systemsAllocationGrid">
+        <dataGrid id="systemsAllocationGrid" dataContainer="systemsAllocationDc" width="100%" editorEnabled="true"
+                  editorBuffered="false">
+            <actions>
+                <action id="create" type="create" caption="msg://systemsAllocationGrid.create.caption"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column property="system.casingSize" editable="false"/>
+                <column property="system.casingWeight" editable="false"/>
+                <column property="system.pumpModel" editable="false"/>
+                <column property="system.depth" editable="false"/>
+                <column property="system.motorType" editable="false"/>
+                <column property="system.intakeConfig" editable="false"/>
+                <column property="system.vaproConfig" editable="false"/>
+                <column property="system.sealConfig" editable="false"/>
+                <column property="system.pumpConfig" editable="false"/>
+                <column property="system.pumpMaterials" editable="false"/>
+                <column property="system.sealMaterials" editable="false"/>
+                <column property="system.motorMaterials" editable="false"/>
+                <column property="system.comment" editable="false"/>
+                <column id="run1" property="run1" editable="true"/>
+                <column id="run2" property="run2" editable="true"/>
+                <column id="run3" property="run3" editable="true"/>
+                <column id="run3plus" property="run3plus" editable="true"/>
+            </columns>
+            <buttonsPanel id="systemsAllocationGridPanel">
+                <button action="systemsAllocationGrid.create"/>
+                <button action="systemsAllocationGrid.remove"/>
+            </buttonsPanel>
+        </dataGrid>
     </layout>
 </fragment>
 

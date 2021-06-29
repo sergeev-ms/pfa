@@ -20,12 +20,8 @@
                         <property name="motorMaterials"/>
                     </property>
                 </property>
-                <property name="utilization" view="_local">
-                    <property name="equipmentType"/>
-                </property>
             </view>
             <loader/>
-            <collection id="breakdownsDc" property="utilization"/>
         </instance>
     </data>
     <dialogMode height="600" width="800"/>

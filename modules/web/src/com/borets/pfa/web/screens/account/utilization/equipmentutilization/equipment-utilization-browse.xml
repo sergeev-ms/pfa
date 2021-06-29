@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://equipmentUtilizationBrowse.caption" focusComponent="equipmentUtilizationsTable"
+        messagesPack="com.borets.pfa.web.screens.account.utilization.equipmentutilization">
+    <data readOnly="true">
+        <collection id="equipmentUtilizationsDc" class="com.borets.pfa.entity.account.utilization.EquipmentUtilization">
+            <view extends="_local">
+                <property name="createTs"/>
+            </view>
+            <loader id="equipmentUtilizationsDl">
+                <query>
+                    <![CDATA[select e from pfa_EquipmentUtilization e order by e.createTs DESC]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>e.account = :account</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="equipmentUtilizationsTable" spacing="true">
+        <filter id="filter" applyTo="equipmentUtilizationsTable" dataLoader="equipmentUtilizationsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="equipmentUtilizationsTable" width="100%" dataContainer="equipmentUtilizationsDc">
+            <actions>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="recordType"/>
+                <column id="validFrom"/>
+                <column id="createTs"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
+                <button id="editBtn" action="equipmentUtilizationsTable.edit"/>
+                <button id="removeBtn" action="equipmentUtilizationsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

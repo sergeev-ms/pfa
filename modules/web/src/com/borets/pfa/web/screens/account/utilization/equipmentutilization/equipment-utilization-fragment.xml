@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<fragment xmlns="http://schemas.haulmont.com/cuba/screen/fragment.xsd">
+    <data>
+        <instance id="equipmentUtilizationDc" class="com.borets.pfa.entity.account.utilization.EquipmentUtilization" provided="true">
+            <collection id="utilizationDetailsDc" property="details"/>
+        </instance>
+    </data>
+    <layout expand="utilizationDg" spacing="true">
+        <form id="form" dataContainer="equipmentUtilizationDc">
+            <column width="450px">
+                <datePicker id="validFromField" resolution="MONTH" stylename="custom-height" property="validFrom"/>
+            </column>
+            <column>
+                <lookupField id="recordTypeField" property="recordType" required="true"/>
+            </column>
+        </form>
+        <dataGrid id="utilizationDg" dataContainer="utilizationDetailsDc" width="100%"  sortable="false" reorderingAllowed="false" editorBuffered="false"
+                  editorEnabled="true" columnsCollapsingAllowed="false">
+            <columns>
+                <column property="equipmentType" editable="false"/>
+                <column property="revenueMode"/>
+                <column property="firstRunValue"/>
+                <column property="sequentRunValue"/>
+            </columns>
+        </dataGrid>
+    </layout>
+</fragment>
+

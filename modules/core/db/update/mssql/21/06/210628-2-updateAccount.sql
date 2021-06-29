@@ -1,0 +1,1 @@
+alter table PFA_ACCOUNT add ACTUAL_EQUIPMENT_UTILIZATION_ID uniqueidentifier ;

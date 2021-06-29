@@ -1,13 +1,15 @@
-package com.borets.pfa.entity.account.appdata
+package com.borets.pfa.entity.account.utilization
 
+import com.borets.pfa.entity.account.appdata.EquipmentType
+import com.borets.pfa.entity.account.appdata.RevenueMode
 import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity
 import java.math.BigDecimal
 import javax.persistence.*
 
-@Table(name = "PFA_EQUIPMENT_UTILIZATION")
-@Entity(name = "pfa_EquipmentUtilization")
-open class EquipmentUtilization : StandardEntity() {
+@Table(name = "PFA_EQUIPMENT_UTILIZATION_DETAIL")
+@Entity(name = "pfa_EquipmentUtilizationDetail")
+open class EquipmentUtilizationDetail : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EQUIPMENT_TYPE_ID")
     var equipmentType: EquipmentType? = null
@@ -21,8 +23,8 @@ open class EquipmentUtilization : StandardEntity() {
     var sequentRunValue: BigDecimal? = BigDecimal.ZERO
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "APPLICATION_DATA_ID")
-    var applicationData: ApplicationData? = null
+    @JoinColumn(name = "EQUIPMENT_UTILIZATION_ID")
+    var equipmentUtilization: EquipmentUtilization? = null
 
     @Column(name = "REVENUE_MODE")
     private var revenueMode: String? = null

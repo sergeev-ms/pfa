@@ -116,6 +116,7 @@ create table PFA_ACCOUNT (
     ACTUAL_APP_DETAIL_ID uniqueidentifier,
     CONTRACT_TYPE nvarchar(50),
     APPLICATION_TYPE nvarchar(50),
+    ACTUAL_EQUIPMENT_UTILIZATION_ID uniqueidentifier,
     --
     primary key nonclustered (ID)
 )^
@@ -277,12 +278,11 @@ create table PFA_EQUIPMENT_UTILIZATION (
     DELETE_TS datetime2,
     DELETED_BY nvarchar(50),
     --
-    EQUIPMENT_TYPE_ID uniqueidentifier,
-    FIRST_RUN_VALUE decimal(19, 2),
-    SEQUENT_RUN_VALUE decimal(19, 2),
-    APPLICATION_DATA_ID uniqueidentifier not null,
-    REVENUE_MODE nvarchar(50),
-    ORDER_ integer,
+    ACCOUNT_ID uniqueidentifier,
+    RECORD_TYPE nvarchar(50),
+    VALID_FROM datetime2,
+    YEAR_ integer,
+    MONTH_ integer,
     --
     primary key nonclustered (ID)
 )^
@@ -491,3 +491,24 @@ create table PFA_PUMP_TYPE (
     primary key nonclustered (ID)
 )^
 -- end PFA_PUMP_TYPE
+-- begin PFA_EQUIPMENT_UTILIZATION_DETAIL
+create table PFA_EQUIPMENT_UTILIZATION_DETAIL (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    EQUIPMENT_TYPE_ID uniqueidentifier,
+    FIRST_RUN_VALUE decimal(19, 2),
+    SEQUENT_RUN_VALUE decimal(19, 2),
+    EQUIPMENT_UTILIZATION_ID uniqueidentifier not null,
+    REVENUE_MODE nvarchar(50),
+    ORDER_ integer,
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_EQUIPMENT_UTILIZATION_DETAIL

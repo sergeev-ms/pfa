@@ -1,19 +1,31 @@
-package com.borets.pfa.entity.account.appdata
+package com.borets.pfa.entity.account.utilization
 
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.activity.RecordType
 import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.chile.core.annotations.MetaProperty
+import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity
 import com.haulmont.cuba.core.entity.annotation.OnDelete
 import com.haulmont.cuba.core.global.DeletePolicy
+import java.time.LocalDate
 import java.time.YearMonth
 import javax.persistence.*
 
-@Table(name = "PFA_APPLICATION_DATA")
-@javax.persistence.Entity(name = "pfa_ApplicationData")
-open class ApplicationData : StandardEntity() {
+@Table(name = "PFA_EQUIPMENT_UTILIZATION")
+@javax.persistence.Entity(name = "pfa_EquipmentUtilization")
+open class EquipmentUtilization : StandardEntity() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ACCOUNT_ID")
+    var account: Account? = null
 
+    @Column(name = "RECORD_TYPE")
+    private var recordType: String? = null
+
+    @Column(name = "VALID_FROM")
+    var validFrom: LocalDate? = null
+
+    @NumberFormat(pattern = "####")
     @Column(name = "YEAR_")
     var year: Int? = null
 
@@ -22,19 +34,12 @@ open class ApplicationData : StandardEntity() {
 
     @Transient
     @MetaProperty(related = ["month", "year"], datatype = "yearMonth")
-    private var yearMonth: String? = null
-
-    @Column(name = "RECORD_TYPE")
-    private var recordType: String? = null
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ACCOUNT_ID")
-    var account: Account? = null
+    var yearMonth: String? = null
 
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "applicationData")
-    var systemAllocations: MutableList<SystemAllocation>? = mutableListOf()
+    @OneToMany(mappedBy = "equipmentUtilization")
+    var details: MutableList<EquipmentUtilizationDetail>? = mutableListOf()
 
     fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
 
@@ -52,7 +57,17 @@ open class ApplicationData : StandardEntity() {
         month = yearMonth?.monthValue
     }
 
+    @PrePersist
+    open fun prePersist() {
+        setYearMonth(YearMonth.from(validFrom))
+    }
+
+    @PreUpdate
+    open fun preUpdate() {
+        setYearMonth(YearMonth.from(validFrom))
+    }
+
     companion object {
-        private const val serialVersionUID = 1467760829462089597L
+        private const val serialVersionUID = -8862484810945346623L
     }
 }

@@ -6,9 +6,11 @@ import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.marketdata.MarketData
+import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.web.screens.account.appdata.applicationdata.ApplicationDataFragment
+import com.borets.pfa.web.screens.account.utilization.equipmentutilization.EquipmentUtilizationFragment
 import com.borets.pfa.web.screens.activity.activity.input.ActivityPivotEdit
 import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
 import com.haulmont.cuba.core.global.DatatypeFormatter
@@ -25,7 +27,6 @@ import javax.inject.Inject
 @UiController("pfa_Account.edit")
 @UiDescriptor("account-edit.xml")
 @EditedEntityContainer("accountDc")
-//@LoadDataBeforeShow
 class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var dataContext: DataContext
@@ -46,7 +47,21 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var actualMarketDataDc: InstancePropertyContainer<MarketData>
     @Inject
     private lateinit var applicationDataDc: InstancePropertyContainer<ApplicationData>
+    @Inject
+    private lateinit var equipmentUtilizationDc: InstanceContainer<EquipmentUtilization>
+    @Inject
+    private lateinit var equipmentUtilizationDl: InstanceLoader<EquipmentUtilization>
+    @Inject
+    private lateinit var accountDl: InstanceLoader<Account>
+    @Inject
+    private lateinit var priceListsDl: CollectionLoader<PriceList>
+    @Inject
+    private lateinit var activityPlansDl: CollectionLoader<Activity>
 
+    @Inject
+    private lateinit var applicationDataFragment: ApplicationDataFragment
+    @Inject
+    private lateinit var equipmentUtilizationFragment: EquipmentUtilizationFragment
     @Inject
     private lateinit var marketDataGb: GroupBoxLayout
     @Inject
@@ -54,39 +69,27 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var appDataGb: GroupBoxLayout
     @Inject
-    private lateinit var applicationDataFragment: ApplicationDataFragment
-
+    private lateinit var equipmentUtilizationGb: GroupBoxLayout
     @Inject
     private lateinit var priceListsTable: Table<PriceList>
-
-    @Inject
-    private lateinit var accountDl: InstanceLoader<Account>
-
-    @Inject
-    private lateinit var priceListsDl: CollectionLoader<PriceList>
-
     @Inject
     private lateinit var activityPlansTable: Table<Activity>
-
-    @Inject
-    private lateinit var activityPlansDl: CollectionLoader<Activity>
 
     @Subscribe
     private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
         applicationDataFragment.setEditable(false)
+        equipmentUtilizationFragment.setEditable(false)
     }
 
     @Subscribe
-    private fun onBeforeShow(event: BeforeShowEvent) {
+    private fun onBeforeShow(@Suppress("UNUSED_PARAMETER") event: BeforeShowEvent) {
         accountDl.load()
     }
-
 
     @Subscribe
     private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
         setWindowCaption()
     }
-
 
     @Subscribe("createRevisionBtn")
     private fun onCreateRevisionBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
@@ -171,6 +174,15 @@ class AccountEdit : StandardEditor<Account>() {
             appDataGb.caption = appDataGb.caption?.format(
                 it.getYearMonth()?.format(DateTimeFormatter.ofPattern("MMM yyyy", userSession.locale)))
             appDataGb.contextHelpText = "Updated by ${it.createdBy} at ${datatypeFormatter.formatDateTime(it.createTs)}"
+        }
+    }
+
+    @Subscribe(id = "equipmentUtilizationDc", target = Target.DATA_CONTAINER)
+    private fun onEquipmentUtilizationDcItemChange(event: InstanceContainer.ItemChangeEvent<EquipmentUtilization>) {
+        event.item?.let {
+            equipmentUtilizationGb.caption = equipmentUtilizationGb.caption?.format(
+                it.getYearMonth()?.format(DateTimeFormatter.ofPattern("MMM yyyy", userSession.locale)))
+            equipmentUtilizationGb.contextHelpText = "Updated by ${it.createdBy} at ${datatypeFormatter.formatDateTime(it.createTs)}"
         }
     }
 
@@ -259,8 +271,43 @@ class AccountEdit : StandardEditor<Account>() {
                 activityPlansDl.setParameter("container_accountDc", editedEntity)
                 activityPlansDl.load()
             }
+            "utilizationTab" -> {
+                editedEntity.actualEquipmentUtilization?.let {
+                    equipmentUtilizationDl.setParameter("equipmentUtilizationId", it.id)
+                    equipmentUtilizationDl.load()
+                }
+            }
         }
     }
 
+    @Subscribe("createUtilizationBtn")
+    private fun onCreateUtilizationBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
+        screenBuilders.editor(EquipmentUtilization::class.java, this)
+            .newEntity()
+            .withParentDataContext(dataContext)
+            .withInitializer { it.account = editedEntity }
+            .withOptions(MapScreenOptions(mutableMapOf(Pair("copyFrom", editedEntity.actualEquipmentUtilization)) as Map<String, Any>))
+            .withOpenMode(OpenMode.NEW_TAB)
+            .build()
+            .also {
+                it.addAfterCloseListener { event ->
+                    if (event.closeAction == WINDOW_COMMIT_AND_CLOSE_ACTION) {
+                        @Suppress("UNCHECKED_CAST")
+                        val committedEntity = (event.screen as StandardEditor<EquipmentUtilization>).editedEntity
+                        equipmentUtilizationDc.setItem(committedEntity)
+                        editedEntity.actualEquipmentUtilization = committedEntity
+                    }
+                }
+            }
+            .show()
+    }
 
+    @Subscribe("showUtilizationsBtn")
+    private fun onShowUtilizationsBtnClick(event: Button.ClickEvent) {
+        screenBuilders.lookup(EquipmentUtilization::class.java, this)
+            .withOptions(MapScreenOptions(mutableMapOf(Pair("account", editedEntity)) as Map<String, Any>))
+            .show()
+    }
 }
+
+

@@ -3,6 +3,7 @@ package com.borets.pfa.entity.account
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.marketdata.ApplicationType
 import com.borets.pfa.entity.account.marketdata.MarketData
+import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.activity.ContractType
 import com.borets.pfa.entity.customer.DimCustomers
 import com.haulmont.chile.core.annotations.Composition
@@ -69,6 +70,13 @@ open class Account : StandardEntity() {
 
     @Column(name = "APPLICATION_TYPE")
     private var applicationType: String? = null
+
+    @OneToMany(mappedBy = "account")
+    var equipmentUtilizations: MutableList<EquipmentUtilization>? = mutableListOf()
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ACTUAL_EQUIPMENT_UTILIZATION_ID")
+    var actualEquipmentUtilization: EquipmentUtilization? = null
 
     fun getType(): Type? = actualRevision?.getType()
 
