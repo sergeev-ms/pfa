@@ -245,7 +245,7 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Subscribe("priceListsTable.view")
-    private fun onPriceListsTableView(event: Action.ActionPerformedEvent) {
+    private fun onPriceListsTableView(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(priceListsTable)
             .withScreenClass(PriceListPivotEdit::class.java)
             .editEntity(priceListsTable.singleSelected!!)
@@ -253,7 +253,7 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Subscribe("activityPlansTable.view")
-    private fun onActivityPlansTableView(event: Action.ActionPerformedEvent) {
+    private fun onActivityPlansTableView(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(activityPlansTable)
             .withScreenClass(ActivityPivotEdit::class.java)
             .editEntity(activityPlansTable.singleSelected!!)
@@ -261,7 +261,7 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Subscribe("tabSheet")
-    private fun onTabSheetSelectedTabChange(event: TabSheet.SelectedTabChangeEvent) {
+    private fun onTabSheetSelectedTabChange(@Suppress("UNUSED_PARAMETER") event: TabSheet.SelectedTabChangeEvent) {
         when (event.selectedTab.name) {
             "priceListsTab" -> {
                 priceListsDl.setParameter("container_accountDc", editedEntity)

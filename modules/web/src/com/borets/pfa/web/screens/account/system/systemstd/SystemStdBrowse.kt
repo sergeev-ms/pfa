@@ -25,7 +25,7 @@ class SystemStdBrowse : StandardLookup<SystemStd>() {
     private lateinit var systemStdsTable: GroupTable<SystemStd>
 
     @Subscribe("systemStdsTable.copy")
-    private fun onSystemStdsTableCopy(event: Action.ActionPerformedEvent) {
+    private fun onSystemStdsTableCopy(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         var copyFrom = systemStdsTable.singleSelected!!
 
         val view = ViewBuilder.of(SystemStd::class.java)

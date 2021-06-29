@@ -15,12 +15,12 @@ class AccountBrowse : StandardLookup<Account>() {
     private lateinit var accountsTable: TreeTable<Account>
 
     @Subscribe("accountsTable.expandAll")
-    private fun onAccountsTableExpandAll(event: Action.ActionPerformedEvent) {
+    private fun onAccountsTableExpandAll(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         accountsTable.expandAll()
     }
 
     @Subscribe("accountsTable.collapseAll")
-    private fun onAccountsTableCollapseAll(event: Action.ActionPerformedEvent) {
+    private fun onAccountsTableCollapseAll(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         accountsTable.collapseAll()
     }
 }

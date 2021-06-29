@@ -51,7 +51,7 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
     private lateinit var detailsTableCopy: ItemTrackingAction
 
     @Subscribe
-    private fun onBeforeShow(event: BeforeShowEvent) {
+    private fun onBeforeShow(@Suppress("UNUSED_PARAMETER") event: BeforeShowEvent) {
         setCaptions()
         detailsTableCopy.addActionPerformedListener {
             val newDetail = dataContext.create(SystemDetail::class.java)
