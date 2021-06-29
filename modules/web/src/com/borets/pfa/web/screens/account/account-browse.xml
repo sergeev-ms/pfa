@@ -30,6 +30,8 @@
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
+                <action id="expandAll" description="msg://accountsTable.expandAll.description" icon="CARET_DOWN"/>
+                <action id="collapseAll" description="msg://accountsTable.collapseAll.description" icon="CARET_RIGHT"/>
             </actions>
             <columns>
                 <column id="name"/>
@@ -46,6 +48,8 @@
                 <button id="createBtn" action="accountsTable.create"/>
                 <button id="editBtn" action="accountsTable.edit"/>
                 <button id="removeBtn" action="accountsTable.remove"/>
+                <button action="accountsTable.expandAll" stylename="icon-only"/>
+                <button action="accountsTable.collapseAll" stylename="icon-only"/>
             </buttonsPanel>
         </treeTable>
         <hbox id="lookupActions" spacing="true" visible="false">
