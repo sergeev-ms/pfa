@@ -2,6 +2,7 @@ package com.borets.pfa.web.screens.account.appdata.applicationdata
 
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.SystemAllocation
+import com.borets.pfa.entity.account.marketdata.RunsNumber
 import com.borets.pfa.entity.account.system.SystemStd
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.*
@@ -73,35 +74,44 @@ class ApplicationDataFragment : ScreenFragment() {
 
         val systemAllocations = applicationDataDc.itemOrNull?.systemAllocations
         if (!systemAllocations.isNullOrEmpty()) {
+            val runsNumber = applicationDataDc.item.account?.actualMarketDetail?.getRunsNumber()
+
             val sumRun1 = systemAllocations.sumOf { it.run1!! }
-            val sumRun2 = systemAllocations.sumOf { it.run2!! }
-            val sumRun3 = systemAllocations.sumOf { it.run3!! }
-            val sumRun3plus = systemAllocations.sumOf { it.run3plus!! }
-
-
             if (sumRun1.toInt() != 1) {
                 validationErrors.add(
                     systemsAllocationGrid as Component,
                     messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "1st Run")
                 )
             }
-            if (sumRun2.toInt() != 1) {
-                validationErrors.add(
-                    systemsAllocationGrid as Component,
-                    messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "2st Run")
-                )
+
+            if (runsNumber == RunsNumber.TWO || runsNumber == RunsNumber.THREE || runsNumber == RunsNumber.THREE_PLUS) {
+                val sumRun2 = systemAllocations.sumOf { it.run2!! }
+                if (sumRun2.toInt() != 1) {
+                    validationErrors.add(
+                        systemsAllocationGrid as Component,
+                        messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "2st Run")
+                    )
+                }
             }
-            if (sumRun3.toInt() != 1) {
-                validationErrors.add(
-                    systemsAllocationGrid as Component,
-                    messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "3st Run")
-                )
+
+            if (runsNumber == RunsNumber.THREE || runsNumber == RunsNumber.THREE_PLUS) {
+                val sumRun3 = systemAllocations.sumOf { it.run3!! }
+                if (sumRun3.toInt() != 1) {
+                    validationErrors.add(
+                        systemsAllocationGrid as Component,
+                        messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "3st Run")
+                    )
+                }
             }
-            if (sumRun3plus.toInt() != 1) {
-                validationErrors.add(
-                    systemsAllocationGrid as Component,
-                    messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "3+ Run")
-                )
+
+            if (runsNumber == RunsNumber.THREE_PLUS) {
+                val sumRun3plus = systemAllocations.sumOf { it.run3plus!! }
+                if (sumRun3plus.toInt() != 1) {
+                    validationErrors.add(
+                        systemsAllocationGrid as Component,
+                        messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "3+ Run")
+                    )
+                }
             }
         }
         return validationErrors
