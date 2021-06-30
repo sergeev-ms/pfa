@@ -132,7 +132,6 @@ create table PFA_ANALYTIC_SET (
     DELETE_TS datetime2,
     DELETED_BY nvarchar(50),
     --
-    CONTRACT_TYPE nvarchar(50),
     JOB_TYPE nvarchar(50),
     WELL_EQUIP nvarchar(50),
     WELL_TAG nvarchar(50),

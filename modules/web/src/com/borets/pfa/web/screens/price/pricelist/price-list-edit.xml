@@ -8,7 +8,6 @@
                 <property name="account" view="_minimal"/>
                 <property name="details" view="_minimal">
                     <property name="analytic" view="_minimal">
-                        <property name="contractType"/>
                         <property name="jobType"/>
                         <property name="wellEquip"/>
                         <property name="wellTag"/>
@@ -43,7 +42,6 @@
                 </actions>
                 <columns>
                     <column id="analytic.jobType"/>
-                    <column id="analytic.contractType"/>
                     <column id="analytic.wellEquip"/>
                     <column id="analytic.wellTag"/>
                     <column id="revenueType"/>

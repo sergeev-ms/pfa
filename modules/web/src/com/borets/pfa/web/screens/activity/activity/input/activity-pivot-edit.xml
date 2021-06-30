@@ -48,9 +48,8 @@
             <groupBox id="filterGb" caption="msg://filterGb.caption" collapsable="true">
                 <hbox spacing="true">
                     <lookupField id="filterJobTypeField" optionsEnum="com.borets.pfa.entity.activity.JobType" inputPrompt="msg://filterJobType.caption"/>
-                    <lookupField id="filterWellTagField" optionsEnum="com.borets.pfa.entity.activity.WellTag" inputPrompt="msg://filterWellTag.caption"/>
                     <lookupField id="filterWellEquipField" optionsEnum="com.borets.pfa.entity.activity.WellEquip" inputPrompt="msg://filterWellEquip.caption"/>
-                    <lookupField id="filterContractTypeField" optionsEnum="com.borets.pfa.entity.activity.ContractType" inputPrompt="msg://filterContractType.caption"/>
+                    <lookupField id="filterWellTagField" optionsEnum="com.borets.pfa.entity.activity.WellTag" inputPrompt="msg://filterWellTag.caption"/>
                 </hbox>
             </groupBox>
             <scrollBox width="100%">
