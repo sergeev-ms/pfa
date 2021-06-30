@@ -1,6 +1,5 @@
 package com.borets.pfa.entity.analytic
 
-import com.borets.pfa.entity.activity.ContractType
 import com.borets.pfa.entity.activity.JobType
 import com.borets.pfa.entity.activity.WellEquip
 import com.borets.pfa.entity.activity.WellTag
@@ -14,9 +13,6 @@ open class AnalyticSet : StandardEntity() {
     companion object {
         private const val serialVersionUID = -9094885344023962029L
     }
-
-    @Column(name = "CONTRACT_TYPE")
-    private var contractType: String? = null
 
     @Column(name = "JOB_TYPE")
     private var jobType: String? = null
@@ -42,8 +38,4 @@ open class AnalyticSet : StandardEntity() {
         this.jobType = jobType?.id
     }
 
-    fun getContractType(): ContractType? = contractType?.let { ContractType.fromId(it) }
-    fun setContractType(contractType: ContractType?) {
-        this.contractType = contractType?.id
-    }
 }

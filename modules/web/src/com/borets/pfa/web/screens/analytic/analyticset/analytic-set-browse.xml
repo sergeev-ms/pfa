@@ -33,7 +33,6 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="contractType"/>
                 <column id="jobType"/>
                 <column id="wellEquip"/>
                 <column id="wellTag"/>

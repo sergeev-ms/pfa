@@ -16,7 +16,6 @@
                 <lookupField id="jobTypeField" property="jobType"/>
                 <lookupField id="wellTagField" property="wellTag"/>
                 <lookupField id="wellEquipField" property="wellEquip"/>
-                <lookupField id="contractTypeField" property="contractType"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

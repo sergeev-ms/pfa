@@ -48,8 +48,6 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     @Inject
     private lateinit var pivotGrid: GridLayout
     @Inject
-    private lateinit var filterContractTypeField: LookupField<ContractType>
-    @Inject
     private lateinit var filterJobTypeField: LookupField<JobType>
     @Inject
     private lateinit var filterWellEquipField: LookupField<WellEquip>
@@ -99,10 +97,6 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
         val pivotStaticProperties = listOf(
             PivotGridInitializer.StaticPropertyData("analytic", "", true, AnalyticSet::class.java, null, null, false),
 
-            PivotGridInitializer.StaticPropertyData(
-                "contractType", messages.getMessage(AnalyticSet::class.java, "AnalyticSet.contractType"),
-                false, ContractType::class.java, null, null, true
-            ),
             PivotGridInitializer.StaticPropertyData(
                 "jobType", messages.getMessage(AnalyticSet::class.java, "AnalyticSet.jobType"),
                 true, JobType::class.java, null, null, true
@@ -167,7 +161,6 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
             .map {
                 KeyValueEntity().apply {
                     this.setValue("analytic", it)
-                    this.setValue("contractType", it.getContractType())
                     this.setValue("jobType", it.getJobType())
                     this.setValue("wellEquip", it.getWellEquip())
                     this.setValue("wellTag", it.getWellTag())
@@ -176,12 +169,9 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     }
 
     private fun initFilter() {
-        listOf(filterContractTypeField, filterJobTypeField, filterWellEquipField, filterWellTagField).forEach { field ->
+        listOf(filterJobTypeField, filterWellEquipField, filterWellTagField).forEach { field ->
             field.addValueChangeListener { _ ->
                 pivotGridHelper.kvCollectionContainer.items.forEachIndexed { index, keyValueEntity ->
-                    val isContract = filterContractTypeField.value?.let {
-                        keyValueEntity.getValueEx<ContractType>("analytic.contractType") == it
-                    } ?: true
                     val isJobType = filterJobTypeField.value?.let {
                         keyValueEntity.getValueEx<JobType>("analytic.jobType") == it
                     } ?: true
@@ -192,7 +182,7 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
                         keyValueEntity.getValueEx<WellTag>("analytic.wellTag") == it
                     } ?: true
 
-                    pivotGridHelper.setPivotRowVisibility(index + 1, isContract && isJobType && isWellEquip && isWellTag)
+                    pivotGridHelper.setPivotRowVisibility(index + 1, isJobType && isWellEquip && isWellTag)
                 }
             }
         }
