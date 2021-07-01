@@ -17,6 +17,7 @@
                     <property name="createTs"/>
                 </property>
                 <property name="actualAppDetail" view="_minimal">
+                    <property name="account"/>
                     <property name="yearMonth"/>
                     <property name="systemAllocations" view="_local">
                         <property name="system" view="_local">
