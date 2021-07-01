@@ -5,6 +5,8 @@ import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.marketdata.RunsNumber
 import com.borets.pfa.entity.account.system.SystemStd
 import com.haulmont.cuba.gui.ScreenBuilders
+import com.haulmont.cuba.gui.actions.list.CreateAction
+import com.haulmont.cuba.gui.actions.list.RemoveAction
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
@@ -12,6 +14,7 @@ import com.haulmont.cuba.gui.model.InstanceContainer
 import com.haulmont.cuba.gui.screen.*
 import com.haulmont.cuba.gui.screen.Target
 import javax.inject.Inject
+import javax.inject.Named
 
 
 @UiController("pfa_ApplicationDataFragment")
@@ -21,7 +24,8 @@ class ApplicationDataFragment : ScreenFragment() {
     private lateinit var dataContext: DataContext
     @Inject
     private lateinit var screenBuilders: ScreenBuilders
-
+    @Inject
+    private lateinit var messageBundle: MessageBundle
 
     @Inject
     private lateinit var applicationDataDc: InstanceContainer<ApplicationData>
@@ -33,8 +37,10 @@ class ApplicationDataFragment : ScreenFragment() {
     @Inject
     private lateinit var systemsAllocationGridPanel: ButtonsPanel
 
-    @Inject
-    private lateinit var messageBundle: MessageBundle
+    @field:Named("systemsAllocationGrid.create")
+    private lateinit var systemsAllocationGridCreate: CreateAction<SystemAllocation>
+    @field:Named("systemsAllocationGrid.remove")
+    private lateinit var systemsAllocationGridRemove: RemoveAction<SystemAllocation>
 
 
     @Subscribe("systemsAllocationGrid.create")
@@ -55,10 +61,8 @@ class ApplicationDataFragment : ScreenFragment() {
 
 
     fun setEditable(editable : Boolean) {
-        systemsAllocationGridPanel.isVisible = editable
-        systemsAllocationGrid.actions.forEach {
-            it.isVisible = editable
-        }
+        systemsAllocationGridCreate.isVisible = editable
+        systemsAllocationGridRemove.isVisible = editable
 
         systemsAllocationGrid.isEditorEnabled = editable
     }
@@ -117,5 +121,12 @@ class ApplicationDataFragment : ScreenFragment() {
         return validationErrors
     }
 
-
+    @Subscribe("systemsAllocationGrid.view")
+    private fun onSystemsAllocationGridView(event: Action.ActionPerformedEvent) {
+        val screen = screenBuilders.editor(SystemStd::class.java, this)
+            .editEntity(systemsAllocationGrid.singleSelected!!.system!!)
+            .build()
+        (screen as ReadOnlyAwareScreen).isReadOnly = true
+        screen.show()
+    }
 }

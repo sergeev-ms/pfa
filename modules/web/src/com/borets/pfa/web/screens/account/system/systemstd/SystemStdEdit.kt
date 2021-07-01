@@ -77,6 +77,7 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
             this.setWidthFull()
             this.setOptionsList(equipmentTypesDc.items)
             this.valueSource = ContainerValueSource(detailsTable.getInstanceContainer(systemDetail), "equipmentType")
+            this.isEditable = !this@SystemStdEdit.isReadOnly
         }
         return lookupField
     }
@@ -95,6 +96,7 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
                     .list() as List<Any>
             }
             this.minSearchStringLength = 4
+            this.isEditable = !this@SystemStdEdit.isReadOnly
         }
         return suggestionPickerField
     }
@@ -106,6 +108,7 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
                 this.datatype = datatypeRegistry.get(Length.NAME)
                 this.isRequired = true
                 this.setWidthFull()
+                this.isEditable = !this@SystemStdEdit.isReadOnly
             }
         } else null
     }
@@ -122,4 +125,6 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
                 this.setValue(it, other.getValue(it))
             }
     }
+
+
 }
