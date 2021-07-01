@@ -315,10 +315,19 @@ class AccountEdit : StandardEditor<Account>() {
 
 
     @Subscribe("priceListsTable.create")
-    private fun onPriceListsTableCreate(event: Action.ActionPerformedEvent) {
+    private fun onPriceListsTableCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(priceListsTable)
             .newEntity()
             .withScreenClass(PriceListPivotEdit::class.java)
+            .withInitializer { it.account = editedEntity }
+            .show()
+    }
+
+    @Subscribe("activityPlansTable.create")
+    private fun onCreateActivityPlanBtnClick(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
+        screenBuilders.editor(activityPlansTable)
+            .newEntity()
+            .withScreenClass(ActivityPivotEdit::class.java)
             .withInitializer { it.account = editedEntity }
             .show()
     }

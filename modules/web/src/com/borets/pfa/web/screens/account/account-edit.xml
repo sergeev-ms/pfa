@@ -192,9 +192,12 @@
                     </columns>
                     <actions>
                         <action id="view" trackSelection="true" caption="msg://activityPlansTable.view.caption"/>
+                        <action id="create" type="create" icon="CREATE_ACTION"
+                                caption="msg://activityPlansTable.create.caption"/>
                     </actions>
                     <rowsCount/>
                 </table>
+                <linkButton id="createActivityPlanBtn" action="activityPlansTable.create" align="MIDDLE_RIGHT"/>
             </tab>
         </tabSheet>
         <hbox id="editActions" spacing="true">
