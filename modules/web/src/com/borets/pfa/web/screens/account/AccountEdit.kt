@@ -1,6 +1,5 @@
 package com.borets.pfa.web.screens.account
 
-import com.haulmont.cuba.gui.screen.*
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.appdata.ApplicationData
@@ -15,10 +14,12 @@ import com.borets.pfa.web.screens.activity.activity.input.ActivityPivotEdit
 import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
 import com.haulmont.cuba.core.global.DatatypeFormatter
 import com.haulmont.cuba.core.global.EntityStates
+import com.haulmont.cuba.core.global.Metadata
 import com.haulmont.cuba.core.global.MetadataTools
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.*
+import com.haulmont.cuba.gui.screen.*
 import com.haulmont.cuba.gui.screen.Target
 import com.haulmont.cuba.security.global.UserSession
 import java.time.format.DateTimeFormatter
@@ -74,6 +75,9 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var priceListsTable: Table<PriceList>
     @Inject
     private lateinit var activityPlansTable: Table<Activity>
+
+    @Inject
+    private lateinit var metadata: Metadata
 
     @Subscribe
     private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
@@ -308,6 +312,17 @@ class AccountEdit : StandardEditor<Account>() {
             .withOptions(MapScreenOptions(mutableMapOf(Pair("account", editedEntity)) as Map<String, Any>))
             .show()
     }
+
+
+    @Subscribe("priceListsTable.create")
+    private fun onPriceListsTableCreate(event: Action.ActionPerformedEvent) {
+        screenBuilders.editor(priceListsTable)
+            .newEntity()
+            .withScreenClass(PriceListPivotEdit::class.java)
+            .withInitializer { it.account = editedEntity }
+            .show()
+    }
+
 }
 
 

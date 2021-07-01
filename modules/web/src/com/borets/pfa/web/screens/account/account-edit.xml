@@ -173,10 +173,13 @@
                         <column id="createTs"/>
                     </columns>
                     <actions>
-                        <action id="view" trackSelection="true" caption="msg://priceListsTable.view.caption"/>
+                        <action id="view" trackSelection="true" type="view"/>
+                        <action id="create" type="create" icon="CREATE_ACTION"
+                                caption="msg://priceListsTable.create.caption"/>
                     </actions>
                     <rowsCount/>
                 </table>
+                <linkButton id="createPriceListBtn" action="priceListsTable.create" align="MIDDLE_RIGHT"/>
             </tab>
             <tab id="activityPlansTab" caption="msg://activityPlansTab.caption" expand="activityPlansTable"
                  spacing="true" margin="true,false,false,false" >
