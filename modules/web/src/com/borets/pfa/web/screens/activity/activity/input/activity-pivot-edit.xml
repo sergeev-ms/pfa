@@ -21,7 +21,7 @@
     <dialogMode height="600" width="800"/>
     <layout expand="editActions" spacing="true">
         <groupBox id="generalGb" caption="msg://generalGb.caption">
-            <form id="form" dataContainer="activityDc" width="100%" childrenCaptionWidth="100px">
+            <form id="headerForm" dataContainer="activityDc" width="100%" childrenCaptionWidth="100px">
                 <column width="100%">
                     <pickerField id="accountField" property="account" required="true">
                         <actions>
@@ -29,18 +29,17 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
+                    <datePicker id="validFromField" property="periodFrom" resolution="MONTH" stylename="custom-height"/>
                 </column>
                 <column width="100%">
                     <textField property="account.contractType"/>
+                    <datePicker id="validToField" property="periodTo" resolution="MONTH" stylename="custom-height"/>
                 </column>
                 <column width="100%">
                     <lookupField id="recordTypeField" property="recordType" required="true"/>
                 </column>
                 <column width="100%">
-                    <datePicker id="validFromField" property="periodFrom" resolution="MONTH" stylename="custom-height"/>
-                </column>
-                <column width="100%">
-                    <datePicker id="validToField" property="periodTo" resolution="MONTH" stylename="custom-height"/>
+                    <linkButton id="fillFromPrevBtn" caption="msg://fillFromPrevBtn.caption" height="34px" icon="COPY"/>
                 </column>
             </form>
         </groupBox>

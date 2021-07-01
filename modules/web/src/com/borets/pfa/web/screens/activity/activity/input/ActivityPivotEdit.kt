@@ -7,6 +7,7 @@ import com.borets.pfa.web.beans.PivotGridInitializer.DynamicPropertyData
 import com.borets.pfa.web.beans.PivotGridInitializer.StaticPropertyData
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.*
+import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
@@ -50,6 +51,15 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     private lateinit var filterWellTagField: LookupField<WellTag>
 
     private lateinit var pivotGridHelper : PivotGridInitializer
+
+    @Inject
+    private lateinit var screenBuilders: ScreenBuilders
+
+    @Inject
+    private lateinit var screenValidation: ScreenValidation
+
+    @Inject
+    private lateinit var headerForm: Form
 
 
     @Subscribe
@@ -182,6 +192,51 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
                     pivotGridHelper.setPivotRowVisibility(index + 1, isJobType && isWellEquip && isWellTag)
                 }
             }
+        }
+    }
+
+    @Subscribe("fillFromPrevBtn")
+    private fun onFillFromPrevBtnClick(event: Button.ClickEvent) {
+        if (!validate())
+            return
+
+        screenBuilders.lookup(Activity::class.java, this)
+            .withOpenMode(OpenMode.DIALOG)
+            .withOptions(MapScreenOptions(mapOf(
+                Pair("account", editedEntity.account),
+                Pair("year", editedEntity.year)))
+            )
+            .withSelectHandler { fillPrevData(it.first()) }
+            .show()
+    }
+
+    private fun fillPrevData(copyFromActivityPlan: Activity) {
+        val view = ViewBuilder.of(Activity::class.java)
+            .add("details") {
+                it.addView(View.LOCAL)
+                    .add("analytic", View.MINIMAL)
+            }.build()
+        dataManager.reload(copyFromActivityPlan, view ).let { prevAct ->
+            prevAct.details?.map {
+                dataContext.create(ActivityDetail::class.java).apply {
+                    this.activity = editedEntity
+                    this.analytic = it.analytic
+                    this.year = it.year
+                    this.month = it.month
+                    this.value = it.value
+                }
+            }?.forEach { detailsDc.mutableItems.add(it) }
+
+            initDynamic()
+        }
+    }
+
+    private fun validate() : Boolean {
+        screenValidation.validateUiComponents(headerForm).also {
+            return if (!it.isEmpty) {
+                screenValidation.showValidationErrors(this, it)
+                false
+            } else true
         }
     }
 }
