@@ -16,6 +16,7 @@ import com.haulmont.cuba.core.global.CommitContext
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.EntitySet
 import groovy.transform.Field
+import org.apache.commons.lang3.StringUtils
 import org.apache.poi.ss.usermodel.DataFormatter
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Sheet
@@ -45,9 +46,9 @@ return entitySet.toListString()
 
 
 private EntitySet createEntities(ArrayList<ImportEntry> importEntries) {
-    def accountMap = importEntries.groupBy { it.account }
+    def accountMap = importEntries.groupBy { it.parent + " - " + it.account}
     accountMap.forEach {accountName, entries ->
-        def account = getAccount(accountName)
+        def account = getAccount(entries.get(0))
         def byRecordType = entries.groupBy { it.recordType }
         byRecordType.forEach {recordType, entriesByRecordType ->
             def priceList = createPriceList(account, recordType)
@@ -110,16 +111,26 @@ private PriceList createPriceList(Account account, String recordType ) {
     return price
 }
 
-private Account getAccount(String accountName) {
-    (dataManager as DataManager).load(Account.class)
-            .query('select e from pfa_Account e where e.name = :accountName')
-            .parameter('accountName', accountName)
-            .optional()
-            .orElseGet {
-                def account = (dataManager as DataManager).create(Account.class)
-                account.name = accountName
-                return dataManager.commit(account)
-            }
+private Account getAccount(ImportEntry importEntry) {
+    def account
+    if (StringUtils.isBlank(importEntry.parent)) {
+        account = (dataManager as DataManager).load(Account.class)
+                .query('select e from pfa_Account e where e.name = :accountName and e.parent IS NULL')
+                .parameter('accountName', importEntry.account)
+                .optional()
+    } else {
+        account = (dataManager as DataManager).load(Account.class)
+                .query('select e from pfa_Account e where e.name = :accountName and e.parent.name = :parentName')
+                .parameter('accountName', importEntry.account)
+                .parameter('parentName', importEntry.parent)
+                .optional()
+    }
+    return account.orElseGet {
+        def newAccount = (dataManager as DataManager).create(Account.class)
+        newAccount.name = importEntry.account
+        return dataManager.commit(newAccount)
+    }
+
 }
 
 private ArrayList<ImportEntry> getImportEntries(boolean skipFirstRow, XSSFSheet sheet) {
@@ -131,14 +142,15 @@ private ArrayList<ImportEntry> getImportEntries(boolean skipFirstRow, XSSFSheet 
             continue
         }
         def entry = new ImportEntry()
-        entry.account = getCellValue(row, 0)
-        entry.jobType = getCellValue(row, 1)
-        entry.wellTag = getCellValue(row, 2)
-        entry.wellEquip = getCellValue(row, 3)
-        entry.contractType = getCellValue(row, 4)
-        entry.recordType = getCellValue(row, 5)
-        entry.revenueType = getCellValue(row, 6)
-        entry.price = getCellValue(row, 7)
+        entry.parent = getCellValue(row, 0)
+        entry.account = getCellValue(row, 1)
+        entry.jobType = getCellValue(row, 2)
+        entry.wellTag = getCellValue(row, 3)
+        entry.wellEquip = getCellValue(row, 4)
+        entry.contractType = getCellValue(row, 5)
+        entry.recordType = getCellValue(row, 6)
+        entry.revenueType = getCellValue(row, 7)
+        entry.price = getCellValue(row, 8)
         importEntries.add(entry)
     }
     return importEntries
@@ -177,6 +189,7 @@ private String getCellValue(Row row, int cellIndex) {
 }
 
 class ImportEntry {
+    public String parent
     public String account
     public String jobType
     public String wellTag
@@ -188,7 +201,7 @@ class ImportEntry {
 
     @Override
     String toString() {
-        return "${account} - ${jobType} - ${wellTag} - ${wellEquip} - ${contractType} -" +
+        return "${parent} - ${account} - ${jobType} - ${wellTag} - ${wellEquip} - ${contractType} -" +
                 "${recordType} - ${revenueType} - ${price}"
     }
 }
