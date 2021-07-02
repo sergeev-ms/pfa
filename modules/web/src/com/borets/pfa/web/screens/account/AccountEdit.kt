@@ -77,12 +77,19 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var activityPlansTable: Table<Activity>
 
     @Inject
-    private lateinit var metadata: Metadata
+    private lateinit var createActivityPlanBtn: LinkButton
+
+    @Inject
+    private lateinit var createPriceListBtn: LinkButton
 
     @Subscribe
     private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
         applicationDataFragment.setEditable(false)
         equipmentUtilizationFragment.setEditable(false)
+
+        //workaround to avoid colored background
+        createActivityPlanBtn.removeStyleName("c-primary-action")
+        createPriceListBtn.removeStyleName("c-primary-action")
     }
 
     @Subscribe
