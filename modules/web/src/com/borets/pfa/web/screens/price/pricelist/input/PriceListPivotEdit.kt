@@ -1,9 +1,6 @@
 package com.borets.pfa.web.screens.price.pricelist.input
 
-import com.borets.pfa.entity.activity.ContractType
-import com.borets.pfa.entity.activity.JobType
-import com.borets.pfa.entity.activity.WellEquip
-import com.borets.pfa.entity.activity.WellTag
+import com.borets.pfa.entity.activity.*
 import com.borets.pfa.entity.analytic.AnalyticSet
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
@@ -11,15 +8,13 @@ import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.web.beans.PivotGridInitializer
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.*
+import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.*
-import com.haulmont.cuba.gui.components.data.value.ContainerValueSource
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
-import com.haulmont.cuba.gui.model.InstanceContainer
 import com.haulmont.cuba.gui.model.KeyValueCollectionContainer
 import com.haulmont.cuba.gui.screen.*
 import java.math.BigDecimal
-import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZoneId
 import java.util.*
@@ -41,6 +36,10 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     private lateinit var entityStates: EntityStates
     @Inject
     private lateinit var metadataTools: MetadataTools
+    @Inject
+    private lateinit var screenBuilders: ScreenBuilders
+    @Inject
+    private lateinit var screenValidation: ScreenValidation
 
     @Inject
     private lateinit var detailsDc: CollectionPropertyContainer<PriceListDetail>
@@ -55,6 +54,8 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     private lateinit var filterWellTagField: LookupField<WellTag>
     @Inject
     private lateinit var yearMonthField: DatePicker<Date>
+    @Inject
+    private lateinit var headerForm: Form
 
     private lateinit var pivotGridHelper: PivotGridInitializer
 
@@ -191,6 +192,51 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     private fun setWindowCaption() {
         if (!entityStates.isNew(editedEntity)) {
             window.caption = metadataTools.getInstanceName(editedEntity)
+        }
+    }
+
+    @Subscribe("fillFromPrevBtn")
+    private fun onFillFromPrevBtnClick(event: Button.ClickEvent) {
+        if (!validate())
+            return
+
+        screenBuilders.lookup(PriceList::class.java, this)
+            .withOpenMode(OpenMode.DIALOG)
+            .withOptions(MapScreenOptions(mapOf(
+                Pair("account", editedEntity.account),
+                Pair("year", editedEntity.year)))
+            )
+            .withSelectHandler { fillPrevData(it.first()) }
+            .show()
+    }
+
+    private fun fillPrevData(copyFromPriceList: PriceList) {
+        val view = ViewBuilder.of(PriceList::class.java)
+            .add("details") {
+                it.addView(View.LOCAL)
+                    .add("analytic", View.MINIMAL)
+                    .add("revenueType", View.MINIMAL)
+            }.build()
+        dataManager.reload(copyFromPriceList, view ).let { prevPrice ->
+            prevPrice.details?.map {
+                dataContext.create(PriceListDetail::class.java).apply {
+                    this.priceList = editedEntity
+                    this.analytic = it.analytic
+                    this.revenueType = it.revenueType
+                    this.value = it.value
+                }
+            }?.forEach { detailsDc.mutableItems.add(it) }
+
+            initDynamic()
+        }
+    }
+
+    private fun validate() : Boolean {
+        screenValidation.validateUiComponents(headerForm).also {
+            return if (!it.isEmpty) {
+                screenValidation.showValidationErrors(this, it)
+                false
+            } else true
         }
     }
 

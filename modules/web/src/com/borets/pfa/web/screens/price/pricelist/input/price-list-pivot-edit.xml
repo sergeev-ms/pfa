@@ -25,7 +25,7 @@
     <dialogMode height="600" width="800"/>
     <layout expand="editActions" spacing="true">
         <groupBox id="generalTab" caption="msg://generalTab.caption">
-            <form id="form" dataContainer="priceListDc" width="100%" childrenCaptionWidth="100px">
+            <form id="headerForm" dataContainer="priceListDc" width="100%" childrenCaptionWidth="100px">
                 <column width="100%">
                     <pickerField id="accountField" property="account" required="true">
                         <actions>
@@ -42,6 +42,7 @@
                 </column>
                 <column width="100%">
                     <datePicker id="yearMonthField" caption="msg://yearMonthField.caption" resolution="MONTH" stylename="custom-height"/>
+                    <linkButton id="fillFromPrevBtn" caption="msg://fillFromPrevBtn.caption" icon="COPY"/>
                 </column>
             </form>
         </groupBox>
