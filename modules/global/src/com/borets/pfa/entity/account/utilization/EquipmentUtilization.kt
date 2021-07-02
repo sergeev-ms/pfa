@@ -36,6 +36,7 @@ open class EquipmentUtilization : StandardEntity() {
     @MetaProperty(related = ["month", "year"], datatype = "yearMonth")
     var yearMonth: String? = null
 
+    @OrderBy("order")
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "equipmentUtilization")
