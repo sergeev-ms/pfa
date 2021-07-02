@@ -2,8 +2,8 @@ package com.borets.pfa.entity
 
 import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity
-import javax.persistence.Column
-import javax.persistence.Table
+import com.haulmont.cuba.security.entity.User
+import javax.persistence.*
 
 @NamePattern(value = "%s|name")
 @Table(name = "PFA_EMPLOYEE")
@@ -17,6 +17,10 @@ open class Employee : StandardEntity() {
 
     @Column(name = "NAME")
     var name: String? = null
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    var user: User? = null
 
     companion object {
         private const val serialVersionUID = -7416490462670014346L

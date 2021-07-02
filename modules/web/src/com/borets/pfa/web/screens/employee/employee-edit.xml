@@ -4,7 +4,9 @@
         messagesPack="com.borets.pfa.web.screens.employee">
     <data>
         <instance id="employeeDc" class="com.borets.pfa.entity.Employee">
-            <view extends="_local"/>
+            <view extends="_local">
+                <property name="user" view="_minimal"/>
+            </view>
             <loader/>
         </instance>
     </data>
@@ -15,6 +17,7 @@
                 <textField id="lastNameField" property="lastName" required="true"/>
                 <textField id="firstNameField" property="firstName" required="true"/>
                 <textField id="nameField" property="name" editable="false"/>
+                <pickerField id="userField" property="user"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

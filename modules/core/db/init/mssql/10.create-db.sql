@@ -357,6 +357,7 @@ create table PFA_EMPLOYEE (
     FIRST_NAME nvarchar(255),
     LAST_NAME nvarchar(255),
     NAME nvarchar(255),
+    USER_ID uniqueidentifier,
     --
     primary key nonclustered (ID)
 )^
