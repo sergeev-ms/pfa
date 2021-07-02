@@ -5,6 +5,11 @@
     <data>
         <instance id="applicationDataDc" class="com.borets.pfa.entity.account.appdata.ApplicationData">
             <view extends="_local">
+                <property name="account" view="_minimal">
+                    <property name="actualMarketDetail">
+                        <property name="runsNumber"/>
+                    </property>
+                </property>
                 <property name="yearMonth"/>
                 <property name="systemAllocations" view="_local">
                     <property name="system" view="_local">
