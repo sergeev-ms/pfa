@@ -40,7 +40,7 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
     private lateinit var measurementService: MeasurementService
 
     @Inject
-    private lateinit var detailsDc: CollectionPropertyContainer<SystemDetail>
+    private lateinit var detailsDc: CollectionContainer<SystemDetail>
     @Inject
     private lateinit var equipmentTypesDc: CollectionContainer<EquipmentType>
 
