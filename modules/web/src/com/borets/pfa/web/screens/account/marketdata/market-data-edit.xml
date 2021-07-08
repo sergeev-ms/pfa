@@ -18,8 +18,8 @@
                     <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption"
                                 stylename="custom-height"/>
                     <lookupField id="fieldTypeField" property="fieldType" required="true"/>
-                    <textField id="trlField" property="trl" required="true"/>
-                    <textField id="arlField" property="arl" required="true"/>
+                    <textField id="trlField" property="trl"/>
+                    <textField id="arlField" property="arl"/>
                     <textField id="wellCheckRateField" property="wellCheckRate" required="true"/>
                     <currencyField id="espLtTargetField" property="espLtTarget" required="true" currency="$"/>
                     <currencyField id="marketShareTargetField" property="marketShareTarget" required="true" currency="$"/>
