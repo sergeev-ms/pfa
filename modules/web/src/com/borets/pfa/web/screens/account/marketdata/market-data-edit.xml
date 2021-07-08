@@ -21,6 +21,8 @@
                     <textField id="trlField" property="trl" required="true"/>
                     <textField id="arlField" property="arl" required="true"/>
                     <textField id="wellCheckRateField" property="wellCheckRate" required="true"/>
+                    <currencyField id="espLtTargetField" property="espLtTarget" required="true" currency="$"/>
+                    <currencyField id="marketShareTargetField" property="marketShareTarget" required="true" currency="$"/>
                 </column>
                 <column width="100%">
                     <lookupField id="recordTypeField" property="recordType" required="true"/>

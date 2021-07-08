@@ -144,17 +144,17 @@ create table PFA_MARKET_DATA (
     ID uniqueidentifier,
     VERSION integer not null,
     CREATE_TS datetime2,
-    CREATED_BY nvarchar(50),
+    CREATED_BY varchar(50),
     UPDATE_TS datetime2,
-    UPDATED_BY nvarchar(50),
+    UPDATED_BY varchar(50),
     DELETE_TS datetime2,
-    DELETED_BY nvarchar(50),
+    DELETED_BY varchar(50),
     --
     YEAR_ integer,
     MONTH_ integer,
-    RECORD_TYPE nvarchar(50),
-    FIELD_TYPE nvarchar(50),
-    RUNS_NUMBER nvarchar(50),
+    RECORD_TYPE varchar(50),
+    FIELD_TYPE varchar(50),
+    RUNS_NUMBER varchar(50),
     F_RUN_DURATION integer,
     S_RUN_DURATION integer,
     TH_RUN_DURATION integer,
@@ -177,6 +177,8 @@ create table PFA_MARKET_DATA (
     ACCOUNT_ID uniqueidentifier not null,
     NEW_WELL_YEAR integer,
     WELL_CHECK_RATE decimal(19, 2),
+    ESP_LT_TARGET integer,
+    MARKET_SHARE_TARGET integer,
     --
     primary key nonclustered (ID)
 )^
