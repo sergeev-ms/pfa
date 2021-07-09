@@ -87,6 +87,7 @@ open class MarketData : StandardEntity() {
 
     @Column(name = "IS_WELL_MONITOR")
     var isWellMonitor: Boolean? = false
+        private set
 
     @Column(name = "WELL_MONITOR_QTY")
     var wellMonitorQty: Int? = null
@@ -107,6 +108,12 @@ open class MarketData : StandardEntity() {
     @NumberFormat(pattern = "#%")
     @Column(name = "WELL_CHECK_RATE")
     var wellCheckRate: BigDecimal? = null
+
+    @Column(name = "ESP_LT_TARGET")
+    var espLtTarget: Int? = null
+
+    @Column(name = "MARKET_SHARE_TARGET")
+    var marketShareTarget: Int? = null
 
     fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
 

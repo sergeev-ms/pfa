@@ -111,6 +111,8 @@
                             <textField property="trl" editable="false"/>
                             <textField property="arl" editable="false"/>
                             <textField property="wellCheckRate" editable="false"/>
+                            <currencyField id="espLtTargetField" property="espLtTarget" editable="false" currency="$"/>
+                            <currencyField id="marketShareTargetField" property="marketShareTarget" editable="false" currency="$"/>
                         </column>
                         <column width="100%">
                             <textField property="runsNumber" editable="false"/>
