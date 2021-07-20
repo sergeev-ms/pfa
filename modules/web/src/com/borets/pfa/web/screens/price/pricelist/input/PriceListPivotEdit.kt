@@ -202,10 +202,7 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
 
         screenBuilders.lookup(PriceList::class.java, this)
             .withOpenMode(OpenMode.DIALOG)
-            .withOptions(MapScreenOptions(mapOf(
-                Pair("account", editedEntity.account),
-                Pair("year", editedEntity.year)))
-            )
+            .withOptions(MapScreenOptions(mapOf(Pair("account", editedEntity.account))))
             .withSelectHandler { fillPrevData(it.first()) }
             .show()
     }
