@@ -230,6 +230,7 @@ create table PFA_SYSTEM_STD (
     UPDATED_BY nvarchar(50),
     DELETE_TS datetime2,
     DELETED_BY nvarchar(50),
+    DTYPE nvarchar(31),
     --
     SYSTEM_ID nvarchar(255),
     CASING_SIZE nvarchar(50),
