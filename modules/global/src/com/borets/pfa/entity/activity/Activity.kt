@@ -40,6 +40,10 @@ open class Activity : StandardEntity() {
     @Column(name = "PERIOD_TO")
     var periodTo: LocalDate? = null
 
+    @Lob
+    @Column(name = "COMMENT_")
+    var comment: String? = null
+
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "activity")

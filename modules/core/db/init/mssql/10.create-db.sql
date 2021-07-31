@@ -34,6 +34,7 @@ create table PFA_ACTIVITY (
     MONTH_ integer,
     PERIOD_FROM datetime2,
     PERIOD_TO datetime2,
+    COMMENT_ nvarchar(max),
     --
     primary key nonclustered (ID)
 )^

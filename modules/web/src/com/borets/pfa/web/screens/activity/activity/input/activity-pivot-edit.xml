@@ -21,7 +21,7 @@
     <dialogMode height="600" width="800"/>
     <layout expand="editActions" spacing="true">
         <groupBox id="generalGb" caption="msg://generalGb.caption">
-            <form id="headerForm" dataContainer="activityDc" width="100%" childrenCaptionWidth="100px">
+            <form id="headerForm" dataContainer="activityDc" width="100%">
                 <column width="100%">
                     <pickerField id="accountField" property="account" required="true">
                         <actions>
@@ -37,6 +37,7 @@
                 </column>
                 <column width="100%">
                     <lookupField id="recordTypeField" property="recordType" required="true"/>
+                    <textArea id="commentField" property="comment" rows="2" colspan="2"/>
                 </column>
                 <column width="100%">
                     <linkButton id="fillFromPrevBtn" caption="msg://fillFromPrevBtn.caption" height="34px" icon="COPY"/>
