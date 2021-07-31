@@ -80,11 +80,6 @@
                 <groupBox id="accountDataGb" caption="msg://accountDataGb.caption" spacing="true">
                     <form id="form" dataContainer="accountDc" childrenCaptionWidth="170px" width="100%">
                         <column width="100%">
-                            <textField id="nameField" property="name"/>
-                            <lookupField property="contractType"/>
-                            <pickerField property="customer"/>
-                        </column>
-                        <column width="100%">
                             <pickerField id="parentField" property="parent">
                                 <actions>
                                     <action id="open" type="picker_open"/>
@@ -92,6 +87,11 @@
                                     <action id="lookup" type="picker_lookup"/>
                                 </actions>
                             </pickerField>
+                            <textField id="nameField" property="name"/>
+                            <pickerField property="customer"/>
+                        </column>
+                        <column width="100%">
+                            <lookupField property="contractType"/>
                             <lookupField property="applicationType"/>
                         </column>
                         <column width="100%">
