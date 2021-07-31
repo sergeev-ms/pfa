@@ -9,12 +9,12 @@ import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.web.screens.account.appdata.applicationdata.ApplicationDataFragment
+import com.borets.pfa.web.screens.account.marketdata.marketdata.MarketDataFragment
 import com.borets.pfa.web.screens.account.utilization.equipmentutilization.EquipmentUtilizationFragment
 import com.borets.pfa.web.screens.activity.activity.input.ActivityPivotEdit
 import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
 import com.haulmont.cuba.core.global.DatatypeFormatter
 import com.haulmont.cuba.core.global.EntityStates
-import com.haulmont.cuba.core.global.Metadata
 import com.haulmont.cuba.core.global.MetadataTools
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.*
@@ -45,7 +45,7 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var actualRevisionDc: InstancePropertyContainer<AccountRevision>
     @Inject
-    private lateinit var actualMarketDataDc: InstancePropertyContainer<MarketData>
+    private lateinit var marketDataDc: InstancePropertyContainer<MarketData>
     @Inject
     private lateinit var applicationDataDc: InstancePropertyContainer<ApplicationData>
     @Inject
@@ -64,6 +64,8 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var equipmentUtilizationFragment: EquipmentUtilizationFragment
     @Inject
+    private lateinit var marketDataFragment: MarketDataFragment
+    @Inject
     private lateinit var marketDataGb: GroupBoxLayout
     @Inject
     private lateinit var accountDataGb: GroupBoxLayout
@@ -73,12 +75,11 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var equipmentUtilizationGb: GroupBoxLayout
     @Inject
     private lateinit var priceListsTable: Table<PriceList>
+
     @Inject
     private lateinit var activityPlansTable: Table<Activity>
-
     @Inject
     private lateinit var createActivityPlanBtn: LinkButton
-
     @Inject
     private lateinit var createPriceListBtn: LinkButton
 
@@ -86,6 +87,7 @@ class AccountEdit : StandardEditor<Account>() {
     private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
         applicationDataFragment.setEditable(false)
         equipmentUtilizationFragment.setEditable(false)
+        marketDataFragment.setEditable(false)
 
         //workaround to avoid colored background
         createActivityPlanBtn.removeStyleName("c-primary-action")
@@ -148,7 +150,7 @@ class AccountEdit : StandardEditor<Account>() {
                 it.addAfterCloseListener { event ->
                     if (event.closeAction == WINDOW_COMMIT_AND_CLOSE_ACTION) {
                         @Suppress("UNCHECKED_CAST")
-                        actualMarketDataDc.setItem((event.screen as StandardEditor<MarketData>).editedEntity)
+                        marketDataDc.setItem((event.screen as StandardEditor<MarketData>).editedEntity)
                     }
                 }
             }.show()
@@ -170,7 +172,7 @@ class AccountEdit : StandardEditor<Account>() {
         }
     }
 
-    @Subscribe(id = "actualMarketDataDc", target = Target.DATA_CONTAINER)
+    @Subscribe(id = "marketDataDc", target = Target.DATA_CONTAINER)
     private fun onActualMarketDataDcItemChange(event: InstanceContainer.ItemChangeEvent<MarketData>) {
         event.item?.let {
             marketDataGb.caption = marketDataGb.caption?.format(

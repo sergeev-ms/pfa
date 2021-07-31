@@ -43,7 +43,7 @@
             </view>
             <loader id="accountDl"/>
             <instance id="actualRevisionDc" property="actualRevision"/>
-            <instance id="actualMarketDataDc" property="actualMarketDetail"/>
+            <instance id="marketDataDc" property="actualMarketDetail"/>
             <instance id="applicationDataDc" property="actualAppDetail"/>
         </instance>
         <collection id="priceListsDc" class="com.borets.pfa.entity.price.PriceList">
@@ -104,42 +104,8 @@
                         <linkButton id="showRevisionsBtn" caption="msg://showRevisionsBtn.caption" icon="HISTORY"/>
                     </hbox>
                 </groupBox>
-                <groupBox id="marketDataGb" caption="msg://marketDataGb.caption" spacing="true">
-                    <form id="actualMarketForm" dataContainer="actualMarketDataDc" childrenCaptionWidth="170px" width="100%">
-                        <column width="100%">
-                            <textField property="fieldType" editable="false"/>
-                            <textField property="trl" editable="false"/>
-                            <textField property="arl" editable="false"/>
-                            <textField property="wellCheckRate" editable="false"/>
-                            <currencyField id="espLtTargetField" property="espLtTarget" editable="false" currency="$"/>
-                            <currencyField id="marketShareTargetField" property="marketShareTarget" editable="false" currency="$"/>
-                        </column>
-                        <column width="100%">
-                            <textField property="runsNumber" editable="false"/>
-                            <textField property="firstRunDuration" editable="false"/>
-                            <textField property="secondRunDuration" editable="false"/>
-                            <textField property="thirdRunDuration" editable="false"/>
-                            <textField property="thirdPlusRunDuration" editable="false"/>
-                        </column>
-                        <column width="100%">
-                            <textField id="wellCountField" property="wellCount" editable="false"/>
-                            <textField id="newWellYearField" property="newWellYear" editable="false"/>
-                            <textField id="conversionRateField" property="conversionRate" editable="false"/>
-                            <textField id="oilPermitsField" property="oilPermits" editable="false"/>
-                            <textField id="rigQtyField" property="rigQty" editable="false"/>
-                            <textField id="ducQtyField" property="ducQty" editable="false"/>
-                        </column>
-                        <column width="100%">
-                            <textField id="completionField" property="completion" editable="false"/>
-                            <textField id="activityRateField" property="activityRate" editable="false"/>
-                            <currencyField id="budgetField" property="budget" editable="false" currency="$"/>
-                            <textField id="bShareField" property="bShare" editable="false"/>
-                            <checkBox id="isWellMonitorField" property="isWellMonitor" editable="false"/>
-                            <textField id="wellMonitorQtyField" property="wellMonitorQty" editable="false"/>
-                            <textField id="bWellCountField" property="bWellCount" editable="false"/>
-                            <currencyField id="rentalCapexField" property="rentalCapex" editable="false" currency="$"/>
-                        </column>
-                    </form>
+                <groupBox id="marketDataGb" caption="msg://marketDataGb.caption" spacing="true" expand="marketDataFragment">
+                    <fragment id="marketDataFragment" screen="pfa_MarketDataFragment"/>
                     <hbox spacing="true" align="MIDDLE_RIGHT">
                         <linkButton id="createMarketDataBtn" caption="msg://createMarketDataBtn.caption" icon="CREATE_ACTION"/>
                         <linkButton id="showMarketDetailsBtn" caption="msg://showMarketDetailsBtn.caption" icon="HISTORY"/>
