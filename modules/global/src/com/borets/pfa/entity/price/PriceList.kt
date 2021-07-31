@@ -40,6 +40,10 @@ open class PriceList : StandardEntity() {
     @MetaProperty(related = ["month", "year"], datatype = "yearMonth")
     private var yearMonth: String? = null
 
+    @Lob
+    @Column(name = "COMMENT_")
+    var comment: String? = null
+
     fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
 
     fun setRecordType(recordType: RecordType?) {

@@ -74,6 +74,7 @@ create table PFA_PRICE_LIST (
     RECORD_TYPE nvarchar(50),
     YEAR_ integer,
     MONTH_ integer,
+    COMMENT_ nvarchar(max),
     --
     primary key nonclustered (ID)
 )^

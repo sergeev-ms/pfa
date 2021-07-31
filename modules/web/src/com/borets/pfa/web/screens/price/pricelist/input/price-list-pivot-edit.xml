@@ -33,6 +33,7 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
+                    <textArea id="commentField" property="comment" rows="2" colspan="3"/>
                 </column>
                 <column width="100%">
                     <textField property="account.contractType"/>
