@@ -115,6 +115,12 @@ open class MarketData : StandardEntity() {
     @Column(name = "MARKET_SHARE_TARGET")
     var marketShareTarget: Int? = null
 
+    @Column(name = "BORETS_RUN_LIFE")
+    var boretsRunLife: Int? = null
+
+    @Column(name = "DELAY_FACTOR")
+    var delayFactor: Int? = null
+
     fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
 
     fun setRecordType(recordType: RecordType?) {
