@@ -40,6 +40,8 @@
                 <column id="fieldType"/>
                 <column id="trl"/>
                 <column id="arl"/>
+                <column id="boretsRunLife" />
+                <column id="delayFactor" />
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">

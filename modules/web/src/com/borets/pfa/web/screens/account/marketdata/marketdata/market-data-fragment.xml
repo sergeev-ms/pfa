@@ -17,9 +17,11 @@
                     <textField id="wellCheckRateField" property="wellCheckRate" required="false"/>
                     <currencyField id="espLtTargetField" property="espLtTarget" required="false" currency="$"/>
                     <currencyField id="marketShareTargetField" property="marketShareTarget" required="false" currency="$"/>
+                    <currencyField id="rentalCapexField" property="rentalCapex" required="false" currency="$"/>
                 </column>
                 <column width="100%">
                     <lookupField id="recordTypeField" property="recordType" required="false"/>
+                    <textField id="boretsRunLifeField" property="boretsRunLife" required="false"/>
                     <lookupField id="runsNumberField" property="runsNumber" required="false"/>
                     <textField id="firstRunDurationField" property="firstRunDuration" required="false"/>
                     <textField id="secondRunDurationField" property="secondRunDuration" required="false"/>
@@ -33,6 +35,7 @@
                     <textField id="oilPermitsField" property="oilPermits" required="false"/>
                     <textField id="rigQtyField" property="rigQty" required="false"/>
                     <textField id="ducQtyField" property="ducQty" required="false"/>
+                    <textField id="delayFactorField" property="delayFactor" required="false"/>
                 </column>
                 <column width="100%">
                     <textField id="completionField" property="completion" required="false"/>
@@ -42,7 +45,6 @@
                     <checkBox id="isWellMonitorField" property="isWellMonitor"/>
                     <textField id="wellMonitorQtyField" property="wellMonitorQty" required="false"/>
                     <textField id="bWellCountField" property="bWellCount" required="false"/>
-                    <currencyField id="rentalCapexField" property="rentalCapex" required="false" currency="$"/>
                 </column>
             </form>
         </scrollBox>
