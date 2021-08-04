@@ -44,6 +44,11 @@
                     <checkBox id="isWellMonitorField" property="isWellMonitor"/>
                     <textField id="wellMonitorQtyField" property="wellMonitorQty" required="false"/>
                     <textField id="bWellCountField" property="bWellCount" required="false"/>
+                    <textField id="runbackInYearField" property="runbackInYear" editable="false"/>
+                    <textField id="pullsInYearField" property="pullsInYear" editable="false" />
+                    <textField id="totalRunbackInYearField" property="totalRunbackInYear" editable="false" />
+                    <textField id="totalInstallInYearField" property="totalInstallInYear" editable="false" />
+
                 </column>
             </form>
         </scrollBox>

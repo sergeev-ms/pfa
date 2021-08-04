@@ -117,6 +117,18 @@ open class MarketData : StandardEntity() {
     @Column(name = "DELAY_FACTOR")
     var delayFactor: Int? = null
 
+    @MetaProperty
+    fun getRunbackInYear(): Int? = null  // TODO
+
+    @MetaProperty
+    fun getPullsInYear(): Int? = null // TODO
+
+    @MetaProperty
+    fun getTotalRunbackInYear(): Int? = null // TODO
+
+    @MetaProperty
+    fun getTotalInstallInYear(): Int? = null // TODO
+
     fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
 
     fun setRecordType(recordType: RecordType?) {
