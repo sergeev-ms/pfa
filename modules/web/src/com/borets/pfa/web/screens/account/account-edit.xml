@@ -93,6 +93,7 @@
                         <column width="100%">
                             <lookupField property="contractType"/>
                             <lookupField property="applicationType"/>
+                            <lookupField property="fieldType" required="false"/>
                         </column>
                         <column width="100%">
                             <textField id="typeField" property="type" editable="false" dataContainer="actualRevisionDc"/>

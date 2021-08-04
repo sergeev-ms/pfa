@@ -11,7 +11,6 @@
             </form>
             <form id="form" dataContainer="marketDataDc" width="100%">
                 <column width="100%">
-                    <lookupField id="fieldTypeField" property="fieldType" required="false"/>
                     <textField id="trlField" property="trl"/>
                     <textField id="arlField" property="arl"/>
                     <textField id="wellCheckRateField" property="wellCheckRate" required="false"/>

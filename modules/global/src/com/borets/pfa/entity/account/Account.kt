@@ -78,6 +78,9 @@ open class Account : StandardEntity() {
     @JoinColumn(name = "ACTUAL_EQUIPMENT_UTILIZATION_ID")
     var actualEquipmentUtilization: EquipmentUtilization? = null
 
+    @Column(name = "FIELD_TYPE")
+    private var fieldType: String? = null
+
     fun getType(): Type? = actualRevision?.getType()
 
     fun getYearMonth(): YearMonth? {
@@ -94,6 +97,12 @@ open class Account : StandardEntity() {
 
     fun setContractType(contractType: ContractType?) {
         this.contractType = contractType?.id
+    }
+
+    fun getFieldType(): FieldType? = fieldType?.let { FieldType.fromId(it) }
+
+    fun setFieldType(fieldType: FieldType?) {
+        this.fieldType = fieldType?.id
     }
 
     companion object {
