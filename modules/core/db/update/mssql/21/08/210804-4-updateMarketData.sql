@@ -1,0 +1,1 @@
+exec sp_rename 'PFA_MARKET_DATA.FIELD_TYPE', 'FIELD_TYPE__U35070', 'COLUMN' ^

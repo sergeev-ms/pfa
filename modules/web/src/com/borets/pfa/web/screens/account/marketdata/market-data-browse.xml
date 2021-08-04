@@ -37,7 +37,6 @@
             </actions>
             <columns>
                 <column id="yearMonth"/>
-                <column id="fieldType"/>
                 <column id="trl"/>
                 <column id="arl"/>
             </columns>

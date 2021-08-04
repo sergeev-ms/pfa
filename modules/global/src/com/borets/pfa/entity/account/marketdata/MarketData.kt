@@ -26,12 +26,8 @@ open class MarketData : StandardEntity() {
     @MetaProperty(related = ["month", "year"], datatype = "yearMonth")
     private var yearMonth: String? = null
 
-
     @Column(name = "RECORD_TYPE")
     private var recordType: String? = null
-
-    @Column(name = "FIELD_TYPE")
-    private var fieldType: String? = null
 
     @Column(name = "RUNS_NUMBER")
     private var runsNumber: String? = RunsNumber.ONE.id
@@ -125,12 +121,6 @@ open class MarketData : StandardEntity() {
 
     fun setRunsNumber(runsNumber: RunsNumber?) {
         this.runsNumber = runsNumber?.id
-    }
-
-    fun getFieldType(): FieldType? = fieldType?.let { FieldType.fromId(it) }
-
-    fun setFieldType(fieldType: FieldType?) {
-        this.fieldType = fieldType?.id
     }
 
     fun getYearMonth(): YearMonth? {

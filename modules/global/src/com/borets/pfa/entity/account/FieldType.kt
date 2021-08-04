@@ -1,4 +1,4 @@
-package com.borets.pfa.entity.account.marketdata
+package com.borets.pfa.entity.account
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass
 
@@ -11,6 +11,6 @@ enum class FieldType(private val id: String) : EnumClass<String> {
     companion object {
 
         @JvmStatic
-        fun fromId(id: String): FieldType? = FieldType.values().find { it.id == id }
+        fun fromId(id: String): FieldType? = values().find { it.id == id }
     }
 }
