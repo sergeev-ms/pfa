@@ -3,8 +3,7 @@
     <data>
         <instance id="marketDataDc" class="com.borets.pfa.entity.account.marketdata.MarketData" provided="true"/>
     </data>
-<!--    <layout expand="scrollBox" spacing="false" margin="false">-->
-    <layout spacing="false" margin="false">
+    <layout expand="scrollBox" spacing="true">
         <scrollBox id="scrollBox" spacing="true">
             <form id="headerForm" dataContainer="marketDataDc">
                 <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption"
@@ -38,7 +37,7 @@
                             <textField id="runbackInYearField" property="runbackInYear" editable="false"/>
                             <textField id="totalInstallInYearField" property="totalInstallInYear" editable="false"/>
                             <textField id="pullsInYearField" property="pullsInYear" editable="false"/>
-                            <textField id="totalRunbackInYearField" property="totalRunbackInYear" editable="false"/>
+                            <textField id="totalPullsInYearField" property="totalPullsInYear" editable="false"/>
                             <currencyField id="budgetField" property="budget" required="false" currency="$"/>
                         </column>
                     </form>
