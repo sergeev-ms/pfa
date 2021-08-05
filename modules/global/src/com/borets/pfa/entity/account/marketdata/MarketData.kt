@@ -124,7 +124,7 @@ open class MarketData : StandardEntity() {
     fun getPullsInYear(): Int? = null // TODO
 
     @MetaProperty
-    fun getTotalRunbackInYear(): Int? = null // TODO
+    fun getTotalPullsInYear(): Int? = null // TODO
 
     @MetaProperty
     fun getTotalInstallInYear(): Int? = null // TODO
