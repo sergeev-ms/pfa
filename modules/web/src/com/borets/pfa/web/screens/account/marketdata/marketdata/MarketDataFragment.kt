@@ -14,7 +14,13 @@ import javax.inject.Inject
 @UiDescriptor("market-data-fragment.xml")
 class MarketDataFragment : ScreenFragment() {
     @Inject
-    private lateinit var form: Form
+    private lateinit var activityInputForm: Form
+    @Inject
+    private lateinit var customerDataForm: Form
+    @Inject
+    private lateinit var boretsDataForm: Form
+    @Inject
+    private lateinit var additionalDataForm: Form
     @Inject
     private lateinit var headerForm: Form
     @Inject
@@ -33,7 +39,10 @@ class MarketDataFragment : ScreenFragment() {
     }
 
     fun setEditable(editable : Boolean) {
-        form.isEditable = editable
+        activityInputForm.isEditable = editable
+        customerDataForm.isEditable = editable
+        boretsDataForm.isEditable = editable
+        additionalDataForm.isEditable = editable
         headerForm.isVisible = editable
     }
 }
