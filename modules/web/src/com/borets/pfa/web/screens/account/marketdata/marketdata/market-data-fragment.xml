@@ -11,8 +11,8 @@
             </form>
             <hbox spacing="true" width="100%">
                 <groupBox caption="msg://marketDataFragmentHeaders.activityInputData"
-                          icon="DATABASE" showAsPanel="true" stylename="borderless">
-                    <form id="activityInputForm" dataContainer="marketDataDc" width="100%">
+                          icon="DATABASE" showAsPanel="true">
+                    <form id="activityInputForm" dataContainer="marketDataDc" width="100%" height="100%">
                         <column width="100%">
                             <textField id="trlField" property="trl"/>
                             <textField id="arlField" property="arl"/>
@@ -29,43 +29,41 @@
                 </groupBox>
 
                 <groupBox caption="msg://marketDataFragmentHeaders.customerData"
-                          icon="BUILDING" showAsPanel="true" stylename="borderless">
-                    <form id="customerDataForm" dataContainer="marketDataDc" width="100%">
+                          icon="BUILDING" showAsPanel="true" >
+                    <form id="customerDataForm" dataContainer="marketDataDc" width="100%" height="100%">
                         <column width="100%">
                             <textField id="wellCountField" property="wellCount" required="false"/>
                             <textField id="newWellYearField" property="newWellYear" required="false"/>
-                            <textField id="runbackInYearField" property="runbackInYear" editable="false"/>
-                            <textField id="totalInstallInYearField" property="totalInstallInYear" editable="false"/>
-                            <textField id="pullsInYearField" property="pullsInYear" editable="false"/>
-                            <textField id="totalPullsInYearField" property="totalPullsInYear" editable="false"/>
+                            <textField id="customerRunbackInYearField" property="customerRunbackInYear" editable="false"/>
+                            <textField id="customerInstallInYear" property="customerInstallInYear" editable="false"/>
+                            <textField id="customerPullsInYearField" property="customerPullsInYear" editable="false"/>
+                            <textField id="customerWellsClosingInYear" property="customerWellsClosingInYear" editable="false"/>
                             <currencyField id="budgetField" property="budget" required="false" currency="$"/>
                         </column>
                     </form>
                 </groupBox>
 
                 <groupBox caption="msg://marketDataFragmentHeaders.boretsData"
-                          icon="INDUSTRY" showAsPanel="true" stylename="borderless">
-                    <form id="boretsDataForm" dataContainer="marketDataDc" width="100%">
+                          icon="INDUSTRY" showAsPanel="true">
+                    <form id="boretsDataForm" dataContainer="marketDataDc" width="100%" height="100%">
                         <column width="100%">
                             <textField id="bWellCountField" property="bWellCount" required="false"/>
-                            <textField id="bShareField" property="bShare" required="false"/>
-                            <currencyField id="marketShareTargetField" property="marketShareTarget" required="false"/>
+                            <textField id="boretsNewWellsInYearField" property="boretsNewWellsInYear" required="false"/>
+                            <textField id="boretsRunbackInYearField" property="boretsRunbackInYear" required="false"/>
+                            <textField id="boretsInstallInYearField" property="boretsInstallInYear" required="false"/>
+                            <textField id="boretsPullsInYearField" property="boretsPullsInYear" required="false"/>
+                            <textField id="boretsWellsClosingField" property="boretsWellsClosingInYear" required="false"/>
+                            <currencyField id="boretsRevenueForecastField" property="boretsRevenueForecast" required="false" currency="$"/>
+                            <currencyField id="marketShareTargetField" property="marketShareTarget" required="false" currency="$"/>
                             <currencyField id="espLtTargetField" property="espLtTarget" required="false" currency="$"/>
-                            currency="$"/>
-                            <lookupField id="recordTypeField" property="recordType" required="false"/>
-                            <!--                            <textField id="oilPermitsField" property="oilPermits" required="false"/>-->
-                            <!--                            <textField id="rigQtyField" property="rigQty" required="false"/>-->
-                            <!--                            <textField id="ducQtyField" property="ducQty" required="false"/>-->
-                            <textField id="completionField" property="completion" required="false"/>
-                            <textField id="activityRateField" property="activityRate" required="false"/>
+                            <textField id="bShareField" property="bShare" required="false"/>
                         </column>
                     </form>
-
                 </groupBox>
 
                 <groupBox caption="msg://marketDataFragmentHeaders.additionalData"
-                          icon="PLUS_CIRCLE" showAsPanel="true" stylename="borderless">
-                    <form id="additionalDataForm" dataContainer="marketDataDc" width="100%">
+                          icon="PLUS_CIRCLE" showAsPanel="true">
+                    <form id="additionalDataForm" dataContainer="marketDataDc" width="100%" height="100%">
                         <column width="100%">
                             <textField id="wellCheckRateField" property="wellCheckRate" required="false"/>
                             <checkBox id="isWellMonitorField" property="isWellMonitor"/>
