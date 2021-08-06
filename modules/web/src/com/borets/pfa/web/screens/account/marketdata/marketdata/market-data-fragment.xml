@@ -9,48 +9,71 @@
                 <datePicker id="yearMonthField" resolution="MONTH" caption="msg://yearMonthField.caption"
                             stylename="custom-height"/>
             </form>
-            <form id="form" dataContainer="marketDataDc" width="100%">
-                <column width="100%">
-                    <textField id="trlField" property="trl"/>
-                    <textField id="arlField" property="arl"/>
-                    <textField id="wellCheckRateField" property="wellCheckRate" required="false"/>
-                    <currencyField id="espLtTargetField" property="espLtTarget" required="false" currency="$"/>
-                    <currencyField id="marketShareTargetField" property="marketShareTarget" required="false" currency="$"/>
-                    <currencyField id="rentalCapexField" property="rentalCapex" required="false" currency="$"/>
-                </column>
-                <column width="100%">
-                    <lookupField id="recordTypeField" property="recordType" required="false"/>
-                    <textField id="boretsRunLifeField" property="boretsRunLife" required="false"/>
-                    <lookupField id="runsNumberField" property="runsNumber" required="false"/>
-                    <textField id="firstRunDurationField" property="firstRunDuration" required="false"/>
-                    <textField id="secondRunDurationField" property="secondRunDuration" required="false"/>
-                    <textField id="thirdRunDurationField" property="thirdRunDuration" required="false"/>
-                    <textField id="thirdPlusRunDurationField" property="thirdPlusRunDuration" required="false"/>
-                </column>
-                <column width="100%">
-                    <textField id="wellCountField" property="wellCount" required="false"/>
-                    <textField id="newWellYearField" property="newWellYear" required="false"/>
-                    <textField id="conversionRateField" property="conversionRate" required="false"/>
-                    <textField id="oilPermitsField" property="oilPermits" required="false"/>
-                    <textField id="rigQtyField" property="rigQty" required="false"/>
-                    <textField id="ducQtyField" property="ducQty" required="false"/>
-                    <textField id="delayFactorField" property="delayFactor" required="false"/>
-                </column>
-                <column width="100%">
-                    <textField id="completionField" property="completion" required="false"/>
-                    <textField id="activityRateField" property="activityRate" required="false"/>
-                    <currencyField id="budgetField" property="budget" required="false" currency="$"/>
-                    <textField id="bShareField" property="bShare" required="false"/>
-                    <checkBox id="isWellMonitorField" property="isWellMonitor"/>
-                    <textField id="wellMonitorQtyField" property="wellMonitorQty" required="false"/>
-                    <textField id="bWellCountField" property="bWellCount" required="false"/>
-                    <textField id="runbackInYearField" property="runbackInYear" editable="false"/>
-                    <textField id="pullsInYearField" property="pullsInYear" editable="false" />
-                    <textField id="totalPullsInYearField" property="totalPullsInYear" editable="false" />
-                    <textField id="totalInstallInYearField" property="totalInstallInYear" editable="false" />
+            <hbox spacing="true" width="100%">
+                <groupBox caption="msg://marketDataFragmentHeaders.activityInputData"
+                          icon="DATABASE" showAsPanel="true">
+                    <form id="activityInputForm" dataContainer="marketDataDc" width="100%" height="100%">
+                        <column width="100%">
+                            <textField id="trlField" property="trl"/>
+                            <textField id="arlField" property="arl"/>
+                            <textField id="boretsRunLifeField" property="boretsRunLife" required="false"/>
+                            <textField id="conversionRateField" property="conversionRate" required="false"/>
+                            <textField id="delayFactorField" property="delayFactor" required="false"/>
+                            <lookupField id="runsNumberField" property="runsNumber" required="false"/>
+                            <textField id="firstRunDurationField" property="firstRunDuration" required="false"/>
+                            <textField id="secondRunDurationField" property="secondRunDuration" required="false"/>
+                            <textField id="thirdRunDurationField" property="thirdRunDuration" required="false"/>
+                            <textField id="thirdPlusRunDurationField" property="thirdPlusRunDuration" required="false"/>
+                        </column>
+                    </form>
+                </groupBox>
 
-                </column>
-            </form>
+                <groupBox caption="msg://marketDataFragmentHeaders.customerData"
+                          icon="BUILDING" showAsPanel="true" >
+                    <form id="customerDataForm" dataContainer="marketDataDc" width="100%" height="100%">
+                        <column width="100%">
+                            <textField id="wellCountField" property="wellCount" required="false"/>
+                            <textField id="newWellYearField" property="newWellYear" required="false"/>
+                            <textField id="customerRunbackInYearField" property="customerRunbackInYear" editable="false"/>
+                            <textField id="customerInstallInYear" property="customerInstallInYear" editable="false"/>
+                            <textField id="customerPullsInYearField" property="customerPullsInYear" editable="false"/>
+                            <textField id="customerWellsClosingInYear" property="customerWellsClosingInYear" editable="false"/>
+                            <currencyField id="budgetField" property="budget" required="false" currency="$"/>
+                        </column>
+                    </form>
+                </groupBox>
+
+                <groupBox caption="msg://marketDataFragmentHeaders.boretsData"
+                          icon="INDUSTRY" showAsPanel="true">
+                    <form id="boretsDataForm" dataContainer="marketDataDc" width="100%" height="100%">
+                        <column width="100%">
+                            <textField id="bWellCountField" property="bWellCount" required="false"/>
+                            <textField id="boretsNewWellsInYearField" property="boretsNewWellsInYear" required="false"/>
+                            <textField id="boretsRunbackInYearField" property="boretsRunbackInYear" required="false"/>
+                            <textField id="boretsInstallInYearField" property="boretsInstallInYear" required="false"/>
+                            <textField id="boretsPullsInYearField" property="boretsPullsInYear" required="false"/>
+                            <textField id="boretsWellsClosingField" property="boretsWellsClosingInYear" required="false"/>
+                            <currencyField id="boretsRevenueForecastField" property="boretsRevenueForecast" required="false" currency="$"/>
+                            <currencyField id="marketShareTargetField" property="marketShareTarget" required="false" currency="$"/>
+                            <currencyField id="espLtTargetField" property="espLtTarget" required="false" currency="$"/>
+                            <textField id="bShareField" property="bShare" required="false"/>
+                        </column>
+                    </form>
+                </groupBox>
+
+                <groupBox caption="msg://marketDataFragmentHeaders.additionalData"
+                          icon="PLUS_CIRCLE" showAsPanel="true">
+                    <form id="additionalDataForm" dataContainer="marketDataDc" width="100%" height="100%">
+                        <column width="100%">
+                            <textField id="wellCheckRateField" property="wellCheckRate" required="false"/>
+                            <checkBox id="isWellMonitorField" property="isWellMonitor"/>
+                            <textField id="wellMonitorQtyField" property="wellMonitorQty" required="false"/>
+                            <currencyField id="rentalCapexField" property="rentalCapex" required="false" currency="$"/>
+                        </column>
+                    </form>
+                </groupBox>
+            </hbox>
+
         </scrollBox>
     </layout>
 </fragment>

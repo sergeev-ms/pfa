@@ -118,16 +118,34 @@ open class MarketData : StandardEntity() {
     var delayFactor: Int? = null
 
     @MetaProperty
-    fun getRunbackInYear(): Int? = null  // TODO
+    fun getCustomerRunbackInYear(): Int? = null  // TODO
 
     @MetaProperty
-    fun getPullsInYear(): Int? = null // TODO
+    fun getBoretsRunbackInYear(): Int? = null // TODO
 
     @MetaProperty
-    fun getTotalPullsInYear(): Int? = null // TODO
+    fun getCustomerInstallInYear(): Int? = null // TODO
 
     @MetaProperty
-    fun getTotalInstallInYear(): Int? = null // TODO
+    fun getBoretsInstallInYear() : Int? = null // TODO
+
+    @MetaProperty
+    fun getCustomerPullsInYear(): Int? = null // TODO
+
+    @MetaProperty
+    fun getBoretsPullsInYear() : Int? = null // TODO
+
+    @MetaProperty
+    fun getCustomerWellsClosingInYear(): Int? = null // TODO
+
+    @MetaProperty
+    fun getBoretsWellsClosingInYear() : Int? = null // TODO
+
+    @MetaProperty
+    fun getBoretsNewWellsInYear(): Int? = null // TODO
+
+    @MetaProperty
+    fun getBoretsRevenueForecast() : Int? = null // TODO
 
     fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
 
