@@ -12,6 +12,7 @@
                 <action id="create" type="create" caption="msg://systemsAllocationGrid.create.caption"/>
                 <action id="remove" type="remove"/>
                 <action id="view" type="view"/>
+                <action id="edit" type="edit"/>
             </actions>
             <columns>
                 <column property="system.casingSize" editable="false"/>
@@ -36,6 +37,7 @@
                 <button action="systemsAllocationGrid.create"/>
                 <button action="systemsAllocationGrid.remove"/>
                 <button action="systemsAllocationGrid.view"/>
+                <button action="systemsAllocationGrid.edit"/>
             </buttonsPanel>
         </dataGrid>
     </layout>

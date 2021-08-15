@@ -12,6 +12,7 @@ import com.haulmont.cuba.core.global.View
 import com.haulmont.cuba.core.global.ViewBuilder
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.actions.list.CreateAction
+import com.haulmont.cuba.gui.actions.list.EditAction
 import com.haulmont.cuba.gui.actions.list.RemoveAction
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
@@ -48,6 +49,9 @@ class ApplicationDataFragment : ScreenFragment() {
 
     @Inject
     private lateinit var dataManager: DataManager
+
+    @field:Named("systemsAllocationGrid.edit")
+    private lateinit var systemsAllocationGridEdit: EditAction<SystemAllocation>
 
 
     @Subscribe("systemsAllocationGrid.create")
@@ -89,6 +93,7 @@ class ApplicationDataFragment : ScreenFragment() {
     fun setEditable(editable : Boolean) {
         systemsAllocationGridCreate.isVisible = editable
         systemsAllocationGridRemove.isVisible = editable
+        systemsAllocationGridEdit.isVisible = editable
 
         systemsAllocationGrid.isEditorEnabled = editable
     }
@@ -188,5 +193,13 @@ class ApplicationDataFragment : ScreenFragment() {
         newSystem.details = newDetailList
 
         return newSystem
+    }
+
+    @Subscribe("systemsAllocationGrid.edit")
+    private fun onSystemsAllocationGridEdit(event: Action.ActionPerformedEvent) {
+        screenBuilders.editor(SystemStd::class.java, this)
+            .withScreenClass(SystemStdEdit::class.java)
+            .editEntity(systemsAllocationGrid.singleSelected!!.system!!)
+            .show()
     }
 }
