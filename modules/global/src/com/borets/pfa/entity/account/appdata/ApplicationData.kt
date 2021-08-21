@@ -25,7 +25,7 @@ open class ApplicationData : StandardEntity() {
     private var yearMonth: String? = null
 
     @Column(name = "RECORD_TYPE")
-    private var recordType: String? = null
+    private var recordType: String? = RecordType.FORECAST.id
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ACCOUNT_ID")

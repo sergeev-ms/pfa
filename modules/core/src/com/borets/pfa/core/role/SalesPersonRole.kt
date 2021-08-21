@@ -96,14 +96,14 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         ),
         EntityAttributeAccess(entityClass = MarketData::class, view = ["*"]),
         EntityAttributeAccess(entityClass = AccountRevision::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = ApplicationData::class, modify = ["*"]),
+        EntityAttributeAccess(entityClass = ApplicationData::class, modify = ["*"], view = ["recordType"]),
         EntityAttributeAccess(entityClass = SystemAllocation::class, modify = ["*"]),
         EntityAttributeAccess(entityClass = SystemDetail::class, modify = ["*"]),
         EntityAttributeAccess(entityClass = SystemStd::class, view = ["*"]),
         EntityAttributeAccess(entityClass = System::class, modify = ["*"]),
         EntityAttributeAccess(entityClass = PriceList::class, view = ["*"]),
         EntityAttributeAccess(entityClass = PriceListDetail::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = Activity::class, modify = ["*"]),
+        EntityAttributeAccess(entityClass = Activity::class, modify = ["*"], view = ["recordType"]),
         EntityAttributeAccess(entityClass = ActivityDetail::class, modify = ["*"]),
         EntityAttributeAccess(entityClass = KeyValueEntity::class, modify = ["*"]),
         EntityAttributeAccess(entityClass = DimCustomers::class, view = ["*"]),
@@ -112,7 +112,7 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = EquipmentType::class, view = ["*"]),
         EntityAttributeAccess(entityClass = EquipmentCategory::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Employee::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = EquipmentUtilization::class, modify = ["*"]),
+        EntityAttributeAccess(entityClass = EquipmentUtilization::class, modify = ["*"], view = ["recordType"]),
         EntityAttributeAccess(entityClass = EquipmentUtilizationDetail::class, modify = ["*"])
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {

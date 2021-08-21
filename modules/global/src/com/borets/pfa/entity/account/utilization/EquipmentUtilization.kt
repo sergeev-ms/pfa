@@ -20,7 +20,7 @@ open class EquipmentUtilization : StandardEntity() {
     var account: Account? = null
 
     @Column(name = "RECORD_TYPE")
-    private var recordType: String? = null
+    private var recordType: String? = RecordType.FORECAST.id
 
     @Column(name = "VALID_FROM")
     var validFrom: LocalDate? = null
