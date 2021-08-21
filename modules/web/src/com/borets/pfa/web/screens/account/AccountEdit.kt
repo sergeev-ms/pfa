@@ -55,7 +55,11 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var accountDl: InstanceLoader<Account>
     @Inject
+    private lateinit var priceListsDc: CollectionContainer<PriceList>
+    @Inject
     private lateinit var priceListsDl: CollectionLoader<PriceList>
+    @Inject
+    private lateinit var activityPlansDc: CollectionContainer<Activity>
     @Inject
     private lateinit var activityPlansDl: CollectionLoader<Activity>
 
@@ -78,20 +82,12 @@ class AccountEdit : StandardEditor<Account>() {
 
     @Inject
     private lateinit var activityPlansTable: Table<Activity>
-    @Inject
-    private lateinit var createActivityPlanBtn: LinkButton
-    @Inject
-    private lateinit var createPriceListBtn: LinkButton
 
     @Subscribe
     private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
         applicationDataFragment.setEditable(false)
         equipmentUtilizationFragment.setEditable(false)
         marketDataFragment.setEditable(false)
-
-        //workaround to avoid colored background
-        createActivityPlanBtn.removeStyleName("c-primary-action")
-        createPriceListBtn.removeStyleName("c-primary-action")
     }
 
     @Subscribe
@@ -276,18 +272,23 @@ class AccountEdit : StandardEditor<Account>() {
     @Subscribe("tabSheet")
     private fun onTabSheetSelectedTabChange(@Suppress("UNUSED_PARAMETER") event: TabSheet.SelectedTabChangeEvent) {
         when (event.selectedTab.name) {
-            "priceListsTab" -> {
-                priceListsDl.setParameter("container_accountDc", editedEntity)
-                priceListsDl.load()
-            }
+            "priceListsTab" ->
+                if (priceListsDc.items.isEmpty()) {
+                    priceListsDl.setParameter("container_accountDc", editedEntity)
+                    priceListsDl.load()
+                }
             "activityPlansTab" -> {
-                activityPlansDl.setParameter("container_accountDc", editedEntity)
-                activityPlansDl.load()
+                if (activityPlansDc.items.isEmpty()) {
+                    activityPlansDl.setParameter("container_accountDc", editedEntity)
+                    activityPlansDl.load()
+                }
             }
             "utilizationTab" -> {
-                editedEntity.actualEquipmentUtilization?.let {
-                    equipmentUtilizationDl.setParameter("equipmentUtilizationId", it.id)
-                    equipmentUtilizationDl.load()
+                if (equipmentUtilizationDc.itemOrNull == null) {
+                    editedEntity.actualEquipmentUtilization?.let {
+                        equipmentUtilizationDl.setParameter("equipmentUtilizationId", it.id)
+                        equipmentUtilizationDl.load()
+                    }
                 }
             }
         }
