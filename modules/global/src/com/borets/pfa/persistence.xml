@@ -31,5 +31,8 @@
         <class>com.borets.pfa.entity.account.system.classification.PumpMaterials</class>
         <class>com.borets.pfa.entity.account.system.classification.OtherMaterials</class>
         <class>com.borets.pfa.entity.account.system.System</class>
+        <class>com.borets.pfa.entity.account.supplementary.Supplementary</class>
+        <class>com.borets.pfa.entity.account.supplementary.SupplementaryDetail</class>
+        <class>com.borets.pfa.entity.account.supplementary.SupplementaryDetailType</class>
     </persistence-unit>
 </persistence>
