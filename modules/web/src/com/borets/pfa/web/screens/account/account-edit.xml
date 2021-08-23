@@ -172,14 +172,16 @@
                         <action id="view" trackSelection="true" caption="msg://activityPlansTable.view.caption"/>
                         <action id="create" type="create" icon="CREATE_ACTION"
                                 caption="msg://activityPlansTable.create.caption"/>
+
                     </actions>
                     <rowsCount/>
                 </table>
                 <linkButton id="createActivityPlanBtn" action="activityPlansTable.create" align="MIDDLE_RIGHT"/>
             </tab>
             <tab id="supplementaryTab" caption="msg://supplementaryTab.caption" spacing="true"
-                 margin="true,false,false,false" expand="supplementaryFragment">
+                 margin="true,false,false,false" expand="attachmentFragment">
                 <fragment id="supplementaryFragment" screen="pfa_SupplementaryFragment"/>
+                <fragment id="attachmentFragment" screen="attachments_AttachmentsFragment"/>
             </tab>
         </tabSheet>
         <hbox id="editActions" spacing="true">
