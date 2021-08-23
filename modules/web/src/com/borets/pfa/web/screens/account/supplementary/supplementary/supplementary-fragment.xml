@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<fragment xmlns="http://schemas.haulmont.com/cuba/screen/fragment.xsd">
+    <data>
+        <instance id="supplementaryDc" class="com.borets.pfa.entity.account.supplementary.Supplementary"
+                  provided="true">
+            <loader/>
+            <collection id="detailsDc" property="details"/>
+        </instance>
+    </data>
+    <layout spacing="true" expand="dummy">
+        <hbox spacing="true">
+            <datePicker id="periodFromField" resolution="MONTH" datatype="localDate"/>
+            <datePicker id="periodToField" resolution="MONTH" datatype="localDate"/>
+        </hbox>
+        <scrollBox orientation="horizontal">
+            <grid id="pivotGrid" spacing="true">
+                <columns>
+                    <column/>
+                </columns>
+                <rows>
+                    <row/>
+                </rows>
+            </grid>
+        </scrollBox>
+        <vbox id="dummy"/>
+    </layout>
+</fragment>
+

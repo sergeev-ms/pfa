@@ -72,6 +72,16 @@
                 </property>
             </view>
         </instance>
+        <instance id="supplementaryDc" class="com.borets.pfa.entity.account.supplementary.Supplementary">
+            <loader id="supplementaryDl">
+                <query>where e.account = :container_accountDc</query>
+            </loader>
+            <view extends="_minimal">
+                <property name="details" view="_local">
+                    <property name="type"/>
+                </property>
+            </view>
+        </instance>
     </data>
     <dialogMode height="600" width="800"/>
     <layout expand="tabSheet" spacing="true">
@@ -166,6 +176,10 @@
                     <rowsCount/>
                 </table>
                 <linkButton id="createActivityPlanBtn" action="activityPlansTable.create" align="MIDDLE_RIGHT"/>
+            </tab>
+            <tab id="supplementaryTab" caption="msg://supplementaryTab.caption" spacing="true"
+                 margin="true,false,false,false" expand="supplementaryFragment">
+                <fragment id="supplementaryFragment" screen="pfa_SupplementaryFragment"/>
             </tab>
         </tabSheet>
         <hbox id="editActions" spacing="true">
