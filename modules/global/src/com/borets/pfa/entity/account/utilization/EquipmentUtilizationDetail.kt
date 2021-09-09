@@ -22,6 +22,10 @@ open class EquipmentUtilizationDetail : StandardEntity() {
     @Column(name = "SEQUENT_RUN_VALUE")
     var sequentRunValue: BigDecimal? = BigDecimal.ZERO
 
+    @NumberFormat(pattern = "#%")
+    @Column(name = "SEQUENT_RUN_COMPETITOR_VALUE")
+    var sequentRunCompetitorValue: BigDecimal? = BigDecimal.ZERO
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "EQUIPMENT_UTILIZATION_ID")
     var equipmentUtilization: EquipmentUtilization? = null

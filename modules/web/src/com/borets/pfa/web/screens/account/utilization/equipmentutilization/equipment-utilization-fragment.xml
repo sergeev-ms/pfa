@@ -21,6 +21,7 @@
                 <column property="revenueMode"/>
                 <column property="firstRunValue"/>
                 <column property="sequentRunValue"/>
+                <column property="sequentRunCompetitorValue"/>
             </columns>
         </dataGrid>
     </layout>
