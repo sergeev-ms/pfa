@@ -1,7 +1,6 @@
 package com.borets.pfa.entity.account.appdata
 
 import com.borets.pfa.entity.account.system.System
-import com.borets.pfa.entity.account.system.SystemStd
 import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity

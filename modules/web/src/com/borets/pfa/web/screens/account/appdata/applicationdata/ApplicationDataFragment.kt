@@ -4,17 +4,19 @@ import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.marketdata.RunsNumber
 import com.borets.pfa.entity.account.system.System
-import com.borets.pfa.entity.account.system.SystemDetail
 import com.borets.pfa.entity.account.system.SystemStd
+import com.borets.pfa.web.screens.account.system.copyToSystem
+import com.borets.pfa.web.screens.account.system.reloadForCopy
 import com.borets.pfa.web.screens.account.system.systemstd.SystemStdEdit
 import com.haulmont.cuba.core.global.DataManager
-import com.haulmont.cuba.core.global.View
-import com.haulmont.cuba.core.global.ViewBuilder
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.actions.list.CreateAction
 import com.haulmont.cuba.gui.actions.list.EditAction
 import com.haulmont.cuba.gui.actions.list.RemoveAction
-import com.haulmont.cuba.gui.components.*
+import com.haulmont.cuba.gui.components.Action
+import com.haulmont.cuba.gui.components.Component
+import com.haulmont.cuba.gui.components.DataGrid
+import com.haulmont.cuba.gui.components.ValidationErrors
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
 import com.haulmont.cuba.gui.model.InstanceContainer
@@ -29,6 +31,8 @@ import javax.inject.Named
 class ApplicationDataFragment : ScreenFragment() {
     @Inject
     private lateinit var dataContext: DataContext
+    @Inject
+    private lateinit var dataManager: DataManager
     @Inject
     private lateinit var screenBuilders: ScreenBuilders
     @Inject
@@ -47,9 +51,6 @@ class ApplicationDataFragment : ScreenFragment() {
     @field:Named("systemsAllocationGrid.remove")
     private lateinit var systemsAllocationGridRemove: RemoveAction<SystemAllocation>
 
-    @Inject
-    private lateinit var dataManager: DataManager
-
     @field:Named("systemsAllocationGrid.edit")
     private lateinit var systemsAllocationGridEdit: EditAction<SystemAllocation>
 
@@ -61,32 +62,15 @@ class ApplicationDataFragment : ScreenFragment() {
                 it.map { selectedStdSystem ->
                     dataContext.create(SystemAllocation::class.java).apply {
                         this.applicationData = applicationDataDc.item
-                        this.system = reloadStdSystem(selectedStdSystem).copyToSystem()
+                        this.system = selectedStdSystem.reloadForCopy(dataManager)
+                            .copyToSystem<System>(dataManager)
+                            .also { newSystem -> dataContext.merge(newSystem) }
                     }
                 }.let { selectedSystemsWrap ->
                     systemsAllocationDc.mutableItems.addAll(selectedSystemsWrap)
                 }
             }
             .show()
-    }
-
-    private fun reloadStdSystem(stdSystem: SystemStd) : SystemStd {
-        return dataManager.reload(
-            stdSystem, ViewBuilder.of(SystemStd::class.java)
-                .addView(View.LOCAL)
-                .add("pumpModel", View.MINIMAL)
-                .add("depth", View.MINIMAL)
-                .add("sealConfig", View.MINIMAL)
-                .add("pumpConfig", View.MINIMAL)
-                .add("pumpMaterials", View.MINIMAL)
-                .add("sealMaterials", View.MINIMAL)
-                .add("motorMaterials", View.MINIMAL)
-                .add("motorType", View.MINIMAL)
-                .add("intakeConfig", View.MINIMAL)
-                .add("vaproConfig", View.MINIMAL)
-                .add("details") {it.addAll("equipmentType", "partNumber", "length")}
-                .build()
-        )
     }
 
 
@@ -160,39 +144,6 @@ class ApplicationDataFragment : ScreenFragment() {
             .build()
         (screen as ReadOnlyAwareScreen).isReadOnly = true
         screen.show()
-    }
-
-    private fun SystemStd.copyToSystem() : System {
-        val newSystem = dataContext.create(System::class.java)
-
-        arrayOf(
-            "casingSize",
-            "casingWeight",
-            "pumpModel",
-            "depth",
-            "motorType",
-            "intakeConfig",
-            "vaproConfig",
-            "sealConfig",
-            "pumpConfig",
-            "pumpMaterials",
-            "sealMaterials",
-            "motorMaterials",
-            "comment"
-        ).forEach { property -> newSystem.setValue(property, this.getValue(property)) }
-
-        val newDetailList = this.details?.map { detailFrom ->
-            dataContext.create(SystemDetail::class.java).apply {
-                arrayOf("equipmentType", "length", "partNumber")
-                    .forEach { property ->
-                        this.setValue(property, detailFrom.getValue(property))
-                        this.system = newSystem
-                    }
-            }
-        }?.toMutableList()
-        newSystem.details = newDetailList
-
-        return newSystem
     }
 
     @Subscribe("systemsAllocationGrid.edit")

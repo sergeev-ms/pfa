@@ -5,14 +5,18 @@ import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.marketdata.MarketData
+import com.borets.pfa.entity.account.system.System
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.web.screens.account.appdata.applicationdata.ApplicationDataFragment
 import com.borets.pfa.web.screens.account.marketdata.marketdata.MarketDataFragment
+import com.borets.pfa.web.screens.account.system.copyToSystem
+import com.borets.pfa.web.screens.account.system.reloadForCopy
 import com.borets.pfa.web.screens.account.utilization.equipmentutilization.EquipmentUtilizationFragment
 import com.borets.pfa.web.screens.activity.activity.input.ActivityPivotEdit
 import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
+import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.DatatypeFormatter
 import com.haulmont.cuba.core.global.EntityStates
 import com.haulmont.cuba.core.global.MetadataTools
@@ -32,6 +36,8 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var dataContext: DataContext
     @Inject
+    private lateinit var dataManager: DataManager
+    @Inject
     private lateinit var screenBuilders: ScreenBuilders
     @Inject
     private lateinit var entityStates: EntityStates
@@ -39,9 +45,9 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var metadataTools: MetadataTools
     @Inject
     private lateinit var userSession: UserSession
+
     @Inject
     private lateinit var datatypeFormatter: DatatypeFormatter
-
     @Inject
     private lateinit var actualRevisionDc: InstancePropertyContainer<AccountRevision>
     @Inject
@@ -60,9 +66,9 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var priceListsDl: CollectionLoader<PriceList>
     @Inject
     private lateinit var activityPlansDc: CollectionContainer<Activity>
+
     @Inject
     private lateinit var activityPlansDl: CollectionLoader<Activity>
-
     @Inject
     private lateinit var applicationDataFragment: ApplicationDataFragment
     @Inject
@@ -77,6 +83,7 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var appDataGb: GroupBoxLayout
     @Inject
     private lateinit var equipmentUtilizationGb: GroupBoxLayout
+
     @Inject
     private lateinit var priceListsTable: Table<PriceList>
 
@@ -243,7 +250,10 @@ class AccountEdit : StandardEditor<Account>() {
         val newSystemAllocationList = other.systemAllocations?.map { otherSystemAllocation ->
             val newSystemAllocation = dataContext.create(SystemAllocation::class.java)
             newSystemAllocation.applicationData = this
-            newSystemAllocation.system = otherSystemAllocation.system
+            newSystemAllocation.system = otherSystemAllocation.system!!
+                .reloadForCopy(dataManager)
+                .copyToSystem<System>(dataManager)
+                .also { dataContext.merge(it) }
             newSystemAllocation.run1 = otherSystemAllocation.run1
             newSystemAllocation.run2 = otherSystemAllocation.run2
             newSystemAllocation.run3 = otherSystemAllocation.run3
