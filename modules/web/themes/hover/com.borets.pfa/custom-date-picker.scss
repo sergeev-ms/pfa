@@ -1,0 +1,20 @@
+@mixin date-picker {
+  .v-inline-datefield.custom-height {
+    table {
+      border-width: thin;
+      border-color: #9a9a9a;
+      border-style: dashed;
+      border-radius: 5px;
+    }
+
+    .v-inline-datefield-calendarpanel {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    td[class*="year"] button,
+    td[class*="month"] button {
+      height: 20px;
+    }
+  }
+}
