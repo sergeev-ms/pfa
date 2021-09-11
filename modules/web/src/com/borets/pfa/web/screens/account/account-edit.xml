@@ -170,6 +170,7 @@
         </tabSheet>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="windowCommitBtn" action="windowCommit"/>
             <button id="closeBtn" action="windowClose"/>
         </hbox>
     </layout>
