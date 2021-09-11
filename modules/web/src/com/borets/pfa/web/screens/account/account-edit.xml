@@ -74,7 +74,8 @@
         </instance>
     </data>
     <dialogMode height="600" width="800"/>
-    <layout expand="tabSheet" spacing="true">
+    <layout expand="tabSheet" spacing="false">
+        <label id="screenHeader" stylename="h2 bold colored" align="MIDDLE_CENTER"/>
         <tabSheet id="tabSheet">
             <tab id="generalTab" caption="msg://generalTab.caption" spacing="true" margin="true,false,false,false" expand="marketDataGb">
                 <groupBox id="accountDataGb" caption="msg://accountDataGb.caption" spacing="true">

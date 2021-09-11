@@ -16,10 +16,7 @@ import com.borets.pfa.web.screens.account.system.reloadForCopy
 import com.borets.pfa.web.screens.account.utilization.equipmentutilization.EquipmentUtilizationFragment
 import com.borets.pfa.web.screens.activity.activity.input.ActivityPivotEdit
 import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
-import com.haulmont.cuba.core.global.DataManager
-import com.haulmont.cuba.core.global.DatatypeFormatter
-import com.haulmont.cuba.core.global.EntityStates
-import com.haulmont.cuba.core.global.MetadataTools
+import com.haulmont.cuba.core.global.*
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.*
@@ -66,9 +63,9 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var priceListsDl: CollectionLoader<PriceList>
     @Inject
     private lateinit var activityPlansDc: CollectionContainer<Activity>
-
     @Inject
     private lateinit var activityPlansDl: CollectionLoader<Activity>
+
     @Inject
     private lateinit var applicationDataFragment: ApplicationDataFragment
     @Inject
@@ -83,12 +80,12 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var appDataGb: GroupBoxLayout
     @Inject
     private lateinit var equipmentUtilizationGb: GroupBoxLayout
-
     @Inject
     private lateinit var priceListsTable: Table<PriceList>
-
     @Inject
     private lateinit var activityPlansTable: Table<Activity>
+    @Inject
+    private lateinit var screenHeader: Label<String>
 
     @Subscribe
     private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
@@ -234,6 +231,7 @@ class AccountEdit : StandardEditor<Account>() {
     private fun setWindowCaption() {
         if (!entityStates.isNew(editedEntity)) {
             window.caption = metadataTools.getInstanceName(editedEntity)
+            screenHeader.value = getHeaderRecursive(editedEntity)
         }
     }
 
@@ -352,6 +350,20 @@ class AccountEdit : StandardEditor<Account>() {
             .show()
     }
 
+    private fun getHeaderRecursive(account: Account): String? {
+        val view = ViewBuilder.of(Account::class.java)
+            .addAll("name", "parent")
+            .build()
+        var accountWithParent : Account = account
+        if (!entityStates.isLoaded(accountWithParent, "parent")) {
+            accountWithParent = dataManager.reload(account, view)
+        }
+        val header : String? = accountWithParent.name
+        return if (accountWithParent.parent != null) {
+            "${getHeaderRecursive(accountWithParent.parent!!)} \u2012 $header"
+        } else
+            header
+    }
 }
 
 
