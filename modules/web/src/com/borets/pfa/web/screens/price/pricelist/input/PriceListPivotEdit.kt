@@ -1,6 +1,8 @@
 package com.borets.pfa.web.screens.price.pricelist.input
 
-import com.borets.pfa.entity.activity.*
+import com.borets.pfa.entity.activity.JobType
+import com.borets.pfa.entity.activity.WellEquip
+import com.borets.pfa.entity.activity.WellTag
 import com.borets.pfa.entity.analytic.AnalyticSet
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
@@ -209,12 +211,16 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
 
     private fun fillPrevData(copyFromPriceList: PriceList) {
         val view = ViewBuilder.of(PriceList::class.java)
+            .addAll("rentalRate", "remoteMonitoring", "wellCheck")
             .add("details") {
                 it.addView(View.LOCAL)
                     .add("analytic", View.MINIMAL)
                     .add("revenueType", View.MINIMAL)
             }.build()
         dataManager.reload(copyFromPriceList, view ).let { prevPrice ->
+            editedEntity.rentalRate = prevPrice.rentalRate
+            editedEntity.remoteMonitoring = prevPrice.remoteMonitoring
+            editedEntity.wellCheck = prevPrice.wellCheck
             prevPrice.details?.map {
                 dataContext.create(PriceListDetail::class.java).apply {
                     this.priceList = editedEntity

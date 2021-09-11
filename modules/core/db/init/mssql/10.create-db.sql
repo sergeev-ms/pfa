@@ -72,6 +72,9 @@ create table PFA_PRICE_LIST (
     --
     ACCOUNT_ID uniqueidentifier,
     RECORD_TYPE nvarchar(50),
+    RENTAL_RATE integer,
+    REMOTE_MONITORING integer,
+    WELL_CHECK integer,
     YEAR_ integer,
     MONTH_ integer,
     COMMENT_ nvarchar(max),
