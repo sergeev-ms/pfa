@@ -72,6 +72,9 @@ create table PFA_PRICE_LIST (
     --
     ACCOUNT_ID uniqueidentifier,
     RECORD_TYPE nvarchar(50),
+    RENTAL_RATE integer,
+    REMOTE_MONITORING integer,
+    WELL_CHECK integer,
     YEAR_ integer,
     MONTH_ integer,
     COMMENT_ nvarchar(max),
@@ -510,6 +513,7 @@ create table PFA_EQUIPMENT_UTILIZATION_DETAIL (
     EQUIPMENT_TYPE_ID uniqueidentifier,
     FIRST_RUN_VALUE decimal(19, 2),
     SEQUENT_RUN_VALUE decimal(19, 2),
+    SEQUENT_RUN_COMPETITOR_VALUE decimal(19, 2),
     EQUIPMENT_UTILIZATION_ID uniqueidentifier not null,
     REVENUE_MODE nvarchar(50),
     ORDER_ integer,

@@ -5,18 +5,19 @@ import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.marketdata.MarketData
+import com.borets.pfa.entity.account.system.System
 import com.borets.pfa.entity.account.supplementary.Supplementary
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.web.screens.account.appdata.applicationdata.ApplicationDataFragment
 import com.borets.pfa.web.screens.account.marketdata.marketdata.MarketDataFragment
+import com.borets.pfa.web.screens.account.system.copyToSystem
+import com.borets.pfa.web.screens.account.system.reloadForCopy
 import com.borets.pfa.web.screens.account.utilization.equipmentutilization.EquipmentUtilizationFragment
 import com.borets.pfa.web.screens.activity.activity.input.ActivityPivotEdit
 import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
-import com.haulmont.cuba.core.global.DatatypeFormatter
-import com.haulmont.cuba.core.global.EntityStates
-import com.haulmont.cuba.core.global.MetadataTools
+import com.haulmont.cuba.core.global.*
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.*
@@ -32,6 +33,8 @@ import javax.inject.Inject
 class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var dataContext: DataContext
+    @Inject
+    private lateinit var dataManager: DataManager
     @Inject
     private lateinit var screenBuilders: ScreenBuilders
     @Inject
@@ -84,10 +87,10 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var equipmentUtilizationGb: GroupBoxLayout
     @Inject
     private lateinit var priceListsTable: Table<PriceList>
-
     @Inject
     private lateinit var activityPlansTable: Table<Activity>
-
+    @Inject
+    private lateinit var screenHeader: Label<String>
 
     @Subscribe
     private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
@@ -233,6 +236,7 @@ class AccountEdit : StandardEditor<Account>() {
     private fun setWindowCaption() {
         if (!entityStates.isNew(editedEntity)) {
             window.caption = metadataTools.getInstanceName(editedEntity)
+            screenHeader.value = getHeaderRecursive(editedEntity)
         }
     }
 
@@ -249,7 +253,10 @@ class AccountEdit : StandardEditor<Account>() {
         val newSystemAllocationList = other.systemAllocations?.map { otherSystemAllocation ->
             val newSystemAllocation = dataContext.create(SystemAllocation::class.java)
             newSystemAllocation.applicationData = this
-            newSystemAllocation.system = otherSystemAllocation.system
+            newSystemAllocation.system = otherSystemAllocation.system!!
+                .reloadForCopy(dataManager)
+                .copyToSystem<System>(dataManager)
+                .also { dataContext.merge(it) }
             newSystemAllocation.run1 = otherSystemAllocation.run1
             newSystemAllocation.run2 = otherSystemAllocation.run2
             newSystemAllocation.run3 = otherSystemAllocation.run3
@@ -356,6 +363,20 @@ class AccountEdit : StandardEditor<Account>() {
             .show()
     }
 
+    private fun getHeaderRecursive(account: Account): String? {
+        val view = ViewBuilder.of(Account::class.java)
+            .addAll("name", "parent")
+            .build()
+        var accountWithParent : Account = account
+        if (!entityStates.isLoaded(accountWithParent, "parent")) {
+            accountWithParent = dataManager.reload(account, view)
+        }
+        val header : String? = accountWithParent.name
+        return if (accountWithParent.parent != null) {
+            "${getHeaderRecursive(accountWithParent.parent!!)} \u2012 $header"
+        } else
+            header
+    }
 }
 
 

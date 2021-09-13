@@ -119,7 +119,8 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         return super.entityAttributePermissions()
     }
 
-    @ScreenComponentAccess(screenId = "pfa_Account.edit", deny = ["createRevisionBtn", "createMarketDataBtn"])
+    @ScreenComponentAccess(screenId = "pfa_Account.edit", deny = ["createRevisionBtn", "createMarketDataBtn",
+        "createAppDataBtn", "createUtilizationBtn"])
     override fun screenComponentPermissions(): ScreenComponentPermissionsContainer {
         return super.screenComponentPermissions()
     }
