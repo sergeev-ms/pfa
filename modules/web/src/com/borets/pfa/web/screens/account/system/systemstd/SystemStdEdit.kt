@@ -56,6 +56,7 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
         detailsTableCopy.addActionPerformedListener {
             val newDetail = dataContext.create(SystemDetail::class.java)
             newDetail.copyFrom(detailsTable.singleSelected!!)
+            newDetail.system = editedEntity
             var index = detailsDc.getItemIndex(detailsTable.singleSelected!!)
             detailsDc.mutableItems.add(++index, newDetail)
         }
@@ -120,7 +121,7 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
     }
 
     private inline fun SystemDetail.copyFrom(other : SystemDetail) {
-        listOf("equipmentType", "length", "partNumber", "system")
+        listOf("equipmentType", "length", "partNumber")
             .forEach {
                 this.setValue(it, other.getValue(it))
             }
