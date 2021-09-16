@@ -62,7 +62,7 @@ dependencies {
     appComponent('com.haulmont.addon.helium:helium-global:0.4.0')
     appComponent('com.haulmont.addon.admintools:cuba-at-global:1.5.1')
     appComponent('com.haulmont.addon.ldap:ldap-global:1.5.2m')
-    appComponent('com.borets.addon.pn:pn-global:0.2')
+    appComponent('com.borets.addon.pn:pn-global:0.2.1')
     appComponent('com.borets.addon.mu:mu-global:0.1')
     appComponent('com.borets.attachments:attach-global:0.3.1')
 }
