@@ -6,12 +6,12 @@ import com.borets.addon.mu.entity.MuType
 import com.borets.addon.mu.service.MeasurementService
 import com.borets.addon.pn.entity.Part
 import com.borets.pfa.entity.account.appdata.EquipmentType
-import com.borets.pfa.entity.account.marketdata.MarketData
 import com.borets.pfa.entity.account.system.SystemDetail
 import com.borets.pfa.entity.account.system.SystemStd
 import com.haulmont.chile.core.datatypes.DatatypeRegistry
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.QueryUtils
+import com.haulmont.cuba.core.global.Sort
 import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.components.actions.ItemTrackingAction
@@ -40,7 +40,7 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
     private lateinit var measurementService: MeasurementService
 
     @Inject
-    private lateinit var detailsDc: CollectionContainer<SystemDetail>
+    private lateinit var detailsDc: CollectionPropertyContainer<SystemDetail>
     @Inject
     private lateinit var equipmentTypesDc: CollectionContainer<EquipmentType>
 
@@ -49,6 +49,7 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
 
     @field:Named("detailsTable.copy")
     private lateinit var detailsTableCopy: ItemTrackingAction
+
 
     @Subscribe
     private fun onBeforeShow(@Suppress("UNUSED_PARAMETER") event: BeforeShowEvent) {
@@ -60,6 +61,11 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
             var index = detailsDc.getItemIndex(detailsTable.singleSelected!!)
             detailsDc.mutableItems.add(++index, newDetail)
         }
+    }
+
+    @Subscribe
+    private fun onAfterShow(event: AfterShowEvent) {
+        detailsDc.sorter.sort(Sort.by("equipmentType.order"))
     }
 
     @Subscribe("detailsTable.create")
