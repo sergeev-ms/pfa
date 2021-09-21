@@ -54,7 +54,10 @@ fun SystemStd.reloadForCopy(dataManager: DataManager) : SystemStd {
             .add("motorType", View.MINIMAL)
             .add("intakeConfig", View.MINIMAL)
             .add("vaproConfig", View.MINIMAL)
-            .add("details") {it.addAll("equipmentType", "partNumber", "length")}
+            .add("details") { it.addAll("length")
+                .add("partNumber", View.MINIMAL)
+                .add("equipmentType") { vb -> vb.addView(View.MINIMAL).add("order") }
+            }
             .build()
     )
 }
