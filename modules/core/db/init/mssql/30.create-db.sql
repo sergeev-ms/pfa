@@ -22,3 +22,16 @@ values ('d69a2c83-2ae8-f01e-f691-84bf172b805b', 1, '2021-04-23 12:42:27', 'admin
 insert into PFA_ANALYTIC_SET
 (ID, VERSION, CREATE_TS, CREATED_BY, UPDATE_TS, UPDATED_BY, DELETE_TS, DELETED_BY, JOB_TYPE, WELL_EQUIP, WELL_TAG)
 values ('f6eb9657-da82-2a9e-6dfa-b31d9b68b1c5', 1, '2021-06-25 07:12:24', 'admin', '2021-06-25 07:12:24', null, null, null, 'I', 'N', 'S')^
+
+insert into PFA_SUPPLEMENTARY_DETAIL_TYPE
+(ID, NAME, CREATE_TS, CREATED_BY, DELETE_TS, DELETED_BY)
+values ('95fb8965-ceba-c838-6616-663655e865b4', 'Oil Permits', '2021-08-22 12:50:00', 'admin', null, null)^
+insert into PFA_SUPPLEMENTARY_DETAIL_TYPE
+(ID, NAME, CREATE_TS, CREATED_BY, DELETE_TS, DELETED_BY)
+values ('b7cc8e91-6cd4-f558-5725-1f5fea3965fb', 'Active Rigs', '2021-08-22 12:50:09', 'admin', null, null)^
+insert into PFA_SUPPLEMENTARY_DETAIL_TYPE
+(ID, NAME, CREATE_TS, CREATED_BY, DELETE_TS, DELETED_BY)
+values ('9fa326ea-7e7e-f784-041e-a2995dd04feb', 'DUCs Count', '2021-08-22 12:50:43', 'admin', null, null)^
+insert into PFA_SUPPLEMENTARY_DETAIL_TYPE
+(ID, NAME, CREATE_TS, CREATED_BY, DELETE_TS, DELETED_BY)
+values ('fae7ddf7-93bf-0c7d-4c03-76cf9d8fe56d', 'ESP Completion', '2021-08-22 12:50:53', 'admin', null, null)^

@@ -6,6 +6,7 @@ import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.marketdata.MarketData
 import com.borets.pfa.entity.account.system.System
+import com.borets.pfa.entity.account.supplementary.Supplementary
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.price.PriceList
@@ -43,9 +44,9 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var entityStates: EntityStates
     @Inject
     private lateinit var userSession: UserSession
-
     @Inject
     private lateinit var datatypeFormatter: DatatypeFormatter
+
     @Inject
     private lateinit var actualRevisionDc: InstancePropertyContainer<AccountRevision>
     @Inject
@@ -66,6 +67,10 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var activityPlansDc: CollectionContainer<Activity>
     @Inject
     private lateinit var activityPlansDl: CollectionLoader<Activity>
+    @Inject
+    private lateinit var supplementaryDl: InstanceLoader<Supplementary>
+    @Inject
+    private lateinit var supplementaryDc: InstanceContainer<Supplementary>
 
     @Inject
     private lateinit var applicationDataFragment: ApplicationDataFragment
@@ -298,6 +303,14 @@ class AccountEdit : StandardEditor<Account>() {
                         equipmentUtilizationDl.setParameter("equipmentUtilizationId", it.id)
                         equipmentUtilizationDl.load()
                     }
+                }
+            }
+            "supplementaryTab" -> {
+                if (entityStates.isNew(editedEntity)) {
+                    supplementaryDc.setItem(editedEntity.supplementary)
+                } else {
+                    supplementaryDl.setParameter("container_accountDc", editedEntity)
+                    supplementaryDl.load()
                 }
             }
         }

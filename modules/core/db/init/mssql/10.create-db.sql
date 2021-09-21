@@ -521,3 +521,52 @@ create table PFA_EQUIPMENT_UTILIZATION_DETAIL (
     primary key nonclustered (ID)
 )^
 -- end PFA_EQUIPMENT_UTILIZATION_DETAIL
+-- begin PFA_SUPPLEMENTARY_DETAIL_TYPE
+create table PFA_SUPPLEMENTARY_DETAIL_TYPE (
+    ID uniqueidentifier,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    NAME nvarchar(255),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_SUPPLEMENTARY_DETAIL_TYPE
+-- begin PFA_SUPPLEMENTARY
+create table PFA_SUPPLEMENTARY (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    ACCOUNT_ID uniqueidentifier,
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_SUPPLEMENTARY
+-- begin PFA_SUPPLEMENTARY_DETAIL
+create table PFA_SUPPLEMENTARY_DETAIL (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    TYPE_ID uniqueidentifier,
+    VALUE_ decimal(19, 2),
+    SUPPLEMENTARY_ID uniqueidentifier not null,
+    YEAR_ integer,
+    MONTH_ integer,
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_SUPPLEMENTARY_DETAIL

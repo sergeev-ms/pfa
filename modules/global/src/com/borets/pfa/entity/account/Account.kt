@@ -3,6 +3,7 @@ package com.borets.pfa.entity.account
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.marketdata.ApplicationType
 import com.borets.pfa.entity.account.marketdata.MarketData
+import com.borets.pfa.entity.account.supplementary.Supplementary
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.activity.ContractType
 import com.borets.pfa.entity.customer.DimCustomers
@@ -14,8 +15,10 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents
 import com.haulmont.cuba.core.entity.annotation.SystemLevel
 import com.haulmont.cuba.core.global.DeletePolicy
+import com.haulmont.cuba.core.global.Metadata
 import java.math.BigDecimal
 import java.time.YearMonth
+import javax.annotation.PostConstruct
 import javax.persistence.*
 
 @PublishEntityChangedEvents
@@ -81,6 +84,11 @@ open class Account : StandardEntity() {
     @Column(name = "FIELD_TYPE")
     private var fieldType: String? = null
 
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
+    var supplementary: Supplementary? = null
+
     fun getType(): Type? = actualRevision?.getType()
 
     fun getYearMonth(): YearMonth? {
@@ -107,5 +115,12 @@ open class Account : StandardEntity() {
 
     companion object {
         private const val serialVersionUID = -5049196871514871532L
+    }
+
+    @PostConstruct
+    open fun postConstruct(metadata: Metadata) {
+        supplementary = metadata.create(Supplementary::class.java).apply {
+            this.account = this@Account
+        }
     }
 }
