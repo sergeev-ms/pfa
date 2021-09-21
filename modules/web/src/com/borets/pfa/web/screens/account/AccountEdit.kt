@@ -17,7 +17,10 @@ import com.borets.pfa.web.screens.account.system.reloadForCopy
 import com.borets.pfa.web.screens.account.utilization.equipmentutilization.EquipmentUtilizationFragment
 import com.borets.pfa.web.screens.activity.activity.input.ActivityPivotEdit
 import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
-import com.haulmont.cuba.core.global.*
+import com.haulmont.cuba.core.global.DataManager
+import com.haulmont.cuba.core.global.DatatypeFormatter
+import com.haulmont.cuba.core.global.EntityStates
+import com.haulmont.cuba.core.global.ViewBuilder
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.*
@@ -39,8 +42,6 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var screenBuilders: ScreenBuilders
     @Inject
     private lateinit var entityStates: EntityStates
-    @Inject
-    private lateinit var metadataTools: MetadataTools
     @Inject
     private lateinit var userSession: UserSession
     @Inject
@@ -235,8 +236,8 @@ class AccountEdit : StandardEditor<Account>() {
 
     private fun setWindowCaption() {
         if (!entityStates.isNew(editedEntity)) {
-            window.caption = metadataTools.getInstanceName(editedEntity)
             screenHeader.value = getHeaderRecursive(editedEntity)
+            window.caption = screenHeader.value
         }
     }
 
