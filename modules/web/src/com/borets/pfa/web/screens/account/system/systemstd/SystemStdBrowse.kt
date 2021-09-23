@@ -7,6 +7,7 @@ import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.Action
 import com.haulmont.cuba.gui.components.GroupTable
+import com.haulmont.cuba.gui.model.CollectionLoader
 import com.haulmont.cuba.gui.screen.*
 import javax.inject.Inject
 
@@ -22,6 +23,15 @@ class SystemStdBrowse : StandardLookup<SystemStd>() {
 
     @Inject
     private lateinit var systemStdsTable: GroupTable<SystemStd>
+
+    @javax.inject.Inject
+    private lateinit var systemStdsDl: CollectionLoader<SystemStd>
+
+    @Subscribe
+    private fun onAfterInit(event: AfterInitEvent) {
+        systemStdsDl.setParameter("type", SystemStd::class.java)
+    }
+
 
     @Subscribe("systemStdsTable.copy")
     private fun onSystemStdsTableCopy(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {

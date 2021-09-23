@@ -8,6 +8,13 @@
             <loader id="systemStdsDl">
                 <query>
                     <![CDATA[select e from pfa_SystemStd e]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>TYPE(e) = :type</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
                 </query>
             </loader>
             <view extends="_local">
