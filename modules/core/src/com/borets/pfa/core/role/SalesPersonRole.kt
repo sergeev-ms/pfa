@@ -1,5 +1,7 @@
 package com.borets.pfa.core.role
 
+import com.borets.addon.pn.entity.*
+import com.borets.attachments.entity.Attachment
 import com.borets.pfa.entity.Employee
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.account.AccountRevision
@@ -8,6 +10,9 @@ import com.borets.pfa.entity.account.appdata.EquipmentCategory
 import com.borets.pfa.entity.account.appdata.EquipmentType
 import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.marketdata.MarketData
+import com.borets.pfa.entity.account.supplementary.Supplementary
+import com.borets.pfa.entity.account.supplementary.SupplementaryDetail
+import com.borets.pfa.entity.account.supplementary.SupplementaryDetailType
 import com.borets.pfa.entity.account.system.System
 import com.borets.pfa.entity.account.system.SystemDetail
 import com.borets.pfa.entity.account.system.SystemStd
@@ -20,6 +25,7 @@ import com.borets.pfa.entity.customer.DimCustomers
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
 import com.borets.pfa.entity.price.RevenueType
+import com.haulmont.cuba.core.entity.FileDescriptor
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.security.app.role.AnnotatedRoleDefinition
 import com.haulmont.cuba.security.app.role.annotation.*
@@ -29,18 +35,19 @@ import com.haulmont.cuba.security.role.EntityPermissionsContainer
 import com.haulmont.cuba.security.role.ScreenComponentPermissionsContainer
 import com.haulmont.cuba.security.role.ScreenPermissionsContainer
 
-@Role(name = SalesPersonRole.NAME)
+@Role(name = SalesPersonRole.NAME, description = SalesPersonRole.DESCRIPTION)
 class SalesPersonRole : AnnotatedRoleDefinition() {
     companion object {
         const val NAME = "sales-person"
+        const val DESCRIPTION = "Creates Activity plans only for his Accounts"
     }
 
     @ScreenAccess(screenIds = ["application-pfa", "pfa_Account.browse", "references-group", "pfa_DimCustomers.browse",
-        "pfa_SystemStd.browse", "pfa_Employee.browse", "pfa_Account.edit", "pfa_ApplicationDataFragment", "pfa_ActivityPivot.edit",
-        "pfa_PriceListPivot.edit", "pfa_MarketData.browse", "pfa_MarketData.edit", "pfa_MarketDataFragment",
-        "pfa_AccountRevision.browse", "pfa_AccountRevision.edit", "pfa_SystemStd.edit", "pfa_ApplicationData.edit",
-        "pfa_ApplicationData.browse", "pfa_EquipmentUtilizationFragment", "pfa_EquipmentUtilization.edit",
-        "pfa_EquipmentUtilization.browse"])
+        "pfa_SystemStd.browse", "pfa_Employee.browse", "pfa_Account.edit", "pfa_ApplicationDataFragment",
+        "pfa_ActivityPivot.edit", "pfa_PriceListPivot.edit", "pfa_MarketData.browse", "pfa_MarketData.edit",
+        "pfa_MarketDataFragment", "pfa_AccountRevision.browse", "pfa_AccountRevision.edit", "pfa_SystemStd.edit",
+        "pfa_ApplicationData.edit", "pfa_ApplicationData.browse", "pfa_EquipmentUtilizationFragment",
+        "pfa_EquipmentUtilization.edit", "pfa_EquipmentUtilization.browse"])
     override fun screenPermissions(): ScreenPermissionsContainer {
         return super.screenPermissions()
     }
@@ -83,7 +90,28 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         ),
         EntityAccess(entityClass = EquipmentUtilizationDetail::class,
             operations = [EntityOp.READ, EntityOp.UPDATE, EntityOp.CREATE]
-        )
+        ),
+        EntityAccess(entityClass = Part::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartBoltDischargeHead::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartBoltIntake::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartCable::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartDrive::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartGC::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartGH::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartGS::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartMLE::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartMotor::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartMotorSeal::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartOther::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartPump::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartSensor::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartUMB::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = PartXFMR::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = FileDescriptor::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = Attachment::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = Supplementary::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = SupplementaryDetail::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = SupplementaryDetailType::class, operations = [EntityOp.READ])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -113,15 +141,43 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = EquipmentCategory::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Employee::class, view = ["*"]),
         EntityAttributeAccess(entityClass = EquipmentUtilization::class, modify = ["*"], view = ["recordType"]),
-        EntityAttributeAccess(entityClass = EquipmentUtilizationDetail::class, modify = ["*"])
+        EntityAttributeAccess(entityClass = EquipmentUtilizationDetail::class, modify = ["*"]),
+        EntityAttributeAccess(entityClass = Part::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartBoltDischargeHead::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartBoltIntake::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartCable::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartDrive::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartGC::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartGH::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartGS::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartMLE::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartMotor::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartMotorSeal::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartOther::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartPump::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartSensor::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartUMB::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = PartXFMR::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = FileDescriptor::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = Attachment::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = Supplementary::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = SupplementaryDetail::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = SupplementaryDetailType::class, view = ["*"])
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()
     }
 
-    @ScreenComponentAccess(screenId = "pfa_Account.edit", deny = ["createRevisionBtn", "createMarketDataBtn",
-        "createAppDataBtn", "createUtilizationBtn"])
+    @ScreenComponentAccess(screenId = "pfa_Account.edit",
+        deny = ["createRevisionBtn", "createMarketDataBtn", "createAppDataBtn", "createUtilizationBtn"],
+        view = ["attachmentFragment.filesMultiUpload", "supplementaryFragment.pivotGrid"]
+    )
     override fun screenComponentPermissions(): ScreenComponentPermissionsContainer {
         return super.screenComponentPermissions()
     }
+
+    override fun getLocName(): String {
+        return "Sales Person"
+    }
+
 }
