@@ -34,10 +34,14 @@
                         <column width="100%">
                             <textField id="wellCountField" property="wellCount" required="false"/>
                             <textField id="newWellYearField" property="newWellYear" required="false"/>
-                            <textField id="customerRunbackInYearField" property="customerRunbackInYear" editable="false"/>
-                            <textField id="customerInstallInYear" property="customerInstallInYear" editable="false"/>
-                            <textField id="customerPullsInYearField" property="customerPullsInYear" editable="false"/>
-                            <textField id="customerWellsClosingInYear" property="customerWellsClosingInYear" editable="false"/>
+                            <textField id="customerPullsInYearField" property="customerPullsInYear"
+                                       contextHelpText="msg://customerPullsInYearField.contextHelpText"/>
+                            <textField id="customerRunbackInYearField" property="customerRunbackInYear"
+                                       contextHelpText="msg://customerRunbackInYearField.contextHelpText"/>
+                            <textField id="customerInstallInYear" property="customerInstallInYear"
+                                       contextHelpText="msg://customerInstallInYear.contextHelpText"/>
+                            <textField id="customerWellsClosingInYear" property="customerWellsClosingInYear"
+                                       contextHelpText="msg://customerWellsClosingInYear.contextHelpText"/>
                             <currencyField id="budgetField" property="budget" required="false" currency="$"/>
                         </column>
                     </form>

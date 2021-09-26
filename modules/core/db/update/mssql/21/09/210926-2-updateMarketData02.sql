@@ -1,0 +1,1 @@
+alter table PFA_MARKET_DATA add CUSTOMER_INSTALL_IN_YEAR integer ;

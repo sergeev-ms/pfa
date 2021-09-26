@@ -1,0 +1,2 @@
+exec sp_rename 'PFA_MARKET_DATA.DELAY_FACTOR', 'DELAY_FACTOR__U68962', 'COLUMN' ^
+alter table PFA_MARKET_DATA add DELAY_FACTOR decimal(19, 2) ;

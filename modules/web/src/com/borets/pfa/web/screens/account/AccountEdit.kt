@@ -5,8 +5,8 @@ import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.marketdata.MarketData
-import com.borets.pfa.entity.account.system.System
 import com.borets.pfa.entity.account.supplementary.Supplementary
+import com.borets.pfa.entity.account.system.System
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.price.PriceList
@@ -243,8 +243,10 @@ class AccountEdit : StandardEditor<Account>() {
 
     private inline fun MarketData.copyFrom(other : MarketData) {
         listOf("trl", "arl", "runsNumber", "firstRunDuration", "wellCheckRate",
-            "secondRunDuration", "thirdRunDuration", "thirdPlusRunDuration", "wellCount", "conversionRate", "oilPermits", "rigQty", "ducQty",
-            "completion", "activityRate", "budget", "bShare", "wellMonitorQty", "bWellCount", "rentalCapex")
+            "secondRunDuration", "thirdRunDuration", "thirdPlusRunDuration", "wellCount", "conversionRate", "oilPermits",
+            "rigQty", "ducQty", "completion", "activityRate", "budget", "bShare", "wellMonitorQty", "bWellCount",
+            "rentalCapex", "customerPullsInYear", "delayFactor", "customerRunbackInYear", "customerInstallInYear",
+            "customerWellsClosingInYear", "newWellYear")
             .forEach {
                 this.setValue(it, other.getValue(it))
             }

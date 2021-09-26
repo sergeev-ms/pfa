@@ -1,0 +1,1 @@
+alter table PFA_MARKET_DATA add CUSTOMER_WELLS_CLOSING_IN_YEAR integer ;

@@ -114,29 +114,30 @@ open class MarketData : StandardEntity() {
     @Column(name = "BORETS_RUN_LIFE")
     var boretsRunLife: Int? = null
 
+    @NumberFormat(pattern = "#%")
     @Column(name = "DELAY_FACTOR")
-    var delayFactor: Int? = null
+    var delayFactor: BigDecimal? = null
 
-    @MetaProperty
-    fun getCustomerRunbackInYear(): Int? = null  // TODO
+    @Column(name = "CUSTOMER_PULLS_IN_YEAR")
+    var customerPullsInYear: Int? = null
+
+    @Column(name = "CUSTOMER_RUNBACK_IN_YEAR")
+    var customerRunbackInYear: Int? = null
+
+    @Column(name = "CUSTOMER_INSTALL_IN_YEAR")
+    var customerInstallInYear: Int? = null
+
+    @Column(name = "CUSTOMER_WELLS_CLOSING_IN_YEAR")
+    var customerWellsClosingInYear: Int? = null
 
     @MetaProperty
     fun getBoretsRunbackInYear(): Int? = null // TODO
 
     @MetaProperty
-    fun getCustomerInstallInYear(): Int? = null // TODO
-
-    @MetaProperty
     fun getBoretsInstallInYear() : Int? = null // TODO
 
     @MetaProperty
-    fun getCustomerPullsInYear(): Int? = null // TODO
-
-    @MetaProperty
     fun getBoretsPullsInYear() : Int? = null // TODO
-
-    @MetaProperty
-    fun getCustomerWellsClosingInYear(): Int? = null // TODO
 
     @MetaProperty
     fun getBoretsWellsClosingInYear() : Int? = null // TODO

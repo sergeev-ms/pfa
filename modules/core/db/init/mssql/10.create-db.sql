@@ -158,7 +158,6 @@ create table PFA_MARKET_DATA (
     YEAR_ integer,
     MONTH_ integer,
     RECORD_TYPE varchar(50),
-    FIELD_TYPE varchar(50),
     RUNS_NUMBER varchar(50),
     F_RUN_DURATION integer,
     S_RUN_DURATION integer,
@@ -184,6 +183,12 @@ create table PFA_MARKET_DATA (
     WELL_CHECK_RATE decimal(19, 2),
     ESP_LT_TARGET integer,
     MARKET_SHARE_TARGET integer,
+    BORETS_RUN_LIFE integer,
+    DELAY_FACTOR decimal(19, 2),
+    CUSTOMER_PULLS_IN_YEAR integer,
+    CUSTOMER_RUNBACK_IN_YEAR integer,
+    CUSTOMER_INSTALL_IN_YEAR integer,
+    CUSTOMER_WELLS_CLOSING_IN_YEAR integer,
     --
     primary key nonclustered (ID)
 )^
