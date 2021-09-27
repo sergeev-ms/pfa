@@ -149,6 +149,7 @@ class ApplicationDataFragment : ScreenFragment() {
     @Subscribe("systemsAllocationGrid.edit")
     private fun onSystemsAllocationGridEdit(event: Action.ActionPerformedEvent) {
         screenBuilders.editor(SystemStd::class.java, this)
+            .withParentDataContext(dataContext)
             .withScreenClass(SystemStdEdit::class.java)
             .editEntity(systemsAllocationGrid.singleSelected!!.system!!)
             .show()
