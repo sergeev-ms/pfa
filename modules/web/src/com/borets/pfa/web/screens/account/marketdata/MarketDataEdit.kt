@@ -1,6 +1,7 @@
 package com.borets.pfa.web.screens.account.marketdata
 
 import com.borets.pfa.entity.account.marketdata.MarketData
+import com.borets.pfa.web.screens.account.marketdata.marketdata.MarketDataFragment
 import com.haulmont.cuba.gui.components.Button
 import com.haulmont.cuba.gui.components.DatePicker
 import com.haulmont.cuba.gui.components.HasValue
@@ -8,6 +9,7 @@ import com.haulmont.cuba.gui.screen.*
 import java.time.YearMonth
 import java.time.ZoneId
 import java.util.*
+import javax.inject.Inject
 import javax.inject.Named
 import kotlin.math.roundToInt
 
@@ -16,6 +18,11 @@ import kotlin.math.roundToInt
 @EditedEntityContainer("marketDataDc")
 @LoadDataBeforeShow
 class MarketDataEdit : StandardEditor<MarketData>() {
+    @Inject
+    private lateinit var screenValidation: ScreenValidation
+
+    @Inject
+    private lateinit var marketDateFragment: MarketDataFragment
     @field:Named("marketDateFragment.yearMonthField")
     private lateinit var yearMonthField: DatePicker<Date>
 
@@ -41,10 +48,19 @@ class MarketDataEdit : StandardEditor<MarketData>() {
 
     @Subscribe("marketDateFragment.calculateCustomerDataBtn")
     private fun onCalculateCustomerDataBtnClick(event: Button.ClickEvent) {
-        calcCustomersPullsInYear()
-        calcCustomerRunbackInYear()
-        calcCustomerInstallInYear()
-        calcCustomerWellsClosing()
+        val errors = listOf("arlField", "conversionRateField", "delayFactorField", "wellCountField", "newWellYearField")
+            .map { marketDateFragment.fragment.getComponent(it) }
+            .toList()
+            .let {
+                screenValidation.validateUiComponents(it)
+            }
+
+        if (errors.isEmpty) {
+            calcCustomersPullsInYear()
+            calcCustomerRunbackInYear()
+            calcCustomerInstallInYear()
+            calcCustomerWellsClosing()
+        } else screenValidation.showValidationErrors(this, errors)
     }
 
     private fun calcCustomerWellsClosing() {
@@ -83,6 +99,5 @@ class MarketDataEdit : StandardEditor<MarketData>() {
         val result = (wellCount - (wellCount * conversionRate)) * 365 / arl +
                 (wellCount * conversionRate)
         editedEntity.customerPullsInYear = result.roundToInt()
-
     }
 }

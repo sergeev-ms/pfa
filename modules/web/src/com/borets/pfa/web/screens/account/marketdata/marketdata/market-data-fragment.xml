@@ -15,10 +15,10 @@
                     <form id="activityInputForm" dataContainer="marketDataDc" width="100%" height="100%">
                         <column width="100%">
                             <textField id="trlField" property="trl"/>
-                            <textField id="arlField" property="arl"/>
+                            <textField id="arlField" property="arl" required="true"/>
                             <textField id="boretsRunLifeField" property="boretsRunLife" required="false"/>
-                            <textField id="conversionRateField" property="conversionRate" required="false"/>
-                            <textField id="delayFactorField" property="delayFactor" required="false"/>
+                            <textField id="conversionRateField" property="conversionRate" required="true"/>
+                            <textField id="delayFactorField" property="delayFactor" required="true"/>
                             <lookupField id="runsNumberField" property="runsNumber" required="false"/>
                             <textField id="firstRunDurationField" property="firstRunDuration" required="false"/>
                             <textField id="secondRunDurationField" property="secondRunDuration" required="false"/>
@@ -32,15 +32,15 @@
                           icon="BUILDING" showAsPanel="true" expand="calculateCustomerDataBtn">
                     <form id="customerDataForm" dataContainer="marketDataDc" width="100%">
                         <column width="100%">
-                            <textField id="wellCountField" property="wellCount" required="false"/>
-                            <textField id="newWellYearField" property="newWellYear" required="false"/>
-                            <textField id="customerPullsInYearField" property="customerPullsInYear"
+                            <textField id="wellCountField" property="wellCount" required="true"/>
+                            <textField id="newWellYearField" property="newWellYear" required="true"/>
+                            <textField id="customerPullsInYearField" property="customerPullsInYear" required="true"
                                        contextHelpText="msg://customerPullsInYearField.contextHelpText"/>
-                            <textField id="customerRunbackInYearField" property="customerRunbackInYear"
+                            <textField id="customerRunbackInYearField" property="customerRunbackInYear" required="true"
                                        contextHelpText="msg://customerRunbackInYearField.contextHelpText"/>
-                            <textField id="customerInstallInYear" property="customerInstallInYear"
+                            <textField id="customerInstallInYear" property="customerInstallInYear" required="true"
                                        contextHelpText="msg://customerInstallInYear.contextHelpText"/>
-                            <textField id="customerWellsClosingInYear" property="customerWellsClosingInYear"
+                            <textField id="customerWellsClosingInYear" property="customerWellsClosingInYear" required="true"
                                        contextHelpText="msg://customerWellsClosingInYear.contextHelpText"/>
                             <currencyField id="budgetField" property="budget" required="false" currency="$"/>
                         </column>
