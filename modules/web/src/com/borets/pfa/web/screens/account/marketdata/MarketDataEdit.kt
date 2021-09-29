@@ -1,11 +1,10 @@
 package com.borets.pfa.web.screens.account.marketdata
 
 import com.borets.pfa.entity.account.marketdata.MarketData
+import com.haulmont.cuba.gui.components.Button
 import com.haulmont.cuba.gui.components.DatePicker
 import com.haulmont.cuba.gui.components.HasValue
-import com.haulmont.cuba.gui.model.InstanceContainer
 import com.haulmont.cuba.gui.screen.*
-import com.haulmont.cuba.gui.screen.Target
 import java.time.YearMonth
 import java.time.ZoneId
 import java.util.*
@@ -40,71 +39,50 @@ class MarketDataEdit : StandardEditor<MarketData>() {
         }
     }
 
-    @Subscribe(id = "marketDataDc", target = Target.DATA_CONTAINER)
-    private fun onMarketDataDcItemPropertyChange(event: InstanceContainer.ItemPropertyChangeEvent<MarketData>) {
-        calcCustomersPullsInYear(event)
-        calcCustomerRunbackInYear(event)
-        calcCustomerInstallInYear(event)
-        calcCustomerWellsClosing(event)
+    @Subscribe("marketDateFragment.calculateCustomerDataBtn")
+    private fun onCalculateCustomerDataBtnClick(event: Button.ClickEvent) {
+        calcCustomersPullsInYear()
+        calcCustomerRunbackInYear()
+        calcCustomerInstallInYear()
+        calcCustomerWellsClosing()
     }
 
-    private fun calcCustomerWellsClosing(event: InstanceContainer.ItemPropertyChangeEvent<MarketData>) {
-        val wellsClosingRelatedAttributes = listOf(
-            "wellCount", "customerPullsInYear", "newWellYear", "conversionRate", "arl", "customerRunbackInYear")
-        if (wellsClosingRelatedAttributes.contains(event.property)) {
-            if (wellsClosingRelatedAttributes.all { event.item.getValue<Number>(it) != null }) {
-                val wellCount = editedEntity.wellCount!!
-                val customerPullsInYear = editedEntity.customerPullsInYear!!
-                val customerInstallInYear = editedEntity.customerInstallInYear!!
-                editedEntity.customerWellsClosingInYear = wellCount - customerPullsInYear + customerInstallInYear
+    private fun calcCustomerWellsClosing() {
+        val wellCount = editedEntity.wellCount!!
+        val customerPullsInYear = editedEntity.customerPullsInYear!!
+        val customerInstallInYear = editedEntity.customerInstallInYear!!
+        editedEntity.customerWellsClosingInYear = wellCount - customerPullsInYear + customerInstallInYear
+    }
+
+    private fun calcCustomerInstallInYear() {
+        val newWellYear = editedEntity.newWellYear!!
+        val customerRunbackInYear = editedEntity.customerRunbackInYear!!
+        editedEntity.customerInstallInYear = newWellYear + customerRunbackInYear
+    }
+
+    private fun calcCustomerRunbackInYear() {
+        val wellCount = editedEntity.wellCount!!.toFloat()
+        val conversionRate = editedEntity.conversionRate!!.toFloat()
+        val arl = editedEntity.arl!!.toFloat()
+        val delayFactor = editedEntity.delayFactor!!.toFloat()
+        val result =
+            if (arl / 365 < 1) {
+                (wellCount - (wellCount * conversionRate)) * 365 / arl *
+                        (1 - (1 - delayFactor) * arl / 365)
+            } else {
+                (wellCount - (wellCount * conversionRate)) * 365 / arl *
+                        delayFactor
             }
-        }
+        editedEntity.customerRunbackInYear = result.roundToInt()
     }
 
-    private fun calcCustomerInstallInYear(event: InstanceContainer.ItemPropertyChangeEvent<MarketData>) {
-        val installRelatedAttributes = listOf("newWellYear", "customerRunbackInYear")
-        if (installRelatedAttributes.contains(event.property)) {
-            if (installRelatedAttributes.all { event.item.getValue<Number>(it) != null }) {
-                val newWellYear = editedEntity.newWellYear!!
-                val customerRunbackInYear = editedEntity.customerRunbackInYear!!
-                editedEntity.customerInstallInYear = newWellYear + customerRunbackInYear
-            }
-        }
-    }
+    private fun calcCustomersPullsInYear() {
+        val wellCount = editedEntity.wellCount!!.toFloat()
+        val conversionRate = editedEntity.conversionRate!!.toFloat()
+        val arl = editedEntity.arl!!.toFloat()
+        val result = (wellCount - (wellCount * conversionRate)) * 365 / arl +
+                (wellCount * conversionRate)
+        editedEntity.customerPullsInYear = result.roundToInt()
 
-    private fun calcCustomerRunbackInYear(event: InstanceContainer.ItemPropertyChangeEvent<MarketData>) {
-        val runbacksRelatedAttributes = listOf("wellCount", "conversionRate", "arl", "delayFactor")
-        if (runbacksRelatedAttributes.contains(event.property)) {
-            if (runbacksRelatedAttributes.all { event.item.getValue<Number>(it) != null }) {
-                val wellCount = editedEntity.wellCount!!.toFloat()
-                val conversionRate = editedEntity.conversionRate!!.toFloat()
-                val arl = editedEntity.arl!!.toFloat()
-                val delayFactor = editedEntity.delayFactor!!.toFloat()
-                val result =
-                    if (arl / 365 < 1) {
-                        (wellCount - (wellCount * conversionRate)) * 365 / arl *
-                                (1 - (1 - delayFactor) * arl / 365)
-                    } else {
-                        (wellCount - (wellCount * conversionRate)) * 365 / arl *
-                                delayFactor
-                    }
-                editedEntity.customerRunbackInYear = result.roundToInt()
-            }
-        }
     }
-
-    private fun calcCustomersPullsInYear(event: InstanceContainer.ItemPropertyChangeEvent<MarketData>) {
-        val pullsRelatedAttributes = listOf("wellCount", "conversionRate", "arl")
-        if (pullsRelatedAttributes.contains(event.property)) {
-            if (pullsRelatedAttributes.all { event.item.getValue<Number>(it) != null }) {
-                val wellCount = editedEntity.wellCount!!.toFloat()
-                val conversionRate = editedEntity.conversionRate!!.toFloat()
-                val arl = editedEntity.arl!!.toFloat()
-                val result = (wellCount - (wellCount * conversionRate)) * 365 / arl +
-                        (wellCount * conversionRate)
-                editedEntity.customerPullsInYear = result.roundToInt()
-            }
-        }
-    }
-
 }

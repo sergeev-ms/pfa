@@ -28,9 +28,9 @@
                     </form>
                 </groupBox>
 
-                <groupBox caption="msg://marketDataFragmentHeaders.customerData"
-                          icon="BUILDING" showAsPanel="true" >
-                    <form id="customerDataForm" dataContainer="marketDataDc" width="100%" height="100%">
+                <groupBox caption="msg://marketDataFragmentHeaders.customerData" spacing="true"
+                          icon="BUILDING" showAsPanel="true" expand="calculateCustomerDataBtn">
+                    <form id="customerDataForm" dataContainer="marketDataDc" width="100%">
                         <column width="100%">
                             <textField id="wellCountField" property="wellCount" required="false"/>
                             <textField id="newWellYearField" property="newWellYear" required="false"/>
@@ -45,6 +45,8 @@
                             <currencyField id="budgetField" property="budget" required="false" currency="$"/>
                         </column>
                     </form>
+                    <linkButton id="calculateCustomerDataBtn" caption="msg://calculateCustomerDataBtn.caption"
+                                icon="REFRESH_ACTION" shortcut="ALT-SHIFT-C" align="MIDDLE_RIGHT"/>
                 </groupBox>
 
                 <groupBox caption="msg://marketDataFragmentHeaders.boretsData"

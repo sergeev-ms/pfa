@@ -3,6 +3,7 @@ package com.borets.pfa.web.screens.account.marketdata.marketdata
 import com.borets.pfa.entity.account.marketdata.RunsNumber
 import com.haulmont.cuba.gui.components.Form
 import com.haulmont.cuba.gui.components.HasValue
+import com.haulmont.cuba.gui.components.LinkButton
 import com.haulmont.cuba.gui.components.TextField
 import com.haulmont.cuba.gui.screen.ScreenFragment
 import com.haulmont.cuba.gui.screen.Subscribe
@@ -29,6 +30,8 @@ class MarketDataFragment : ScreenFragment() {
     private lateinit var thirdRunDurationField: TextField<Int>
     @Inject
     private lateinit var thirdPlusRunDurationField: TextField<Int>
+    @Inject
+    private lateinit var calculateCustomerDataBtn: LinkButton
 
 
     @Subscribe("runsNumberField")
@@ -44,5 +47,6 @@ class MarketDataFragment : ScreenFragment() {
         boretsDataForm.isEditable = editable
         additionalDataForm.isEditable = editable
         headerForm.isVisible = editable
+        calculateCustomerDataBtn.isVisible = editable
     }
 }
