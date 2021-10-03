@@ -352,6 +352,7 @@ class AccountEdit : StandardEditor<Account>() {
     private fun onPriceListsTableCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(priceListsTable)
             .newEntity()
+            .withParentDataContext(dataContext)
             .withScreenClass(PriceListPivotEdit::class.java)
             .withInitializer { it.account = editedEntity }
             .show()
@@ -361,6 +362,7 @@ class AccountEdit : StandardEditor<Account>() {
     private fun onCreateActivityPlanBtnClick(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(activityPlansTable)
             .newEntity()
+            .withParentDataContext(dataContext)
             .withScreenClass(ActivityPivotEdit::class.java)
             .withInitializer { it.account = editedEntity }
             .show()
