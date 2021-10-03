@@ -1,13 +1,13 @@
 package com.borets.pfa.web.screens.account.utilization.equipmentutilization
 
 import com.borets.pfa.entity.account.appdata.EquipmentType
-import com.haulmont.cuba.gui.screen.*
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetail
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.EntityStates
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
+import com.haulmont.cuba.gui.screen.*
 import javax.inject.Inject
 
 @UiController("pfa_EquipmentUtilization.edit")
@@ -55,6 +55,7 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
                                 this.setRevenueMode(foundedDetail.getRevenueMode())
                                 this.firstRunValue = foundedDetail.firstRunValue
                                 this.sequentRunValue = foundedDetail.sequentRunValue
+                                this.sequentRunCompetitorValue = foundedDetail.sequentRunCompetitorValue
                             }
                     }
                 }
