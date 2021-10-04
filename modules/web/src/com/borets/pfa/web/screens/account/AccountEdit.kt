@@ -92,6 +92,14 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var activityPlansTable: Table<Activity>
     @Inject
     private lateinit var screenHeader: Label<String>
+    @Inject
+    private lateinit var createMarketDataBtn: LinkButton
+    @Inject
+    private lateinit var createRevisionBtn: LinkButton
+    @Inject
+    private lateinit var createAppDataBtn: LinkButton
+    @Inject
+    private lateinit var createUtilizationBtn: LinkButton
 
     @Subscribe
     private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
@@ -108,6 +116,11 @@ class AccountEdit : StandardEditor<Account>() {
     @Subscribe
     private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
         setWindowCaption()
+    }
+
+    @Subscribe
+    private fun onAfterCommitChanges(@Suppress("UNUSED_PARAMETER") event: AfterCommitChangesEvent) {
+        reEnableButtons()
     }
 
     @Subscribe("createRevisionBtn")
@@ -381,6 +394,14 @@ class AccountEdit : StandardEditor<Account>() {
             "${getHeaderRecursive(accountWithParent.parent!!)} \u2012 $header"
         } else
             header
+    }
+
+    private fun reEnableButtons() {
+        //These buttons disabled on click. Enable buttons after commit.
+        createRevisionBtn.isEnabled = true
+        createMarketDataBtn.isEnabled = true
+        createAppDataBtn.isEnabled = true
+        createUtilizationBtn.isEnabled = true
     }
 }
 
