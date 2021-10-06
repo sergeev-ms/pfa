@@ -1,5 +1,6 @@
 package com.borets.pfa.core.role
 
+import com.borets.addon.country.entity.Country
 import com.borets.addon.pn.entity.*
 import com.borets.attachments.entity.Attachment
 import com.borets.pfa.entity.Employee
@@ -121,7 +122,8 @@ class SalesManagerRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = PartSensor::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = PartUMB::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = PartXFMR::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = Attachment::class, operations = [EntityOp.READ])
+        EntityAccess(entityClass = Attachment::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = Country::class, operations = [EntityOp.READ])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -183,7 +185,8 @@ class SalesManagerRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = PartSensor::class, view = ["*"]),
         EntityAttributeAccess(entityClass = PartUMB::class, view = ["*"]),
         EntityAttributeAccess(entityClass = PartXFMR::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = Attachment::class, view = ["*"])
+        EntityAttributeAccess(entityClass = Attachment::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = Country::class, view = ["*"])
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()

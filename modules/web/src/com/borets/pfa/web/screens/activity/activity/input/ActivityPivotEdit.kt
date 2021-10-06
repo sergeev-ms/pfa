@@ -2,6 +2,7 @@ package com.borets.pfa.web.screens.activity.activity.input
 
 import com.borets.pfa.entity.activity.*
 import com.borets.pfa.entity.analytic.AnalyticSet
+import com.borets.pfa.web.beans.CountrySettingsBean
 import com.borets.pfa.web.beans.PivotGridInitializer
 import com.borets.pfa.web.beans.PivotGridInitializer.DynamicPropertyData
 import com.borets.pfa.web.beans.PivotGridInitializer.StaticPropertyData
@@ -37,6 +38,12 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     private lateinit var metadataTools: MetadataTools
     @Inject
     private lateinit var entityStates: EntityStates
+    @Inject
+    private lateinit var screenBuilders: ScreenBuilders
+    @Inject
+    private lateinit var screenValidation: ScreenValidation
+    @Inject
+    private lateinit var countrySettings: CountrySettingsBean
 
     @Inject
     private lateinit var detailsDc: CollectionPropertyContainer<ActivityDetail>
@@ -49,17 +56,11 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     private lateinit var filterJobTypeField: LookupField<JobType>
     @Inject
     private lateinit var filterWellTagField: LookupField<WellTag>
+    @Inject
+    private lateinit var headerForm: Form
 
     private lateinit var pivotGridHelper : PivotGridInitializer
 
-    @Inject
-    private lateinit var screenBuilders: ScreenBuilders
-
-    @Inject
-    private lateinit var screenValidation: ScreenValidation
-
-    @Inject
-    private lateinit var headerForm: Form
 
 
     @Subscribe
@@ -69,7 +70,28 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     }
 
     @Subscribe
-    private fun onBeforeShow(@Suppress("UNUSED_PARAMETER") event: BeforeShowEvent) {
+    private fun onInitEntity(event: InitEntityEvent<Activity>) {
+        event.entity.periodFrom = YearMonth.now().withMonth(1).atDay(1)
+        event.entity.periodTo = YearMonth.now().withMonth(12).atEndOfMonth()
+    }
+
+
+    @Subscribe
+    private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
+        initPivotGrid()
+        initDynamic()
+        setWindowCaption()
+    }
+
+
+    @Subscribe(id = "activityDc", target = Target.DATA_CONTAINER)
+    private fun onActivityDcItemPropertyChange(event: InstanceContainer.ItemPropertyChangeEvent<Activity>) {
+        if ((event.property == "periodFrom" || event.property == "periodTo") && event.value != null) {
+            initDynamic()
+        }
+    }
+
+    private fun initPivotGrid() {
         val pivotStaticProperties = listOf(
             StaticPropertyData("analytic", "", true, AnalyticSet::class.java, null, null, false),
 
@@ -97,28 +119,6 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
                 }
             }
             detail!!.value = value as Int?
-        }
-    }
-
-    @Subscribe
-    private fun onInitEntity(event: InitEntityEvent<Activity>) {
-        event.entity.periodFrom = YearMonth.now().withMonth(1).atDay(1)
-        event.entity.periodTo = YearMonth.now().withMonth(12).atEndOfMonth()
-    }
-
-
-    @Subscribe
-    private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
-        initDynamic()
-
-        setWindowCaption()
-    }
-
-
-    @Subscribe(id = "activityDc", target = Target.DATA_CONTAINER)
-    private fun onActivityDcItemPropertyChange(event: InstanceContainer.ItemPropertyChangeEvent<Activity>) {
-        if ((event.property == "periodFrom" || event.property == "periodTo") && event.value != null) {
-            initDynamic()
         }
     }
 
@@ -162,8 +162,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     }
 
     private fun initKvEntities(): List<KeyValueEntity> {
-        return dataManager.load(AnalyticSet::class.java)
-            .list()
+        return countrySettings.getActivityAnalyticSets(editedEntity.account!!.country!!)
             .map {
                 KeyValueEntity().apply {
                     this.setValue("analytic", it)

@@ -1,5 +1,6 @@
 package com.borets.pfa.core.role
 
+import com.borets.addon.country.entity.Country
 import com.borets.addon.pn.entity.*
 import com.borets.attachments.entity.Attachment
 import com.borets.pfa.entity.Employee
@@ -130,7 +131,8 @@ class ReadOnlyRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = SupplementaryDetail::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = SupplementaryDetailType::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = FileDescriptor::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = Attachment::class, operations = [EntityOp.READ])
+        EntityAccess(entityClass = Attachment::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = Country::class, operations = [EntityOp.READ])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -188,7 +190,8 @@ class ReadOnlyRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = SupplementaryDetail::class, view = ["*"]),
         EntityAttributeAccess(entityClass = SupplementaryDetailType::class, view = ["*"]),
         EntityAttributeAccess(entityClass = FileDescriptor::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = Attachment::class, view = ["*"])
+        EntityAttributeAccess(entityClass = Attachment::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = Country::class, view = ["*"])
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()

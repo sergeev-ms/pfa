@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://countrySettingBrowse.caption"
+        focusComponent="countrySettingsTable" messagesPack="com.borets.pfa.web.screens.setting.countrysetting">
+    <data readOnly="true">
+        <collection id="countrySettingsDc" class="com.borets.pfa.entity.setting.CountrySetting">
+            <view extends="_local">
+                <property name="country" view="_minimal"/>
+                <property name="createTs"/>
+                <property name="createdBy"/>
+                <property name="updateTs"/>
+                <property name="updatedBy"/>
+            </view>
+            <loader id="countrySettingsDl">
+                <query>
+                    <![CDATA[select e from pfa_CountrySetting e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="countrySettingsTable" spacing="true">
+        <filter id="filter" applyTo="countrySettingsTable" dataLoader="countrySettingsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="countrySettingsTable" width="100%" dataContainer="countrySettingsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="country"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
+                <button id="createBtn" action="countrySettingsTable.create"/>
+                <button id="editBtn" action="countrySettingsTable.edit"/>
+                <button id="removeBtn" action="countrySettingsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

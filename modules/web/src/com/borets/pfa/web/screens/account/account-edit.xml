@@ -40,6 +40,7 @@
                     <property name="createdBy"/>
                     <property name="createTs"/>
                 </property>
+                <property name="country" view="_minimal"/>
             </view>
             <loader id="accountDl"/>
             <instance id="actualRevisionDc" property="actualRevision"/>
@@ -82,15 +83,22 @@
                 </property>
             </view>
         </instance>
+        <collection id="countryOptionsDc" class="com.borets.addon.country.entity.Country">
+            <loader id="countryOptionsDl">
+                <query>select e from country_Country e order by e.name</query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600" width="800"/>
     <layout expand="tabSheet" spacing="false">
         <label id="screenHeader" stylename="h2 bold colored" align="MIDDLE_CENTER"/>
         <tabSheet id="tabSheet">
-            <tab id="generalTab" caption="msg://generalTab.caption" spacing="true" margin="true,false,false,false" expand="marketDataGb">
+            <tab id="generalTab" caption="msg://generalTab.caption" spacing="true" margin="true,false,false,false"
+                 expand="marketDataGb">
                 <groupBox id="accountDataGb" caption="msg://accountDataGb.caption" spacing="true">
                     <form id="form" dataContainer="accountDc" childrenCaptionWidth="170px" width="100%">
                         <column width="100%">
+                            <lookupField id="countryField" property="country" optionsContainer="countryOptionsDc"/>
                             <pickerField id="parentField" property="parent">
                                 <actions>
                                     <action id="open" type="picker_open"/>
@@ -99,7 +107,6 @@
                                 </actions>
                             </pickerField>
                             <textField id="nameField" property="name"/>
-                            <pickerField property="customer"/>
                         </column>
                         <column width="100%">
                             <lookupField property="contractType"/>
@@ -107,28 +114,34 @@
                             <lookupField property="fieldType" required="false"/>
                         </column>
                         <column width="100%">
-                            <textField id="typeField" property="type" editable="false" dataContainer="actualRevisionDc"/>
-                            <textField id="managerField" property="manager" editable="false" dataContainer="actualRevisionDc"/>
+                            <pickerField property="customer"/>
+                            <textField id="typeField" property="type" editable="false"
+                                       dataContainer="actualRevisionDc"/>
+                            <textField id="managerField" property="manager" editable="false"
+                                       dataContainer="actualRevisionDc"/>
                         </column>
                     </form>
                     <hbox spacing="true" align="MIDDLE_RIGHT">
-                        <linkButton id="createRevisionBtn" caption="msg://createRevisionBtn.caption" icon="CREATE_ACTION"
-                                    disableOnClick="true"/>
+                        <linkButton id="createRevisionBtn" caption="msg://createRevisionBtn.caption"
+                                    icon="CREATE_ACTION" disableOnClick="true"/>
                         <linkButton id="showRevisionsBtn" caption="msg://showRevisionsBtn.caption" icon="HISTORY"/>
                     </hbox>
                 </groupBox>
-                <groupBox id="marketDataGb" caption="msg://marketDataGb.caption" spacing="true" expand="marketDataFragment">
+                <groupBox id="marketDataGb" caption="msg://marketDataGb.caption" spacing="true"
+                          expand="marketDataFragment">
                     <fragment id="marketDataFragment" screen="pfa_MarketDataFragment"/>
                     <hbox spacing="true" align="MIDDLE_RIGHT">
-                        <linkButton id="createMarketDataBtn" caption="msg://createMarketDataBtn.caption" icon="CREATE_ACTION"
-                                    disableOnClick="true"/>
-                        <linkButton id="showMarketDetailsBtn" caption="msg://showMarketDetailsBtn.caption" icon="HISTORY"/>
+                        <linkButton id="createMarketDataBtn" caption="msg://createMarketDataBtn.caption"
+                                    icon="CREATE_ACTION" disableOnClick="true"/>
+                        <linkButton id="showMarketDetailsBtn" caption="msg://showMarketDetailsBtn.caption"
+                                    icon="HISTORY"/>
                     </hbox>
                 </groupBox>
             </tab>
             <tab id="appDataTab" caption="msg://appDataTab.caption" spacing="true"
                  margin="true,false,false,false" expand="appDataGb">
-                <groupBox id="appDataGb" caption="msg://appDataGb.caption" spacing="true" expand="applicationDataFragment">
+                <groupBox id="appDataGb" caption="msg://appDataGb.caption" spacing="true"
+                          expand="applicationDataFragment">
                     <fragment id="applicationDataFragment" screen="pfa_ApplicationDataFragment"/>
                 </groupBox>
                 <hbox spacing="true" align="MIDDLE_RIGHT">
@@ -139,17 +152,18 @@
             </tab>
             <tab id="utilizationTab" caption="msg://utilizationTab.caption" margin="true,false,false,false"
                  expand="equipmentUtilizationGb" spacing="true">
-                <groupBox id="equipmentUtilizationGb" caption="msg://equipmentUtilizationGb.caption" spacing="true" expand="equipmentUtilizationFragment">
+                <groupBox id="equipmentUtilizationGb" caption="msg://equipmentUtilizationGb.caption" spacing="true"
+                          expand="equipmentUtilizationFragment">
                     <fragment id="equipmentUtilizationFragment" screen="pfa_EquipmentUtilizationFragment"/>
                 </groupBox>
                 <hbox spacing="true" align="MIDDLE_RIGHT">
-                    <linkButton id="createUtilizationBtn" caption="msg://createUtilizationBtn.caption" icon="CREATE_ACTION"
-                                disableOnClick="true"/>
+                    <linkButton id="createUtilizationBtn" caption="msg://createUtilizationBtn.caption"
+                                icon="CREATE_ACTION" disableOnClick="true"/>
                     <linkButton id="showUtilizationsBtn" caption="msg://showUtiliazationsBtn.caption" icon="HISTORY"/>
                 </hbox>
             </tab>
             <tab id="priceListsTab" caption="msg://priceListsTab.caption" expand="priceListsTable"
-                 spacing="true" margin="true,false,false,false" >
+                 spacing="true" margin="true,false,false,false">
                 <table id="priceListsTable" dataContainer="priceListsDc" width="100%">
                     <columns>
                         <column id="recordType"/>
@@ -166,7 +180,7 @@
                 <linkButton id="createPriceListBtn" action="priceListsTable.create" align="MIDDLE_RIGHT"/>
             </tab>
             <tab id="activityPlansTab" caption="msg://activityPlansTab.caption" expand="activityPlansTable"
-                 spacing="true" margin="true,false,false,false" >
+                 spacing="true" margin="true,false,false,false">
                 <table id="activityPlansTable" dataContainer="activityPlansDc" width="100%">
                     <columns>
                         <column id="recordType"/>
@@ -177,7 +191,6 @@
                         <action id="view" trackSelection="true" caption="msg://activityPlansTable.view.caption"/>
                         <action id="create" type="create" icon="CREATE_ACTION"
                                 caption="msg://activityPlansTable.create.caption"/>
-
                     </actions>
                     <rowsCount/>
                 </table>

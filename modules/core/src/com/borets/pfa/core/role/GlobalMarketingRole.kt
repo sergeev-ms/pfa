@@ -1,5 +1,6 @@
 package com.borets.pfa.core.role
 
+import com.borets.addon.country.entity.Country
 import com.borets.addon.pn.entity.*
 import com.borets.attachments.entity.Attachment
 import com.borets.pfa.entity.Employee
@@ -132,7 +133,8 @@ class GlobalMarketingRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = PumpMaterials::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = PumpType::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = SealConfig::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = VaproConfig::class, operations = [EntityOp.READ])
+        EntityAccess(entityClass = VaproConfig::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = Country::class, operations = [EntityOp.READ])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()

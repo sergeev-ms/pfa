@@ -24,9 +24,7 @@
                 dataLoader="analyticSetsDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="analyticSetsTable"
-                    width="100%"
-                    dataContainer="analyticSetsDc">
+        <groupTable id="analyticSetsTable" width="100%" dataContainer="analyticSetsDc" multiselect="true">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
@@ -38,8 +36,7 @@
                 <column id="wellTag"/>
             </columns>
             <rowsCount/>
-            <buttonsPanel id="buttonsPanel"
-                          alwaysVisible="true">
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
                 <button id="createBtn" action="analyticSetsTable.create"/>
                 <button id="editBtn" action="analyticSetsTable.edit"/>
                 <button id="removeBtn" action="analyticSetsTable.remove"/>

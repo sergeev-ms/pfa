@@ -1,5 +1,6 @@
 package com.borets.pfa.web.screens.price.pricelist.input
 
+import com.borets.pfa.web.beans.CountrySettingsBean
 import com.borets.pfa.entity.activity.JobType
 import com.borets.pfa.entity.activity.WellEquip
 import com.borets.pfa.entity.activity.WellTag
@@ -42,6 +43,8 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     private lateinit var screenBuilders: ScreenBuilders
     @Inject
     private lateinit var screenValidation: ScreenValidation
+    @Inject
+    private lateinit var countrySettings: CountrySettingsBean
 
     @Inject
     private lateinit var detailsDc: CollectionPropertyContainer<PriceListDetail>
@@ -70,12 +73,8 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     }
 
     @Subscribe
-    private fun onBeforeShow(@Suppress("UNUSED_PARAMETER") event: BeforeShowEvent) {
-        initPivotGrid()
-    }
-
-    @Subscribe
     private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
+        initPivotGrid()
         initDynamic()
         setWindowCaption()
         editedEntity.getYearMonth()?.let {
@@ -159,8 +158,7 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     }
 
     private fun initKvEntities(): List<KeyValueEntity> {
-        return dataManager.load(AnalyticSet::class.java)
-            .list()
+        return countrySettings.getPriceAnalyticSets(editedEntity.account!!.country!!)
             .map {
                 KeyValueEntity().apply {
                     this.setValue("analytic", it)

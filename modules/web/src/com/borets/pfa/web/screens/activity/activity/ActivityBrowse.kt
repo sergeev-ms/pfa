@@ -49,12 +49,4 @@ class ActivityBrowse : StandardLookup<Activity>() {
             .editEntity(activitiesTable.singleSelected!!)
             .show()
     }
-
-    @Subscribe("activitiesTable.create")
-    private fun onActivitiesTableCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
-        screenBuilders.editor(activitiesTable)
-            .newEntity()
-            .withScreenClass(ActivityPivotEdit::class.java)
-            .show()
-    }
 }

@@ -1,0 +1,1 @@
+alter table PFA_COUNTRY_SETTING_ANALYTIC_DETAIL add ORDER_ integer ;

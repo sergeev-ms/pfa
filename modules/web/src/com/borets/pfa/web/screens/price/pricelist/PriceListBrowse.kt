@@ -45,14 +45,4 @@ class PriceListBrowse : StandardLookup<PriceList>() {
             .withScreenClass(PriceListPivotEdit::class.java)
             .show()
     }
-
-    @Subscribe("priceListsTable.create")
-    private fun onPriceListsTableCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
-        screenBuilders.editor(priceListsTable)
-            .newEntity()
-            .withScreenClass(PriceListPivotEdit::class.java)
-            .show()
-    }
-
-
 }

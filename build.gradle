@@ -65,6 +65,7 @@ dependencies {
     appComponent('com.borets.addon.pn:pn-global:0.2.1')
     appComponent('com.borets.addon.mu:mu-global:0.1.1')
     appComponent('com.borets.attachments:attach-global:0.3.1')
+    appComponent('com.borets.addon.country:country-global:0.1.2')
 }
 
 def mssql = 'com.microsoft.sqlserver:mssql-jdbc:7.2.2.jre8'

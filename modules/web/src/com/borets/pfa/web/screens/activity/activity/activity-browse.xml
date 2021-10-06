@@ -34,7 +34,6 @@
         </filter>
         <groupTable id="activitiesTable" width="100%" dataContainer="activitiesDc">
             <actions>
-                <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
                 <action id="openPlain" caption="openPlain"/>
@@ -48,7 +47,6 @@
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">
-                <button id="createBtn" action="activitiesTable.create"/>
                 <button id="editBtn" action="activitiesTable.edit"/>
                 <button id="removeBtn" action="activitiesTable.remove"/>
             </buttonsPanel>

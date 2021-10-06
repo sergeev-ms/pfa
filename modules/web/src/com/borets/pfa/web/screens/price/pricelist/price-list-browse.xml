@@ -31,7 +31,6 @@
         </filter>
         <groupTable id="priceListsTable" width="100%" dataContainer="priceListsDc">
             <actions>
-                <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
                 <action id="openPlain" caption="msg://priceListsTable.openPlain.caption" trackSelection="true"/>
@@ -44,7 +43,6 @@
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">
-                <button id="createBtn" action="priceListsTable.create"/>
                 <button id="editBtn" action="priceListsTable.edit"/>
                 <button id="removeBtn" action="priceListsTable.remove"/>
             </buttonsPanel>

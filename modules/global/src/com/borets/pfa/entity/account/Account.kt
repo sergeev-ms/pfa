@@ -1,5 +1,6 @@
 package com.borets.pfa.entity.account
 
+import com.borets.addon.country.entity.Country
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.marketdata.ApplicationType
 import com.borets.pfa.entity.account.marketdata.MarketData
@@ -26,6 +27,10 @@ import javax.persistence.*
 @Table(name = "PFA_ACCOUNT")
 @Entity(name = "pfa_Account")
 open class Account : StandardEntity() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COUNTRY_ID")
+    var country: Country? = null
+
     @Column(name = "NAME")
     var name: String? = null
 

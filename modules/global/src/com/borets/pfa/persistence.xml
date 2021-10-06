@@ -34,5 +34,7 @@
         <class>com.borets.pfa.entity.account.supplementary.Supplementary</class>
         <class>com.borets.pfa.entity.account.supplementary.SupplementaryDetail</class>
         <class>com.borets.pfa.entity.account.supplementary.SupplementaryDetailType</class>
+        <class>com.borets.pfa.entity.setting.CountrySetting</class>
+        <class>com.borets.pfa.entity.setting.CountrySettingAnalyticDetail</class>
     </persistence-unit>
 </persistence>

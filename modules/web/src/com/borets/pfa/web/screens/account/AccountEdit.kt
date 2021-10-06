@@ -1,5 +1,6 @@
 package com.borets.pfa.web.screens.account
 
+import com.borets.addon.country.entity.Country
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.appdata.ApplicationData
@@ -71,6 +72,10 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var supplementaryDl: InstanceLoader<Supplementary>
     @Inject
     private lateinit var supplementaryDc: InstanceContainer<Supplementary>
+    @Inject
+    private lateinit var countryOptionsDl: CollectionLoader<Country>
+    @Inject
+    private lateinit var countryOptionsDc: CollectionContainer<Country>
 
     @Inject
     private lateinit var applicationDataFragment: ApplicationDataFragment
@@ -100,12 +105,16 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var createAppDataBtn: LinkButton
     @Inject
     private lateinit var createUtilizationBtn: LinkButton
+    @Inject
+    private lateinit var countryField: LookupField<Country>
 
     @Subscribe
     private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
         applicationDataFragment.setEditable(false)
         equipmentUtilizationFragment.setEditable(false)
         marketDataFragment.setEditable(false)
+
+        countryOptionsDl.load() //early load to use results in InitEntityEvent
     }
 
     @Subscribe
@@ -114,8 +123,19 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Subscribe
+    private fun onInitEntity(event: InitEntityEvent<Account>) {
+        if (countryOptionsDc.items.size == 1) {
+            event.entity.country = countryOptionsDc.items[0]
+        }
+    }
+
+
+    @Subscribe
     private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
         setWindowCaption()
+        if (countryOptionsDc.items.size == 1) {
+            countryField.isEditable = false
+        }
     }
 
     @Subscribe
@@ -379,6 +399,11 @@ class AccountEdit : StandardEditor<Account>() {
             .withScreenClass(ActivityPivotEdit::class.java)
             .withInitializer { it.account = editedEntity }
             .show()
+    }
+
+    @Install(to = "countryField", subject = "optionIconProvider")
+    private fun countryFieldOptionIconProvider(country: Country?): String? {
+        return country?.picture
     }
 
     private fun getHeaderRecursive(account: Account): String? {

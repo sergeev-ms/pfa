@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
         caption="msg://accountBrowse.caption" focusComponent="accountsTable"
         messagesPack="com.borets.pfa.web.screens.account">
     <data readOnly="true">
@@ -12,6 +11,7 @@
                     <property name="manager"/>
                     <property name="yearMonth"/>
                 </property>
+                <property name="country" view="_minimal"/>
             </view>
             <loader id="accountsDl">
                 <query>
@@ -22,7 +22,8 @@
     </data>
     <dialogMode height="600" width="800"/>
     <layout expand="accountsTable" spacing="true">
-        <filter id="filter" applyTo="accountsTable" dataLoader="accountsDl" useMaxResults="false" windowCaptionUpdateEnabled="false">
+        <filter id="filter" applyTo="accountsTable" dataLoader="accountsDl" useMaxResults="false"
+                windowCaptionUpdateEnabled="false">
             <properties include=".*"/>
         </filter>
         <treeTable id="accountsTable" width="100%" dataContainer="accountsDc" hierarchyProperty="parent">
@@ -43,6 +44,7 @@
                 <column id="actualRevision.type"/>
                 <column id="actualRevision.manager"/>
                 <column id="actualRevision.yearMonth"/>
+                <column id="country" collapsed="true"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">

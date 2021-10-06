@@ -11,6 +11,7 @@
             <item screen="pfa_EquipmentType.browse" caption="mainMsg://menu_config.pfa_EquipmentType.browse"/>
             <item screen="pfa_EquipmentCategory.browse" caption="mainMsg://menu_config.pfa_EquipmentCategory.browse"/>
             <item screen="pfa_SystemStd.browse" caption="mainMsg://menu_config.pfa_SystemStd.browse"/>
+            <item screen="pfa_CountrySetting.browse" caption="mainMsg://menu_config.pfa_CountrySetting.browse"/>
             <item screen="pfa_Employee.browse" caption="mainMsg://menu_config.pfa_Employee.browse"/>
             <item screen="pfa_SupplementaryDetailType.browse" caption="mainMsg://menu_config.pfa_SupplementaryDetailType.browse"/>
             <menu id="system-classification" caption="mainMsg://menu_config.system-classification">

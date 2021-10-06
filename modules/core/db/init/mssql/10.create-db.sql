@@ -113,6 +113,7 @@ create table PFA_ACCOUNT (
     DELETE_TS datetime2,
     DELETED_BY nvarchar(50),
     --
+    COUNTRY_ID uniqueidentifier,
     NAME nvarchar(255),
     PARENT_ID uniqueidentifier,
     CUSTOMER_ID decimal(7),
@@ -122,6 +123,7 @@ create table PFA_ACCOUNT (
     CONTRACT_TYPE nvarchar(50),
     APPLICATION_TYPE nvarchar(50),
     ACTUAL_EQUIPMENT_UTILIZATION_ID uniqueidentifier,
+    FIELD_TYPE nvarchar(50),
     --
     primary key nonclustered (ID)
 )^
@@ -575,3 +577,39 @@ create table PFA_SUPPLEMENTARY_DETAIL (
     primary key nonclustered (ID)
 )^
 -- end PFA_SUPPLEMENTARY_DETAIL
+-- begin PFA_COUNTRY_SETTING_ANALYTIC_DETAIL
+create table PFA_COUNTRY_SETTING_ANALYTIC_DETAIL (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    COUNTRY_SETTING_ID uniqueidentifier not null,
+    ANALYTIC_SET_ID uniqueidentifier,
+    PRICE_LIST tinyint,
+    ACTIVITY_PLAN tinyint,
+    ORDER_ integer,
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_COUNTRY_SETTING_ANALYTIC_DETAIL
+-- begin PFA_COUNTRY_SETTING
+create table PFA_COUNTRY_SETTING (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    COUNTRY_ID uniqueidentifier,
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_COUNTRY_SETTING
