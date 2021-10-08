@@ -1,9 +1,11 @@
 package com.borets.pfa.web.beans
 
 import com.borets.addon.country.entity.Country
+import com.borets.pfa.entity.account.appdata.EquipmentType
 import com.borets.pfa.entity.analytic.AnalyticSet
 import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.entity.setting.CountrySettingAnalyticDetail
+import com.borets.pfa.entity.setting.CountrySettingEquipmentType
 import com.borets.pfa.entity.setting.CountrySettingRevenueType
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.View
@@ -60,6 +62,17 @@ class CountrySettingsBean {
             .view { it.add("revenueType", View.LOCAL) }
             .list()
             .map { it.revenueType!! }
+    }
+
+    fun getEquipmentTypesForUtilizationModel(country : Country) : List<EquipmentType> {
+        return dataManager.load(CountrySettingEquipmentType::class.java)
+            .query("""where e.countrySetting.country = :country
+                |and e.showInUtilModel = 1
+                |order by e.order""".trimMargin())
+            .parameter("country", country)
+            .view { it.add("equipmentType", View.LOCAL) }
+            .list()
+            .map { it.equipmentType!! }
     }
 
 }
