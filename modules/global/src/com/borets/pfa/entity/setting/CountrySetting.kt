@@ -20,6 +20,11 @@ open class CountrySetting : StandardEntity() {
     @OneToMany(mappedBy = "countrySetting")
     var analyticSettings: MutableList<CountrySettingAnalyticDetail>? = mutableListOf()
 
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "countrySetting")
+    var revenueTypeSettings: MutableList<CountrySettingRevenueType>? = mutableListOf()
+
     companion object {
         private const val serialVersionUID = -2129473630577786850L
     }

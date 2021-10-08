@@ -134,9 +134,7 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     }
 
     private fun initDynamic() {
-        dataManager.load(RevenueType::class.java)
-            .query("select e from pfa_RevenueType e order by e.order, e.name")
-            .list()
+            countrySettings.getRevenueTypes(editedEntity.account!!.country!!)
             .map { PivotGridInitializer.DynamicPropertyData(
                 it.id.toString(),
                 it.name!!,

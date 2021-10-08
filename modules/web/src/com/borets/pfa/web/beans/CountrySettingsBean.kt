@@ -2,7 +2,9 @@ package com.borets.pfa.web.beans
 
 import com.borets.addon.country.entity.Country
 import com.borets.pfa.entity.analytic.AnalyticSet
+import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.entity.setting.CountrySettingAnalyticDetail
+import com.borets.pfa.entity.setting.CountrySettingRevenueType
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.View
 import org.springframework.stereotype.Component
@@ -47,6 +49,17 @@ class CountrySettingsBean {
             .view { it.add("analyticSet", View.LOCAL) }
             .list()
             .map { it.analyticSet!! }
+    }
+
+
+    fun getRevenueTypes(country : Country) : List<RevenueType> {
+        return dataManager.load(CountrySettingRevenueType::class.java)
+            .query("""where e.countrySetting.country = :country
+                |order by e.revenueType.order, e.revenueType.name""".trimMargin())
+            .parameter("country", country)
+            .view { it.add("revenueType", View.LOCAL) }
+            .list()
+            .map { it.revenueType!! }
     }
 
 }

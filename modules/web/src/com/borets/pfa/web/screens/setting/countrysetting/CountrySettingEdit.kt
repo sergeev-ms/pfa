@@ -1,8 +1,10 @@
 package com.borets.pfa.web.screens.setting.countrysetting
 
 import com.borets.pfa.entity.analytic.AnalyticSet
+import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.entity.setting.CountrySetting
 import com.borets.pfa.entity.setting.CountrySettingAnalyticDetail
+import com.borets.pfa.entity.setting.CountrySettingRevenueType
 import com.haulmont.cuba.core.global.Sort
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.Action
@@ -23,6 +25,8 @@ class CountrySettingEdit : StandardEditor<CountrySetting>() {
 
     @Inject
     private lateinit var analyticSettingsDc: CollectionPropertyContainer<CountrySettingAnalyticDetail>
+    @Inject
+    private lateinit var revenueTypeSettingsDc: CollectionPropertyContainer<CountrySettingRevenueType>
 
     @Subscribe("analyticSettingsTable.add")
     private fun onAnalyticSettingsTableAdd(event: Action.ActionPerformedEvent) {
@@ -36,6 +40,22 @@ class CountrySettingEdit : StandardEditor<CountrySetting>() {
                     }
                 }.toList().run {
                     analyticSettingsDc.mutableItems.addAll(this)
+                }
+            }.show()
+    }
+
+    @Subscribe("revenueTypeSettingsTable.add")
+    private fun onRevenueTypeSettingsTableAdd(event: Action.ActionPerformedEvent) {
+        screenBuilders.lookup(RevenueType::class.java, this)
+            .withOpenMode(OpenMode.NEW_TAB)
+            .withSelectHandler {
+                it.onEach {
+                    dataContext.create(CountrySettingRevenueType::class.java).apply {
+                        countrySetting = editedEntity
+                        revenueType = it
+                    }.run {
+                        revenueTypeSettingsDc.mutableItems.add(this)
+                    }
                 }
             }.show()
     }
