@@ -1,8 +1,11 @@
 package com.borets.pfa.entity.account.utilization
 
 import com.borets.pfa.entity.account.appdata.EquipmentType
+import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity
+import com.haulmont.cuba.core.entity.annotation.OnDelete
+import com.haulmont.cuba.core.global.DeletePolicy
 import java.math.BigDecimal
 import javax.persistence.*
 
@@ -34,6 +37,11 @@ open class EquipmentUtilizationDetail : StandardEntity() {
 
     @Column(name = "ORDER_")
     var order: Int? = null
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "detail")
+    var values: MutableList<EquipmentUtilizationDetailValue>? = mutableListOf()
 
     fun getRevenueMode(): RevenueMode? = revenueMode?.let { RevenueMode.fromId(it) }
 
