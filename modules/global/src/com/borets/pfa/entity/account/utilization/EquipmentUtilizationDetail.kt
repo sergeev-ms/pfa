@@ -1,7 +1,6 @@
 package com.borets.pfa.entity.account.utilization
 
 import com.borets.pfa.entity.account.appdata.EquipmentType
-import com.borets.pfa.entity.account.appdata.RevenueMode
 import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity
 import java.math.BigDecimal
