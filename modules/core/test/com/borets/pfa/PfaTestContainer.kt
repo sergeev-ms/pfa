@@ -13,7 +13,8 @@ open class PfaTestContainer : TestContainer() {
             "com.haulmont.addon.ldap",
             "com.borets.addon.pn",
             "com.borets.addon.mu",
-            "com.borets.attachments"
+            "com.borets.attachments",
+            "com.haulmont.reports"
         )
         appPropertiesFiles = mutableListOf(
                 // List the files defined in your web.xml
