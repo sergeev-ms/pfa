@@ -36,9 +36,10 @@
                     <property name="createdBy"/>
                     <property name="createTs"/>
                 </property>
-                <property name="actualEquipmentUtilization" view="_minimal">
-                    <property name="createdBy"/>
-                    <property name="createTs"/>
+                <property name="actualEquipmentUtilization" view="_local">
+                    <property name="details" view="_local">
+                        <property name="equipmentType" view="_minimal"/>
+                    </property>
                 </property>
                 <property name="country" view="_minimal"/>
             </view>
@@ -46,6 +47,7 @@
             <instance id="actualRevisionDc" property="actualRevision"/>
             <instance id="marketDataDc" property="actualMarketDetail"/>
             <instance id="applicationDataDc" property="actualAppDetail"/>
+            <instance id="equipmentUtilizationDc" property="actualEquipmentUtilization"/>
         </instance>
         <collection id="priceListsDc" class="com.borets.pfa.entity.price.PriceList">
             <view extends="_local">
@@ -63,16 +65,6 @@
                 <query>where e.account = :container_accountDc order by e.createTs desc</query>
             </loader>
         </collection>
-        <instance id="equipmentUtilizationDc" class="com.borets.pfa.entity.account.utilization.EquipmentUtilization">
-            <loader id="equipmentUtilizationDl">
-                <query>where e.id = :equipmentUtilizationId</query>
-            </loader>
-            <view extends="_local">
-                <property name="details" view="_local">
-                    <property name="equipmentType" view="_minimal"/>
-                </property>
-            </view>
-        </instance>
         <instance id="supplementaryDc" class="com.borets.pfa.entity.account.supplementary.Supplementary">
             <loader id="supplementaryDl">
                 <query>where e.account = :container_accountDc</query>
@@ -86,6 +78,19 @@
         <collection id="countryOptionsDc" class="com.borets.addon.country.entity.Country">
             <loader id="countryOptionsDl">
                 <query>select e from country_Country e order by e.name</query>
+            </loader>
+        </collection>
+        <collection id="equipmentUtilizationDetailValueDc"
+                    class="com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue">
+            <view extends="_local">
+                <property name="detail" view="_minimal"/>
+                <property name="valueType" view="_minimal"/>
+            </view>
+            <loader id="equipmentUtilizationDetailValueDl">
+                <query>
+                    select e from pfa_EquipmentUtilizationDetailValue e where
+                    e.detail.equipmentUtilization.account = :container_accountDc
+                </query>
             </loader>
         </collection>
     </data>

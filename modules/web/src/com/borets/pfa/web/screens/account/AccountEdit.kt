@@ -9,6 +9,7 @@ import com.borets.pfa.entity.account.marketdata.MarketData
 import com.borets.pfa.entity.account.supplementary.Supplementary
 import com.borets.pfa.entity.account.system.System
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
+import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.web.screens.account.appdata.applicationdata.ApplicationDataFragment
@@ -55,9 +56,7 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var applicationDataDc: InstancePropertyContainer<ApplicationData>
     @Inject
-    private lateinit var equipmentUtilizationDc: InstanceContainer<EquipmentUtilization>
-    @Inject
-    private lateinit var equipmentUtilizationDl: InstanceLoader<EquipmentUtilization>
+    private lateinit var equipmentUtilizationDc: InstancePropertyContainer<EquipmentUtilization>
     @Inject
     private lateinit var accountDl: InstanceLoader<Account>
     @Inject
@@ -76,6 +75,10 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var countryOptionsDl: CollectionLoader<Country>
     @Inject
     private lateinit var countryOptionsDc: CollectionContainer<Country>
+    @Inject
+    private lateinit var equipmentUtilizationDetailValueDl: CollectionLoader<EquipmentUtilizationDetailValue>
+    @Inject
+    private lateinit var equipmentUtilizationDetailValueDc: CollectionContainer<EquipmentUtilizationDetailValue>
 
     @Inject
     private lateinit var applicationDataFragment: ApplicationDataFragment
@@ -108,17 +111,28 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var countryField: LookupField<Country>
 
+
     @Subscribe
-    private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
+    private fun onInit(event: InitEvent) {
         applicationDataFragment.setEditable(false)
         equipmentUtilizationFragment.setEditable(false)
         marketDataFragment.setEditable(false)
+    }
 
+    @Subscribe
+    private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
         countryOptionsDl.load() //early load to use results in InitEntityEvent
     }
 
     @Subscribe
     private fun onBeforeShow(@Suppress("UNUSED_PARAMETER") event: BeforeShowEvent) {
+        /*
+        Load before accountDl because of EquipmentUtilizationFragment InstanceContainer.ItemChangeEvent
+        We have to have detail values to repaint pivot table
+        */
+        equipmentUtilizationDetailValueDl.setParameter("container_accountDc", editedEntity)
+        equipmentUtilizationDetailValueDl.load()
+
         accountDl.load()
     }
 
@@ -142,6 +156,7 @@ class AccountEdit : StandardEditor<Account>() {
     private fun onAfterCommitChanges(@Suppress("UNUSED_PARAMETER") event: AfterCommitChangesEvent) {
         reEnableButtons()
     }
+
 
     @Subscribe("createRevisionBtn")
     private fun onCreateRevisionBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
@@ -332,14 +347,6 @@ class AccountEdit : StandardEditor<Account>() {
                     activityPlansDl.load()
                 }
             }
-            "utilizationTab" -> {
-                if (equipmentUtilizationDc.itemOrNull == null) {
-                    editedEntity.actualEquipmentUtilization?.let {
-                        equipmentUtilizationDl.setParameter("equipmentUtilizationId", it.id)
-                        equipmentUtilizationDl.load()
-                    }
-                }
-            }
             "supplementaryTab" -> {
                 if (entityStates.isNew(editedEntity)) {
                     supplementaryDc.setItem(editedEntity.supplementary)
@@ -360,11 +367,18 @@ class AccountEdit : StandardEditor<Account>() {
             .withOptions(MapScreenOptions(mutableMapOf(Pair("copyFrom", editedEntity.actualEquipmentUtilization)) as Map<String, Any>))
             .withOpenMode(OpenMode.NEW_TAB)
             .build()
-            .also {
-                it.addAfterCloseListener { event ->
+            .also { screen ->
+                screen.addAfterCloseListener { event ->
                     if (event.closeAction == WINDOW_COMMIT_AND_CLOSE_ACTION) {
                         @Suppress("UNCHECKED_CAST")
                         val committedEntity = (event.screen as StandardEditor<EquipmentUtilization>).editedEntity
+
+                        equipmentUtilizationDetailValueDc.mutableItems.clear()
+                        dataContext.modified
+                            .filterIsInstance<EquipmentUtilizationDetailValue>()
+                            .filter { it.detail!!.equipmentUtilization == committedEntity }
+                            .forEach { equipmentUtilizationDetailValueDc.mutableItems.add(it) }
+
                         equipmentUtilizationDc.setItem(committedEntity)
                         editedEntity.actualEquipmentUtilization = committedEntity
                     }

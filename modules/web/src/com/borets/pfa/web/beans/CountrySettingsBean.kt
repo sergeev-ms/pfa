@@ -2,6 +2,7 @@ package com.borets.pfa.web.beans
 
 import com.borets.addon.country.entity.Country
 import com.borets.pfa.entity.account.appdata.EquipmentType
+import com.borets.pfa.entity.account.utilization.EquipmentUtilizationValueType
 import com.borets.pfa.entity.analytic.AnalyticSet
 import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.entity.setting.CountrySettingAnalyticDetail
@@ -73,6 +74,12 @@ class CountrySettingsBean {
             .view { it.add("equipmentType", View.LOCAL) }
             .list()
             .map { it.equipmentType!! }
+    }
+
+    fun getEquipmentUtilizationDetailValueType() : List<EquipmentUtilizationValueType> {
+        // TODO: 09.10.2021 implement country specific
+        return dataManager.load(EquipmentUtilizationValueType::class.java)
+            .list()
     }
 
 }

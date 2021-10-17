@@ -3,9 +3,6 @@ package com.borets.pfa.web.screens.account.utilization.equipmentutilization
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetail
 import com.borets.pfa.web.beans.CountrySettingsBean
-import com.haulmont.cuba.core.global.DataManager
-import com.haulmont.cuba.core.global.EntityStates
-import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
 import com.haulmont.cuba.gui.screen.*
 import javax.inject.Inject
@@ -16,14 +13,9 @@ import javax.inject.Inject
 @LoadDataBeforeShow
 class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
     @Inject
-    private lateinit var entityStates: EntityStates
-    @Inject
     private lateinit var dataContext: DataContext
     @Inject
     private lateinit var countrySettings: CountrySettingsBean
-
-    @Inject
-    private lateinit var detailsDc: CollectionPropertyContainer<EquipmentUtilizationDetail>
 
     private var copyFrom : EquipmentUtilization? = null
 
@@ -33,13 +25,11 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
     }
 
     @Subscribe
-    private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
-        if (entityStates.isNew(editedEntity)) {
-            createDetails()
-        }
+    private fun onInitEntity(event: InitEntityEvent<EquipmentUtilization>) {
+        createDetails(event.entity)
     }
 
-    private fun createDetails() {
+    private fun createDetails(entity: EquipmentUtilization) {
         val breakdowns = countrySettings.getEquipmentTypesForUtilizationModel(editedEntity.account!!.country!!)
             .map {
                 dataContext.create(EquipmentUtilizationDetail::class.java).apply {
@@ -47,17 +37,17 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
                     this.equipmentType = it
 
                     //copy details values from copyFrom
-                    copyFrom?.details?.let { copyFromDetails ->
-                        copyFromDetails.find { copyFromDetail -> copyFromDetail.equipmentType == it }
-                            ?.let { foundedDetail ->
-                                this.setRevenueMode(foundedDetail.getRevenueMode())
-                                this.firstRunValue = foundedDetail.firstRunValue
-                                this.sequentRunValue = foundedDetail.sequentRunValue
-                                this.sequentRunCompetitorValue = foundedDetail.sequentRunCompetitorValue
-                            }
-                    }
+//                    copyFrom?.details?.let { copyFromDetails ->
+//                        copyFromDetails.find { copyFromDetail -> copyFromDetail.equipmentType == it }
+//                            ?.let { foundedDetail ->
+//                                this.setRevenueMode(foundedDetail.getRevenueMode())
+//                                this.firstRunValue = foundedDetail.firstRunValue
+//                                this.sequentRunValue = foundedDetail.sequentRunValue
+//                                this.sequentRunCompetitorValue = foundedDetail.sequentRunCompetitorValue
+//                            }
+//                    }
                 }
             }
-        detailsDc.mutableItems.addAll(breakdowns)
+        entity.details = breakdowns.toMutableList()
     }
 }

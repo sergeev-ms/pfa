@@ -10,10 +10,28 @@
                 </property>
             </view>
             <loader/>
-            <collection id="detailsDc" property="details"/>
+            <collection id="detailsDc" property="details">
+                <collection id="detailValuesDc" property="values"/>
+            </collection>
         </instance>
+        <collection id="equipmentUtilizationDetailValueDc"
+                    class="com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue">
+            <view extends="_local">
+                <property name="detail" view="_minimal"/>
+                <property name="valueType" view="_minimal"/>
+            </view>
+            <loader id="equipmentUtilizationDetailValueDl">
+                <query>
+                    select e from pfa_EquipmentUtilizationDetailValue e where
+                    e.detail.equipmentUtilization = :container_equipmentUtilizationDc
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600" width="800"/>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
     <layout expand="detailsBox" spacing="true">
         <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.account.utilization/EquipmentUtilization.details" expand="equipmentUtilizationFragment">
             <fragment id="equipmentUtilizationFragment" screen="pfa_EquipmentUtilizationFragment" width="100%"/>
