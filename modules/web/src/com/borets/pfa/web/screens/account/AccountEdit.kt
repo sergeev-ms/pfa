@@ -130,6 +130,7 @@ class AccountEdit : StandardEditor<Account>() {
         Load before accountDl because of EquipmentUtilizationFragment InstanceContainer.ItemChangeEvent
         We have to have detail values to repaint pivot table
         */
+        // TODO: 17.10.2021         Looks like there is the performance problem. Same data will be loaded with accountDl
         equipmentUtilizationDetailValueDl.setParameter("container_accountDc", editedEntity)
         equipmentUtilizationDetailValueDl.load()
 
@@ -376,7 +377,7 @@ class AccountEdit : StandardEditor<Account>() {
                         equipmentUtilizationDetailValueDc.mutableItems.clear()
                         dataContext.modified
                             .filterIsInstance<EquipmentUtilizationDetailValue>()
-                            .filter { it.detail!!.equipmentUtilization == committedEntity }
+                            .filter { it.detail?.equipmentUtilization == committedEntity }
                             .forEach { equipmentUtilizationDetailValueDc.mutableItems.add(it) }
 
                         equipmentUtilizationDc.setItem(committedEntity)

@@ -2,7 +2,9 @@ package com.borets.pfa.web.screens.account.utilization.equipmentutilization
 
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetail
+import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue
 import com.borets.pfa.web.beans.CountrySettingsBean
+import com.haulmont.cuba.gui.model.CollectionContainer
 import com.haulmont.cuba.gui.model.DataContext
 import com.haulmont.cuba.gui.screen.*
 import javax.inject.Inject
@@ -17,7 +19,11 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
     @Inject
     private lateinit var countrySettings: CountrySettingsBean
 
-    private var copyFrom : EquipmentUtilization? = null
+    @Inject
+    private lateinit var equipmentUtilizationDetailValueDc: CollectionContainer<EquipmentUtilizationDetailValue>
+
+
+    private var copyFrom: EquipmentUtilization? = null
 
     @Subscribe
     private fun onAfterInit(event: AfterInitEvent) {
@@ -30,24 +36,36 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
     }
 
     private fun createDetails(entity: EquipmentUtilization) {
-        val breakdowns = countrySettings.getEquipmentTypesForUtilizationModel(editedEntity.account!!.country!!)
+        countrySettings.getEquipmentTypesForUtilizationModel(editedEntity.account!!.country!!)
             .map {
-                dataContext.create(EquipmentUtilizationDetail::class.java).apply {
-                    this.equipmentUtilization = editedEntity
+                return@map dataContext.create(EquipmentUtilizationDetail::class.java).apply {
+                    this.equipmentUtilization = entity
                     this.equipmentType = it
-
-                    //copy details values from copyFrom
-//                    copyFrom?.details?.let { copyFromDetails ->
-//                        copyFromDetails.find { copyFromDetail -> copyFromDetail.equipmentType == it }
-//                            ?.let { foundedDetail ->
-//                                this.setRevenueMode(foundedDetail.getRevenueMode())
-//                                this.firstRunValue = foundedDetail.firstRunValue
-//                                this.sequentRunValue = foundedDetail.sequentRunValue
-//                                this.sequentRunCompetitorValue = foundedDetail.sequentRunCompetitorValue
-//                            }
-//                    }
+                }.copyDetail {
+                    copyFrom?.details?.let { copyFromDetails ->
+                        copyFromDetails.find { copyFromDetail -> copyFromDetail.equipmentType == it }
+                    }
                 }
+            }.let {
+                entity.details = it.toMutableList()
             }
-        entity.details = breakdowns.toMutableList()
+
+    }
+
+    private inline fun EquipmentUtilizationDetail.copyDetail(function: () -> EquipmentUtilizationDetail?)
+            : EquipmentUtilizationDetail {
+        val copyFrom = function.invoke()
+        this.setRevenueMode(copyFrom?.getRevenueMode())
+        this.values = copyFrom?.values?.map {
+            dataContext.create(EquipmentUtilizationDetailValue::class.java).apply {
+                this.detail = this@copyDetail
+                this.valueType = it.valueType
+                this.value = it.value
+            }
+        }?.toMutableList()
+            ?.also {
+                equipmentUtilizationDetailValueDc.mutableItems.addAll(it)
+            }
+        return this
     }
 }

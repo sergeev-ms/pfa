@@ -39,6 +39,7 @@
                 <property name="actualEquipmentUtilization" view="_local">
                     <property name="details" view="_local">
                         <property name="equipmentType" view="_minimal"/>
+                        <property name="values" view="_local" fetch="UNDEFINED"/>
                     </property>
                 </property>
                 <property name="country" view="_minimal"/>
