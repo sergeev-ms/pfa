@@ -9,7 +9,7 @@
                     <property name="equipmentType" view="_minimal"/>
                 </property>
             </view>
-            <loader/>
+            <loader id="equipmentUtilizationDl"/>
             <collection id="detailsDc" property="details">
                 <collection id="detailValuesDc" property="values"/>
             </collection>
@@ -29,9 +29,6 @@
         </collection>
     </data>
     <dialogMode height="600" width="800"/>
-    <facets>
-        <dataLoadCoordinator auto="true"/>
-    </facets>
     <layout expand="detailsBox" spacing="true">
         <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.account.utilization/EquipmentUtilization.details" expand="equipmentUtilizationFragment">
             <fragment id="equipmentUtilizationFragment" screen="pfa_EquipmentUtilizationFragment" width="100%"/>

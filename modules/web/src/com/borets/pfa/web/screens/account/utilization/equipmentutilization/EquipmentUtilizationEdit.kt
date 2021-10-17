@@ -12,7 +12,6 @@ import javax.inject.Inject
 @UiController("pfa_EquipmentUtilization.edit")
 @UiDescriptor("equipment-utilization-edit.xml")
 @EditedEntityContainer("equipmentUtilizationDc")
-@LoadDataBeforeShow
 class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
     @Inject
     private lateinit var dataContext: DataContext
@@ -25,6 +24,12 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
 
     private var copyFrom: EquipmentUtilization? = null
 
+    @javax.inject.Inject
+    private lateinit var equipmentUtilizationDl: com.haulmont.cuba.gui.model.InstanceLoader<com.borets.pfa.entity.account.utilization.EquipmentUtilization>
+
+    @javax.inject.Inject
+    private lateinit var equipmentUtilizationDetailValueDl: com.haulmont.cuba.gui.model.CollectionLoader<com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue>
+
     @Subscribe
     private fun onAfterInit(event: AfterInitEvent) {
         copyFrom = (event.options as? MapScreenOptions)?.params?.get("copyFrom") as EquipmentUtilization?
@@ -34,6 +39,15 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
     private fun onInitEntity(event: InitEntityEvent<EquipmentUtilization>) {
         createDetails(event.entity)
     }
+
+    @Subscribe
+    private fun onBeforeShow(event: BeforeShowEvent) {
+        //early load and the order is important!
+        equipmentUtilizationDetailValueDl.setParameter("container_equipmentUtilizationDc", editedEntity)
+        equipmentUtilizationDetailValueDl.load()
+        equipmentUtilizationDl.load()
+    }
+
 
     private fun createDetails(entity: EquipmentUtilization) {
         countrySettings.getEquipmentTypesForUtilizationModel(editedEntity.account!!.country!!)
