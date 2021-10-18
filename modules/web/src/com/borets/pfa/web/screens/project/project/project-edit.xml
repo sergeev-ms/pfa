@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://projectEdit.caption"
+        focusComponent="form"
+        messagesPack="com.borets.pfa.web.screens.project.project">
+    <data>
+        <instance id="projectDc"
+                  class="com.borets.pfa.entity.project.Project">
+            <view extends="_local"/>
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="projectDc">
+            <column width="450px">
+                <textField id="customerNoField" property="customerNo"/>
+                <textField id="regionField" property="region"/>
+                <textField id="wellIdField" property="wellId"/>
+                <textField id="wellField" property="well"/>
+                <textField id="wellApiField" property="wellApi"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

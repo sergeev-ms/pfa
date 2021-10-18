@@ -26,5 +26,7 @@
                 <item screen="pfa_OtherMaterials.browse" caption="mainMsg://menu_config.pfa_OtherMaterials.browse"/>
             </menu>
         </menu>
+        <item screen="pfa_DiscoveryProject.browse" caption="mainMsg://menu_config.pfa_DiscoveryProject.browse"/>
+        <item screen="pfa_Project.browse" caption="mainMsg://menu_config.pfa_Project.browse"/>
     </menu>
 </menu-config>

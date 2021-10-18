@@ -18,5 +18,20 @@
         <property name="dataSource" ref="cubaDataSource_dwh"/>
         <qualifier type="org.springframework.beans.factory.annotation.Qualifier" value="dwh"/>
     </bean>
+    <bean id="cubaDataSource_DiscoveryProjectsDataStore" class="com.haulmont.cuba.core.sys.CubaDataSourceFactoryBean">
+        <property name="storeName" value="DiscoveryProjectsDataStore"/>
+    </bean>
+    <bean id="entityManagerFactory_DiscoveryProjectsDataStore"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" lazy-init="false">
+        <property name="persistenceXmlLocation"
+                  value="file:${cuba.dataDir}/DiscoveryProjectsDataStore-persistence.xml"/>
+        <property name="dataSource" ref="cubaDataSource_DiscoveryProjectsDataStore"/>
+        <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
+    </bean>
+    <bean id="transactionManager_DiscoveryProjectsDataStore" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory_DiscoveryProjectsDataStore"/>
+        <property name="dataSource" ref="cubaDataSource_DiscoveryProjectsDataStore"/>
+        <qualifier type="org.springframework.beans.factory.annotation.Qualifier" value="DiscoveryProjectsDataStore"/>
+    </bean>
 
 </beans>
