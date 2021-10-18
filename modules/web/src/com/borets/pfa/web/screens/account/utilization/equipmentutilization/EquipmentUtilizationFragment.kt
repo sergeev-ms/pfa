@@ -5,6 +5,7 @@ import com.borets.pfa.entity.account.utilization.*
 import com.borets.pfa.entity.activity.RecordType
 import com.borets.pfa.web.beans.CountrySettingsBean
 import com.borets.pfa.web.beans.PivotGridInitializer
+import com.haulmont.chile.core.datatypes.DatatypeRegistry
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.AppBeans
 import com.haulmont.cuba.core.global.DataManager
@@ -32,6 +33,8 @@ class EquipmentUtilizationFragment : ScreenFragment() {
     private lateinit var countrySettingsBean: CountrySettingsBean
     @Inject
     private lateinit var dataContext: DataContext
+    @Inject
+    private lateinit var datatypeRegistry: DatatypeRegistry
 
     @Inject
     private lateinit var equipmentUtilizationDc: InstanceContainer<EquipmentUtilization>
@@ -99,7 +102,10 @@ class EquipmentUtilizationFragment : ScreenFragment() {
                 BigDecimal::class.javaObjectType,
                 TextField::class.java,
                 "100px",
-                pivotGridEditable)
+                pivotGridEditable,
+                false,
+                datatypeRegistry.get("percentage")
+                )
             }
             .let { dynamicProperties ->
                 pivotGridHelper.initDynamicProperties(dynamicProperties)

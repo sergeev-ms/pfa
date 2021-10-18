@@ -1,14 +1,12 @@
 package com.borets.pfa.web.beans
 
+import com.haulmont.chile.core.datatypes.Datatype
 import com.haulmont.chile.core.datatypes.impl.EnumClass
 import com.haulmont.cuba.core.app.keyvalue.KeyValueMetaClass
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.gui.UiComponents
+import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.components.Component.Alignment
-import com.haulmont.cuba.gui.components.Field
-import com.haulmont.cuba.gui.components.GridLayout
-import com.haulmont.cuba.gui.components.Label
-import com.haulmont.cuba.gui.components.LookupField
 import com.haulmont.cuba.gui.components.data.options.EnumOptions
 import com.haulmont.cuba.gui.components.data.value.ContainerValueSource
 import com.haulmont.cuba.gui.model.CollectionChangeType
@@ -209,6 +207,8 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
                     propertyData.fieldWidth?.let { this.setWidth(it) }
                     this.isEditable = propertyData.editable
                     this.isRequired = propertyData.required
+                    if (this is HasDatatype<*> && propertyData.dataType != null)
+                        this.datatype = propertyData.dataType
                 }
                 pivotGrid.add(field, colIndex + skipColumns, rowIndex + skipRows)
             }
@@ -247,7 +247,8 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         override var fieldWidth: String?,
         val visible: Boolean = true,
         override val editable: Boolean = true,
-        override val required: Boolean = false
+        override val required: Boolean = false,
+        override var dataType: Datatype<*>? = null
     ) : KvContainerProperty
 
     class DynamicPropertyData<T>(
@@ -258,7 +259,8 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         override var fieldType: Class<out Field<*>>?,
         override var fieldWidth: String?,
         override val editable: Boolean = true,
-        override val required: Boolean = false
+        override val required: Boolean = false,
+        override var dataType: Datatype<*>? = null
     ) : KvContainerProperty
 
     interface KvContainerProperty {
@@ -269,5 +271,6 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         val required: Boolean
         var fieldType: Class<out Field<*>>?
         var fieldWidth: String?
+        var dataType: Datatype<*>?
     }
 }
