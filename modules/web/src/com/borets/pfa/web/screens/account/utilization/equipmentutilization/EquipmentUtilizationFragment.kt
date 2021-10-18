@@ -130,7 +130,8 @@ class EquipmentUtilizationFragment : ScreenFragment() {
             PivotGridInitializer.StaticPropertyData(
                 "revenueMode",
                 messages.getMessage(EquipmentUtilizationDetail::class.java, "EquipmentUtilizationDetail.revenueMode"),
-                true, RevenueMode::class.java, LookupField::class.java, null, true, pivotGridEditable
+                true, RevenueMode::class.java, LookupField::class.java, null, true, pivotGridEditable,
+                true
             )
         )
     }

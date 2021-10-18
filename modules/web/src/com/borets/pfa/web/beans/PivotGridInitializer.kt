@@ -127,6 +127,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
                     this.valueSource = ContainerValueSource(getInstanceContainer(keyValueEntity), staticData.property)
                     staticData.fieldWidth?.let { this.setWidth(it) }
                     this.isEditable = staticData.editable
+                    this.isRequired = staticData.visible
                 }
 
                 if (component is LookupField<*> && EnumClass::class.java.isAssignableFrom(staticData.clazz)) {
@@ -207,6 +208,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
                     this.valueSource = ContainerValueSource(getInstanceContainer(keyValueEntity), propertyData.property)
                     propertyData.fieldWidth?.let { this.setWidth(it) }
                     this.isEditable = propertyData.editable
+                    this.isRequired = propertyData.required
                 }
                 pivotGrid.add(field, colIndex + skipColumns, rowIndex + skipRows)
             }
@@ -244,7 +246,8 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         override var fieldType: Class<out Field<*>>?,
         override var fieldWidth: String?,
         val visible: Boolean = true,
-        override val editable: Boolean = true
+        override val editable: Boolean = true,
+        override val required: Boolean = false
     ) : KvContainerProperty
 
     class DynamicPropertyData<T>(
@@ -254,7 +257,8 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         override val clazz: Class<T>,
         override var fieldType: Class<out Field<*>>?,
         override var fieldWidth: String?,
-        override val editable: Boolean = true
+        override val editable: Boolean = true,
+        override val required: Boolean = false
     ) : KvContainerProperty
 
     interface KvContainerProperty {
@@ -262,6 +266,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         val caption: String
         val clazz: Class<*>
         val editable: Boolean
+        val required: Boolean
         var fieldType: Class<out Field<*>>?
         var fieldWidth: String?
     }
