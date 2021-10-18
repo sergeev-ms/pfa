@@ -8,6 +8,7 @@ import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.entity.setting.CountrySettingAnalyticDetail
 import com.borets.pfa.entity.setting.CountrySettingEquipmentType
 import com.borets.pfa.entity.setting.CountrySettingRevenueType
+import com.borets.pfa.entity.setting.CountrySettingUtilizationValueType
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.View
 import org.springframework.stereotype.Component
@@ -76,10 +77,13 @@ class CountrySettingsBean {
             .map { it.equipmentType!! }
     }
 
-    fun getEquipmentUtilizationDetailValueType() : List<EquipmentUtilizationValueType> {
-        // TODO: 09.10.2021 implement country specific
-        return dataManager.load(EquipmentUtilizationValueType::class.java)
+    fun getEquipmentUtilizationDetailValueType(country : Country) : List<EquipmentUtilizationValueType> {
+        return dataManager.load(CountrySettingUtilizationValueType::class.java)
+            .query("where e.countrySetting.country = :country")
+            .parameter("country", country)
+            .view {it.add("utilizationValueType", View.MINIMAL)}
             .list()
+            .map { it.utilizationValueType!! }
     }
 
 }

@@ -5,7 +5,9 @@ import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetail
 import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue
 import com.borets.pfa.web.beans.CountrySettingsBean
 import com.haulmont.cuba.gui.model.CollectionContainer
+import com.haulmont.cuba.gui.model.CollectionLoader
 import com.haulmont.cuba.gui.model.DataContext
+import com.haulmont.cuba.gui.model.InstanceLoader
 import com.haulmont.cuba.gui.screen.*
 import javax.inject.Inject
 
@@ -19,16 +21,14 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
     private lateinit var countrySettings: CountrySettingsBean
 
     @Inject
+    private lateinit var equipmentUtilizationDetailValueDl: CollectionLoader<EquipmentUtilizationDetailValue>
+    @Inject
     private lateinit var equipmentUtilizationDetailValueDc: CollectionContainer<EquipmentUtilizationDetailValue>
-
+    @Inject
+    private lateinit var equipmentUtilizationDl: InstanceLoader<EquipmentUtilization>
 
     private var copyFrom: EquipmentUtilization? = null
 
-    @javax.inject.Inject
-    private lateinit var equipmentUtilizationDl: com.haulmont.cuba.gui.model.InstanceLoader<com.borets.pfa.entity.account.utilization.EquipmentUtilization>
-
-    @javax.inject.Inject
-    private lateinit var equipmentUtilizationDetailValueDl: com.haulmont.cuba.gui.model.CollectionLoader<com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue>
 
     @Subscribe
     private fun onAfterInit(event: AfterInitEvent) {
@@ -45,6 +45,7 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
         //early load and the order is important!
         equipmentUtilizationDetailValueDl.setParameter("container_equipmentUtilizationDc", editedEntity)
         equipmentUtilizationDetailValueDl.load()
+
         equipmentUtilizationDl.load()
     }
 

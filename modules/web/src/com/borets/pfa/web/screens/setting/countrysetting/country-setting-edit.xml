@@ -15,11 +15,15 @@
                 <property name="equipmentTypeSettings" view="_local">
                     <property name="equipmentType" view="_minimal"/>
                 </property>
+                <property name="utilizationValueTypeSettings" view="_local">
+                    <property name="utilizationValueType" view="_minimal"/>
+                </property>
             </view>
             <loader/>
             <collection id="analyticSettingsDc" property="analyticSettings"/>
             <collection id="revenueTypeSettingsDc" property="revenueTypeSettings"/>
             <collection id="equipmentTypeSettingsDc" property="equipmentTypeSettings"/>
+            <collection id="utilizationValueTypeSettingsDc" property="utilizationValueTypeSettings"/>
         </instance>
     </data>
     <dialogMode height="600" width="800"/>
@@ -91,6 +95,23 @@
                     <buttonsPanel>
                         <button action="equipmentTypeSettingsTable.add"/>
                         <button action="equipmentTypeSettingsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="utilizationValueTypeSettingsTab" spacing="true"  margin="true,true,true,true"
+                 caption="msg://utilizationValueTypeSettingsTab.caption" expand="utilizationValueTypeSettingsTable">
+                <table id="utilizationValueTypeSettingsTable" dataContainer="utilizationValueTypeSettingsDc" width="100%"
+                       sortable="false" reorderingAllowed="false" multiselect="true">
+                    <actions>
+                        <action id="add" caption="msg://analyticSettingsTable.add.caption" icon="ADD_ACTION"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="utilizationValueType"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button action="utilizationValueTypeSettingsTable.add"/>
+                        <button action="utilizationValueTypeSettingsTable.remove"/>
                     </buttonsPanel>
                 </table>
             </tab>

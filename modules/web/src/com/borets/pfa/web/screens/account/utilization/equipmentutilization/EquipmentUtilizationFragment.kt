@@ -34,6 +34,8 @@ class EquipmentUtilizationFragment : ScreenFragment() {
     private lateinit var dataContext: DataContext
 
     @Inject
+    private lateinit var equipmentUtilizationDc: InstanceContainer<EquipmentUtilization>
+    @Inject
     private lateinit var utilizationDetailsDc: CollectionPropertyContainer<EquipmentUtilizationDetail>
     @Inject
     private lateinit var equipmentUtilizationDetailValueDc: CollectionContainer<EquipmentUtilizationDetailValue>
@@ -80,7 +82,7 @@ class EquipmentUtilizationFragment : ScreenFragment() {
                         this.detail = key as EquipmentUtilizationDetail
                         this.valueType =
                             dataManager.getReference(EquipmentUtilizationValueType::class.java, UUID.fromString(property)
-                        )
+                            )
                     }
                 }
                 detailValue!!.value = value as BigDecimal?
@@ -89,7 +91,7 @@ class EquipmentUtilizationFragment : ScreenFragment() {
     }
 
     private fun initDynamic() {
-        countrySettingsBean.getEquipmentUtilizationDetailValueType()
+        countrySettingsBean.getEquipmentUtilizationDetailValueType(equipmentUtilizationDc.item.account!!.country!!)
             .map { PivotGridInitializer.DynamicPropertyData(
                 it.id.toString(),
                 it.name!!,

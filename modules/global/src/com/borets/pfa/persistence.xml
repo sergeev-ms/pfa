@@ -40,5 +40,6 @@
         <class>com.borets.pfa.entity.setting.CountrySettingEquipmentType</class>
         <class>com.borets.pfa.entity.account.utilization.EquipmentUtilizationValueType</class>
         <class>com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue</class>
+        <class>com.borets.pfa.entity.setting.CountrySettingUtilizationValueType</class>
     </persistence-unit>
 </persistence>
