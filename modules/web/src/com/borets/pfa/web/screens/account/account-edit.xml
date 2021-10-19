@@ -41,11 +41,13 @@
                     <property name="createTs"/>
                 </property>
                 <property name="country" view="_minimal"/>
+                <property name="projects" view="_local"/>
             </view>
             <loader id="accountDl"/>
             <instance id="actualRevisionDc" property="actualRevision"/>
             <instance id="marketDataDc" property="actualMarketDetail"/>
             <instance id="applicationDataDc" property="actualAppDetail"/>
+            <collection id="projectsDc" property="projects"/>
         </instance>
         <collection id="priceListsDc" class="com.borets.pfa.entity.price.PriceList">
             <view extends="_local">
@@ -87,6 +89,9 @@
             <loader id="countryOptionsDl">
                 <query>select e from country_Country e order by e.name</query>
             </loader>
+        </collection>
+        <collection id="projectsOptionDc" class="com.borets.pfa.entity.project.Project">
+            <loader id="projectsOptionDl"/>
         </collection>
     </data>
     <dialogMode height="600" width="800"/>
@@ -200,6 +205,13 @@
                  margin="true,false,false,false" expand="attachmentFragment">
                 <fragment id="supplementaryFragment" screen="pfa_SupplementaryFragment"/>
                 <fragment id="attachmentFragment" screen="attachments_AttachmentsFragment"/>
+            </tab>
+            <tab id="projectsTab" caption="msg://projectsTab.caption" spacing="true"
+                 margin="true,false,false,false" expand="twinColumn">
+                <twinColumn id="twinColumn" dataContainer="accountDc" property="projects"
+                            optionsContainer="projectsOptionDc" width="100%" addAllBtnEnabled="true"
+                            leftColumnCaption="msg://twinColumn.left.caption"
+                            rightColumnCaption="msg://twinColumn.right.caption" contextHelpText="msg://twinColumn.contextHelpText"/>
             </tab>
         </tabSheet>
         <hbox id="editActions" spacing="true">

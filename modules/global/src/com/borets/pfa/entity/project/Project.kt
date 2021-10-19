@@ -13,7 +13,7 @@ import javax.persistence.*
 
 @Table(name = "PFA_PROJECT")
 @Entity(name = "pfa_Project")
-@NamePattern("%s - %s (%s)|wellId,well,region")
+@NamePattern("%s - %s (%s)|well,wellId,region")
 open class Project : StandardEntity() {
     @OnDeleteInverse(DeletePolicy.UNLINK)
     @ManyToOne(fetch = FetchType.LAZY)

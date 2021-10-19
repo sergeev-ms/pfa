@@ -26,6 +26,7 @@ import com.borets.pfa.entity.customer.DimCustomers
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
 import com.borets.pfa.entity.price.RevenueType
+import com.borets.pfa.entity.project.Project
 import com.haulmont.cuba.core.entity.FileDescriptor
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.security.app.role.AnnotatedRoleDefinition
@@ -113,7 +114,8 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = Supplementary::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = SupplementaryDetail::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = SupplementaryDetailType::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = Country::class, operations = [EntityOp.READ])
+        EntityAccess(entityClass = Country::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = Project::class, operations = [EntityOp.READ])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()

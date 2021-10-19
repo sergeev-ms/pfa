@@ -27,6 +27,7 @@ import com.borets.pfa.entity.customer.DimCustomers
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
 import com.borets.pfa.entity.price.RevenueType
+import com.borets.pfa.entity.project.Project
 import com.haulmont.cuba.core.entity.FileDescriptor
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.security.app.role.AnnotatedRoleDefinition
@@ -46,7 +47,7 @@ class SalesManagerRole : AnnotatedRoleDefinition() {
         "pfa_ActivityPivot.edit", "pfa_PriceListPivot.edit", "pfa_MarketData.browse", "pfa_MarketData.edit",
         "pfa_MarketDataFragment", "pfa_AccountRevision.browse", "pfa_AccountRevision.edit", "pfa_SystemStd.edit",
         "pfa_ApplicationData.edit", "pfa_ApplicationData.browse", "pfa_EquipmentUtilizationFragment",
-        "pfa_EquipmentUtilization.edit", "pfa_EquipmentUtilization.browse"])
+        "pfa_EquipmentUtilization.edit", "pfa_EquipmentUtilization.browse", "pfa_Project.browse"])
     override fun screenPermissions(): ScreenPermissionsContainer {
         return super.screenPermissions()
     }
@@ -123,7 +124,8 @@ class SalesManagerRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = PartUMB::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = PartXFMR::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Attachment::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = Country::class, operations = [EntityOp.READ])
+        EntityAccess(entityClass = Country::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = Project::class, operations = [EntityOp.READ, EntityOp.UPDATE])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -186,7 +188,8 @@ class SalesManagerRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = PartUMB::class, view = ["*"]),
         EntityAttributeAccess(entityClass = PartXFMR::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Attachment::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = Country::class, view = ["*"])
+        EntityAttributeAccess(entityClass = Country::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = Project::class, view = ["*"], modify = ["account"])
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()

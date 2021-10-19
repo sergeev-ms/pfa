@@ -11,6 +11,7 @@ import com.borets.pfa.entity.account.system.System
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.price.PriceList
+import com.borets.pfa.entity.project.Project
 import com.borets.pfa.web.screens.account.appdata.applicationdata.ApplicationDataFragment
 import com.borets.pfa.web.screens.account.marketdata.marketdata.MarketDataFragment
 import com.borets.pfa.web.screens.account.system.copyToSystem
@@ -18,10 +19,7 @@ import com.borets.pfa.web.screens.account.system.reloadForCopy
 import com.borets.pfa.web.screens.account.utilization.equipmentutilization.EquipmentUtilizationFragment
 import com.borets.pfa.web.screens.activity.activity.input.ActivityPivotEdit
 import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
-import com.haulmont.cuba.core.global.DataManager
-import com.haulmont.cuba.core.global.DatatypeFormatter
-import com.haulmont.cuba.core.global.EntityStates
-import com.haulmont.cuba.core.global.ViewBuilder
+import com.haulmont.cuba.core.global.*
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.*
@@ -76,6 +74,8 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var countryOptionsDl: CollectionLoader<Country>
     @Inject
     private lateinit var countryOptionsDc: CollectionContainer<Country>
+    @Inject
+    private lateinit var projectsOptionDl: CollectionLoader<Project>
 
     @Inject
     private lateinit var applicationDataFragment: ApplicationDataFragment
@@ -120,6 +120,8 @@ class AccountEdit : StandardEditor<Account>() {
     @Subscribe
     private fun onBeforeShow(@Suppress("UNUSED_PARAMETER") event: BeforeShowEvent) {
         accountDl.load()
+
+        projectsOptionDl.load()
     }
 
     @Subscribe
@@ -265,6 +267,20 @@ class AccountEdit : StandardEditor<Account>() {
         screenBuilders.lookup(ApplicationData::class.java, this)
             .withOptions(MapScreenOptions(mutableMapOf(Pair("account", editedEntity)) as Map<String, Any>))
             .show()
+    }
+
+    @Install(to = "projectsOptionDl", target = Target.DATA_LOADER)
+    private fun projectsOptionDlLoadDelegate(loadContext: LoadContext<Project>?): MutableList<Project> {
+        return dataManager.load(Project::class.java)
+            .query("""select p from pfa_Project p
+                |left join p.account a
+                |where p.customerNo = :customerId
+                |and (a is null or a = :account)
+                |order by p.well""".trimMargin())
+            .parameter("customerId", editedEntity.customerId!!)
+            .parameter("account", editedEntity)
+            .view {it.addView(View.MINIMAL).add("account", View.MINIMAL)}
+            .list()
     }
 
     private fun setWindowCaption() {
