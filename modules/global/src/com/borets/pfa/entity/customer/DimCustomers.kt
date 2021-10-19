@@ -12,7 +12,7 @@ import javax.persistence.Table
 @NamePattern(value = "%s|customerName")
 @DbView
 @DdlGeneration(value = DdlGeneration.DbScriptGenerationMode.CREATE_ONLY)
-@Table(name = "DimCustomers")
+@Table(name = "DimCustomers_vw")
 @javax.persistence.Entity(name = "pfa_DimCustomers")
 open class DimCustomers : BaseDbGeneratedIdEntity<BigDecimal>() {
 
