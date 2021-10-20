@@ -44,6 +44,8 @@
                         <property name="equipmentType" view="_minimal"/>
                         <property name="values" view="_local" fetch="UNDEFINED"/>
                     </property>
+                    <property name="createdBy"/>
+                    <property name="createTs"/>
                 </property>
                 <property name="country" view="_minimal"/>
                 <property name="projects" view="_local"/>
