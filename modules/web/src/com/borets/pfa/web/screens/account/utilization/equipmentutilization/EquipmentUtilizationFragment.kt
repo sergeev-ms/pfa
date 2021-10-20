@@ -64,7 +64,9 @@ class EquipmentUtilizationFragment : ScreenFragment() {
 
     @Subscribe(target = Target.PARENT_CONTROLLER)
     private fun onAfterShow(event: Screen.AfterShowEvent) {
-        initPivot()
+        equipmentUtilizationDc.itemOrNull?.let {
+            initPivot()
+        }
     }
 
 
