@@ -13,9 +13,7 @@
                 </property>
             </view>
             <loader id="equipmentUtilizationDl"/>
-            <collection id="detailsDc" property="details">
-                <collection id="detailValuesDc" property="values"/>
-            </collection>
+            <collection id="utilizationDetailsDc" property="details"/>
         </instance>
         <collection id="equipmentUtilizationDetailValueDc"
                     class="com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue">

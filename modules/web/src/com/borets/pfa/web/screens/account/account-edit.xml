@@ -93,7 +93,7 @@
             <loader id="equipmentUtilizationDetailValueDl">
                 <query>
                     select e from pfa_EquipmentUtilizationDetailValue e where
-                    e.detail.equipmentUtilization.account = :container_accountDc
+                    e.detail.equipmentUtilization = :actualEquipmentUtilization
                 </query>
             </loader>
         </collection>

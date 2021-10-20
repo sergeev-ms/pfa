@@ -62,16 +62,18 @@ class EquipmentUtilizationFragment : ScreenFragment() {
         pivotGridHelper.initStaticPivotProperties(prepareStaticProperties())
     }
 
+    @Subscribe(target = Target.PARENT_CONTROLLER)
+    private fun onAfterShow(event: Screen.AfterShowEvent) {
+        initPivot()
+    }
 
-    @Subscribe(id = "equipmentUtilizationDc", target = Target.DATA_CONTAINER)
-    private fun onEquipmentUtilizationDcItemChange(event: InstanceContainer.ItemChangeEvent<EquipmentUtilization>) {
-        //Moved here from typical Screen.AfterShowEvent to repaint pivot-table after updating Equipment Utilization
-        initPivotGrid()
+
+    fun initPivot() {
+        initStatic()
         initDynamic()
     }
 
-    private fun initPivotGrid() {
-
+    private fun initStatic() {
         pivotGridHelper.setStaticPivotPropertiesValues(initKvEntities())
 
         pivotGridHelper.setStoreFunction { key: Any, property: String, value: Any? ->

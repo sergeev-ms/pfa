@@ -4,6 +4,7 @@ import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetail
 import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue
 import com.borets.pfa.web.beans.CountrySettingsBean
+import com.haulmont.cuba.core.global.EntityStates
 import com.haulmont.cuba.gui.model.CollectionContainer
 import com.haulmont.cuba.gui.model.CollectionLoader
 import com.haulmont.cuba.gui.model.DataContext
@@ -19,6 +20,8 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
     private lateinit var dataContext: DataContext
     @Inject
     private lateinit var countrySettings: CountrySettingsBean
+    @Inject
+    private lateinit var entityStates: EntityStates
 
     @Inject
     private lateinit var equipmentUtilizationDetailValueDl: CollectionLoader<EquipmentUtilizationDetailValue>
@@ -36,19 +39,15 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
     }
 
     @Subscribe
-    private fun onInitEntity(event: InitEntityEvent<EquipmentUtilization>) {
-        createDetails(event.entity)
-    }
-
-    @Subscribe
     private fun onBeforeShow(event: BeforeShowEvent) {
-        //early load and the order is important!
+        equipmentUtilizationDl.load()
+
         equipmentUtilizationDetailValueDl.setParameter("container_equipmentUtilizationDc", editedEntity)
         equipmentUtilizationDetailValueDl.load()
 
-        equipmentUtilizationDl.load()
+        if (entityStates.isNew(editedEntity))
+            createDetails(editedEntity)
     }
-
 
     private fun createDetails(entity: EquipmentUtilization) {
         countrySettings.getEquipmentTypesForUtilizationModel(editedEntity.account!!.country!!)

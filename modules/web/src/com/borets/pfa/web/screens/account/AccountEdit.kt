@@ -126,15 +126,13 @@ class AccountEdit : StandardEditor<Account>() {
 
     @Subscribe
     private fun onBeforeShow(@Suppress("UNUSED_PARAMETER") event: BeforeShowEvent) {
-        /*
-        Load before accountDl because of EquipmentUtilizationFragment InstanceContainer.ItemChangeEvent
-        We have to have detail values to repaint pivot table
-        */
+        accountDl.load()
+
         // TODO: 17.10.2021         Looks like there is the performance problem. Same data will be loaded with accountDl
-        equipmentUtilizationDetailValueDl.setParameter("container_accountDc", editedEntity)
+        equipmentUtilizationDetailValueDl
+            .setParameter("actualEquipmentUtilization", editedEntity.actualEquipmentUtilization)
         equipmentUtilizationDetailValueDl.load()
 
-        accountDl.load()
     }
 
     @Subscribe
@@ -382,6 +380,7 @@ class AccountEdit : StandardEditor<Account>() {
 
                         equipmentUtilizationDc.setItem(committedEntity)
                         editedEntity.actualEquipmentUtilization = committedEntity
+                        equipmentUtilizationFragment.initPivot()
                     }
                 }
             }
