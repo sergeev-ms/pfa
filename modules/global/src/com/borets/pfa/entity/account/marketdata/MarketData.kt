@@ -53,7 +53,7 @@ open class MarketData : StandardEntity() {
     @Column(name = "WELL_COUNT")
     var wellCount: Int? = null
 
-    @NumberFormat(pattern = "#%")
+    @MetaProperty(datatype = "percentage")
     @Column(name = "CONVERSION_RATE")
     var conversionRate: BigDecimal? = null
 
@@ -66,18 +66,18 @@ open class MarketData : StandardEntity() {
     @Column(name = "DUC_QTY")
     var ducQty: Int? = null
 
-    @NumberFormat(pattern = "#%")
+    @MetaProperty(datatype = "percentage")
     @Column(name = "COMPLETION")
     var completion: BigDecimal? = null
 
-    @NumberFormat(pattern = "#%")
+    @MetaProperty(datatype = "percentage")
     @Column(name = "ACTIVITY_RATE")
     var activityRate: BigDecimal? = null
 
     @Column(name = "BUDGET")
     var budget: Int? = null
 
-    @NumberFormat(pattern = "#%")
+    @MetaProperty(datatype = "percentage")
     @Column(name = "B_SHARE")
     var bShare: BigDecimal? = null
 
@@ -101,7 +101,7 @@ open class MarketData : StandardEntity() {
     @Column(name = "NEW_WELL_YEAR")
     var newWellYear: Int? = null
 
-    @NumberFormat(pattern = "#%")
+    @MetaProperty(datatype = "percentage")
     @Column(name = "WELL_CHECK_RATE")
     var wellCheckRate: BigDecimal? = null
 
@@ -114,7 +114,7 @@ open class MarketData : StandardEntity() {
     @Column(name = "BORETS_RUN_LIFE")
     var boretsRunLife: Int? = null
 
-    @NumberFormat(pattern = "#%")
+    @MetaProperty(datatype = "percentage")
     @Column(name = "DELAY_FACTOR")
     var delayFactor: BigDecimal? = null
 
