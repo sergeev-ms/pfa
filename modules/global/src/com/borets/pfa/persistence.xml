@@ -36,6 +36,11 @@
         <class>com.borets.pfa.entity.account.supplementary.SupplementaryDetailType</class>
         <class>com.borets.pfa.entity.setting.CountrySetting</class>
         <class>com.borets.pfa.entity.setting.CountrySettingAnalyticDetail</class>
+        <class>com.borets.pfa.entity.setting.CountrySettingRevenueType</class>
+        <class>com.borets.pfa.entity.setting.CountrySettingEquipmentType</class>
+        <class>com.borets.pfa.entity.setting.CountrySettingUtilizationValueType</class>
+        <class>com.borets.pfa.entity.account.utilization.EquipmentUtilizationValueType</class>
+        <class>com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue</class>
         <class>com.borets.pfa.entity.project.Project</class>
     </persistence-unit>
 </persistence>

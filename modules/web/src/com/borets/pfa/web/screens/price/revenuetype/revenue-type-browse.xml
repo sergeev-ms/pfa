@@ -19,7 +19,7 @@
         <filter id="filter" applyTo="revenueTypesTable" dataLoader="revenueTypesDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="revenueTypesTable" width="100%" dataContainer="revenueTypesDc">
+        <groupTable id="revenueTypesTable" width="100%" dataContainer="revenueTypesDc" multiselect="true">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>

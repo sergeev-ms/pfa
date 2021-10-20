@@ -1,8 +1,14 @@
 package com.borets.pfa.web.beans
 
 import com.borets.addon.country.entity.Country
+import com.borets.pfa.entity.account.appdata.EquipmentType
+import com.borets.pfa.entity.account.utilization.EquipmentUtilizationValueType
 import com.borets.pfa.entity.analytic.AnalyticSet
+import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.entity.setting.CountrySettingAnalyticDetail
+import com.borets.pfa.entity.setting.CountrySettingEquipmentType
+import com.borets.pfa.entity.setting.CountrySettingRevenueType
+import com.borets.pfa.entity.setting.CountrySettingUtilizationValueType
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.View
 import org.springframework.stereotype.Component
@@ -47,6 +53,37 @@ class CountrySettingsBean {
             .view { it.add("analyticSet", View.LOCAL) }
             .list()
             .map { it.analyticSet!! }
+    }
+
+
+    fun getRevenueTypes(country : Country) : List<RevenueType> {
+        return dataManager.load(CountrySettingRevenueType::class.java)
+            .query("""where e.countrySetting.country = :country
+                |order by e.revenueType.order, e.revenueType.name""".trimMargin())
+            .parameter("country", country)
+            .view { it.add("revenueType", View.LOCAL) }
+            .list()
+            .map { it.revenueType!! }
+    }
+
+    fun getEquipmentTypesForUtilizationModel(country : Country) : List<EquipmentType> {
+        return dataManager.load(CountrySettingEquipmentType::class.java)
+            .query("""where e.countrySetting.country = :country
+                |and e.showInUtilModel = 1
+                |order by e.order""".trimMargin())
+            .parameter("country", country)
+            .view { it.add("equipmentType", View.LOCAL) }
+            .list()
+            .map { it.equipmentType!! }
+    }
+
+    fun getEquipmentUtilizationDetailValueType(country : Country) : List<EquipmentUtilizationValueType> {
+        return dataManager.load(CountrySettingUtilizationValueType::class.java)
+            .query("where e.countrySetting.country = :country")
+            .parameter("country", country)
+            .view {it.add("utilizationValueType", View.MINIMAL)}
+            .list()
+            .map { it.utilizationValueType!! }
     }
 
 }

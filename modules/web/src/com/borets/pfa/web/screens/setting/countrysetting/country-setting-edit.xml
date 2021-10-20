@@ -9,9 +9,21 @@
                 <property name="analyticSettings" view="_local">
                     <property name="analyticSet" view="_local"/>
                 </property>
+                <property name="revenueTypeSettings" view="_minimal">
+                    <property name="revenueType" view="_minimal"/>
+                </property>
+                <property name="equipmentTypeSettings" view="_local">
+                    <property name="equipmentType" view="_minimal"/>
+                </property>
+                <property name="utilizationValueTypeSettings" view="_local">
+                    <property name="utilizationValueType" view="_minimal"/>
+                </property>
             </view>
             <loader/>
             <collection id="analyticSettingsDc" property="analyticSettings"/>
+            <collection id="revenueTypeSettingsDc" property="revenueTypeSettings"/>
+            <collection id="equipmentTypeSettingsDc" property="equipmentTypeSettings"/>
+            <collection id="utilizationValueTypeSettingsDc" property="utilizationValueTypeSettings"/>
         </instance>
     </data>
     <dialogMode height="600" width="800"/>
@@ -30,7 +42,7 @@
             <tab id="analyticSettingsTab" spacing="true"  margin="true,true,true,true"
                  caption="msg://analyticSettingsTab.caption" expand="analyticSettingsTable">
                 <table id="analyticSettingsTable" dataContainer="analyticSettingsDc" width="100%" editable="true"
-                       sortable="false" reorderingAllowed="false">
+                       sortable="false" reorderingAllowed="false" multiselect="true">
                     <actions>
                         <action id="add" caption="msg://analyticSettingsTable.add.caption" icon="ADD_ACTION"/>
                         <action id="remove" type="remove"/>
@@ -46,6 +58,60 @@
                     <buttonsPanel>
                         <button action="analyticSettingsTable.add"/>
                         <button action="analyticSettingsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="revenueTypeSettingsTab" spacing="true"  margin="true,true,true,true"
+                 caption="msg://revenueTypeSettingsTab.caption" expand="revenueTypeSettingsTable">
+                <table id="revenueTypeSettingsTable" dataContainer="revenueTypeSettingsDc" width="100%"
+                       sortable="false" reorderingAllowed="false" multiselect="true">
+                    <actions>
+                        <action id="add" caption="msg://analyticSettingsTable.add.caption" icon="ADD_ACTION"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="revenueType"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button action="revenueTypeSettingsTable.add"/>
+                        <button action="revenueTypeSettingsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="equipmentTypeSettingsTab" spacing="true"  margin="true,true,true,true"
+                 caption="msg://equipmentTypeSettingsTab.caption" expand="equipmentTypeSettingsTable">
+                <table id="equipmentTypeSettingsTable" dataContainer="equipmentTypeSettingsDc" width="100%"
+                       sortable="false" reorderingAllowed="false" multiselect="true" editable="true">
+                    <actions>
+                        <action id="add" caption="msg://analyticSettingsTable.add.caption" icon="ADD_ACTION"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="equipmentType"/>
+                        <column id="order" editable="true"/>
+                        <column id="mandatory" editable="true"/>
+                        <column id="showInUtilModel" editable="true"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button action="equipmentTypeSettingsTable.add"/>
+                        <button action="equipmentTypeSettingsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="utilizationValueTypeSettingsTab" spacing="true"  margin="true,true,true,true"
+                 caption="msg://utilizationValueTypeSettingsTab.caption" expand="utilizationValueTypeSettingsTable">
+                <table id="utilizationValueTypeSettingsTable" dataContainer="utilizationValueTypeSettingsDc" width="100%"
+                       sortable="false" reorderingAllowed="false" multiselect="true">
+                    <actions>
+                        <action id="add" caption="msg://analyticSettingsTable.add.caption" icon="ADD_ACTION"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="utilizationValueType"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button action="utilizationValueTypeSettingsTable.add"/>
+                        <button action="utilizationValueTypeSettingsTable.remove"/>
                     </buttonsPanel>
                 </table>
             </tab>

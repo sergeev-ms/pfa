@@ -21,7 +21,7 @@
         <filter id="filter" applyTo="equipmentTypesTable" dataLoader="equipmentTypesDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="equipmentTypesTable" width="100%" dataContainer="equipmentTypesDc">
+        <groupTable id="equipmentTypesTable" width="100%" dataContainer="equipmentTypesDc" multiselect="true">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>

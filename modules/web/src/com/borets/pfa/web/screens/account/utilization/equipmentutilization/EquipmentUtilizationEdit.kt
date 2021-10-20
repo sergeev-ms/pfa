@@ -1,31 +1,37 @@
 package com.borets.pfa.web.screens.account.utilization.equipmentutilization
 
-import com.borets.pfa.entity.account.appdata.EquipmentType
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetail
-import com.haulmont.cuba.core.global.DataManager
+import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue
+import com.borets.pfa.web.beans.CountrySettingsBean
 import com.haulmont.cuba.core.global.EntityStates
-import com.haulmont.cuba.gui.model.CollectionPropertyContainer
+import com.haulmont.cuba.gui.model.CollectionContainer
+import com.haulmont.cuba.gui.model.CollectionLoader
 import com.haulmont.cuba.gui.model.DataContext
+import com.haulmont.cuba.gui.model.InstanceLoader
 import com.haulmont.cuba.gui.screen.*
 import javax.inject.Inject
 
 @UiController("pfa_EquipmentUtilization.edit")
 @UiDescriptor("equipment-utilization-edit.xml")
 @EditedEntityContainer("equipmentUtilizationDc")
-@LoadDataBeforeShow
 class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
     @Inject
-    private lateinit var entityStates: EntityStates
-    @Inject
-    private lateinit var dataManager: DataManager
-    @Inject
     private lateinit var dataContext: DataContext
+    @Inject
+    private lateinit var countrySettings: CountrySettingsBean
+    @Inject
+    private lateinit var entityStates: EntityStates
 
     @Inject
-    private lateinit var detailsDc: CollectionPropertyContainer<EquipmentUtilizationDetail>
+    private lateinit var equipmentUtilizationDetailValueDl: CollectionLoader<EquipmentUtilizationDetailValue>
+    @Inject
+    private lateinit var equipmentUtilizationDetailValueDc: CollectionContainer<EquipmentUtilizationDetailValue>
+    @Inject
+    private lateinit var equipmentUtilizationDl: InstanceLoader<EquipmentUtilization>
 
-    private var copyFrom : EquipmentUtilization? = null
+    private var copyFrom: EquipmentUtilization? = null
+
 
     @Subscribe
     private fun onAfterInit(event: AfterInitEvent) {
@@ -33,33 +39,47 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
     }
 
     @Subscribe
-    private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
-        if (entityStates.isNew(editedEntity)) {
-            createDetails()
-        }
+    private fun onBeforeShow(event: BeforeShowEvent) {
+        equipmentUtilizationDl.load()
+
+        equipmentUtilizationDetailValueDl.setParameter("container_equipmentUtilizationDc", editedEntity)
+        equipmentUtilizationDetailValueDl.load()
+
+        if (entityStates.isNew(editedEntity))
+            createDetails(editedEntity)
     }
 
-    private fun createDetails() {
-        val breakdowns = dataManager.load(EquipmentType::class.java)
-            .query("order by e.order")
-            .list()
+    private fun createDetails(entity: EquipmentUtilization) {
+        countrySettings.getEquipmentTypesForUtilizationModel(editedEntity.account!!.country!!)
             .map {
-                dataContext.create(EquipmentUtilizationDetail::class.java).apply {
-                    this.equipmentUtilization = editedEntity
+                return@map dataContext.create(EquipmentUtilizationDetail::class.java).apply {
+                    this.equipmentUtilization = entity
                     this.equipmentType = it
-
-                    //copy details values from copyFrom
+                }.copyDetail {
                     copyFrom?.details?.let { copyFromDetails ->
                         copyFromDetails.find { copyFromDetail -> copyFromDetail.equipmentType == it }
-                            ?.let { foundedDetail ->
-                                this.setRevenueMode(foundedDetail.getRevenueMode())
-                                this.firstRunValue = foundedDetail.firstRunValue
-                                this.sequentRunValue = foundedDetail.sequentRunValue
-                                this.sequentRunCompetitorValue = foundedDetail.sequentRunCompetitorValue
-                            }
                     }
                 }
+            }.let {
+                entity.details = it.toMutableList()
             }
-        detailsDc.mutableItems.addAll(breakdowns)
+
+    }
+
+    private inline fun EquipmentUtilizationDetail.copyDetail(function: () -> EquipmentUtilizationDetail?)
+            : EquipmentUtilizationDetail {
+        val copyFrom = function.invoke()
+        this.setRevenueMode(copyFrom?.getRevenueMode())
+        this.values = copyFrom?.values?.map {
+            dataContext.create(EquipmentUtilizationDetailValue::class.java).apply {
+                this.detail = this@copyDetail
+                this.valueType = it.valueType
+                this.value = it.value
+            }
+        }?.toMutableList()
+            ?.also {
+                equipmentUtilizationDetailValueDc.mutableItems.addAll(it)
+            }
+        return this
     }
 }

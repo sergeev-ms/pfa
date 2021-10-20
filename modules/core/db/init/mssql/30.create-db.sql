@@ -35,3 +35,13 @@ values ('9fa326ea-7e7e-f784-041e-a2995dd04feb', 'DUCs Count', '2021-08-22 12:50:
 insert into PFA_SUPPLEMENTARY_DETAIL_TYPE
 (ID, NAME, CREATE_TS, CREATED_BY, DELETE_TS, DELETED_BY)
 values ('fae7ddf7-93bf-0c7d-4c03-76cf9d8fe56d', 'ESP Completion', '2021-08-22 12:50:53', 'admin', null, null)^
+
+insert into PFA_EQUIPMENT_UTILIZATION_VALUE_TYPE
+(ID, VERSION, CREATE_TS, CREATED_BY, UPDATE_TS, UPDATED_BY, DELETE_TS, DELETED_BY, NAME)
+values ('b524216b-9ada-a5be-4030-e69c9ebfbb36', 1, '2021-10-09 13:40:09', 'admin', '2021-10-09 13:40:09', null, null, null, '1st Run')^
+insert into PFA_EQUIPMENT_UTILIZATION_VALUE_TYPE
+(ID, VERSION, CREATE_TS, CREATED_BY, UPDATE_TS, UPDATED_BY, DELETE_TS, DELETED_BY, NAME)
+values ('adfba5eb-0d68-00ab-18da-8279c4322d39', 1, '2021-10-09 13:40:17', 'admin', '2021-10-09 13:40:17', null, null, null, 'Run >1')^
+insert into PFA_EQUIPMENT_UTILIZATION_VALUE_TYPE
+(ID, VERSION, CREATE_TS, CREATED_BY, UPDATE_TS, UPDATED_BY, DELETE_TS, DELETED_BY, NAME)
+values ('3c0f9fd0-6355-31fa-06c0-5dca6ad42d35', 2, '2021-10-09 13:40:31', 'admin', '2021-10-09 13:42:19', null, null, null, 'Run >1 (Competitor wells)')^
