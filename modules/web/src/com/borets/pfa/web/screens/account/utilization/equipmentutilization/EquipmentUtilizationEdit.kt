@@ -70,13 +70,16 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
             : EquipmentUtilizationDetail {
         val copyFrom = function.invoke()
         this.setRevenueMode(copyFrom?.getRevenueMode())
-        this.values = copyFrom?.values?.map {
-            dataContext.create(EquipmentUtilizationDetailValue::class.java).apply {
-                this.detail = this@copyDetail
-                this.valueType = it.valueType
-                this.value = it.value
-            }
-        }?.toMutableList()
+        val detailValueTypes = countrySettings.getEquipmentUtilizationDetailValueType(editedEntity.account!!.country!!)
+        this.values = copyFrom?.values
+            ?.filter {detailValueTypes.contains(it.valueType) }
+            ?.map {
+                dataContext.create(EquipmentUtilizationDetailValue::class.java).apply {
+                    this.detail = this@copyDetail
+                    this.valueType = it.valueType
+                    this.value = it.value
+                }
+            }?.toMutableList()
             ?.also {
                 equipmentUtilizationDetailValueDc.mutableItems.addAll(it)
             }
