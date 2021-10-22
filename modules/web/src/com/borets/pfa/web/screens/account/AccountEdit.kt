@@ -21,6 +21,7 @@ import com.borets.pfa.web.screens.account.system.reloadForCopy
 import com.borets.pfa.web.screens.account.utilization.equipmentutilization.EquipmentUtilizationFragment
 import com.borets.pfa.web.screens.activity.activity.input.ActivityPivotEdit
 import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
+import com.google.common.collect.ImmutableSet
 import com.haulmont.cuba.core.global.*
 import com.haulmont.cuba.gui.Dialogs
 import com.haulmont.cuba.gui.ScreenBuilders
@@ -33,6 +34,8 @@ import com.haulmont.cuba.gui.screen.*
 import com.haulmont.cuba.gui.screen.Target
 import com.haulmont.cuba.security.global.UserSession
 import com.haulmont.cuba.web.widgets.CubaGrid
+import com.vaadin.shared.ui.dnd.DropEffect
+import com.vaadin.shared.ui.dnd.EffectAllowed
 import com.vaadin.shared.ui.grid.DropMode
 import com.vaadin.ui.components.grid.GridDragSource
 import com.vaadin.ui.components.grid.GridDropTarget
@@ -58,6 +61,10 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var datatypeFormatter: DatatypeFormatter
     @Inject
     private lateinit var timeSource: TimeSource
+    @Inject
+    private lateinit var dialogs: Dialogs
+    @Inject
+    private lateinit var messageBundle: MessageBundle
 
     @Inject
     private lateinit var actualRevisionDc: InstancePropertyContainer<AccountRevision>
@@ -95,8 +102,6 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var projectsDc: CollectionPropertyContainer<ProjectAssignment>
     @Inject
     private lateinit var projectsOptionDc: CollectionContainer<Project>
-    @Inject
-    private lateinit var dialogs: Dialogs
 
     @Inject
     private lateinit var applicationDataFragment: ApplicationDataFragment
@@ -134,11 +139,8 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var assignedProjectsTable: DataGrid<ProjectAssignment>
 
-    var dragged: List<Project>? = null
+    private var dragged: MutableSet<Project> = mutableSetOf()
 
-
-    @Inject
-    private lateinit var messageBundle: MessageBundle
 
     @Subscribe
     private fun onInit(event: InitEvent) {
@@ -519,7 +521,7 @@ class AccountEdit : StandardEditor<Account>() {
             .show()
     }
 
-    private fun moveToRight(projects : MutableSet<Project>) {
+    private fun moveToRight(projects: Set<Project>) {
         dialogs.createInputDialog(this)
             .withCaption(messageBundle.getMessage("projectAssignInputDialog.caption"))
             .withParameter(InputParameter
@@ -546,22 +548,29 @@ class AccountEdit : StandardEditor<Account>() {
 
     private fun setupDragAndDrop() {
         @Suppress("UNCHECKED_CAST")
-        val projectOptionsCubaGrid = projectOptionTable.unwrap(CubaGrid::class.java) as CubaGrid<Project>
-        val source: GridDragSource<Project> = GridDragSource(projectOptionsCubaGrid)
-        source.addGridDragStartListener {
-            dragged = projectOptionTable.selected.toList()
-        }
-        source.addGridDragEndListener {
-            dragged = null
+        val projectOptionsCubaGrid = (projectOptionTable.unwrap(CubaGrid::class.java) as CubaGrid<Project>)
+        GridDragSource(projectOptionsCubaGrid).apply {
+            effectAllowed = EffectAllowed.MOVE
+
+            addGridDragStartListener {
+                dragged.addAll(projectOptionTable.selected)
+            }
+
+            addGridDragEndListener {
+                dragged.clear()
+            }
         }
 
-        val cubaGrid = assignedProjectsTable.unwrap(CubaGrid::class.java)
         @Suppress("UNCHECKED_CAST")
-        val target: GridDropTarget<Project> = GridDropTarget(cubaGrid, DropMode.ON_GRID) as GridDropTarget<Project>
-        target.addGridDropListener {
-            if (!dragged.isNullOrEmpty())
-                moveToRight(dragged!!.toMutableSet())
+        val cubaGrid = assignedProjectsTable.unwrap(CubaGrid::class.java) as CubaGrid<Project>
+        GridDropTarget(cubaGrid, DropMode.ON_GRID).apply {
+            dropEffect = DropEffect.MOVE
+            addGridDropListener {
+                if (dragged.isNotEmpty())
+                    moveToRight(ImmutableSet.copyOf(dragged))
+            }
         }
+
     }
 }
 
