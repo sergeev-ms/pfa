@@ -8,7 +8,7 @@ import com.borets.pfa.entity.account.supplementary.Supplementary
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.activity.ContractType
 import com.borets.pfa.entity.customer.DimCustomers
-import com.borets.pfa.entity.project.Project
+import com.borets.pfa.entity.project.ProjectAssignment
 import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.chile.core.annotations.NamePattern
@@ -95,8 +95,10 @@ open class Account : StandardEntity() {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
     var supplementary: Supplementary? = null
 
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "account")
-    var projects: MutableList<Project>? = mutableListOf()
+    var projects: MutableList<ProjectAssignment>? = mutableListOf()
 
     fun getType(): Type? = actualRevision?.getType()
 
