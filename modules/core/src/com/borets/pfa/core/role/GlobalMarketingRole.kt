@@ -28,6 +28,7 @@ import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
 import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.entity.project.Project
+import com.borets.pfa.entity.project.ProjectAssignment
 import com.haulmont.cuba.core.entity.FileDescriptor
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.security.app.role.AnnotatedRoleDefinition
@@ -136,7 +137,9 @@ class GlobalMarketingRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = SealConfig::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = VaproConfig::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Country::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = Project::class, operations = [EntityOp.READ])
+        EntityAccess(entityClass = Project::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = Project::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -197,7 +200,9 @@ class GlobalMarketingRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = PumpMaterials::class, view = ["*"]),
         EntityAttributeAccess(entityClass = PumpType::class, view = ["*"]),
         EntityAttributeAccess(entityClass = SealConfig::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = VaproConfig::class, view = ["*"])
+        EntityAttributeAccess(entityClass = VaproConfig::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = Project::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"])
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()

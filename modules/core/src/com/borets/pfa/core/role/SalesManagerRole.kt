@@ -28,6 +28,7 @@ import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
 import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.entity.project.Project
+import com.borets.pfa.entity.project.ProjectAssignment
 import com.haulmont.cuba.core.entity.FileDescriptor
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.security.app.role.AnnotatedRoleDefinition
@@ -125,7 +126,8 @@ class SalesManagerRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = PartXFMR::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Attachment::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Country::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = Project::class, operations = [EntityOp.READ, EntityOp.UPDATE])
+        EntityAccess(entityClass = Project::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ, EntityOp.UPDATE, EntityOp.CREATE])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -189,7 +191,8 @@ class SalesManagerRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = PartXFMR::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Attachment::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Country::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = Project::class, view = ["*"], modify = ["account"])
+        EntityAttributeAccess(entityClass = Project::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = ProjectAssignment::class, modify = ["*"])
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()
