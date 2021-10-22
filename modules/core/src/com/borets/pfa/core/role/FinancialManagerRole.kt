@@ -31,6 +31,8 @@ import com.borets.pfa.entity.customer.DimCustomers
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
 import com.borets.pfa.entity.price.RevenueType
+import com.borets.pfa.entity.project.Project
+import com.borets.pfa.entity.project.ProjectAssignment
 import com.borets.pfa.entity.setting.*
 import com.haulmont.cuba.core.entity.FileDescriptor
 import com.haulmont.cuba.core.entity.KeyValueEntity
@@ -151,7 +153,9 @@ class FinancialManagerRole : AnnotatedRoleDefinition() {
             operations = [EntityOp.CREATE, EntityOp.READ, EntityOp.UPDATE]
         ),
         EntityAccess(entityClass = MeasurementUnit::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = MeasurementUnitSet::class, operations = [EntityOp.READ])
+        EntityAccess(entityClass = MeasurementUnitSet::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = Project::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -220,7 +224,9 @@ class FinancialManagerRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = PartPump::class, view = ["*"]),
         EntityAttributeAccess(entityClass = PartSensor::class, view = ["*"]),
         EntityAttributeAccess(entityClass = PartUMB::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = PartXFMR::class, view = ["*"])
+        EntityAttributeAccess(entityClass = PartXFMR::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = Project::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"])
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()
