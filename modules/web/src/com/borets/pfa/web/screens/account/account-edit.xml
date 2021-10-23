@@ -141,7 +141,7 @@
                     </form>
                     <hbox spacing="true" align="MIDDLE_RIGHT">
                         <linkButton id="createRevisionBtn" caption="msg://createRevisionBtn.caption"
-                                    icon="CREATE_ACTION" disableOnClick="true"/>
+                                    icon="CREATE_ACTION"/>
                         <linkButton id="showRevisionsBtn" caption="msg://showRevisionsBtn.caption" icon="HISTORY"/>
                     </hbox>
                 </groupBox>
@@ -150,7 +150,7 @@
                     <fragment id="marketDataFragment" screen="pfa_MarketDataFragment"/>
                     <hbox spacing="true" align="MIDDLE_RIGHT">
                         <linkButton id="createMarketDataBtn" caption="msg://createMarketDataBtn.caption"
-                                    icon="CREATE_ACTION" disableOnClick="true"/>
+                                    icon="CREATE_ACTION"/>
                         <linkButton id="showMarketDetailsBtn" caption="msg://showMarketDetailsBtn.caption"
                                     icon="HISTORY"/>
                     </hbox>
@@ -163,8 +163,7 @@
                     <fragment id="applicationDataFragment" screen="pfa_ApplicationDataFragment"/>
                 </groupBox>
                 <hbox spacing="true" align="MIDDLE_RIGHT">
-                    <linkButton id="createAppDataBtn" caption="msg://createAppDataBtn.caption" icon="CREATE_ACTION"
-                                disableOnClick="true"/>
+                    <linkButton id="createAppDataBtn" caption="msg://createAppDataBtn.caption" icon="CREATE_ACTION"/>
                     <linkButton id="showAppDetailsBtn" caption="msg://showAppDetailsBtn.caption" icon="HISTORY"/>
                 </hbox>
             </tab>
@@ -176,7 +175,7 @@
                 </groupBox>
                 <hbox spacing="true" align="MIDDLE_RIGHT">
                     <linkButton id="createUtilizationBtn" caption="msg://createUtilizationBtn.caption"
-                                icon="CREATE_ACTION" disableOnClick="true"/>
+                                icon="CREATE_ACTION"/>
                     <linkButton id="showUtilizationsBtn" caption="msg://showUtiliazationsBtn.caption" icon="HISTORY"/>
                 </hbox>
             </tab>

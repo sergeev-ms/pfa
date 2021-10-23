@@ -206,6 +206,7 @@ class AccountEdit : StandardEditor<Account>() {
                     if (event.closeAction == WINDOW_COMMIT_AND_CLOSE_ACTION) {
                         @Suppress("UNCHECKED_CAST")
                         actualRevisionDc.setItem((event.screen as StandardEditor<AccountRevision>).editedEntity)
+                        createRevisionBtn.isEnabled = false
                     }
                 }
             }.show()
@@ -236,6 +237,7 @@ class AccountEdit : StandardEditor<Account>() {
                     if (event.closeAction == WINDOW_COMMIT_AND_CLOSE_ACTION) {
                         @Suppress("UNCHECKED_CAST")
                         marketDataDc.setItem((event.screen as StandardEditor<MarketData>).editedEntity)
+                        createMarketDataBtn.isEnabled = false
                     }
                 }
             }.show()
@@ -300,6 +302,7 @@ class AccountEdit : StandardEditor<Account>() {
                     if (event.closeAction == WINDOW_COMMIT_AND_CLOSE_ACTION) {
                         @Suppress("UNCHECKED_CAST")
                         applicationDataDc.setItem((event.screen as StandardEditor<ApplicationData>).editedEntity)
+                        createAppDataBtn.isEnabled = false
                     }
                 }
             }.show()
@@ -434,6 +437,8 @@ class AccountEdit : StandardEditor<Account>() {
                         equipmentUtilizationDc.setItem(committedEntity)
                         editedEntity.actualEquipmentUtilization = committedEntity
                         equipmentUtilizationFragment.initPivot()
+
+                        createUtilizationBtn.isEnabled = false
                     }
                 }
             }
