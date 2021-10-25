@@ -48,7 +48,9 @@
                     <property name="createTs"/>
                 </property>
                 <property name="country" view="_minimal"/>
-                <property name="projects" view="_local"/>
+                <property name="projects" view="_local">
+                    <property name="project" view="_minimal"/>
+                </property>
             </view>
             <loader id="accountDl"/>
             <instance id="actualRevisionDc" property="actualRevision"/>
@@ -139,7 +141,7 @@
                     </form>
                     <hbox spacing="true" align="MIDDLE_RIGHT">
                         <linkButton id="createRevisionBtn" caption="msg://createRevisionBtn.caption"
-                                    icon="CREATE_ACTION" disableOnClick="true"/>
+                                    icon="CREATE_ACTION"/>
                         <linkButton id="showRevisionsBtn" caption="msg://showRevisionsBtn.caption" icon="HISTORY"/>
                     </hbox>
                 </groupBox>
@@ -148,7 +150,7 @@
                     <fragment id="marketDataFragment" screen="pfa_MarketDataFragment"/>
                     <hbox spacing="true" align="MIDDLE_RIGHT">
                         <linkButton id="createMarketDataBtn" caption="msg://createMarketDataBtn.caption"
-                                    icon="CREATE_ACTION" disableOnClick="true"/>
+                                    icon="CREATE_ACTION"/>
                         <linkButton id="showMarketDetailsBtn" caption="msg://showMarketDetailsBtn.caption"
                                     icon="HISTORY"/>
                     </hbox>
@@ -161,8 +163,7 @@
                     <fragment id="applicationDataFragment" screen="pfa_ApplicationDataFragment"/>
                 </groupBox>
                 <hbox spacing="true" align="MIDDLE_RIGHT">
-                    <linkButton id="createAppDataBtn" caption="msg://createAppDataBtn.caption" icon="CREATE_ACTION"
-                                disableOnClick="true"/>
+                    <linkButton id="createAppDataBtn" caption="msg://createAppDataBtn.caption" icon="CREATE_ACTION"/>
                     <linkButton id="showAppDetailsBtn" caption="msg://showAppDetailsBtn.caption" icon="HISTORY"/>
                 </hbox>
             </tab>
@@ -174,7 +175,7 @@
                 </groupBox>
                 <hbox spacing="true" align="MIDDLE_RIGHT">
                     <linkButton id="createUtilizationBtn" caption="msg://createUtilizationBtn.caption"
-                                icon="CREATE_ACTION" disableOnClick="true"/>
+                                icon="CREATE_ACTION"/>
                     <linkButton id="showUtilizationsBtn" caption="msg://showUtiliazationsBtn.caption" icon="HISTORY"/>
                 </hbox>
             </tab>
@@ -218,11 +219,39 @@
                 <fragment id="attachmentFragment" screen="attachments_AttachmentsFragment"/>
             </tab>
             <tab id="projectsTab" caption="msg://projectsTab.caption" spacing="true"
-                 margin="true,false,false,false" expand="twinColumn">
-                <twinColumn id="twinColumn" dataContainer="accountDc" property="projects"
-                            optionsContainer="projectsOptionDc" width="100%" addAllBtnEnabled="true"
-                            leftColumnCaption="msg://twinColumn.left.caption"
-                            rightColumnCaption="msg://twinColumn.right.caption" contextHelpText="msg://twinColumn.contextHelpText"/>
+                 margin="true,false,false,false" expand="projectContainer">
+                <hbox id="projectContainer" width="100%" spacing="true">
+                    <dataGrid id="projectOptionTable" dataContainer="projectsOptionDc" selectionMode="MULTI"
+                              width="100%" height="100%">
+                        <columns>
+                            <column property="well" sort="ASCENDING"/>
+                            <column property="wellId" collapsed="true"/>
+                            <column property="region" collapsed="true"/>
+                        </columns>
+                        <actions>
+                            <action id="assignToAccount" trackSelection="true" icon="CHEVRON_RIGHT" caption="Assign"/>
+                        </actions>
+                        <buttonsPanel align="MIDDLE_RIGHT">
+                            <button action="projectOptionTable.assignToAccount" stylename="icon-align-right"/>
+                        </buttonsPanel>
+                    </dataGrid>
+                    <dataGrid id="assignedProjectsTable" dataContainer="projectsDc" selectionMode="MULTI"
+                              height="100%" width="100%" settingsEnabled="false">
+                        <columns>
+                            <column property="project.well" sort="ASCENDING"/>
+                            <column property="project.wellId" collapsed="true"/>
+                            <column property="project.region" collapsed="true"/>
+                            <column property="dateStart"/>
+                            <column property="dateEnd"/>
+                        </columns>
+                        <actions>
+                            <action id="removeAssign" caption="Remove Assign" icon="REMOVE" trackSelection="true"/>
+                        </actions>
+                        <buttonsPanel>
+                            <button action="assignedProjectsTable.removeAssign"/>
+                        </buttonsPanel>
+                    </dataGrid>
+                </hbox>
             </tab>
         </tabSheet>
         <hbox id="editActions" spacing="true">

@@ -1,24 +1,17 @@
 package com.borets.pfa.entity.project
 
-import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.customer.DimCustomers
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity
-import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse
 import com.haulmont.cuba.core.entity.annotation.SystemLevel
-import com.haulmont.cuba.core.global.DeletePolicy
 import java.math.BigDecimal
 import javax.persistence.*
 
 @Table(name = "PFA_PROJECT")
 @Entity(name = "pfa_Project")
-@NamePattern("%s - %s (%s)|well,wellId,region")
+@NamePattern(value = "%s - %s (%s)|well,wellId,region")
 open class Project : StandardEntity() {
-    @OnDeleteInverse(DeletePolicy.UNLINK)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ACCOUNT_ID")
-    var account: Account? = null
 
     @Column(name = "CUSTOMER_NO")
     var customerNo: Int? = null
@@ -42,6 +35,9 @@ open class Project : StandardEntity() {
 
     @Column(name = "WELL_API")
     var wellApi: String? = null
+
+    @OneToMany(mappedBy = "project")
+    var assignments: MutableList<ProjectAssignment>? = mutableListOf()
 
     companion object {
         private const val serialVersionUID = -6802373636661990336L

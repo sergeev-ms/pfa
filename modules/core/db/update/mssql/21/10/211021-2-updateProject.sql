@@ -1,0 +1,3 @@
+exec sp_rename 'PFA_PROJECT.ACCOUNT_ID', 'ACCOUNT_ID__U67851', 'COLUMN' ^
+alter table PFA_PROJECT drop constraint FK_PFA_PROJECT_ON_ACCOUNT ;
+drop index IDX_PFA_PROJECT_ON_ACCOUNT on PFA_PROJECT ;

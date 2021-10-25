@@ -712,7 +712,6 @@ create table PFA_PROJECT (
     DELETE_TS datetime2,
     DELETED_BY nvarchar(50),
     --
-    ACCOUNT_ID uniqueidentifier,
     CUSTOMER_NO integer,
     CUSTOMER_ID decimal(7),
     REGION nvarchar(255),
@@ -723,3 +722,22 @@ create table PFA_PROJECT (
     primary key nonclustered (ID)
 )^
 -- end PFA_PROJECT
+-- begin PFA_PROJECT_ASSIGNMENT
+create table PFA_PROJECT_ASSIGNMENT (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    PROJECT_ID uniqueidentifier,
+    ACCOUNT_ID uniqueidentifier not null,
+    DATE_START datetime2,
+    DATE_END datetime2,
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_PROJECT_ASSIGNMENT

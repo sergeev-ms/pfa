@@ -13,6 +13,7 @@ import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.project.Project
+import com.borets.pfa.entity.project.ProjectAssignment
 import com.borets.pfa.web.screens.account.appdata.applicationdata.ApplicationDataFragment
 import com.borets.pfa.web.screens.account.marketdata.marketdata.MarketDataFragment
 import com.borets.pfa.web.screens.account.system.copyToSystem
@@ -20,15 +21,27 @@ import com.borets.pfa.web.screens.account.system.reloadForCopy
 import com.borets.pfa.web.screens.account.utilization.equipmentutilization.EquipmentUtilizationFragment
 import com.borets.pfa.web.screens.activity.activity.input.ActivityPivotEdit
 import com.borets.pfa.web.screens.price.pricelist.input.PriceListPivotEdit
+import com.google.common.collect.ImmutableSet
 import com.haulmont.cuba.core.global.*
+import com.haulmont.cuba.gui.Dialogs
 import com.haulmont.cuba.gui.ScreenBuilders
+import com.haulmont.cuba.gui.app.core.inputdialog.DialogActions
+import com.haulmont.cuba.gui.app.core.inputdialog.DialogOutcome
+import com.haulmont.cuba.gui.app.core.inputdialog.InputParameter
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.*
 import com.haulmont.cuba.gui.screen.*
 import com.haulmont.cuba.gui.screen.Target
 import com.haulmont.cuba.security.global.UserSession
+import com.haulmont.cuba.web.widgets.CubaGrid
+import com.vaadin.shared.ui.dnd.DropEffect
+import com.vaadin.shared.ui.dnd.EffectAllowed
+import com.vaadin.shared.ui.grid.DropMode
+import com.vaadin.ui.components.grid.GridDragSource
+import com.vaadin.ui.components.grid.GridDropTarget
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+
 
 @UiController("pfa_Account.edit")
 @UiDescriptor("account-edit.xml")
@@ -46,6 +59,12 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var userSession: UserSession
     @Inject
     private lateinit var datatypeFormatter: DatatypeFormatter
+    @Inject
+    private lateinit var timeSource: TimeSource
+    @Inject
+    private lateinit var dialogs: Dialogs
+    @Inject
+    private lateinit var messageBundle: MessageBundle
 
     @Inject
     private lateinit var actualRevisionDc: InstancePropertyContainer<AccountRevision>
@@ -79,6 +98,10 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var equipmentUtilizationDetailValueDc: CollectionContainer<EquipmentUtilizationDetailValue>
     @Inject
     private lateinit var projectsOptionDl: CollectionLoader<Project>
+    @Inject
+    private lateinit var projectsDc: CollectionPropertyContainer<ProjectAssignment>
+    @Inject
+    private lateinit var projectsOptionDc: CollectionContainer<Project>
 
     @Inject
     private lateinit var applicationDataFragment: ApplicationDataFragment
@@ -111,11 +134,21 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var countryField: LookupField<Country>
 
+    @Inject
+    private lateinit var projectOptionTable: DataGrid<Project>
+    @Inject
+    private lateinit var assignedProjectsTable: DataGrid<ProjectAssignment>
+
+    private var dragged: MutableSet<Project> = mutableSetOf()
+
+
     @Subscribe
     private fun onInit(event: InitEvent) {
         applicationDataFragment.setEditable(false)
         equipmentUtilizationFragment.setEditable(false)
         marketDataFragment.setEditable(false)
+
+        setupDragAndDrop()
     }
 
     @Subscribe
@@ -142,7 +175,6 @@ class AccountEdit : StandardEditor<Account>() {
         }
     }
 
-
     @Subscribe
     private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
         setWindowCaption()
@@ -150,6 +182,7 @@ class AccountEdit : StandardEditor<Account>() {
             countryField.isEditable = false
         }
     }
+
 
     @Subscribe
     private fun onAfterCommitChanges(@Suppress("UNUSED_PARAMETER") event: AfterCommitChangesEvent) {
@@ -173,6 +206,7 @@ class AccountEdit : StandardEditor<Account>() {
                     if (event.closeAction == WINDOW_COMMIT_AND_CLOSE_ACTION) {
                         @Suppress("UNCHECKED_CAST")
                         actualRevisionDc.setItem((event.screen as StandardEditor<AccountRevision>).editedEntity)
+                        createRevisionBtn.isEnabled = false
                     }
                 }
             }.show()
@@ -203,6 +237,7 @@ class AccountEdit : StandardEditor<Account>() {
                     if (event.closeAction == WINDOW_COMMIT_AND_CLOSE_ACTION) {
                         @Suppress("UNCHECKED_CAST")
                         marketDataDc.setItem((event.screen as StandardEditor<MarketData>).editedEntity)
+                        createMarketDataBtn.isEnabled = false
                     }
                 }
             }.show()
@@ -251,7 +286,6 @@ class AccountEdit : StandardEditor<Account>() {
         }
     }
 
-
     @Subscribe("createAppDataBtn")
     private fun onCreateAppDataBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
         screenBuilders.editor(ApplicationData::class.java, this)
@@ -268,10 +302,12 @@ class AccountEdit : StandardEditor<Account>() {
                     if (event.closeAction == WINDOW_COMMIT_AND_CLOSE_ACTION) {
                         @Suppress("UNCHECKED_CAST")
                         applicationDataDc.setItem((event.screen as StandardEditor<ApplicationData>).editedEntity)
+                        createAppDataBtn.isEnabled = false
                     }
                 }
             }.show()
     }
+
 
     @Subscribe("showAppDetailsBtn")
     private fun onShowAppDetailsBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
@@ -283,14 +319,21 @@ class AccountEdit : StandardEditor<Account>() {
     @Install(to = "projectsOptionDl", target = Target.DATA_LOADER)
     private fun projectsOptionDlLoadDelegate(loadContext: LoadContext<Project>?): MutableList<Project> {
         return dataManager.load(Project::class.java)
+//            .query("""select p from pfa_Project p
+//                |left join p.account a
+//                |where p.customerNo = :customerId
+//                |and (a is null or a = :account)
+//                |order by p.well""".trimMargin())
             .query("""select p from pfa_Project p
-                |left join p.account a
                 |where p.customerNo = :customerId
-                |and (a is null or a = :account)
+                |and NOT EXISTS( 
+                |   select pa 
+                |   from pfa_ProjectAssignment pa
+                |   where pa.project = p and pa.dateEnd IS NULL)
                 |order by p.well""".trimMargin())
             .parameter("customerId", editedEntity.customerId!!)
-            .parameter("account", editedEntity)
-            .view {it.addView(View.MINIMAL).add("account", View.MINIMAL)}
+            .view {it.addView(View.MINIMAL)
+            }
             .list()
     }
 
@@ -394,6 +437,8 @@ class AccountEdit : StandardEditor<Account>() {
                         equipmentUtilizationDc.setItem(committedEntity)
                         editedEntity.actualEquipmentUtilization = committedEntity
                         equipmentUtilizationFragment.initPivot()
+
+                        createUtilizationBtn.isEnabled = false
                     }
                 }
             }
@@ -407,7 +452,6 @@ class AccountEdit : StandardEditor<Account>() {
             .show()
     }
 
-
     @Subscribe("priceListsTable.create")
     private fun onPriceListsTableCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(priceListsTable)
@@ -417,6 +461,7 @@ class AccountEdit : StandardEditor<Account>() {
             .withInitializer { it.account = editedEntity }
             .show()
     }
+
 
     @Subscribe("activityPlansTable.create")
     private fun onCreateActivityPlanBtnClick(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
@@ -454,6 +499,83 @@ class AccountEdit : StandardEditor<Account>() {
         createMarketDataBtn.isEnabled = true
         createAppDataBtn.isEnabled = true
         createUtilizationBtn.isEnabled = true
+    }
+
+    @Subscribe("projectOptionTable.assignToAccount")
+    private fun onProjectOptionTableAssignToAccount(event: Action.ActionPerformedEvent) {
+        moveToRight(projectOptionTable.selected)
+    }
+
+    @Subscribe("assignedProjectsTable.removeAssign")
+    private fun onAssignedProjectsTableRemoveAssign(event: Action.ActionPerformedEvent) {
+        dialogs.createInputDialog(this)
+            .withCaption(messageBundle.getMessage("projectRemoveAssignInputDialog.caption"))
+            .withParameter(InputParameter
+                .localDateTimeParameter("date")
+                .withCaption(messageBundle.getMessage("projectRemoveAssignInputDialog.dateParameter"))
+                .withRequired(true)
+                .withDefaultValue(timeSource.now().toLocalDateTime()))
+            .withActions(DialogActions.OK_CANCEL)
+            .withCloseListener { closeEvent ->
+                if (closeEvent.closedWith(DialogOutcome.OK)) {
+                    assignedProjectsTable.selected.forEach {
+                        it.dateEnd = timeSource.now().toLocalDateTime()
+                    }
+                }
+            }
+            .show()
+    }
+
+    private fun moveToRight(projects: Set<Project>) {
+        dialogs.createInputDialog(this)
+            .withCaption(messageBundle.getMessage("projectAssignInputDialog.caption"))
+            .withParameter(InputParameter
+                .localDateTimeParameter("date")
+                .withCaption(messageBundle.getMessage("projectAssignInputDialog.dateParameter"))
+                .withRequired(true)
+                .withDefaultValue(timeSource.now().toLocalDateTime()))
+            .withActions(DialogActions.OK_CANCEL)
+            .withCloseListener { closeEvent ->
+                if (closeEvent.closedWith(DialogOutcome.OK)) {
+                    projects.map {
+                        dataContext.create(ProjectAssignment::class.java).apply {
+                            account = editedEntity
+                            project = it
+                            dateStart = closeEvent.getValue("date")
+                        }
+                    }.also { projectsDc.mutableItems.addAll(it) }
+                        .map { it.project }
+                        .run { projectsOptionDc.mutableItems.removeAll(this) }
+                }
+            }
+            .show()
+    }
+
+    private fun setupDragAndDrop() {
+        @Suppress("UNCHECKED_CAST")
+        val projectOptionsCubaGrid = (projectOptionTable.unwrap(CubaGrid::class.java) as CubaGrid<Project>)
+        GridDragSource(projectOptionsCubaGrid).apply {
+            effectAllowed = EffectAllowed.MOVE
+
+            addGridDragStartListener {
+                dragged.addAll(projectOptionTable.selected)
+            }
+
+            addGridDragEndListener {
+                dragged.clear()
+            }
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        val cubaGrid = assignedProjectsTable.unwrap(CubaGrid::class.java) as CubaGrid<Project>
+        GridDropTarget(cubaGrid, DropMode.ON_GRID).apply {
+            dropEffect = DropEffect.MOVE
+            addGridDropListener {
+                if (dragged.isNotEmpty())
+                    moveToRight(ImmutableSet.copyOf(dragged))
+            }
+        }
+
     }
 }
 

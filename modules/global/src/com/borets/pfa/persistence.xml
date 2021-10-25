@@ -42,5 +42,6 @@
         <class>com.borets.pfa.entity.account.utilization.EquipmentUtilizationValueType</class>
         <class>com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue</class>
         <class>com.borets.pfa.entity.project.Project</class>
+        <class>com.borets.pfa.entity.project.ProjectAssignment</class>
     </persistence-unit>
 </persistence>
