@@ -24,8 +24,8 @@
                 </cssLayout>
             </cssLayout>
             <workArea id="workArea" stylename="c-workarea" height="100%">
-                <initialLayout spacing="true" margin="true" expand="initialLayoutLabel">
-                    <label id="initialLayoutLabel" width="100%"
+                <initialLayout spacing="true" margin="true">
+                    <label id="initialLayoutLabel" width="100%" align="MIDDLE_CENTER"
                            stylename="h1 align-center colored" htmlEnabled="true"/>
                 </initialLayout>
             </workArea>
