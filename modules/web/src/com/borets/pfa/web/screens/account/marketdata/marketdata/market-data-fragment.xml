@@ -20,10 +20,6 @@
                             <textField id="conversionRateField" property="conversionRate" required="true"/>
                             <textField id="delayFactorField" property="delayFactor" required="true"/>
                             <lookupField id="runsNumberField" property="runsNumber" required="false"/>
-                            <textField id="firstRunDurationField" property="firstRunDuration" required="false"/>
-                            <textField id="secondRunDurationField" property="secondRunDuration" required="false"/>
-                            <textField id="thirdRunDurationField" property="thirdRunDuration" required="false"/>
-                            <textField id="thirdPlusRunDurationField" property="thirdPlusRunDuration" required="false"/>
                         </column>
                     </form>
                 </groupBox>
