@@ -7,7 +7,7 @@
     </data>
     <layout expand="systemsAllocationGrid">
         <dataGrid id="systemsAllocationGrid" dataContainer="systemsAllocationDc" width="100%" editorEnabled="true"
-                  editorBuffered="false">
+                  editorBuffered="false" stylename="no-vertical-lines">
             <actions>
                 <action id="create" type="create" caption="msg://systemsAllocationGrid.create.caption"/>
                 <action id="remove" type="remove"/>
@@ -30,8 +30,6 @@
                 <column property="system.comment" editable="false"/>
                 <column id="run1" property="run1" editable="true"/>
                 <column id="run2" property="run2" editable="true"/>
-                <column id="run3" property="run3" editable="true"/>
-                <column id="run3plus" property="run3plus" editable="true"/>
             </columns>
             <buttonsPanel id="systemsAllocationGridPanel">
                 <button action="systemsAllocationGrid.create"/>

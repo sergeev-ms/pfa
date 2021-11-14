@@ -112,26 +112,6 @@ class ApplicationDataFragment : ScreenFragment() {
                     )
                 }
             }
-
-            if (runsNumber == RunsNumber.THREE || runsNumber == RunsNumber.THREE_PLUS) {
-                val sumRun3 = systemAllocations.sumOf { it.run3!! }
-                if (sumRun3.toInt() != 1) {
-                    validationErrors.add(
-                        systemsAllocationGrid as Component,
-                        messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "3st Run")
-                    )
-                }
-            }
-
-            if (runsNumber == RunsNumber.THREE_PLUS) {
-                val sumRun3plus = systemAllocations.sumOf { it.run3plus!! }
-                if (sumRun3plus.toInt() != 1) {
-                    validationErrors.add(
-                        systemsAllocationGrid as Component,
-                        messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "3+ Run")
-                    )
-                }
-            }
         }
         return validationErrors
     }
