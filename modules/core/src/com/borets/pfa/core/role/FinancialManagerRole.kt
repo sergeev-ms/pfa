@@ -56,7 +56,8 @@ class FinancialManagerRole : AnnotatedRoleDefinition() {
         "pfa_MarketDataFragment", "pfa_AccountRevision.browse", "pfa_AccountRevision.edit", "pfa_SystemStd.edit",
         "pfa_ApplicationData.edit", "pfa_ApplicationData.browse", "pfa_EquipmentUtilizationFragment",
         "pfa_EquipmentUtilization.edit", "pfa_EquipmentUtilization.browse", "pfa_CountrySetting.browse",
-        "pfa_CountrySetting.edit"])
+        "pfa_CountrySetting.edit", "pfa_AnalyticSet.browse", "pfa_RevenueType.browse", "pfa_EquipmentType.browse",
+        "pfa_EquipmentUtilizationValueType.browse"])
     override fun screenPermissions(): ScreenPermissionsContainer {
         return super.screenPermissions()
     }
