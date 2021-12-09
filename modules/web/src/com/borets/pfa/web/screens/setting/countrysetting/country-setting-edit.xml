@@ -10,7 +10,7 @@
                     <property name="analyticSet" view="_local"/>
                 </property>
                 <property name="revenueTypeSettings" view="_minimal">
-                    <property name="revenueType" view="_minimal"/>
+                    <property name="revenueType" view="_local"/>
                 </property>
                 <property name="equipmentTypeSettings" view="_local">
                     <property name="equipmentType" view="_minimal"/>
@@ -71,6 +71,7 @@
                     </actions>
                     <columns>
                         <column id="revenueType"/>
+                        <column id="revenueType.fullName"/>
                     </columns>
                     <buttonsPanel>
                         <button action="revenueTypeSettingsTable.add"/>
