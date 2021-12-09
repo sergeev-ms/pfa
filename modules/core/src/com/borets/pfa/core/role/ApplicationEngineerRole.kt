@@ -1,6 +1,8 @@
 package com.borets.pfa.core.role
 
 import com.borets.addon.country.entity.Country
+import com.borets.addon.mu.entity.MeasurementUnit
+import com.borets.addon.mu.entity.MeasurementUnitSet
 import com.borets.addon.pn.entity.*
 import com.borets.attachments.entity.Attachment
 import com.borets.pfa.entity.Employee
@@ -20,6 +22,8 @@ import com.borets.pfa.entity.account.system.SystemStd
 import com.borets.pfa.entity.account.system.classification.*
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetail
+import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue
+import com.borets.pfa.entity.account.utilization.EquipmentUtilizationValueType
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.activity.ActivityDetail
 import com.borets.pfa.entity.analytic.AnalyticSet
@@ -29,6 +33,7 @@ import com.borets.pfa.entity.price.PriceListDetail
 import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.entity.project.Project
 import com.borets.pfa.entity.project.ProjectAssignment
+import com.borets.pfa.entity.setting.*
 import com.haulmont.cuba.core.entity.FileDescriptor
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.security.app.role.AnnotatedRoleDefinition
@@ -162,6 +167,17 @@ class ApplicationEngineerRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = Attachment::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = FileDescriptor::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Country::class, operations = [EntityOp.READ]),
+
+        EntityAccess(entityClass = CountrySetting::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = CountrySettingAnalyticDetail::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = CountrySettingEquipmentType::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = CountrySettingRevenueType::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = CountrySettingUtilizationValueType::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = EquipmentUtilizationDetailValue::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = EquipmentUtilizationValueType::class, operations = [EntityOp.READ]),
+
+        EntityAccess(entityClass = MeasurementUnit::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = MeasurementUnitSet::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Project::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ])
     )
@@ -224,6 +240,13 @@ class ApplicationEngineerRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = Attachment::class, view = ["*"]),
         EntityAttributeAccess(entityClass = FileDescriptor::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Country::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = CountrySetting::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = CountrySettingAnalyticDetail::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = CountrySettingEquipmentType::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = CountrySettingRevenueType::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = CountrySettingUtilizationValueType::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = EquipmentUtilizationDetailValue::class, modify = ["*"]),
+        EntityAttributeAccess(entityClass = EquipmentUtilizationValueType::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Project::class, view = ["*"]),
         EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"])
     )

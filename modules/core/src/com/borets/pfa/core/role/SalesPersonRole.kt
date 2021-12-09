@@ -19,6 +19,8 @@ import com.borets.pfa.entity.account.system.SystemDetail
 import com.borets.pfa.entity.account.system.SystemStd
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetail
+import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue
+import com.borets.pfa.entity.account.utilization.EquipmentUtilizationValueType
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.activity.ActivityDetail
 import com.borets.pfa.entity.analytic.AnalyticSet
@@ -28,6 +30,7 @@ import com.borets.pfa.entity.price.PriceListDetail
 import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.entity.project.Project
 import com.borets.pfa.entity.project.ProjectAssignment
+import com.borets.pfa.entity.setting.*
 import com.haulmont.cuba.core.entity.FileDescriptor
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.security.app.role.AnnotatedRoleDefinition
@@ -116,6 +119,13 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = SupplementaryDetail::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = SupplementaryDetailType::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Country::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = CountrySetting::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = CountrySettingAnalyticDetail::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = CountrySettingEquipmentType::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = CountrySettingRevenueType::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = CountrySettingUtilizationValueType::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = EquipmentUtilizationDetailValue::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = EquipmentUtilizationValueType::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Project::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ])
     )
@@ -170,6 +180,13 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = SupplementaryDetail::class, view = ["*"]),
         EntityAttributeAccess(entityClass = SupplementaryDetailType::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Country::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = CountrySetting::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = CountrySettingAnalyticDetail::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = CountrySettingEquipmentType::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = CountrySettingRevenueType::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = CountrySettingUtilizationValueType::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = EquipmentUtilizationDetailValue::class, modify = ["*"]),
+        EntityAttributeAccess(entityClass = EquipmentUtilizationValueType::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Project::class, view = ["*"]),
         EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"])
     )
