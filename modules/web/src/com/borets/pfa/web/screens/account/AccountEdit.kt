@@ -332,8 +332,8 @@ class AccountEdit : StandardEditor<Account>() {
                 |   where pa.project = p and pa.dateEnd IS NULL)
                 |order by p.well""".trimMargin())
             .parameter("customerId", editedEntity.customerId!!)
-            .view {it.addView(View.MINIMAL)
-            }
+            .parameter("today", timeSource.now().toLocalDateTime())
+            .view {it.addView(View.LOCAL)}
             .list()
     }
 
