@@ -319,17 +319,12 @@ class AccountEdit : StandardEditor<Account>() {
     @Install(to = "projectsOptionDl", target = Target.DATA_LOADER)
     private fun projectsOptionDlLoadDelegate(loadContext: LoadContext<Project>?): MutableList<Project> {
         return dataManager.load(Project::class.java)
-//            .query("""select p from pfa_Project p
-//                |left join p.account a
-//                |where p.customerNo = :customerId
-//                |and (a is null or a = :account)
-//                |order by p.well""".trimMargin())
             .query("""select p from pfa_Project p
                 |where p.customerNo = :customerId
                 |and NOT EXISTS( 
                 |   select pa 
                 |   from pfa_ProjectAssignment pa
-                |   where pa.project = p and pa.dateEnd IS NULL)
+                |   where pa.project = p and (pa.dateEnd IS NULL or pa.dateEnd > :today))
                 |order by p.well""".trimMargin())
             .parameter("customerId", editedEntity.customerId!!)
             .parameter("today", timeSource.now().toLocalDateTime())
