@@ -519,7 +519,7 @@ class AccountEdit : StandardEditor<Account>() {
             .withCloseListener { closeEvent ->
                 if (closeEvent.closedWith(DialogOutcome.OK)) {
                     assignedProjectsTable.selected.forEach {
-                        it.dateEnd = timeSource.now().toLocalDateTime()
+                        it.dateEnd = closeEvent.getValue("date")
                     }
                 }
             }
