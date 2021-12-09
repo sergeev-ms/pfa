@@ -225,6 +225,7 @@
                               width="100%" height="100%">
                         <columns>
                             <column property="well" sort="ASCENDING"/>
+                            <column property="wellApi"/>
                             <column property="wellId" collapsed="true"/>
                             <column property="region" collapsed="true"/>
                         </columns>
@@ -239,6 +240,7 @@
                               height="100%" width="100%" settingsEnabled="false">
                         <columns>
                             <column property="project.well" sort="ASCENDING"/>
+                            <column property="project.wellApi"/>
                             <column property="project.wellId" collapsed="true"/>
                             <column property="project.region" collapsed="true"/>
                             <column property="dateStart"/>
