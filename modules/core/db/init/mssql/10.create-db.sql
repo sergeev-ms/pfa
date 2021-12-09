@@ -697,6 +697,7 @@ create table PFA_COUNTRY_SETTING_UTILIZATION_VALUE_TYPE (
     --
     COUNTRY_SETTING_ID uniqueidentifier not null,
     UTILIZATION_VALUE_TYPE_ID uniqueidentifier,
+    ORDER_ integer,
     --
     primary key nonclustered (ID)
 )^

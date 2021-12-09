@@ -79,7 +79,7 @@ class CountrySettingsBean {
 
     fun getEquipmentUtilizationDetailValueType(country : Country) : List<EquipmentUtilizationValueType> {
         return dataManager.load(CountrySettingUtilizationValueType::class.java)
-            .query("where e.countrySetting.country = :country")
+            .query("where e.countrySetting.country = :country order by e.order")
             .parameter("country", country)
             .view {it.add("utilizationValueType", View.MINIMAL)}
             .list()

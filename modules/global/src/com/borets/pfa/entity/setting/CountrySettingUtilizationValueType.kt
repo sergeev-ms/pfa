@@ -2,10 +2,7 @@ package com.borets.pfa.entity.setting
 
 import com.borets.pfa.entity.account.utilization.EquipmentUtilizationValueType
 import com.haulmont.cuba.core.entity.StandardEntity
-import javax.persistence.FetchType
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.Table
+import javax.persistence.*
 
 @Table(name = "PFA_COUNTRY_SETTING_UTILIZATION_VALUE_TYPE")
 @javax.persistence.Entity(name = "pfa_CountrySettingUtilizationValueType")
@@ -22,4 +19,7 @@ open class CountrySettingUtilizationValueType : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "UTILIZATION_VALUE_TYPE_ID")
     var utilizationValueType: EquipmentUtilizationValueType? = null
+
+    @Column(name = "ORDER_")
+    var order: Int? = null
 }

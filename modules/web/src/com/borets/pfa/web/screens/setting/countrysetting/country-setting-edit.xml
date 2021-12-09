@@ -102,13 +102,14 @@
             <tab id="utilizationValueTypeSettingsTab" spacing="true"  margin="true,true,true,true"
                  caption="msg://utilizationValueTypeSettingsTab.caption" expand="utilizationValueTypeSettingsTable">
                 <table id="utilizationValueTypeSettingsTable" dataContainer="utilizationValueTypeSettingsDc" width="100%"
-                       sortable="false" reorderingAllowed="false" multiselect="true">
+                       sortable="false" reorderingAllowed="false" multiselect="true" editable="true">
                     <actions>
                         <action id="add" caption="msg://analyticSettingsTable.add.caption" icon="ADD_ACTION"/>
                         <action id="remove" type="remove"/>
                     </actions>
                     <columns>
                         <column id="utilizationValueType"/>
+                        <column id="order" editable="true"/>
                     </columns>
                     <buttonsPanel>
                         <button action="utilizationValueTypeSettingsTable.add"/>
