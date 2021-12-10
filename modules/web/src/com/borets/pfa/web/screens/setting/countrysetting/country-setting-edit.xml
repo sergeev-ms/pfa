@@ -11,6 +11,7 @@
                 </property>
                 <property name="revenueTypeSettings" view="_minimal">
                     <property name="revenueType" view="_local"/>
+                    <property name="analyticSets" view="_local"/>
                 </property>
                 <property name="equipmentTypeSettings" view="_local">
                     <property name="equipmentType" view="_minimal"/>
@@ -68,14 +69,18 @@
                     <actions>
                         <action id="add" caption="msg://analyticSettingsTable.add.caption" icon="ADD_ACTION"/>
                         <action id="remove" type="remove"/>
+                        <action id="selectAnalytics" trackSelection="true" icon="PICKERFIELD_LOOKUP"
+                                caption="msg://revenueTypeSettingsTable.caption"/>
                     </actions>
                     <columns>
                         <column id="revenueType"/>
                         <column id="revenueType.fullName"/>
+                        <column id="analyticSets"/>
                     </columns>
                     <buttonsPanel>
                         <button action="revenueTypeSettingsTable.add"/>
                         <button action="revenueTypeSettingsTable.remove"/>
+                        <button action="revenueTypeSettingsTable.selectAnalytics"/>
                     </buttonsPanel>
                 </table>
             </tab>

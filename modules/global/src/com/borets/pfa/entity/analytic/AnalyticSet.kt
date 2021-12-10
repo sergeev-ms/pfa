@@ -3,10 +3,12 @@ package com.borets.pfa.entity.analytic
 import com.borets.pfa.entity.activity.JobType
 import com.borets.pfa.entity.activity.WellEquip
 import com.borets.pfa.entity.activity.WellTag
+import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity
 import javax.persistence.Column
 import javax.persistence.Table
 
+@NamePattern(value = "%s-%s-%s|jobType,wellTag,wellEquip")
 @Table(name = "PFA_ANALYTIC_SET")
 @javax.persistence.Entity(name = "pfa_AnalyticSet")
 open class AnalyticSet : StandardEntity() {

@@ -5,11 +5,16 @@ import com.borets.pfa.entity.account.utilization.EquipmentUtilizationValueType
 import com.borets.pfa.entity.analytic.AnalyticSet
 import com.borets.pfa.entity.price.RevenueType
 import com.borets.pfa.entity.setting.*
+import com.borets.pfa.web.screens.analytic.analyticset.AnalyticSetBrowse
+import com.haulmont.cuba.core.global.MetadataTools
 import com.haulmont.cuba.gui.ScreenBuilders
 import com.haulmont.cuba.gui.components.Action
+import com.haulmont.cuba.gui.components.Component
+import com.haulmont.cuba.gui.components.Table
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
 import com.haulmont.cuba.gui.screen.*
+import com.haulmont.cuba.gui.screen.Target
 import javax.inject.Inject
 
 @UiController("pfa_CountrySetting.edit")
@@ -21,6 +26,8 @@ class CountrySettingEdit : StandardEditor<CountrySetting>() {
     private lateinit var screenBuilders: ScreenBuilders
     @Inject
     private lateinit var dataContext: DataContext
+    @Inject
+    private lateinit var metadataTools: MetadataTools
 
     @Inject
     private lateinit var analyticSettingsDc: CollectionPropertyContainer<CountrySettingAnalyticDetail>
@@ -95,5 +102,30 @@ class CountrySettingEdit : StandardEditor<CountrySetting>() {
                     }
                 }
             }.show()
+    }
+
+    @Install(to = "revenueTypeSettingsTable.analyticSets", subject = "columnGenerator",
+        target = Target.COMPONENT, type = Any::class, required = true)
+    private fun revenueTypeSettingsTableAnalyticSetsColumnGenerator(countrySettingRevenueType: CountrySettingRevenueType?): Component {
+        val analyticSetAsString = countrySettingRevenueType?.analyticSets
+            ?.joinToString("; ") { metadataTools.getInstanceName(it) }
+        return Table.PlainTextCell(analyticSetAsString)
+    }
+
+    @Subscribe("revenueTypeSettingsTable.selectAnalytics")
+    private fun onRevenueTypeSettingsTableSelectAnalytics(event: Action.ActionPerformedEvent) {
+        val availableAnalytics = editedEntity.analyticSettings
+            ?.map { it.analyticSet }
+            ?.toList()
+        screenBuilders.lookup(AnalyticSet::class.java, this)
+            .withOpenMode(OpenMode.DIALOG)
+            .withOptions(MapScreenOptions(mapOf(
+                Pair(AnalyticSetBrowse.AVAILABLE_ANALYTICS_PARAM_NAME, availableAnalytics),
+                Pair(AnalyticSetBrowse.SELECTED_ANALYTICS_PARAM_NAME, revenueTypeSettingsDc.item.analyticSets)
+            )))
+            .withSelectHandler {
+                revenueTypeSettingsDc.item.analyticSets = it.toMutableList()
+            }
+            .show()
     }
 }
