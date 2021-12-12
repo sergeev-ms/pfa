@@ -318,18 +318,23 @@ class AccountEdit : StandardEditor<Account>() {
 
     @Install(to = "projectsOptionDl", target = Target.DATA_LOADER)
     private fun projectsOptionDlLoadDelegate(loadContext: LoadContext<Project>?): MutableList<Project> {
-        return dataManager.load(Project::class.java)
-            .query("""select p from pfa_Project p
+        val customerId = editedEntity.customerId
+        if (customerId != null) {
+            return dataManager.load(Project::class.java)
+                .query(
+                    """select p from pfa_Project p
                 |where p.customerNo = :customerId
                 |and NOT EXISTS( 
                 |   select pa 
                 |   from pfa_ProjectAssignment pa
                 |   where pa.project = p and (pa.dateEnd IS NULL or pa.dateEnd > :today))
-                |order by p.well""".trimMargin())
-            .parameter("customerId", editedEntity.customerId!!)
-            .parameter("today", timeSource.now().toLocalDateTime())
-            .view {it.addView(View.LOCAL)}
-            .list()
+                |order by p.well""".trimMargin()
+                )
+                .parameter("customerId", customerId)
+                .parameter("today", timeSource.now().toLocalDateTime())
+                .view { it.addView(View.LOCAL) }
+                .list()
+        } else return mutableListOf()
     }
 
     private fun setWindowCaption() {
