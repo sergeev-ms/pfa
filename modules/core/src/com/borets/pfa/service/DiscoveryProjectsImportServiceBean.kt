@@ -1,9 +1,13 @@
 package com.borets.pfa.service
 
+import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.project.DiscoveryProject
 import com.borets.pfa.entity.project.Project
+import com.borets.pfa.entity.project.ProjectAssignment
 import com.haulmont.cuba.core.global.CommitContext
 import com.haulmont.cuba.core.global.DataManager
+import com.haulmont.cuba.core.global.View
+import com.haulmont.cuba.core.global.ViewBuilder
 import com.haulmont.cuba.security.app.Authenticated
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,8 +32,10 @@ class DiscoveryProjectsImportServiceBean : DiscoveryProjectsImportService {
         log.info("Start importing Projects from Discovery DSI...")
 
         val stats = doImport()
-
         log.info("Import from Discovery DSI is finished.\n $stats")
+
+        val createdAssignmentsCount = createProjectAssignments(stats.newEntities)
+        log.info("Created {} project assignments after import.", createdAssignmentsCount)
     }
 
     private fun doImport(): DiscoveryProjectsImportStatistics {
@@ -156,5 +162,71 @@ class DiscoveryProjectsImportServiceBean : DiscoveryProjectsImportService {
             project.wellApi = discoveryProject.power
         }
         return hasChanges
+    }
+
+    /**
+     * Creating ProjectAssignments.
+     */
+    private fun createProjectAssignments(projectWellIds: List<String?>): Int {
+        if (projectWellIds.isEmpty()) {
+            return 0
+        }
+
+        // loading all projects without assignment in single query (only for faster processing)...
+        val projectsWithoutAssignments = dataManager.load(Project::class.java)
+            .query("select p from pfa_Project  p where not exists " +
+                    "(select pa from pfa_ProjectAssignment pa where pa.project = p)")
+            .view(
+                ViewBuilder.of(Project::class.java)
+                    .addView(View.LOCAL)
+                    .addAll("assignments")
+                    .build()
+            )
+            .list()
+
+        if (projectsWithoutAssignments.isEmpty()) {
+            return 0
+        }
+
+        var count = 0
+        val commitContext = CommitContext()
+        val dateStart = LocalDateTime.now()
+
+        for (project in projectsWithoutAssignments) {
+            if (!projectWellIds.contains(project.wellId)) {
+                continue
+            }
+            try {
+                    val accounts = dataManager.load(Account::class.java)
+                        .query("select a from pfa_Account a where a.customerId = :customerNo")
+                        .parameter("customerNo", project.customerNo)
+                        .list()
+
+                    if (accounts.size == 1) {
+                        // Found project without ProjectAssignment and
+                        // there is only one Account with CustomerId same as Project's customerNo.
+                        // Creating ProjectAssignment for Project and Account...
+
+                        val account = accounts[0]
+                        log.info("Creating project assignment for project {} and account {}...",
+                            project.wellId, account.name)
+
+                        val projectAssignment = metadata.create(ProjectAssignment::class.java)
+                        projectAssignment.project = project
+                        projectAssignment.account = account
+                        projectAssignment.dateStart = dateStart
+
+                        commitContext.addInstanceToCommit(projectAssignment)
+                        count++
+                    }
+
+
+            } catch (exc: IllegalStateException) {
+                log.info("Could not create ProjectAssignment for project with wellId {}", project.wellId)
+            }
+        }
+
+        dataManager.commit(commitContext)
+        return count
     }
 }
