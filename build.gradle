@@ -136,8 +136,6 @@ configure(coreModule) {
         compileOnly(servletApi)
         jdbc(mssql) { exclude(group: 'com.microsoft.azure', module: 'azure-keyvault') }
         testRuntime(mssql) { exclude(group: 'com.microsoft.azure', module: 'azure-keyvault') }
-        compile group: 'org.springframework.kafka', name: 'spring-kafka', version: '2.6.2'
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
     }
 
     task cleanConf(description: 'Cleans up conf directory', type: Delete) {
@@ -234,9 +232,7 @@ task buildWarTest(type: CubaWarBuilding) {
     appProperties = ['cuba.automaticDatabaseUpdate'   : true,
                      'cuba.dataSourceProvider'        : 'jndi',
                      'cuba.webHostName'               : 'us-cuba-test.us.borets.gc',
-                     'cuba.webPort'                   : '90',
-                     'pfa.kafka.parts.consumer.topics': 'part-numbers-test',
-                     'pfa.kafka.parts.consumer.group' : 'pfa-test']
+                     'cuba.webPort'                   : '90']
     webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
     logbackConfigurationFile = 'etc/war-logback.xml'
     includeContextXml = true
@@ -250,8 +246,6 @@ task buildWar(type: CubaWarBuilding) {
                      'cuba.webHostName'                   : 'us-pro.us.borets.gc',
                      'cuba.webPort'                       : '80',
                      'cuba.webAppUrl'                     : 'http://us-borets-pro.us.borets.gc',
-                     'pfa.kafka.parts.consumer.topics'    : 'part-numbers',
-                     'pfa.kafka.parts.consumer.group'     : 'pfa',
                      'cuba.web.productionMode'            : true,
                      'cuba.performanceLogDisabled'        : true,
                      'cuba.web.loginDialogDefaultUser'    : '<disabled>',
