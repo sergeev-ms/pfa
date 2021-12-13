@@ -193,13 +193,13 @@ class DiscoveryProjectsImportServiceBean : DiscoveryProjectsImportService {
         val dateStart = LocalDateTime.now()
 
         for (project in projectsWithoutAssignments) {
-            if (!projectWellIds.contains(project.wellId)) {
+            if (project.customerNo == null || !projectWellIds.contains(project.wellId)) {
                 continue
             }
             try {
                     val accounts = dataManager.load(Account::class.java)
                         .query("select a from pfa_Account a where a.customerId = :customerNo")
-                        .parameter("customerNo", project.customerNo)
+                        .parameter("customerNo", project.customerNo!!)
                         .list()
 
                     if (accounts.size == 1) {
