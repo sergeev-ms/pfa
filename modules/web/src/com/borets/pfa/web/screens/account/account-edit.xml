@@ -67,6 +67,15 @@
                 <query>where e.account = :container_accountDc order by e.createTs desc</query>
             </loader>
         </collection>
+        <collection id="directSalesDc" class="com.borets.pfa.entity.account.directsale.DirectSale">
+            <view extends="_local">
+                <property name="createTs"/>
+                <property name="parent"/>
+            </view>
+            <loader id="directSalesDl">
+                <query>where e.account = :container_accountDc order by e.createTs desc</query>
+            </loader>
+        </collection>
         <collection id="activityPlansDc" class="com.borets.pfa.entity.activity.Activity">
             <view extends="_local">
                 <property name="createTs"/>
@@ -212,6 +221,31 @@
                     <rowsCount/>
                 </table>
                 <linkButton id="createActivityPlanBtn" action="activityPlansTable.create" align="MIDDLE_RIGHT"/>
+            </tab>
+            <tab id="directSalesTab" caption="msg://directSalesTab.caption" expand="directSalesTable"
+                 spacing="true" margin="true,false,false,false">
+                <treeTable id="directSalesTable" dataContainer="directSalesDc" width="100%" hierarchyProperty="parent">
+                    <columns>
+                        <column id="createTs"/>
+                        <column id="recordType"/>
+                        <column id="status"/>
+                        <column id="date" caption="msg://directSalesTable.date"/>
+                        <column id="probability"/>
+                        <column id="bShare"/>
+                    </columns>
+                    <actions>
+                        <action id="view" type="edit" trackSelection="true" caption="msg://directSalesTable.view.caption"/>
+                        <action id="create" type="create" icon="CREATE_ACTION"
+                                caption="msg://directSalesTable.create.caption"/>
+                        <action id="addForecast" caption="msg://detailsTable.addForecast.caption"
+                                trackSelection="true" icon="LINK"/>
+                    </actions>
+                    <rowsCount/>
+                </treeTable>
+                <hbox spacing="true" align="MIDDLE_RIGHT">
+                    <linkButton id="createDirectSaleBtn" action="directSalesTable.create"/>
+                    <linkButton id="addForecastBtn" action="directSalesTable.addForecast"/>
+                </hbox>
             </tab>
             <tab id="supplementaryTab" caption="msg://supplementaryTab.caption" spacing="true"
                  margin="true,false,false,false" expand="attachmentFragment">

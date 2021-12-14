@@ -5,6 +5,8 @@ import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.account.AccountRevision
 import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.SystemAllocation
+import com.borets.pfa.entity.account.directsale.DirectSale
+import com.borets.pfa.entity.account.directsale.DirectSaleDetail
 import com.borets.pfa.entity.account.marketdata.MarketData
 import com.borets.pfa.entity.account.supplementary.Supplementary
 import com.borets.pfa.entity.account.system.System
@@ -39,6 +41,7 @@ import com.vaadin.shared.ui.dnd.EffectAllowed
 import com.vaadin.shared.ui.grid.DropMode
 import com.vaadin.ui.components.grid.GridDragSource
 import com.vaadin.ui.components.grid.GridDropTarget
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -102,6 +105,10 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var projectsDc: CollectionPropertyContainer<ProjectAssignment>
     @Inject
     private lateinit var projectsOptionDc: CollectionContainer<Project>
+    @Inject
+    private lateinit var directSalesDc: CollectionContainer<DirectSale>
+    @Inject
+    private lateinit var directSalesDl: CollectionLoader<DirectSale>
 
     @Inject
     private lateinit var applicationDataFragment: ApplicationDataFragment
@@ -138,9 +145,10 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var projectOptionTable: DataGrid<Project>
     @Inject
     private lateinit var assignedProjectsTable: DataGrid<ProjectAssignment>
+    @Inject
+    private lateinit var directSalesTable: Table<DirectSale>
 
     private var dragged: MutableSet<Project> = mutableSetOf()
-
 
     @Subscribe
     private fun onInit(event: InitEvent) {
@@ -316,7 +324,7 @@ class AccountEdit : StandardEditor<Account>() {
             .show()
     }
 
-    @Install(to = "projectsOptionDl", target = Target.DATA_LOADER)
+    @Install(to = "projectsOptionDl", target = Target.DATA_LOADER, type = Any::class, subject = "", required = true)
     private fun projectsOptionDlLoadDelegate(loadContext: LoadContext<Project>?): MutableList<Project> {
         val customerId = editedEntity.customerId
         if (customerId != null) {
@@ -410,6 +418,12 @@ class AccountEdit : StandardEditor<Account>() {
                     supplementaryDl.load()
                 }
             }
+            "directSalesTab" -> {
+                if (directSalesDc.items.isEmpty()) {
+                    directSalesDl.setParameter("container_accountDc", editedEntity)
+                    directSalesDl.load()
+                }
+            }
         }
     }
 
@@ -473,7 +487,37 @@ class AccountEdit : StandardEditor<Account>() {
             .show()
     }
 
-    @Install(to = "countryField", subject = "optionIconProvider")
+    @Subscribe("directSalesTable.create")
+    private fun onDirectSalesTableCreate(event: Action.ActionPerformedEvent) {
+        screenBuilders.editor(directSalesTable)
+            .newEntity()
+            .withInitializer { it.account = editedEntity }
+            .withParentDataContext(dataContext)
+            .show()
+    }
+
+    @Subscribe("directSalesTable.addForecast")
+    private fun onDirectSalesTableAddForecast(event: Action.ActionPerformedEvent) {
+        screenBuilders.editor(directSalesTable)
+            .newEntity()
+            .withInitializer {
+                val directSaleReloaded = dataManager.reload(directSalesDc.item,
+                    ViewBuilder.of(DirectSale::class.java)
+                        .addView(View.LOCAL)
+                        .add("account", View.MINIMAL)
+                        .add("details") { detailsVb ->
+                            detailsVb.addView(View.LOCAL).add("part", View.MINIMAL) }
+                        .build()
+                )
+                it.copyFrom(directSaleReloaded)
+                it.parent = directSaleReloaded
+            }
+            .withParentDataContext(dataContext)
+            .show()
+    }
+
+    @Install(to = "countryField", subject = "optionIconProvider", type = Any::class, required = true,
+        target = Target.COMPONENT)
     private fun countryFieldOptionIconProvider(country: Country?): String? {
         return country?.picture
     }
@@ -575,8 +619,33 @@ class AccountEdit : StandardEditor<Account>() {
                     moveToRight(ImmutableSet.copyOf(dragged))
             }
         }
+    }
 
+    @Install(to = "directSalesTable.date", subject = "formatter", type = Any::class, required = true,
+        target = Target.COMPONENT)
+    private fun directSalesTableDateFormatter(localDate: LocalDate?): String {
+        return localDate?.format(DateTimeFormatter.ofPattern("MMM yyyy", userSession.locale)) ?: ""
+    }
+
+    private fun DirectSale.copyFrom(item: DirectSale) {
+        probability = item.probability
+        bShare = item.bShare
+        account = item.account
+        setStatus(item.getStatus())
+        val copiedDetails = item.details
+            ?.map {
+                dataContext.create(DirectSaleDetail::class.java).apply {
+                    directSale = this@copyFrom
+                    part = it.part
+                    price = it.price
+                    length = it.length
+                }
+            }
+            ?.toMutableList()
+        details = copiedDetails
     }
 }
+
+
 
 

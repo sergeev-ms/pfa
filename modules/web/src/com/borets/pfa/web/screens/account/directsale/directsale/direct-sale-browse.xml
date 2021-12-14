@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://directSaleBrowse.caption" focusComponent="directSalesTable"
+        messagesPack="com.borets.pfa.web.screens.account.directsale.directsale">
+    <data readOnly="true">
+        <collection id="directSalesDc" class="com.borets.pfa.entity.account.directsale.DirectSale">
+            <view extends="_local">
+                <property name="account" view="_minimal"/>
+            </view>
+            <loader id="directSalesDl">
+                <query>
+                    <![CDATA[select e from pfa_DirectSale e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="directSalesTable" spacing="true">
+        <filter id="filter" applyTo="directSalesTable" dataLoader="directSalesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="directSalesTable" width="100%" dataContainer="directSalesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="account"/>
+                <column id="date"/>
+                <column id="recordType"/>
+                <column id="status"/>
+                <column id="probability"/>
+                <column id="bShare"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
+                <button id="createBtn" action="directSalesTable.create"/>
+                <button id="editBtn" action="directSalesTable.edit"/>
+                <button id="removeBtn" action="directSalesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

@@ -1,0 +1,2 @@
+alter table PFA_DIRECT_SALE add constraint FK_PFA_DIRECT_SALE_ON_PARENT foreign key (PARENT_ID) references PFA_DIRECT_SALE(ID);
+create index IDX_PFA_DIRECT_SALE_ON_PARENT on PFA_DIRECT_SALE (PARENT_ID);

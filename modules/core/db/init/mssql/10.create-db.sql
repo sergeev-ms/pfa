@@ -749,3 +749,44 @@ create table PFA_COUNTRY_SETTING_REVENUE_TYPE_ANALYTIC_SET_LINK (
     primary key (COUNTRY_SETTING_REVENUE_TYPE_ID, ANALYTIC_SET_ID)
 )^
 -- end PFA_COUNTRY_SETTING_REVENUE_TYPE_ANALYTIC_SET_LINK
+-- begin PFA_DIRECT_SALE_DETAIL
+create table PFA_DIRECT_SALE_DETAIL (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    DIRECT_SALE_ID uniqueidentifier not null,
+    PART_ID uniqueidentifier,
+    LENGTH decimal(19,6),
+    PRICE integer,
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_DIRECT_SALE_DETAIL
+-- begin PFA_DIRECT_SALE
+create table PFA_DIRECT_SALE (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    ACCOUNT_ID uniqueidentifier,
+    DATE_ datetime2,
+    RECORD_TYPE nvarchar(50),
+    STATUS nvarchar(50),
+    PROBABILITY decimal(19, 2),
+    B_SHARE decimal(19, 2),
+    PARENT_ID uniqueidentifier,
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_DIRECT_SALE

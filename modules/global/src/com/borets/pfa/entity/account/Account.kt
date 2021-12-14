@@ -2,6 +2,7 @@ package com.borets.pfa.entity.account
 
 import com.borets.addon.country.entity.Country
 import com.borets.pfa.entity.account.appdata.ApplicationData
+import com.borets.pfa.entity.account.directsale.DirectSale
 import com.borets.pfa.entity.account.marketdata.ApplicationType
 import com.borets.pfa.entity.account.marketdata.MarketData
 import com.borets.pfa.entity.account.supplementary.Supplementary
@@ -99,6 +100,9 @@ open class Account : StandardEntity() {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "account")
     var projects: MutableList<ProjectAssignment>? = mutableListOf()
+
+    @OneToMany(mappedBy = "account")
+    var directSales: MutableList<DirectSale>? = mutableListOf()
 
     fun getType(): Type? = actualRevision?.getType()
 

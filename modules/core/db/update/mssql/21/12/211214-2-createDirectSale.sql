@@ -1,0 +1,2 @@
+alter table PFA_DIRECT_SALE add constraint FK_PFA_DIRECT_SALE_ON_ACCOUNT foreign key (ACCOUNT_ID) references PFA_ACCOUNT(ID);
+create index IDX_PFA_DIRECT_SALE_ON_ACCOUNT on PFA_DIRECT_SALE (ACCOUNT_ID);

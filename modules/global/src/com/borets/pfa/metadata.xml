@@ -3,7 +3,7 @@
 
     <datatypes>
         <datatype id="yearMonth" class="com.borets.pfa.datatype.YearMonthDataType" sqlType="varchar(10)"/>
-        <datatype id="percentage" class="com.borets.pfa.datatype.PercentageDatatype"/>
+        <datatype id="percentage" class="com.borets.pfa.datatype.PercentageDatatype" sqlType="decimal(19, 2)"/>
     </datatypes>
 
     <metadata-model root-package="com.borets.pfa" namespace="pfa"/>

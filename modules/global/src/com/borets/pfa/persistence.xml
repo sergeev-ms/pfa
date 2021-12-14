@@ -43,5 +43,7 @@
         <class>com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue</class>
         <class>com.borets.pfa.entity.project.Project</class>
         <class>com.borets.pfa.entity.project.ProjectAssignment</class>
+        <class>com.borets.pfa.entity.account.directsale.DirectSale</class>
+        <class>com.borets.pfa.entity.account.directsale.DirectSaleDetail</class>
     </persistence-unit>
 </persistence>
