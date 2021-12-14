@@ -492,7 +492,6 @@ class AccountEdit : StandardEditor<Account>() {
         screenBuilders.editor(directSalesTable)
             .newEntity()
             .withInitializer { it.account = editedEntity }
-            .withParentDataContext(dataContext)
             .show()
     }
 
@@ -512,7 +511,6 @@ class AccountEdit : StandardEditor<Account>() {
                 it.copyFrom(directSaleReloaded)
                 it.parent = directSaleReloaded
             }
-            .withParentDataContext(dataContext)
             .show()
     }
 
@@ -634,7 +632,7 @@ class AccountEdit : StandardEditor<Account>() {
         setStatus(item.getStatus())
         val copiedDetails = item.details
             ?.map {
-                dataContext.create(DirectSaleDetail::class.java).apply {
+                dataManager.create(DirectSaleDetail::class.java).apply {
                     directSale = this@copyFrom
                     part = it.part
                     price = it.price
