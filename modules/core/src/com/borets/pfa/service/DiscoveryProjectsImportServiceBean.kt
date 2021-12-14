@@ -4,16 +4,12 @@ import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.project.DiscoveryProject
 import com.borets.pfa.entity.project.Project
 import com.borets.pfa.entity.project.ProjectAssignment
-import com.haulmont.cuba.core.global.CommitContext
-import com.haulmont.cuba.core.global.DataManager
-import com.haulmont.cuba.core.global.View
-import com.haulmont.cuba.core.global.ViewBuilder
+import com.haulmont.cuba.core.global.*
 import com.haulmont.cuba.security.app.Authenticated
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Duration
-import java.time.LocalDateTime
 
 @Service(DiscoveryProjectsImportService.NAME)
 class DiscoveryProjectsImportServiceBean : DiscoveryProjectsImportService {
@@ -22,10 +18,14 @@ class DiscoveryProjectsImportServiceBean : DiscoveryProjectsImportService {
     private lateinit var dataManager: DataManager
 
     @Autowired
-    private lateinit var metadata: com.haulmont.cuba.core.global.Metadata
+    private lateinit var metadata: Metadata
 
     @Autowired
     private lateinit var log: org.slf4j.Logger
+
+    @Autowired
+    private lateinit var timeSource: TimeSource
+
 
     @Authenticated
     override fun import() {
@@ -34,12 +34,12 @@ class DiscoveryProjectsImportServiceBean : DiscoveryProjectsImportService {
         val stats = doImport()
         log.info("Import from Discovery DSI is finished.\n $stats")
 
-        val createdAssignmentsCount = createProjectAssignments(stats.newEntities)
+        val createdAssignmentsCount = createProjectAssignmentsForNewProjects(stats.newEntities)
         log.info("Created {} project assignments after import.", createdAssignmentsCount)
     }
 
     private fun doImport(): DiscoveryProjectsImportStatistics {
-        val startTime = LocalDateTime.now()
+        val startTime = timeSource.now().toLocalDateTime()
         // WARNING:
         // external view contains poorly prepared data (leading spaces, garbage etc.).
         // Leave it as is, do not try to clean up or sanitize.
@@ -61,7 +61,7 @@ class DiscoveryProjectsImportServiceBean : DiscoveryProjectsImportService {
             return DiscoveryProjectsImportStatistics(
                 0, 0, discoveryProjects.size,
                 discoveryProjects.map { it.wellId }.toMutableList(),
-                startTime = startTime, elapsedTime = Duration.between(startTime, LocalDateTime.now())
+                startTime = startTime, elapsedTime = Duration.between(startTime, timeSource.now().toLocalDateTime())
             )
         }
 
@@ -134,7 +134,7 @@ class DiscoveryProjectsImportServiceBean : DiscoveryProjectsImportService {
         dataManager.commit(ctx)
 
         stats.startTime = startTime
-        stats.elapsedTime = Duration.between(startTime, LocalDateTime.now())
+        stats.elapsedTime = Duration.between(startTime, timeSource.now().toLocalDateTime())
         return stats
     }
 
@@ -165,35 +165,24 @@ class DiscoveryProjectsImportServiceBean : DiscoveryProjectsImportService {
     }
 
     /**
-     * Creating ProjectAssignments.
+     * Creating ProjectAssignments for new projects.
      */
-    private fun createProjectAssignments(projectWellIds: List<String?>): Int {
-        if (projectWellIds.isEmpty()) {
+    private fun createProjectAssignmentsForNewProjects(newProjectWellIds: List<String?>): Int {
+        if (newProjectWellIds.isEmpty()) {
             return 0
         }
 
-        // loading all projects without assignment in single query (only for faster processing)...
-        val projectsWithoutAssignments = dataManager.load(Project::class.java)
-            .query("select p from pfa_Project  p where not exists " +
-                    "(select pa from pfa_ProjectAssignment pa where pa.project = p)")
-            .view(
-                ViewBuilder.of(Project::class.java)
-                    .addView(View.LOCAL)
-                    .addAll("assignments")
-                    .build()
-            )
-            .list()
-
+        val projectsWithoutAssignments = loadNewProjectsWithoutAssignments(newProjectWellIds, 100)
         if (projectsWithoutAssignments.isEmpty()) {
             return 0
         }
 
         var count = 0
         val commitContext = CommitContext()
-        val dateStart = LocalDateTime.now()
+        val dateStart = timeSource.now().toLocalDateTime()
 
         for (project in projectsWithoutAssignments) {
-            if (project.customerNo == null || !projectWellIds.contains(project.wellId)) {
+            if (project.customerNo == null || !newProjectWellIds.contains(project.wellId)) {
                 continue
             }
             try {
@@ -228,5 +217,37 @@ class DiscoveryProjectsImportServiceBean : DiscoveryProjectsImportService {
 
         dataManager.commit(commitContext)
         return count
+    }
+
+    private fun loadNewProjectsWithoutAssignments(newProjectWellIds: List<String?>,
+                                                  wellIdsParamThreshold: Int = 2000 /* ~2000 is SQL Server limit*/): List<Project> {
+        val queryBuilder = dataManager.load(Project::class.java)
+
+        if (newProjectWellIds.size < wellIdsParamThreshold) {
+            queryBuilder
+                .query(
+                    "select p from pfa_Project p where " +
+                            "p.wellId in :wellIds " +
+                            "and not exists (select pa from pfa_ProjectAssignment pa where pa.project = p)"
+                )
+                .parameter("wellIds", newProjectWellIds)
+        } else {
+            queryBuilder
+                // loading all projects without assignment in single query
+                // (for faster processing, all projects with newProjectWellIds are among them)...
+                .query(
+                    "select p from pfa_Project  p where not exists " +
+                            "(select pa from pfa_ProjectAssignment pa where pa.project = p)"
+                )
+        }
+
+        return queryBuilder
+            .view(
+                ViewBuilder.of(Project::class.java)
+                    .addView(View.LOCAL)
+                    .addAll("assignments")
+                    .build()
+            )
+            .list()
     }
 }
