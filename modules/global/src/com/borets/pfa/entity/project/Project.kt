@@ -8,7 +8,9 @@ import com.haulmont.cuba.core.entity.annotation.SystemLevel
 import java.math.BigDecimal
 import javax.persistence.*
 
-@Table(name = "PFA_PROJECT")
+@Table(name = "PFA_PROJECT", indexes = [
+    Index(name = "IDX_PFA_PROJECT_ON_WELL_ID", columnList = "WELL_ID")
+])
 @Entity(name = "pfa_Project")
 @NamePattern(value = "%s - %s (%s)|well,wellId,region")
 open class Project : StandardEntity() {
