@@ -78,7 +78,7 @@ class DirectSaleEdit : StandardEditor<DirectSale>() {
         type = Any::class, required = true)
     private fun detailsTablePriceColumnGenerator(directSaleDetail: DirectSaleDetail): Component {
         @Suppress("UnstableApiUsage")
-        return uiComponents.create(CurrencyField.TYPE_INTEGER).apply {
+        return uiComponents.create(CurrencyField.TYPE_BIGDECIMAL).apply {
             setWidthFull()
             currency = "$"
             valueSource = ContainerValueSource(detailsTable.getInstanceContainer(directSaleDetail), "price")
