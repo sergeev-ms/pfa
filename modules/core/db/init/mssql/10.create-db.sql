@@ -763,7 +763,7 @@ create table PFA_DIRECT_SALE_DETAIL (
     DIRECT_SALE_ID uniqueidentifier not null,
     PART_ID uniqueidentifier,
     LENGTH decimal(19,6),
-    PRICE integer,
+    PRICE decimal(19, 2),
     --
     primary key nonclustered (ID)
 )^

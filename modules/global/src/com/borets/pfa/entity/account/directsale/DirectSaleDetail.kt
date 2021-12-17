@@ -25,7 +25,7 @@ open class DirectSaleDetail : StandardEntity() {
     var length: BigDecimal? = BigDecimal.ZERO
 
     @Column(name = "PRICE")
-    var price: Int? = 0
+    var price: BigDecimal? = null
 
     companion object {
         private const val serialVersionUID = 3874006177258997456L
