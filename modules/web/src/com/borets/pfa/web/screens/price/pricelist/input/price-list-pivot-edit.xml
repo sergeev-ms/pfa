@@ -35,18 +35,12 @@
                         </actions>
                     </pickerField>
                     <textArea id="commentField" property="comment" rows="2" colspan="3"/>
-                    <currencyField id="rentalRateField" property="rentalRate" currency="$"
-                                   description="msg://rentalRateField.description"/>
                 </column>
                 <column width="100%">
                     <textField property="account.contractType"/>
-                    <currencyField id="remoteMonitoringField" property="remoteMonitoring" currency="$"
-                        description="msg://remoteMonitoringField.description"/>
                 </column>
                 <column width="100%">
                     <lookupField id="recordTypeField" property="recordType" required="true"/>
-                    <currencyField id="wellCheckField" property="wellCheck" currency="$"
-                    description="msg://wellCheckField.description"/>
                 </column>
                 <column width="100%">
                     <datePicker id="yearMonthField" caption="msg://yearMonthField.caption" resolution="MONTH"
