@@ -206,6 +206,7 @@ class AccountEdit : StandardEditor<Account>() {
                 it.account = editedEntity
                 it.manager = editedEntity.actualRevision?.manager
                 it.setType(editedEntity.actualRevision?.getType())
+                it.active = editedEntity.actualRevision?.active ?: true
             }
             .withOpenMode(OpenMode.DIALOG)
             .build()

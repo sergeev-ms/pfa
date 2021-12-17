@@ -98,6 +98,7 @@ create table PFA_ACCOUNT_REVISION (
     MANAGER_ID uniqueidentifier,
     TYPE_ nvarchar(50),
     ACCOUNT_ID uniqueidentifier not null,
+    ACTIVE tinyint,
     --
     primary key nonclustered (ID)
 )^

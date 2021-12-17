@@ -134,6 +134,7 @@
                                 </actions>
                             </pickerField>
                             <textField id="nameField" property="name"/>
+                            <pickerField property="customer"/>
                         </column>
                         <column width="100%">
                             <lookupField property="contractType"/>
@@ -141,10 +142,11 @@
                             <lookupField property="fieldType" required="false"/>
                         </column>
                         <column width="100%">
-                            <pickerField property="customer"/>
                             <textField id="typeField" property="type" editable="false"
                                        dataContainer="actualRevisionDc"/>
                             <textField id="managerField" property="manager" editable="false"
+                                       dataContainer="actualRevisionDc"/>
+                            <checkBox id="activeField" property="active" editable="false"
                                        dataContainer="actualRevisionDc"/>
                         </column>
                     </form>

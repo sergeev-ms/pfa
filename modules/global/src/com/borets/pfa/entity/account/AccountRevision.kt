@@ -30,6 +30,9 @@ open class AccountRevision : StandardEntity() {
     @JoinColumn(name = "ACCOUNT_ID")
     var account: Account? = null
 
+    @Column(name = "ACTIVE")
+    var active: Boolean? = true
+
     fun getType(): Type? = type?.let { Type.fromId(it) }
 
     fun setType(type: Type?) {

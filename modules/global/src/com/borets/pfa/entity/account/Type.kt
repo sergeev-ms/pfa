@@ -5,8 +5,7 @@ import com.haulmont.chile.core.datatypes.impl.EnumClass
 enum class Type(private val id: String) : EnumClass<String> {
     STRATEGIC("S"),
     KEY("K"),
-    OTHER("O"),
-    INACTIVE("I");
+    OTHER("O");
 
     override fun getId() = id
 

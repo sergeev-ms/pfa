@@ -43,6 +43,7 @@
                 <column id="customer" collapsed="true"/>
                 <column id="actualRevision.type"/>
                 <column id="actualRevision.manager"/>
+                <column id="actualRevision.active"/>
                 <column id="actualRevision.yearMonth"/>
                 <column id="country" collapsed="true"/>
             </columns>
