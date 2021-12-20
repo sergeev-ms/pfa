@@ -10,6 +10,8 @@ import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.EquipmentCategory
 import com.borets.pfa.entity.account.appdata.EquipmentType
 import com.borets.pfa.entity.account.appdata.SystemAllocation
+import com.borets.pfa.entity.account.directsale.DirectSale
+import com.borets.pfa.entity.account.directsale.DirectSaleDetail
 import com.borets.pfa.entity.account.marketdata.MarketData
 import com.borets.pfa.entity.account.supplementary.Supplementary
 import com.borets.pfa.entity.account.supplementary.SupplementaryDetail
@@ -56,7 +58,7 @@ class GlobalMarketingRole : AnnotatedRoleDefinition() {
         "pfa_ApplicationData.edit", "pfa_ApplicationData.browse", "pfa_EquipmentUtilizationFragment",
         "pfa_EquipmentUtilization.edit", "pfa_EquipmentUtilization.browse", "pfa_RevenueType.browse",
         "pfa_EquipmentType.browse", "pfa_SupplementaryDetailType.browse", "pfa_SupplementaryFragment",
-        "pfa_SupplementaryDetailType.edit"])
+        "pfa_SupplementaryDetailType.edit", "pfa_DirectSale.edit"])
     override fun screenPermissions(): ScreenPermissionsContainer {
         return super.screenPermissions()
     }
@@ -148,7 +150,9 @@ class GlobalMarketingRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = EquipmentUtilizationDetailValue::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = EquipmentUtilizationValueType::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Project::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ])
+        EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = DirectSale::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = DirectSaleDetail::class, operations = [EntityOp.READ])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -219,17 +223,12 @@ class GlobalMarketingRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = EquipmentUtilizationDetailValue::class, modify = ["*"]),
         EntityAttributeAccess(entityClass = EquipmentUtilizationValueType::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Project::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"])
+        EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = DirectSale::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = DirectSaleDetail::class, view = ["*"]),
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()
-    }
-
-    @ScreenComponentAccess(screenId = "pfa_Account.edit",
-        deny = ["createRevisionBtn", "createAppDataBtn", "createUtilizationBtn"],
-    )
-    override fun screenComponentPermissions(): ScreenComponentPermissionsContainer {
-        return super.screenComponentPermissions()
     }
 
     override fun getLocName(): String {
