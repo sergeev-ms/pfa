@@ -23,7 +23,7 @@
     <dialogMode height="600" width="800"/>
     <layout expand="accountsTable" spacing="true">
         <filter id="filter" applyTo="accountsTable" dataLoader="accountsDl" useMaxResults="false"
-                windowCaptionUpdateEnabled="false">
+                windowCaptionUpdateEnabled="false" columnsCount="4">
             <properties include=".*"/>
         </filter>
         <treeTable id="accountsTable" width="100%" dataContainer="accountsDc" hierarchyProperty="parent">
