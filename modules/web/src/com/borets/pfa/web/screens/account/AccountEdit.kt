@@ -34,6 +34,7 @@ import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.*
 import com.haulmont.cuba.gui.screen.*
 import com.haulmont.cuba.gui.screen.Target
+import com.haulmont.cuba.security.entity.EntityOp
 import com.haulmont.cuba.security.global.UserSession
 import com.haulmont.cuba.web.widgets.CubaGrid
 import com.vaadin.shared.ui.dnd.DropEffect
@@ -68,6 +69,8 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var dialogs: Dialogs
     @Inject
     private lateinit var messageBundle: MessageBundle
+    @Inject
+    private lateinit var security: Security
 
     @Inject
     private lateinit var actualRevisionDc: InstancePropertyContainer<AccountRevision>
@@ -157,6 +160,7 @@ class AccountEdit : StandardEditor<Account>() {
         marketDataFragment.setEditable(false)
 
         setupDragAndDrop()
+        setupButtonsVisibility()
     }
 
     @Subscribe
@@ -642,6 +646,13 @@ class AccountEdit : StandardEditor<Account>() {
             }
             ?.toMutableList()
         details = copiedDetails
+    }
+
+    private fun setupButtonsVisibility() {
+        createRevisionBtn.isVisible = security.isEntityOpPermitted(AccountRevision::class.java, EntityOp.CREATE)
+        createMarketDataBtn.isVisible = security.isEntityOpPermitted(MarketData::class.java, EntityOp.CREATE)
+        createAppDataBtn.isVisible = security.isEntityOpPermitted(ApplicationData::class.java, EntityOp.CREATE)
+        createUtilizationBtn.isVisible = security.isEntityOpPermitted(EquipmentUtilization::class.java, EntityOp.CREATE)
     }
 }
 
