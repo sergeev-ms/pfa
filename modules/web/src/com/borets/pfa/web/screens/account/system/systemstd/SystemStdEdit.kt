@@ -50,7 +50,6 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
     @field:Named("detailsTable.copy")
     private lateinit var detailsTableCopy: ItemTrackingAction
 
-
     @Subscribe
     private fun onBeforeShow(@Suppress("UNUSED_PARAMETER") event: BeforeShowEvent) {
         setCaptions()
@@ -133,5 +132,8 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
             }
     }
 
-
+    override fun setReadOnly(readOnly: Boolean) {
+        super.setReadOnly(readOnly)
+        detailsTableCopy.isEnabled = !readOnly
+    }
 }

@@ -111,7 +111,8 @@
                 <actions>
                     <action id="create" type="create"/>
                     <action id="remove" type="remove"/>
-                    <action id="copy" trackSelection="true" caption="msg://detailsTable.copy.caption" icon="COPY"/>
+                    <action id="copy" trackSelection="true" caption="msg://detailsTable.copy.caption" icon="COPY"
+                            constraintOperationType="create"/>
                 </actions>
                 <columns>
                     <column id="equipmentType" generator="equipmentTypeGenerator" required="true"/>
