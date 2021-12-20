@@ -240,7 +240,7 @@
                         <action id="create" type="create" icon="CREATE_ACTION"
                                 caption="msg://directSalesTable.create.caption"/>
                         <action id="addForecast" caption="msg://detailsTable.addForecast.caption"
-                                trackSelection="true" icon="LINK"/>
+                                trackSelection="true" icon="LINK" constraintOperationType="create"/>
                     </actions>
                     <rowsCount/>
                 </treeTable>
