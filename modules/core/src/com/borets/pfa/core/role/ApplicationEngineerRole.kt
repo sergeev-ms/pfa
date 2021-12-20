@@ -12,6 +12,8 @@ import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.EquipmentCategory
 import com.borets.pfa.entity.account.appdata.EquipmentType
 import com.borets.pfa.entity.account.appdata.SystemAllocation
+import com.borets.pfa.entity.account.directsale.DirectSale
+import com.borets.pfa.entity.account.directsale.DirectSaleDetail
 import com.borets.pfa.entity.account.marketdata.MarketData
 import com.borets.pfa.entity.account.supplementary.Supplementary
 import com.borets.pfa.entity.account.supplementary.SupplementaryDetail
@@ -68,7 +70,7 @@ class ApplicationEngineerRole : AnnotatedRoleDefinition() {
             "pn_PartCable.edit", "pn_PartDrive.edit", "pn_PartGC.edit", "pn_PartGH.edit", "pn_PartGS.edit",
             "pn_PartMLE.edit", "pn_PartMotor.edit", "pn_PartMotorSeal.edit", "pn_PartPump.edit", "pn_PartSensor.edit",
             "pn_PartXFMR.edit", "help", "aboutWindow", "settings", "pn_PartUMB.browse", "pn_PartOther.browse",
-            "pn_PartOther.edit", "pn_PartUMB.edit"]
+            "pn_PartOther.edit", "pn_PartUMB.edit", "pfa_DirectSale.edit"]
     )
     override fun screenPermissions(): ScreenPermissionsContainer {
         return super.screenPermissions()
@@ -92,14 +94,8 @@ class ApplicationEngineerRole : AnnotatedRoleDefinition() {
         ),
         EntityAccess(entityClass = PriceList::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = PriceListDetail::class, operations = [EntityOp.READ]),
-        EntityAccess(
-            entityClass = ActivityDetail::class,
-            operations = [EntityOp.READ]
-        ),
-        EntityAccess(
-            entityClass = KeyValueEntity::class,
-            operations = [EntityOp.READ]
-        ),
+        EntityAccess(entityClass = ActivityDetail::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = KeyValueEntity::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = DimCustomers::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = AnalyticSet::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = RevenueType::class, operations = [EntityOp.READ]),
@@ -179,7 +175,9 @@ class ApplicationEngineerRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = MeasurementUnit::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = MeasurementUnitSet::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Project::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ])
+        EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = DirectSale::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = DirectSaleDetail::class, operations = [EntityOp.READ])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -248,14 +246,15 @@ class ApplicationEngineerRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = EquipmentUtilizationDetailValue::class, modify = ["*"]),
         EntityAttributeAccess(entityClass = EquipmentUtilizationValueType::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Project::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"])
+        EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = DirectSale::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = DirectSaleDetail::class, view = ["*"])
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()
     }
 
     @ScreenComponentAccess(screenId = "pfa_Account.edit",
-        deny = ["createRevisionBtn", "createMarketDataBtn"],
         view = ["attachmentFragment.filesMultiUpload"]
     )
     override fun screenComponentPermissions(): ScreenComponentPermissionsContainer {
