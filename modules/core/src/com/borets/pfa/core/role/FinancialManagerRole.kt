@@ -12,6 +12,8 @@ import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.EquipmentCategory
 import com.borets.pfa.entity.account.appdata.EquipmentType
 import com.borets.pfa.entity.account.appdata.SystemAllocation
+import com.borets.pfa.entity.account.directsale.DirectSale
+import com.borets.pfa.entity.account.directsale.DirectSaleDetail
 import com.borets.pfa.entity.account.marketdata.MarketData
 import com.borets.pfa.entity.account.supplementary.Supplementary
 import com.borets.pfa.entity.account.supplementary.SupplementaryDetail
@@ -57,7 +59,7 @@ class FinancialManagerRole : AnnotatedRoleDefinition() {
         "pfa_ApplicationData.edit", "pfa_ApplicationData.browse", "pfa_EquipmentUtilizationFragment",
         "pfa_EquipmentUtilization.edit", "pfa_EquipmentUtilization.browse", "pfa_CountrySetting.browse",
         "pfa_CountrySetting.edit", "pfa_AnalyticSet.browse", "pfa_RevenueType.browse", "pfa_EquipmentType.browse",
-        "pfa_EquipmentUtilizationValueType.browse"])
+        "pfa_EquipmentUtilizationValueType.browse", "pfa_DirectSale.edit"])
     override fun screenPermissions(): ScreenPermissionsContainer {
         return super.screenPermissions()
     }
@@ -156,7 +158,9 @@ class FinancialManagerRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = MeasurementUnit::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = MeasurementUnitSet::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Project::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ])
+        EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = DirectSale::class, operations = [EntityOp.READ, EntityOp.UPDATE, EntityOp.CREATE]),
+        EntityAccess(entityClass = DirectSaleDetail::class, operations = [EntityOp.READ, EntityOp.UPDATE, EntityOp.CREATE])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -227,14 +231,15 @@ class FinancialManagerRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = PartUMB::class, view = ["*"]),
         EntityAttributeAccess(entityClass = PartXFMR::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Project::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"])
+        EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = DirectSale::class, modify = ["*"]),
+        EntityAttributeAccess(entityClass = DirectSaleDetail::class, modify = ["*"])
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()
     }
 
     @ScreenComponentAccess(screenId = "pfa_Account.edit",
-        deny = ["createMarketDataBtn"],
         view = ["attachmentFragment.filesMultiUpload"]
     )
     override fun screenComponentPermissions(): ScreenComponentPermissionsContainer {
