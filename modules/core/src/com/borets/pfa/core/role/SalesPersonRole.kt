@@ -10,6 +10,8 @@ import com.borets.pfa.entity.account.appdata.ApplicationData
 import com.borets.pfa.entity.account.appdata.EquipmentCategory
 import com.borets.pfa.entity.account.appdata.EquipmentType
 import com.borets.pfa.entity.account.appdata.SystemAllocation
+import com.borets.pfa.entity.account.directsale.DirectSale
+import com.borets.pfa.entity.account.directsale.DirectSaleDetail
 import com.borets.pfa.entity.account.marketdata.MarketData
 import com.borets.pfa.entity.account.supplementary.Supplementary
 import com.borets.pfa.entity.account.supplementary.SupplementaryDetail
@@ -53,7 +55,7 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         "pfa_ActivityPivot.edit", "pfa_PriceListPivot.edit", "pfa_MarketData.browse", "pfa_MarketData.edit",
         "pfa_MarketDataFragment", "pfa_AccountRevision.browse", "pfa_AccountRevision.edit", "pfa_SystemStd.edit",
         "pfa_ApplicationData.edit", "pfa_ApplicationData.browse", "pfa_EquipmentUtilizationFragment",
-        "pfa_EquipmentUtilization.edit", "pfa_EquipmentUtilization.browse"])
+        "pfa_EquipmentUtilization.edit", "pfa_EquipmentUtilization.browse", "pfa_DirectSale.edit"])
     override fun screenPermissions(): ScreenPermissionsContainer {
         return super.screenPermissions()
     }
@@ -62,15 +64,13 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = Account::class, operations = [EntityOp.READ, EntityOp.UPDATE]),
         EntityAccess(entityClass = AccountRevision::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = MarketData::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = ApplicationData::class,
-            operations = [EntityOp.READ, EntityOp.CREATE, EntityOp.UPDATE]
-        ),
-        EntityAccess(entityClass = SystemAllocation::class,
-            operations = [EntityOp.READ, EntityOp.CREATE, EntityOp.UPDATE, EntityOp.DELETE]
-        ),
-        EntityAccess(entityClass = SystemDetail::class, operations = [EntityOp.READ, EntityOp.CREATE, EntityOp.UPDATE]),
+        EntityAccess(entityClass = ApplicationData::class,operations = [EntityOp.READ]),
         EntityAccess(entityClass = SystemStd::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = System::class, operations = [EntityOp.READ, EntityOp.CREATE, EntityOp.UPDATE]),
+        EntityAccess(entityClass = System::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = SystemDetail::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = SystemAllocation::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = EquipmentUtilization::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = EquipmentUtilizationDetail::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = PriceList::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = PriceListDetail::class, operations = [EntityOp.READ]),
         EntityAccess(
@@ -91,12 +91,6 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = EquipmentType::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = EquipmentCategory::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Employee::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = EquipmentUtilization::class,
-            operations = [EntityOp.CREATE, EntityOp.UPDATE, EntityOp.READ]
-        ),
-        EntityAccess(entityClass = EquipmentUtilizationDetail::class,
-            operations = [EntityOp.READ, EntityOp.UPDATE, EntityOp.CREATE]
-        ),
         EntityAccess(entityClass = Part::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = PartBoltDischargeHead::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = PartBoltIntake::class, operations = [EntityOp.READ]),
@@ -127,7 +121,9 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = EquipmentUtilizationDetailValue::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = EquipmentUtilizationValueType::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = Project::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ])
+        EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = DirectSale::class, operations = [EntityOp.READ, EntityOp.UPDATE, EntityOp.CREATE]),
+        EntityAccess(entityClass = DirectSaleDetail::class, operations = [EntityOp.READ, EntityOp.UPDATE, EntityOp.CREATE, EntityOp.DELETE])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -188,14 +184,15 @@ class SalesPersonRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = EquipmentUtilizationDetailValue::class, modify = ["*"]),
         EntityAttributeAccess(entityClass = EquipmentUtilizationValueType::class, view = ["*"]),
         EntityAttributeAccess(entityClass = Project::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"])
+        EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = DirectSale::class, modify = ["*"]),
+        EntityAttributeAccess(entityClass = DirectSaleDetail::class, modify = ["*"])
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()
     }
 
     @ScreenComponentAccess(screenId = "pfa_Account.edit",
-        deny = ["createRevisionBtn", "createMarketDataBtn", "createAppDataBtn", "createUtilizationBtn"],
         view = ["attachmentFragment.filesMultiUpload", "supplementaryFragment.pivotGrid"]
     )
     override fun screenComponentPermissions(): ScreenComponentPermissionsContainer {
