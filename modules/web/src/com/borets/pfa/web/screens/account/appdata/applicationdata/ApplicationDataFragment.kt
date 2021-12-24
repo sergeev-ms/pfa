@@ -54,6 +54,9 @@ class ApplicationDataFragment : ScreenFragment() {
     @field:Named("systemsAllocationGrid.edit")
     private lateinit var systemsAllocationGridEdit: EditAction<SystemAllocation>
 
+    @javax.inject.Inject
+    private lateinit var entityStates: com.haulmont.cuba.core.global.EntityStates
+
 
     @Subscribe("systemsAllocationGrid.create")
     private fun onSystemsAllocationGridCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
@@ -90,26 +93,27 @@ class ApplicationDataFragment : ScreenFragment() {
 
     private fun performSystemAllocationValidation(): ValidationErrors {
         val validationErrors = ValidationErrors()
+        if (applicationDataDc.itemOrNull != null && entityStates.isNew(applicationDataDc.item)) {
+            val systemAllocations = applicationDataDc.itemOrNull?.systemAllocations
+            if (!systemAllocations.isNullOrEmpty()) {
+                val runsNumber = applicationDataDc.item.account?.actualMarketDetail?.getRunsNumber()
 
-        val systemAllocations = applicationDataDc.itemOrNull?.systemAllocations
-        if (!systemAllocations.isNullOrEmpty()) {
-            val runsNumber = applicationDataDc.item.account?.actualMarketDetail?.getRunsNumber()
-
-            val sumRun1 = systemAllocations.sumOf { it.run1!! }
-            if (sumRun1.toInt() != 1) {
-                validationErrors.add(
-                    systemsAllocationGrid as Component,
-                    messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "1st Run")
-                )
-            }
-
-            if (runsNumber == RunsNumber.TWO || runsNumber == RunsNumber.THREE || runsNumber == RunsNumber.THREE_PLUS) {
-                val sumRun2 = systemAllocations.sumOf { it.run2!! }
-                if (sumRun2.toInt() != 1) {
+                val sumRun1 = systemAllocations.sumOf { it.run1!! }
+                if (sumRun1.toInt() != 1) {
                     validationErrors.add(
                         systemsAllocationGrid as Component,
-                        messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "2st Run")
+                        messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "1st Run")
                     )
+                }
+
+                if (runsNumber == RunsNumber.TWO || runsNumber == RunsNumber.THREE || runsNumber == RunsNumber.THREE_PLUS) {
+                    val sumRun2 = systemAllocations.sumOf { it.run2!! }
+                    if (sumRun2.toInt() != 1) {
+                        validationErrors.add(
+                            systemsAllocationGrid as Component,
+                            messageBundle.formatMessage("systemsAllocationGrid.validationMessage", "2st Run")
+                        )
+                    }
                 }
             }
         }
