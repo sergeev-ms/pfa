@@ -106,7 +106,7 @@ class EquipmentUtilizationFragment : ScreenFragment() {
                 BigDecimal::class.javaObjectType,
                 TextField::class.java,
                 "100px",
-                pivotGridEditable,
+                { pivotGridEditable },
                 false,
                 datatypeRegistry.get("percentage")
                 )
@@ -140,8 +140,8 @@ class EquipmentUtilizationFragment : ScreenFragment() {
             PivotGridInitializer.StaticPropertyData(
                 "revenueMode",
                 messages.getMessage(EquipmentUtilizationDetail::class.java, "EquipmentUtilizationDetail.revenueMode"),
-                true, RevenueMode::class.java, LookupField::class.java, null, true, pivotGridEditable,
-                true
+                true, RevenueMode::class.java, LookupField::class.java, null, true,
+                { pivotGridEditable }, true
             )
         )
     }

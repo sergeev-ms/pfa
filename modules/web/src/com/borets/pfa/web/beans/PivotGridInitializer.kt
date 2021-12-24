@@ -1,5 +1,6 @@
 package com.borets.pfa.web.beans
 
+import com.borets.pfa.entity.analytic.AnalyticSet
 import com.haulmont.chile.core.datatypes.Datatype
 import com.haulmont.chile.core.datatypes.impl.EnumClass
 import com.haulmont.cuba.core.app.keyvalue.KeyValueMetaClass
@@ -18,6 +19,7 @@ import com.vaadin.ui.themes.ValoTheme
 import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+import java.util.function.Predicate
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 
@@ -124,7 +126,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
                 component = uiComponents.create(staticData.fieldType!!).apply {
                     this.valueSource = ContainerValueSource(getInstanceContainer(keyValueEntity), staticData.property)
                     staticData.fieldWidth?.let { this.setWidth(it) }
-                    this.isEditable = staticData.editable
+                    this.isEditable = staticData.editable.test("")
                     this.isRequired = staticData.visible
                 }
 
@@ -205,7 +207,9 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
                 val field = uiComponents.create(propertyData.fieldType).apply {
                     this.valueSource = ContainerValueSource(getInstanceContainer(keyValueEntity), propertyData.property)
                     propertyData.fieldWidth?.let { this.setWidth(it) }
-                    this.isEditable = propertyData.editable
+                    this.isEditable = propertyData.editable.test(
+                        keyValueEntity.getValue<AnalyticSet>("analytic")?.id.toString())
+                    //todo: fix hardcoded "analytic"
                     this.isRequired = propertyData.required
                     if (this is HasDatatype<*> && propertyData.dataType != null)
                         this.datatype = propertyData.dataType
@@ -246,7 +250,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         override var fieldType: Class<out Field<*>>?,
         override var fieldWidth: String?,
         val visible: Boolean = true,
-        override val editable: Boolean = true,
+        override val editable: Predicate<String> = Predicate { true },
         override val required: Boolean = false,
         override var dataType: Datatype<*>? = null
     ) : KvContainerProperty
@@ -258,7 +262,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         override val clazz: Class<T>,
         override var fieldType: Class<out Field<*>>?,
         override var fieldWidth: String?,
-        override val editable: Boolean = true,
+        override val editable: Predicate<String> = Predicate { true },
         override val required: Boolean = false,
         override var dataType: Datatype<*>? = null
     ) : KvContainerProperty
@@ -267,7 +271,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         val property: String
         val caption: String
         val clazz: Class<*>
-        val editable: Boolean
+        val editable: Predicate<String>
         val required: Boolean
         var fieldType: Class<out Field<*>>?
         var fieldWidth: String?

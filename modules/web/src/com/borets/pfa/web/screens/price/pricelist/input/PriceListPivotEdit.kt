@@ -134,12 +134,14 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     }
 
     private fun initDynamic() {
-            countrySettings.getRevenueTypes(editedEntity.account!!.country!!)
+        val country = editedEntity.account!!.country!!
+        countrySettings.getRevenueTypes(country)
             .map { PivotGridInitializer.DynamicPropertyData(
                 it.id.toString(),
                 it.name!!,
                 it.fullName,
-                BigDecimal::class.javaObjectType, CurrencyField::class.java, "70px")
+                BigDecimal::class.javaObjectType, CurrencyField::class.java, "70px",
+                { analyticSetId -> isDynamicPropertyEditable(it, analyticSetId) } )
             }
             .let { dynamicProperties ->
                 pivotGridHelper.initDynamicProperties(dynamicProperties)
@@ -153,6 +155,14 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
                     }
                 }
             }
+    }
+
+    private fun isDynamicPropertyEditable(revenueType: RevenueType, analyticSetId: String) : Boolean {
+        return revenueType.settings
+            ?.flatMap { it.analyticSets!! }
+            ?.map { it.id.toString() }
+            ?.contains(analyticSetId)
+            ?: false
     }
 
     private fun initKvEntities(): List<KeyValueEntity> {
