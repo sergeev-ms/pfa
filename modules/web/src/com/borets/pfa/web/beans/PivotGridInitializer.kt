@@ -207,8 +207,10 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
                 val field = uiComponents.create(propertyData.fieldType).apply {
                     this.valueSource = ContainerValueSource(getInstanceContainer(keyValueEntity), propertyData.property)
                     propertyData.fieldWidth?.let { this.setWidth(it) }
-                    this.isEditable = propertyData.editable.test(
-                        keyValueEntity.getValue<AnalyticSet>("analytic")?.id.toString())
+                    this.isEditable = propertyData.editable
+                        .test(keyValueEntity.getValue<AnalyticSet>("analytic")?.id.toString())
+                    this.isEnabled = propertyData.enabled
+                        .test(keyValueEntity.getValue<AnalyticSet>("analytic")?.id.toString())
                     //todo: fix hardcoded "analytic"
                     this.isRequired = propertyData.required
                     if (this is HasDatatype<*> && propertyData.dataType != null)
@@ -252,6 +254,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         val visible: Boolean = true,
         override val editable: Predicate<String> = Predicate { true },
         override val required: Boolean = false,
+        override val enabled: Predicate<String> = Predicate { true },
         override var dataType: Datatype<*>? = null
     ) : KvContainerProperty
 
@@ -264,6 +267,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         override var fieldWidth: String?,
         override val editable: Predicate<String> = Predicate { true },
         override val required: Boolean = false,
+        override val enabled: Predicate<String> = Predicate { true },
         override var dataType: Datatype<*>? = null
     ) : KvContainerProperty
 
@@ -273,6 +277,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         val clazz: Class<*>
         val editable: Predicate<String>
         val required: Boolean
+        val enabled: Predicate<String>
         var fieldType: Class<out Field<*>>?
         var fieldWidth: String?
         var dataType: Datatype<*>?

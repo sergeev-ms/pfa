@@ -108,9 +108,9 @@ class EquipmentUtilizationFragment : ScreenFragment() {
                 "100px",
                 { pivotGridEditable },
                 false,
+                { true },
                 datatypeRegistry.get("percentage")
-                )
-            }
+            ) }
             .let { dynamicProperties ->
                 pivotGridHelper.initDynamicProperties(dynamicProperties)
                 pivotGridHelper.setDynamicPropertiesValues { kvDc : KeyValueCollectionContainer ->

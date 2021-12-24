@@ -141,7 +141,9 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
                 it.name!!,
                 it.fullName,
                 BigDecimal::class.javaObjectType, CurrencyField::class.java, "70px",
-                { analyticSetId -> isDynamicPropertyEditable(it, analyticSetId) } )
+                { true },
+                false,
+                { analyticSetId -> isDynamicPropertyEnabled(it, analyticSetId)})
             }
             .let { dynamicProperties ->
                 pivotGridHelper.initDynamicProperties(dynamicProperties)
@@ -157,7 +159,7 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
             }
     }
 
-    private fun isDynamicPropertyEditable(revenueType: RevenueType, analyticSetId: String) : Boolean {
+    private fun isDynamicPropertyEnabled(revenueType: RevenueType, analyticSetId: String) : Boolean {
         return revenueType.settings
             ?.flatMap { it.analyticSets!! }
             ?.map { it.id.toString() }
