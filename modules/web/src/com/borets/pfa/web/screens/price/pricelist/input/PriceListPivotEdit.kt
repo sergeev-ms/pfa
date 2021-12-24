@@ -97,19 +97,20 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
 
     private fun initPivotGrid() {
         val pivotStaticProperties = listOf(
-            PivotGridInitializer.StaticPropertyData("analytic", "", true, AnalyticSet::class.java, null, null, false),
+            PivotGridInitializer.StaticPropertyData("analytic", "",
+                true, AnalyticSet::class.java, null, null, false),
 
             PivotGridInitializer.StaticPropertyData(
                 "jobType", messages.getMessage(AnalyticSet::class.java, "AnalyticSet.jobType"),
-                true, JobType::class.java, null, null, true
+                false, JobType::class.java, null, null, true
             ),
             PivotGridInitializer.StaticPropertyData(
                 "wellEquip", messages.getMessage(AnalyticSet::class.java, "AnalyticSet.wellEquip"),
-                true, WellEquip::class.java, null, null, true
+                false, WellEquip::class.java, null, null, true
             ),
             PivotGridInitializer.StaticPropertyData(
                 "wellTag", messages.getMessage(AnalyticSet::class.java, "AnalyticSet.wellTag"),
-                true, WellTag::class.java, null, null, true
+                false, WellTag::class.java, null, null, true
             )
         )
 

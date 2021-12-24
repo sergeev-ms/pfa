@@ -127,20 +127,18 @@ class EquipmentUtilizationFragment : ScreenFragment() {
 
     private fun prepareStaticProperties(): List<PivotGridInitializer.StaticPropertyData> {
         return listOf(
-            PivotGridInitializer.StaticPropertyData(
-                "detail", "", true,
-                EquipmentUtilizationDetail::class.java, null, null, false
+            PivotGridInitializer.StaticPropertyData("detail", "",
+                true, EquipmentUtilizationDetail::class.java, null, null, false
             ),
-
             PivotGridInitializer.StaticPropertyData(
                 "equipmentType",
                 messages.getMessage(EquipmentUtilizationDetail::class.java, "EquipmentUtilizationDetail.equipmentType"),
-                true, EquipmentType::class.java, null, null
+                false, EquipmentType::class.java, null, null
             ),
             PivotGridInitializer.StaticPropertyData(
                 "revenueMode",
                 messages.getMessage(EquipmentUtilizationDetail::class.java, "EquipmentUtilizationDetail.revenueMode"),
-                true, RevenueMode::class.java, LookupField::class.java, null, true,
+                false, RevenueMode::class.java, LookupField::class.java, null, true,
                 { pivotGridEditable }, true
             )
         )

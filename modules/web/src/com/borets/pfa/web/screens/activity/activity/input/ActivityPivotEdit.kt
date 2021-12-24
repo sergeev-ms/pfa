@@ -93,14 +93,14 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
 
     private fun initPivotGrid() {
         val pivotStaticProperties = listOf(
-            StaticPropertyData("analytic", "", true, AnalyticSet::class.java, null, null, false),
-
+            StaticPropertyData("analytic", "",
+                true, AnalyticSet::class.java, null, null, false),
             StaticPropertyData("jobType", messages.getMessage(AnalyticSet::class.java, "AnalyticSet.jobType"),
-                true, JobType::class.java, null, null, true),
+                false, JobType::class.java, null, null, true),
             StaticPropertyData("wellEquip", messages.getMessage(AnalyticSet::class.java, "AnalyticSet.wellEquip"),
-                true, WellEquip::class.java, null, null, true),
+                false, WellEquip::class.java, null, null, true),
             StaticPropertyData("wellTag", messages.getMessage(AnalyticSet::class.java, "AnalyticSet.wellTag"),
-                true, WellTag::class.java, null, null, true)
+                false, WellTag::class.java, null, null, true)
         )
 
 

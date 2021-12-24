@@ -1,9 +1,11 @@
 package com.borets.pfa.web.beans
 
 import com.borets.pfa.entity.analytic.AnalyticSet
+import com.haulmont.bali.util.Preconditions
 import com.haulmont.chile.core.datatypes.Datatype
 import com.haulmont.chile.core.datatypes.impl.EnumClass
 import com.haulmont.cuba.core.app.keyvalue.KeyValueMetaClass
+import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.*
@@ -29,7 +31,6 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
     companion object {
         const val NAME = "pfa_PivotGridInitializer"
     }
-
     @Inject
     private lateinit var dataComponents: DataComponents
     @Inject
@@ -46,6 +47,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
     private var pivotGridRows = 1 //cause we have to skip header row
 
     private val containerList: MutableList<KeyValueContainer> = mutableListOf()
+    private lateinit var keyPropertyName: String
 
     @PostConstruct
     fun postConstruct() {
@@ -73,6 +75,10 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
     fun initStaticPivotProperties(properties: List<StaticPropertyData>) {
         this.staticProperties = properties
         addKvContainerProperties(properties)
+
+        val keyProperty = properties.find { it.key }
+        Preconditions.checkNotNullArgument(keyProperty, "Setup key-property for pivot-grid")
+        this.keyPropertyName = keyProperty!!.property
 
         properties.filter { it.visible }.forEachIndexed { index, staticPropertyData ->
             addColumnCaption(staticPropertyData.caption, index)
@@ -208,10 +214,9 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
                     this.valueSource = ContainerValueSource(getInstanceContainer(keyValueEntity), propertyData.property)
                     propertyData.fieldWidth?.let { this.setWidth(it) }
                     this.isEditable = propertyData.editable
-                        .test(keyValueEntity.getValue<AnalyticSet>("analytic")?.id.toString())
+                        .test(keyValueEntity.getValue<Entity<*>>(keyPropertyName)?.id.toString())
                     this.isEnabled = propertyData.enabled
-                        .test(keyValueEntity.getValue<AnalyticSet>("analytic")?.id.toString())
-                    //todo: fix hardcoded "analytic"
+                        .test(keyValueEntity.getValue<Entity<*>>(keyPropertyName)?.id.toString())
                     this.isRequired = propertyData.required
                     if (this is HasDatatype<*> && propertyData.dataType != null)
                         this.datatype = propertyData.dataType
