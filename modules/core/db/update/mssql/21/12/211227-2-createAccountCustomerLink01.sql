@@ -1,0 +1,2 @@
+alter table PFA_ACCOUNT_CUSTOMER_LINK add constraint FK_ACCCUS_ON_ACCOUNT foreign key (ACCOUNT_ID) references PFA_ACCOUNT(ID);
+alter table PFA_ACCOUNT_CUSTOMER_LINK add constraint FK_ACCCUS_ON_CUSTOMER foreign key (CUSTOMER_ID) references PFA_CUSTOMER(ID);

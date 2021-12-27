@@ -117,7 +117,6 @@ create table PFA_ACCOUNT (
     COUNTRY_ID uniqueidentifier,
     NAME nvarchar(255),
     PARENT_ID uniqueidentifier,
-    CUSTOMER_ID decimal(7),
     ACTUAL_REVISION_ID uniqueidentifier,
     ACTUAL_MARKET_DETAIL_ID uniqueidentifier,
     ACTUAL_APP_DETAIL_ID uniqueidentifier,
@@ -791,3 +790,27 @@ create table PFA_DIRECT_SALE (
     primary key nonclustered (ID)
 )^
 -- end PFA_DIRECT_SALE
+-- begin PFA_CUSTOMER
+create table PFA_CUSTOMER (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    NAME nvarchar(255),
+    DIM_CUSTOMER_ID decimal(7),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_CUSTOMER
+-- begin PFA_ACCOUNT_CUSTOMER_LINK
+create table PFA_ACCOUNT_CUSTOMER_LINK (
+    ACCOUNT_ID uniqueidentifier,
+    CUSTOMER_ID uniqueidentifier,
+    primary key (ACCOUNT_ID, CUSTOMER_ID)
+)^
+-- end PFA_ACCOUNT_CUSTOMER_LINK

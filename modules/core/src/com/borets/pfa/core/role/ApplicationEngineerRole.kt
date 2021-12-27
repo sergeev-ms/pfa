@@ -29,6 +29,7 @@ import com.borets.pfa.entity.account.utilization.EquipmentUtilizationValueType
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.activity.ActivityDetail
 import com.borets.pfa.entity.analytic.AnalyticSet
+import com.borets.pfa.entity.customer.Customer
 import com.borets.pfa.entity.customer.DimCustomers
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
@@ -177,7 +178,8 @@ class ApplicationEngineerRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = Project::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = DirectSale::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = DirectSaleDetail::class, operations = [EntityOp.READ])
+        EntityAccess(entityClass = DirectSaleDetail::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = Customer::class, operations = [EntityOp.READ])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -248,7 +250,8 @@ class ApplicationEngineerRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = Project::class, view = ["*"]),
         EntityAttributeAccess(entityClass = ProjectAssignment::class, view = ["*"]),
         EntityAttributeAccess(entityClass = DirectSale::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = DirectSaleDetail::class, view = ["*"])
+        EntityAttributeAccess(entityClass = DirectSaleDetail::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = Customer::class, view = ["*"])
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()

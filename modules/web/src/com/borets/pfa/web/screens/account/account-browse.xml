@@ -5,7 +5,6 @@
     <data readOnly="true">
         <collection id="accountsDc" class="com.borets.pfa.entity.account.Account">
             <view extends="_local">
-                <property name="customer"/>
                 <property name="parent" view="_minimal"/>
                 <property name="actualRevision" view="_local">
                     <property name="manager"/>
@@ -40,7 +39,6 @@
                 <column id="applicationType"/>
                 <column id="fieldType"/>
                 <column id="parent" collapsed="true"/>
-                <column id="customer" collapsed="true"/>
                 <column id="actualRevision.type"/>
                 <column id="actualRevision.manager"/>
                 <column id="actualRevision.active"/>

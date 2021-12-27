@@ -45,5 +45,6 @@
         <class>com.borets.pfa.entity.project.ProjectAssignment</class>
         <class>com.borets.pfa.entity.account.directsale.DirectSale</class>
         <class>com.borets.pfa.entity.account.directsale.DirectSaleDetail</class>
+        <class>com.borets.pfa.entity.customer.Customer</class>
     </persistence-unit>
 </persistence>

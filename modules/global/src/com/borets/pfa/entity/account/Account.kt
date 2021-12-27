@@ -8,10 +8,9 @@ import com.borets.pfa.entity.account.marketdata.MarketData
 import com.borets.pfa.entity.account.supplementary.Supplementary
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.activity.ContractType
-import com.borets.pfa.entity.customer.DimCustomers
+import com.borets.pfa.entity.customer.Customer
 import com.borets.pfa.entity.project.ProjectAssignment
 import com.haulmont.chile.core.annotations.Composition
-import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity
 import com.haulmont.cuba.core.entity.annotation.OnDelete
@@ -39,14 +38,6 @@ open class Account : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
     var parent: Account? = null
-
-    @SystemLevel
-    @Column(name = "CUSTOMER_ID", precision = 7, scale = 0)
-    var customerId: BigDecimal? = null
-
-    @Transient
-    @MetaProperty(related = ["customerId"])
-    var customer: DimCustomers? = null
 
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
@@ -103,6 +94,13 @@ open class Account : StandardEntity() {
 
     @OneToMany(mappedBy = "account")
     var directSales: MutableList<DirectSale>? = mutableListOf()
+
+    @JoinTable(
+        name = "PFA_ACCOUNT_CUSTOMER_LINK",
+    joinColumns = [JoinColumn(name = "ACCOUNT_ID")],
+    inverseJoinColumns = [JoinColumn(name = "CUSTOMER_ID")])
+    @ManyToMany
+    var customers: MutableList<Customer>? = mutableListOf()
 
     fun getType(): Type? = actualRevision?.getType()
 

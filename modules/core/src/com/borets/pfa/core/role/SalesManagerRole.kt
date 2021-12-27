@@ -27,6 +27,7 @@ import com.borets.pfa.entity.account.utilization.EquipmentUtilizationValueType
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.activity.ActivityDetail
 import com.borets.pfa.entity.analytic.AnalyticSet
+import com.borets.pfa.entity.customer.Customer
 import com.borets.pfa.entity.customer.DimCustomers
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
@@ -133,7 +134,8 @@ class SalesManagerRole : AnnotatedRoleDefinition() {
         EntityAccess(entityClass = Project::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = ProjectAssignment::class, operations = [EntityOp.READ, EntityOp.UPDATE, EntityOp.CREATE]),
         EntityAccess(entityClass = DirectSale::class, operations = [EntityOp.READ, EntityOp.UPDATE, EntityOp.CREATE]),
-        EntityAccess(entityClass = DirectSaleDetail::class, operations = [EntityOp.READ, EntityOp.UPDATE, EntityOp.CREATE, EntityOp.DELETE])
+        EntityAccess(entityClass = DirectSaleDetail::class, operations = [EntityOp.READ, EntityOp.UPDATE, EntityOp.CREATE, EntityOp.DELETE]),
+        EntityAccess(entityClass = Customer::class, operations = [EntityOp.READ, EntityOp.UPDATE, EntityOp.CREATE])
     )
     override fun entityPermissions(): EntityPermissionsContainer {
         return super.entityPermissions()
@@ -207,7 +209,8 @@ class SalesManagerRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = Project::class, view = ["*"]),
         EntityAttributeAccess(entityClass = ProjectAssignment::class, modify = ["*"]),
         EntityAttributeAccess(entityClass = DirectSale::class, modify = ["*"]),
-        EntityAttributeAccess(entityClass = DirectSaleDetail::class, modify = ["*"])
+        EntityAttributeAccess(entityClass = DirectSaleDetail::class, modify = ["*"]),
+        EntityAttributeAccess(entityClass = Customer::class, modify = ["*"]),
     )
     override fun entityAttributePermissions(): EntityAttributePermissionsContainer {
         return super.entityAttributePermissions()

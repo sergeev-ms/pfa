@@ -13,6 +13,8 @@ import com.borets.pfa.entity.account.system.System
 import com.borets.pfa.entity.account.utilization.EquipmentUtilization
 import com.borets.pfa.entity.account.utilization.EquipmentUtilizationDetailValue
 import com.borets.pfa.entity.activity.Activity
+import com.borets.pfa.entity.customer.Customer
+import com.borets.pfa.entity.customer.DimCustomers
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.project.Project
 import com.borets.pfa.entity.project.ProjectAssignment
@@ -34,6 +36,7 @@ import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.model.*
 import com.haulmont.cuba.gui.screen.*
 import com.haulmont.cuba.gui.screen.Target
+import com.haulmont.cuba.security.entity.EntityAttrAccess
 import com.haulmont.cuba.security.entity.EntityOp
 import com.haulmont.cuba.security.global.UserSession
 import com.haulmont.cuba.web.widgets.CubaGrid
@@ -112,6 +115,8 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var directSalesDc: CollectionContainer<DirectSale>
     @Inject
     private lateinit var directSalesDl: CollectionLoader<DirectSale>
+    @Inject
+    private lateinit var customersDc: CollectionPropertyContainer<Customer>
 
     @Inject
     private lateinit var applicationDataFragment: ApplicationDataFragment
@@ -150,8 +155,17 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var assignedProjectsTable: DataGrid<ProjectAssignment>
     @Inject
     private lateinit var directSalesTable: Table<DirectSale>
+    @Inject
+    private lateinit var customersField: TextField<String>
 
     private var dragged: MutableSet<Project> = mutableSetOf()
+
+    @javax.inject.Inject
+    private lateinit var customersPickerBtn: com.haulmont.cuba.gui.components.Button
+
+    @javax.inject.Inject
+    private lateinit var customersClearBtn: com.haulmont.cuba.gui.components.Button
+
 
     @Subscribe
     private fun onInit(event: InitEvent) {
@@ -331,19 +345,19 @@ class AccountEdit : StandardEditor<Account>() {
 
     @Install(to = "projectsOptionDl", target = Target.DATA_LOADER, type = Any::class, subject = "", required = true)
     private fun projectsOptionDlLoadDelegate(loadContext: LoadContext<Project>?): MutableList<Project> {
-        val customerId = editedEntity.customerId
-        if (customerId != null) {
+        val customerIds = editedEntity.customers?.map { it.dimCustomerId }
+        if (customerIds != null) {
             return dataManager.load(Project::class.java)
                 .query(
                     """select p from pfa_Project p
-                |where p.customerNo = :customerId
+                |where p.customerNo IN :customerIds
                 |and NOT EXISTS( 
                 |   select pa 
                 |   from pfa_ProjectAssignment pa
                 |   where pa.project = p and (pa.dateEnd IS NULL or pa.dateEnd > :today))
                 |order by p.well""".trimMargin()
                 )
-                .parameter("customerId", customerId)
+                .parameter("customerIds", customerIds)
                 .parameter("today", timeSource.now().toLocalDateTime())
                 .view { it.addView(View.LOCAL) }
                 .list()
@@ -653,6 +667,49 @@ class AccountEdit : StandardEditor<Account>() {
         createMarketDataBtn.isVisible = security.isEntityOpPermitted(MarketData::class.java, EntityOp.CREATE)
         createAppDataBtn.isVisible = security.isEntityOpPermitted(ApplicationData::class.java, EntityOp.CREATE)
         createUtilizationBtn.isVisible = security.isEntityOpPermitted(EquipmentUtilization::class.java, EntityOp.CREATE)
+
+        customersPickerBtn.isVisible = security.isEntityAttrPermitted(Account::class.java, "customers", EntityAttrAccess.MODIFY)
+        customersClearBtn.isVisible = security.isEntityAttrPermitted(Account::class.java, "customers", EntityAttrAccess.MODIFY)
+    }
+
+    @Subscribe("customersPickerBtn")
+    private fun onCustomersPickerBtnClick(event: Button.ClickEvent) {
+        screenBuilders.lookup(DimCustomers::class.java, this)
+            .withOpenMode(OpenMode.DIALOG)
+            .withSelectHandler {
+                it.map(getCustomer()).run {
+                    customersDc.mutableItems.addAll(this)
+                }
+            }
+            .show()
+    }
+
+    private fun getCustomer(): (DimCustomers) -> Customer = {
+        dataManager.load(Customer::class.java)
+            .query("where e.dimCustomerId = :dimCustomerId")
+            .view {vb -> vb.addView(View.MINIMAL).add("dimCustomer", View.MINIMAL)}
+            .parameter("dimCustomerId", it.customerNo!!)
+            .optional()
+            .orElseGet {
+                dataContext.create(Customer::class.java).apply {
+                    name = it.customerName
+                    dimCustomer = it
+                }
+            }
+    }
+
+    @Subscribe("customersClearBtn")
+    private fun onCustomersClearBtnClick(event: Button.ClickEvent) {
+        customersDc.mutableItems.clear()
+    }
+
+    @Subscribe(id = "customersDc", target = Target.DATA_CONTAINER)
+    private fun onCustomersDcCollectionChange(event: CollectionContainer.CollectionChangeEvent<Customer>) {
+        if (event.changeType == CollectionChangeType.REFRESH) {
+            customersField.value = customersDc.items
+                .map { it.dimCustomer?.customerName }
+                .joinToString("; ")
+        }
     }
 }
 

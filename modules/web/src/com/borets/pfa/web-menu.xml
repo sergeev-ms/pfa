@@ -19,6 +19,7 @@
                   caption="mainMsg://menu_config.pfa_EquipmentUtilizationValueType.browse"/>
             <item screen="pfa_DiscoveryProject.browse" caption="mainMsg://menu_config.pfa_DiscoveryProject.browse"/>
             <item screen="pfa_Project.browse" caption="mainMsg://menu_config.pfa_Project.browse"/>
+            <item screen="pfa_Customer.browse" caption="mainMsg://menu_config.pfa_Customer.browse"/>
             <menu id="system-classification" caption="mainMsg://menu_config.system-classification">
                 <item screen="pfa_PumpType.browse" caption="mainMsg://menu_config.pfa_PumpType.browse"/>
                 <item screen="pfa_Depth.browse" caption="mainMsg://menu_config.pfa_Depth.browse"/>

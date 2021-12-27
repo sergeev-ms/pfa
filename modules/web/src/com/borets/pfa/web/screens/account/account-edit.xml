@@ -5,7 +5,6 @@
     <data>
         <instance id="accountDc" class="com.borets.pfa.entity.account.Account">
             <view extends="_local">
-                <property name="customer"/>
                 <property name="parent" view="_minimal"/>
                 <property name="actualRevision" view="_local">
                     <property name="manager"/>
@@ -51,6 +50,9 @@
                 <property name="projects" view="_local">
                     <property name="project" view="_minimal"/>
                 </property>
+                <property name="customers" view="_minimal">
+                    <property name="dimCustomer" view="_minimal"/>
+                </property>
             </view>
             <loader id="accountDl"/>
             <instance id="actualRevisionDc" property="actualRevision"/>
@@ -58,6 +60,7 @@
             <instance id="applicationDataDc" property="actualAppDetail"/>
             <instance id="equipmentUtilizationDc" property="actualEquipmentUtilization"/>
             <collection id="projectsDc" property="projects"/>
+            <collection id="customersDc" property="customers"/>
         </instance>
         <collection id="priceListsDc" class="com.borets.pfa.entity.price.PriceList">
             <view extends="_local">
@@ -123,7 +126,7 @@
             <tab id="generalTab" caption="msg://generalTab.caption" spacing="true" margin="true,false,false,false"
                  expand="marketDataGb">
                 <groupBox id="accountDataGb" caption="msg://accountDataGb.caption" spacing="true">
-                    <form id="form" dataContainer="accountDc" childrenCaptionWidth="170px" width="100%">
+                    <form id="form" dataContainer="accountDc" childrenCaptionWidth="120px" width="100%">
                         <column width="100%">
                             <lookupField id="countryField" property="country" optionsContainer="countryOptionsDc"/>
                             <pickerField id="parentField" property="parent">
@@ -134,7 +137,11 @@
                                 </actions>
                             </pickerField>
                             <textField id="nameField" property="name"/>
-                            <pickerField property="customer"/>
+                            <hbox caption="Customers" width="100%" expand="customersField">
+                                <textField id="customersField" editable="false"/>
+                                <button id="customersPickerBtn" icon="PICKERFIELD_LOOKUP" stylename="icon-only"/>
+                                <button id="customersClearBtn" icon="PICKERFIELD_CLEAR" stylename="icon-only"/>
+                            </hbox>
                         </column>
                         <column width="100%">
                             <lookupField property="contractType"/>
@@ -147,7 +154,7 @@
                             <textField id="managerField" property="manager" editable="false"
                                        dataContainer="actualRevisionDc"/>
                             <checkBox id="activeField" property="active" editable="false"
-                                       dataContainer="actualRevisionDc"/>
+                                      dataContainer="actualRevisionDc"/>
                         </column>
                     </form>
                     <hbox spacing="true" align="MIDDLE_RIGHT">
