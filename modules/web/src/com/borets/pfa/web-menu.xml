@@ -2,8 +2,6 @@
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
     <menu id="application-pfa" insertBefore="application-pn" caption="mainMsg://menu_config.application-pfa">
         <item screen="pfa_Account.browse" caption="mainMsg://menu_config.pfa_Account.browse"/>
-        <item screen="pfa_Activity.browse" caption="mainMsg://menu_config.pfa_Activity.browse"/>
-        <item screen="pfa_PriceList.browse" caption="mainMsg://menu_config.pfa_PriceList.browse"/>
         <item screen="pfa_DirectSale.browse" caption="mainMsg://menu_config.pfa_DirectSale.browse"/>
         <menu id="references-group" caption="mainMsg://menu_config.references-group">
             <item screen="pfa_AnalyticSet.browse" caption="mainMsg://menu_config.pfa_AnalyticSet.browse"/>

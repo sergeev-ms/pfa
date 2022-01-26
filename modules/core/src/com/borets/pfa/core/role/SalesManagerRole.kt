@@ -51,6 +51,7 @@ class SalesManagerRole : AnnotatedRoleDefinition() {
 
     @ScreenAccess(screenIds = ["application-pfa", "pfa_Account.browse", "references-group", "pfa_DimCustomers.browse",
         "pfa_SystemStd.browse", "pfa_Employee.browse", "pfa_Account.edit", "pfa_ApplicationDataFragment",
+        "pfa_Activity.browse",
         "pfa_ActivityPivot.edit", "pfa_PriceListPivot.edit", "pfa_MarketData.browse", "pfa_MarketData.edit",
         "pfa_MarketDataFragment", "pfa_AccountRevision.browse", "pfa_AccountRevision.edit", "pfa_SystemStd.edit",
         "pfa_ApplicationData.edit", "pfa_ApplicationData.browse", "pfa_EquipmentUtilizationFragment",
