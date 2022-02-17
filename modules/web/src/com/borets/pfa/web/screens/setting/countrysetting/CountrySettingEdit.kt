@@ -112,20 +112,46 @@ class CountrySettingEdit : StandardEditor<CountrySetting>() {
         return Table.PlainTextCell(analyticSetAsString)
     }
 
+    @Install(to = "utilizationValueTypeSettingsTable.analyticSets", subject = "columnGenerator")
+    private fun utilizationValueTypeSettingsTableAnalyticSetsColumnGenerator(countrySettingUtilizationValueType: CountrySettingUtilizationValueType?): Component {
+        val analyticSetAsString = countrySettingUtilizationValueType?.analyticSets
+            ?.joinToString("; ") { metadataTools.getInstanceName(it) }
+        return Table.PlainTextCell(analyticSetAsString)
+    }
+
     @Subscribe("revenueTypeSettingsTable.selectAnalytics")
     private fun onRevenueTypeSettingsTableSelectAnalytics(event: Action.ActionPerformedEvent) {
+        selectAnalytic(revenueTypeSettingsDc.item.analyticSets) {
+            revenueTypeSettingsDc.item.analyticSets = it.toMutableList()
+        }
+    }
+
+
+    @Subscribe("utilizationValueTypeSettingsTable.selectAnalytics")
+    private fun onUtilizationValueTypeSettingsTableSelectAnalytics(event: Action.ActionPerformedEvent) {
+        selectAnalytic(utilizationValueTypeSettingsDc.item.analyticSets) {
+            utilizationValueTypeSettingsDc.item.analyticSets = it.toMutableList()
+        }
+    }
+
+    private fun selectAnalytic(
+        analyticSets: MutableList<AnalyticSet>?,
+        selectHandler: (selected: MutableCollection<AnalyticSet>) -> Unit
+    ) {
         val availableAnalytics = editedEntity.analyticSettings
             ?.map { it.analyticSet }
             ?.toList()
         screenBuilders.lookup(AnalyticSet::class.java, this)
             .withOpenMode(OpenMode.DIALOG)
-            .withOptions(MapScreenOptions(mapOf(
-                Pair(AnalyticSetBrowse.AVAILABLE_ANALYTICS_PARAM_NAME, availableAnalytics),
-                Pair(AnalyticSetBrowse.SELECTED_ANALYTICS_PARAM_NAME, revenueTypeSettingsDc.item.analyticSets)
-            )))
-            .withSelectHandler {
-                revenueTypeSettingsDc.item.analyticSets = it.toMutableList()
-            }
+            .withOptions(
+                MapScreenOptions(
+                    mapOf(
+                        Pair(AnalyticSetBrowse.AVAILABLE_ANALYTICS_PARAM_NAME, availableAnalytics),
+                        Pair(AnalyticSetBrowse.SELECTED_ANALYTICS_PARAM_NAME, analyticSets)
+                    )
+                )
+            )
+            .withSelectHandler(selectHandler)
             .show()
     }
 }
