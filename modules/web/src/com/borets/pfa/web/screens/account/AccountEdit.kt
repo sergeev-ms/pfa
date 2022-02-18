@@ -167,7 +167,6 @@ class AccountEdit : StandardEditor<Account>() {
     @Inject
     private lateinit var deleteCustomerBtn: Button
 
-
     @Subscribe
     private fun onInit(event: InitEvent) {
         applicationDataFragment.setEditable(false)
@@ -704,22 +703,6 @@ class AccountEdit : StandardEditor<Account>() {
                     dimCustomer = it
                 }
             }
-    }
-
-    @Subscribe("deleteCustomerBtn")
-    private fun onDeleteCustomerButtonClick(event: Button.ClickEvent) {
-        val customer = customersGrid.singleSelected
-        if (customer != null) {
-            dialogs.createOptionDialog(Dialogs.MessageType.CONFIRMATION)
-                .withCaption(messageBundle.getMessage("accountDataDeleteConfirmation.caption"))
-                .withMessage(messageBundle.getMessage("accountDataDeleteConfirmation.message"))
-                .withActions(
-                    DialogAction(DialogAction.Type.YES, Action.Status.PRIMARY)
-                        .withHandler { customersDc.mutableItems.remove(customer) },
-                    DialogAction(DialogAction.Type.NO)
-                )
-                .show()
-        }
     }
 
 }

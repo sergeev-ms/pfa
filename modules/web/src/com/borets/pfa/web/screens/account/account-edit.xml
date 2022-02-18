@@ -130,11 +130,16 @@
                         <column width="130px">
                             <lookupField id="countryField" property="country" optionsContainer="countryOptionsDc"/>
                             <textField property="name" colspan="2" width="100%"/>
-                            <dataGrid id="customersGrid" caption="Customers" dataContainer="customersDc" width="100%"
+                            <dataGrid id="customersGrid" caption="msg://accountDataCustomerGrid.caption"
+                                      dataContainer="customersDc" width="100%"
                                       headerVisible="false" contextMenuEnabled="false" settingsEnabled="false"
                                       textSelectionEnabled="true" columnsCollapsingAllowed="false"
                                       emptyStateMessage="msg://accountDataCustomerGrid.empty"
-                                      stylename="no-stripes" colspan="2" minHeight="87px" height="87px">
+                                      stylename="no-stripes no-vertical-lines no-horizontal-lines"
+                                      colspan="2" minHeight="87px" height="87px">
+                                <actions>
+                                    <action id="remove" type="remove" icon="REMOVE_ACTION" caption="msg://accountDataDeleteCustomerButton.caption"/>
+                                </actions>
                                 <columns>
                                     <column property="dimCustomer.customerName" expandRatio="1"/>
                                 </columns>
@@ -142,10 +147,8 @@
                             <!-- aligning buttons to right end -->
                             <hbox colspan="2" width="100%">
                                 <label box.expandRatio="1" />
-                                <linkButton id="addCustomerBtn" captionAsHtml="true"
-                                            caption="msg://accountDataAddCustomerButton.caption" icon="PLUS_CIRCLE" />
-                                <linkButton id="deleteCustomerBtn" captionAsHtml="true"
-                                            caption="msg://accountDataDeleteCustomerButton.caption" icon="REMOVE_ACTION"/>
+                                <linkButton id="addCustomerBtn" caption="msg://accountDataAddCustomerButton.caption" icon="PLUS_CIRCLE" />
+                                <linkButton id="deleteCustomerBtn" action="customersGrid.remove" />
                             </hbox>
                         </column>
 
