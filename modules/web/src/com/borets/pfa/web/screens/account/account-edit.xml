@@ -126,29 +126,46 @@
             <tab id="generalTab" caption="msg://generalTab.caption" spacing="true" margin="true,false,false,false"
                  expand="marketDataGb">
                 <groupBox id="accountDataGb" caption="msg://accountDataGb.caption" spacing="true">
-                    <form id="form" dataContainer="accountDc" childrenCaptionWidth="120px" width="100%">
-                        <column width="100%">
+                    <form id="form" dataContainer="accountDc" width="100%" childrenCaptionWidth="80px">
+                        <column width="130px">
                             <lookupField id="countryField" property="country" optionsContainer="countryOptionsDc"/>
-                            <pickerField id="parentField" property="parent">
+                            <textField property="name" colspan="2" width="100%"/>
+                            <dataGrid id="customersGrid" caption="Customers" dataContainer="customersDc" width="100%"
+                                      headerVisible="false" contextMenuEnabled="false" settingsEnabled="false"
+                                      textSelectionEnabled="true" columnsCollapsingAllowed="false"
+                                      emptyStateMessage="msg://accountDataCustomerGrid.empty"
+                                      stylename="no-stripes" colspan="2" minHeight="87px" height="87px">
+                                <columns>
+                                    <column property="dimCustomer.customerName" expandRatio="1"/>
+                                </columns>
+                            </dataGrid>
+                            <!-- aligning buttons to right end -->
+                            <hbox colspan="2" width="100%">
+                                <label box.expandRatio="1" />
+                                <linkButton id="addCustomerBtn" captionAsHtml="true"
+                                            caption="msg://accountDataAddCustomerButton.caption" icon="PLUS_CIRCLE" />
+                                <linkButton id="deleteCustomerBtn" captionAsHtml="true"
+                                            caption="msg://accountDataDeleteCustomerButton.caption" icon="REMOVE_ACTION"/>
+                            </hbox>
+                        </column>
+
+                        <column flex="1">
+                            <pickerField id="parentField" property="parent" width="100%">
                                 <actions>
                                     <action id="open" type="picker_open"/>
                                     <action id="clear" type="picker_clear"/>
                                     <action id="lookup" type="picker_lookup"/>
                                 </actions>
                             </pickerField>
-                            <textField id="nameField" property="name"/>
-                            <hbox caption="Customers" width="100%" expand="customersField">
-                                <textField id="customersField" editable="false"/>
-                                <button id="customersPickerBtn" icon="PICKERFIELD_LOOKUP" stylename="icon-only"/>
-                                <button id="customersClearBtn" icon="PICKERFIELD_CLEAR" stylename="icon-only"/>
-                            </hbox>
                         </column>
-                        <column width="100%">
+
+                        <column width="150px" childrenCaptionWidth="115px">
                             <lookupField property="contractType"/>
                             <lookupField property="applicationType"/>
                             <lookupField property="fieldType" required="false"/>
                         </column>
-                        <column width="100%">
+
+                        <column flex="1">
                             <textField id="typeField" property="type" editable="false"
                                        dataContainer="actualRevisionDc"/>
                             <textField id="managerField" property="manager" editable="false"
@@ -163,6 +180,7 @@
                         <linkButton id="showRevisionsBtn" caption="msg://showRevisionsBtn.caption" icon="HISTORY"/>
                     </hbox>
                 </groupBox>
+
                 <groupBox id="marketDataGb" caption="msg://marketDataGb.caption" spacing="true"
                           expand="marketDataFragment">
                     <fragment id="marketDataFragment" screen="pfa_MarketDataFragment"/>

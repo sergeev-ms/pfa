@@ -155,16 +155,17 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var assignedProjectsTable: DataGrid<ProjectAssignment>
     @Inject
     private lateinit var directSalesTable: Table<DirectSale>
-    @Inject
-    private lateinit var customersField: TextField<String>
 
     private var dragged: MutableSet<Project> = mutableSetOf()
 
-    @javax.inject.Inject
-    private lateinit var customersPickerBtn: com.haulmont.cuba.gui.components.Button
+    @Inject
+    private lateinit var customersGrid: DataGrid<Customer>
 
-    @javax.inject.Inject
-    private lateinit var customersClearBtn: com.haulmont.cuba.gui.components.Button
+    @Inject
+    private lateinit var addCustomerBtn: Button
+
+    @Inject
+    private lateinit var deleteCustomerBtn: Button
 
 
     @Subscribe
@@ -668,17 +669,24 @@ class AccountEdit : StandardEditor<Account>() {
         createAppDataBtn.isVisible = security.isEntityOpPermitted(ApplicationData::class.java, EntityOp.CREATE)
         createUtilizationBtn.isVisible = security.isEntityOpPermitted(EquipmentUtilization::class.java, EntityOp.CREATE)
 
-        customersPickerBtn.isVisible = security.isEntityAttrPermitted(Account::class.java, "customers", EntityAttrAccess.MODIFY)
-        customersClearBtn.isVisible = security.isEntityAttrPermitted(Account::class.java, "customers", EntityAttrAccess.MODIFY)
+        addCustomerBtn.isVisible = security.isEntityAttrPermitted(Account::class.java, "customers", EntityAttrAccess.MODIFY)
+        deleteCustomerBtn.isVisible = security.isEntityAttrPermitted(Account::class.java, "customers", EntityAttrAccess.MODIFY)
     }
 
-    @Subscribe("customersPickerBtn")
-    private fun onCustomersPickerBtnClick(event: Button.ClickEvent) {
+    @Subscribe("addCustomerBtn")
+    private fun onAddCustomerButtonClick(event: Button.ClickEvent) {
         screenBuilders.lookup(DimCustomers::class.java, this)
             .withOpenMode(OpenMode.DIALOG)
             .withSelectHandler {
+                var aCustomer: Customer? = null
                 it.map(getCustomer()).run {
                     customersDc.mutableItems.addAll(this)
+                    if (this.isNotEmpty()) {
+                        aCustomer = this[0]
+                    }
+                }
+                if (aCustomer != null) {
+                    customersGrid.scrollTo(aCustomer!!, DataGrid.ScrollDestination.END)
                 }
             }
             .show()
@@ -698,19 +706,22 @@ class AccountEdit : StandardEditor<Account>() {
             }
     }
 
-    @Subscribe("customersClearBtn")
-    private fun onCustomersClearBtnClick(event: Button.ClickEvent) {
-        customersDc.mutableItems.clear()
-    }
-
-    @Subscribe(id = "customersDc", target = Target.DATA_CONTAINER)
-    private fun onCustomersDcCollectionChange(event: CollectionContainer.CollectionChangeEvent<Customer>) {
-        if (event.changeType == CollectionChangeType.REFRESH) {
-            customersField.value = customersDc.items
-                .map { it.dimCustomer?.customerName }
-                .joinToString("; ")
+    @Subscribe("deleteCustomerBtn")
+    private fun onDeleteCustomerButtonClick(event: Button.ClickEvent) {
+        val customer = customersGrid.singleSelected
+        if (customer != null) {
+            dialogs.createOptionDialog(Dialogs.MessageType.CONFIRMATION)
+                .withCaption(messageBundle.getMessage("accountDataDeleteConfirmation.caption"))
+                .withMessage(messageBundle.getMessage("accountDataDeleteConfirmation.message"))
+                .withActions(
+                    DialogAction(DialogAction.Type.YES, Action.Status.PRIMARY)
+                        .withHandler { customersDc.mutableItems.remove(customer) },
+                    DialogAction(DialogAction.Type.NO)
+                )
+                .show()
         }
     }
+
 }
 
 
