@@ -132,7 +132,7 @@
                             <textField property="name" colspan="2" width="100%"/>
                             <dataGrid id="customersGrid" caption="msg://accountDataCustomerGrid.caption"
                                       dataContainer="customersDc" width="100%"
-                                      headerVisible="false" contextMenuEnabled="false" settingsEnabled="false"
+                                      headerVisible="true" headerRowHeight="1px" contextMenuEnabled="false" settingsEnabled="false"
                                       textSelectionEnabled="true" columnsCollapsingAllowed="false"
                                       emptyStateMessage="msg://accountDataCustomerGrid.empty"
                                       stylename="no-stripes no-vertical-lines no-horizontal-lines"
@@ -141,7 +141,7 @@
                                     <action id="remove" type="remove" icon="REMOVE_ACTION" caption="msg://accountDataDeleteCustomerButton.caption"/>
                                 </actions>
                                 <columns>
-                                    <column property="dimCustomer.customerName" expandRatio="1"/>
+                                    <column property="dimCustomer.customerName" expandRatio="1" caption="" sortable="false"/>
                                 </columns>
                             </dataGrid>
                             <!-- aligning buttons to right end -->
