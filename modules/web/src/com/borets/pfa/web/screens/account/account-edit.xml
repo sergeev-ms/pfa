@@ -123,8 +123,7 @@
     <layout expand="tabSheet" spacing="false">
         <label id="screenHeader" stylename="h2 bold colored" align="MIDDLE_CENTER"/>
         <tabSheet id="tabSheet">
-            <tab id="generalTab" caption="msg://generalTab.caption" spacing="true" margin="true,false,false,false"
-                 expand="marketDataGb">
+            <tab id="generalTab" caption="msg://generalTab.caption" spacing="true" margin="true,false,false,false" expand="accountDataGb">
                 <groupBox id="accountDataGb" caption="msg://accountDataGb.caption" spacing="true">
                     <form id="form" dataContainer="accountDc" width="100%" childrenCaptionWidth="80px">
                         <column width="130px">
@@ -161,13 +160,11 @@
                                 </actions>
                             </pickerField>
                         </column>
-
                         <column width="150px" childrenCaptionWidth="115px">
                             <lookupField property="contractType"/>
                             <lookupField property="applicationType"/>
                             <lookupField property="fieldType" required="false"/>
                         </column>
-
                         <column flex="1">
                             <textField id="typeField" property="type" editable="false"
                                        dataContainer="actualRevisionDc"/>
@@ -177,23 +174,24 @@
                                       dataContainer="actualRevisionDc"/>
                         </column>
                     </form>
-                    <hbox spacing="true" align="MIDDLE_RIGHT">
-                        <linkButton id="createRevisionBtn" caption="msg://createRevisionBtn.caption"
-                                    icon="CREATE_ACTION"/>
-                        <linkButton id="showRevisionsBtn" caption="msg://showRevisionsBtn.caption" icon="HISTORY"/>
-                    </hbox>
                 </groupBox>
-
-                <groupBox id="marketDataGb" caption="msg://marketDataGb.caption" spacing="true"
-                          expand="marketDataFragment">
+                <hbox spacing="true" align="MIDDLE_RIGHT">
+                    <linkButton id="createRevisionBtn" caption="msg://createRevisionBtn.caption"
+                                icon="CREATE_ACTION"/>
+                    <linkButton id="showRevisionsBtn" caption="msg://showRevisionsBtn.caption" icon="HISTORY"/>
+                </hbox>
+            </tab>
+            <tab id="marketTab" caption="msg://marketTab.caption" spacing="true" margin="true,false,false,false"
+                 expand="marketDataGb">
+                <groupBox id="marketDataGb" caption="msg://marketDataGb.caption" spacing="true" expand="marketDataFragment">
                     <fragment id="marketDataFragment" screen="pfa_MarketDataFragment"/>
-                    <hbox spacing="true" align="MIDDLE_RIGHT">
-                        <linkButton id="createMarketDataBtn" caption="msg://createMarketDataBtn.caption"
-                                    icon="CREATE_ACTION"/>
-                        <linkButton id="showMarketDetailsBtn" caption="msg://showMarketDetailsBtn.caption"
-                                    icon="HISTORY"/>
-                    </hbox>
                 </groupBox>
+                <hbox spacing="true" align="MIDDLE_RIGHT">
+                    <linkButton id="createMarketDataBtn" caption="msg://createMarketDataBtn.caption"
+                                icon="CREATE_ACTION"/>
+                    <linkButton id="showMarketDetailsBtn" caption="msg://showMarketDetailsBtn.caption"
+                                icon="HISTORY"/>
+                </hbox>
             </tab>
             <tab id="appDataTab" caption="msg://appDataTab.caption" spacing="true"
                  margin="true,false,false,false" expand="appDataGb">
