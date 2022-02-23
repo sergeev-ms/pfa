@@ -48,7 +48,7 @@
                 </property>
                 <property name="country" view="_minimal"/>
                 <property name="projects" view="_local">
-                    <property name="project" view="_minimal"/>
+                    <property name="project" view="_local"/>
                 </property>
                 <property name="customers" view="_minimal">
                     <property name="dimCustomer" view="_minimal"/>
