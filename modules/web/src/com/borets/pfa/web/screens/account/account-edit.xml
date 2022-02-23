@@ -141,7 +141,7 @@
                                     <action id="remove" type="remove" icon="REMOVE_ACTION" caption="msg://accountDataDeleteCustomerButton.caption"/>
                                 </actions>
                                 <columns>
-                                    <column property="dimCustomer.customerName" expandRatio="1" caption="" sortable="false"/>
+                                    <column property="name" expandRatio="1" caption="" sortable="false"/>
                                 </columns>
                             </dataGrid>
                             <!-- aligning buttons to right end -->
