@@ -84,9 +84,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
         initPivotGrid()
         initDynamic()
         setWindowCaption()
-        if (entityStates.isNew(editedEntity) && activityInputConfig.getAutoFillFromPrev()) {
-            autoFillFromPreviousActivity()
-        }
+        autoFillFromPreviousActivity()
     }
 
     @Subscribe(id = "activityDc", target = Target.DATA_CONTAINER)
@@ -241,12 +239,14 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     }
 
     private fun autoFillFromPreviousActivity() {
-        editedEntity.account?.let { account ->
-            dataManager.load(Activity::class.java)
-                .query("where e.account = ?1 order by e.createTs DESC", account)
-                .maxResults(1)
-                .optional()
-                .ifPresent { fillPrevData(it) }
+        if (entityStates.isNew(editedEntity) && activityInputConfig.getAutoFillFromPrev()) {
+            editedEntity.account?.let { account ->
+                dataManager.load(Activity::class.java)
+                    .query("where e.account = ?1 order by e.createTs DESC", account)
+                    .maxResults(1)
+                    .optional()
+                    .ifPresent { fillPrevData(it) }
+            }
         }
     }
 
