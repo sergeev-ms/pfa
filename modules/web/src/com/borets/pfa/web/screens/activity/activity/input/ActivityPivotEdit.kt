@@ -1,5 +1,6 @@
 package com.borets.pfa.web.screens.activity.activity.input
 
+import com.borets.pfa.config.ActivityInputConfig
 import com.borets.pfa.entity.activity.*
 import com.borets.pfa.entity.analytic.AnalyticSet
 import com.borets.pfa.web.beans.CountrySettingsBean
@@ -17,7 +18,8 @@ import com.haulmont.cuba.gui.model.KeyValueCollectionContainer
 import com.haulmont.cuba.gui.screen.*
 import com.haulmont.cuba.gui.screen.Target
 import com.haulmont.cuba.security.global.UserSession
-import java.time.*
+import java.time.Period
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -44,6 +46,8 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     private lateinit var screenValidation: ScreenValidation
     @Inject
     private lateinit var countrySettings: CountrySettingsBean
+    @Inject
+    private lateinit var activityInputConfig: ActivityInputConfig
 
     @Inject
     private lateinit var detailsDc: CollectionPropertyContainer<ActivityDetail>
@@ -60,7 +64,6 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     private lateinit var headerForm: Form
 
     private lateinit var pivotGridHelper : PivotGridInitializer
-
 
 
     @Subscribe
@@ -81,8 +84,10 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
         initPivotGrid()
         initDynamic()
         setWindowCaption()
+        if (entityStates.isNew(editedEntity) && activityInputConfig.getAutoFillFromPrev()) {
+            autoFillFromPreviousActivity()
+        }
     }
-
 
     @Subscribe(id = "activityDc", target = Target.DATA_CONTAINER)
     private fun onActivityDcItemPropertyChange(event: InstanceContainer.ItemPropertyChangeEvent<Activity>) {
@@ -90,6 +95,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
             initDynamic()
         }
     }
+
 
     private fun initPivotGrid() {
         val pivotStaticProperties = listOf(
@@ -132,7 +138,6 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
         window.caption = window.caption?.format(value)
     }
 
-
     private fun initDynamic() {
         var startMonth = YearMonth.from(editedEntity.periodFrom)
         val endMonth = YearMonth.from(editedEntity.periodTo)
@@ -161,6 +166,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
         }
     }
 
+
     private fun initKvEntities(): List<KeyValueEntity> {
         return countrySettings.getActivityAnalyticSets(editedEntity.account!!.country!!)
             .map {
@@ -172,7 +178,6 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
                 }
             }
     }
-
 
     private fun initFilter() {
         listOf(filterJobTypeField, filterWellEquipField, filterWellTagField).forEach { field ->
@@ -194,6 +199,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
         }
     }
 
+
     @Subscribe("fillFromPrevBtn")
     private fun onFillFromPrevBtnClick(event: Button.ClickEvent) {
         if (!validate())
@@ -211,11 +217,15 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
 
     private fun fillPrevData(copyFromActivityPlan: Activity) {
         val view = ViewBuilder.of(Activity::class.java)
+            .addAll("periodFrom", "periodTo")
             .add("details") {
                 it.addView(View.LOCAL)
                     .add("analytic", View.MINIMAL)
             }.build()
         dataManager.reload(copyFromActivityPlan, view ).let { prevAct ->
+            editedEntity.periodFrom = prevAct.periodFrom
+            editedEntity.periodTo = prevAct.periodTo
+
             prevAct.details?.map {
                 dataContext.create(ActivityDetail::class.java).apply {
                     this.activity = editedEntity
@@ -227,6 +237,16 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
             }?.forEach { detailsDc.mutableItems.add(it) }
 
             initDynamic()
+        }
+    }
+
+    private fun autoFillFromPreviousActivity() {
+        editedEntity.account?.let { account ->
+            dataManager.load(Activity::class.java)
+                .query("where e.account = ?1 order by e.createTs DESC", account)
+                .maxResults(1)
+                .optional()
+                .ifPresent { fillPrevData(it) }
         }
     }
 
