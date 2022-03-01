@@ -1,5 +1,7 @@
 package com.borets.pfa.web.screens.price.pricelist.input
 
+import com.borets.pfa.config.PriceInputConfig
+import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.web.beans.CountrySettingsBean
 import com.borets.pfa.entity.activity.JobType
 import com.borets.pfa.entity.activity.WellEquip
@@ -45,6 +47,8 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     private lateinit var screenValidation: ScreenValidation
     @Inject
     private lateinit var countrySettings: CountrySettingsBean
+    @Inject
+    private lateinit var priceInputConfig: PriceInputConfig
 
     @Inject
     private lateinit var detailsDc: CollectionPropertyContainer<PriceListDetail>
@@ -83,6 +87,8 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
                 .atStartOfDay(ZoneId.systemDefault())
                 .toInstant())
         }
+
+        autoFillFromPreviousActivity()
     }
 
     @Subscribe("yearMonthField")
@@ -240,6 +246,18 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
             }?.forEach { detailsDc.mutableItems.add(it) }
 
             initDynamic()
+        }
+    }
+
+    private fun autoFillFromPreviousActivity() {
+        if (entityStates.isNew(editedEntity) && priceInputConfig.getAutoFillFromPrev()) {
+            editedEntity.account?.let { account ->
+                dataManager.load(PriceList::class.java)
+                    .query("where e.account = ?1 order by e.createTs DESC", account)
+                    .maxResults(1)
+                    .optional()
+                    .ifPresent { fillPrevData(it) }
+            }
         }
     }
 
