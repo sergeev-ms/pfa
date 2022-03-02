@@ -4,11 +4,12 @@ import com.borets.pfa.entity.analytic.AnalyticSet
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity
+import java.time.LocalDate
 import java.time.YearMonth
 import javax.persistence.*
 
 @Table(name = "PFA_ACTIVITY_DETAIL")
-@javax.persistence.Entity(name = "pfa_ActivityDetail")
+@Entity(name = "pfa_ActivityDetail")
 open class ActivityDetail : StandardEntity() {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,6 +44,16 @@ open class ActivityDetail : StandardEntity() {
     fun setYearMonth(yearMonth: YearMonth?) {
         year = yearMonth?.year
         month = yearMonth?.monthValue
+    }
+
+    @Transient
+    @MetaProperty(related = ["month", "year"])
+    fun getLocalDate() : LocalDate? {
+        var localDate : LocalDate? = null
+        if (month != null && year != null) {
+            localDate = LocalDate.of(year!!, month!!, 1)
+        }
+        return localDate
     }
 
 

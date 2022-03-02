@@ -94,6 +94,16 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
         }
     }
 
+    @Subscribe
+    private fun onBeforeCommitChanges(event: BeforeCommitChangesEvent) {
+        //remove details if it's not in the window (periodFrom - periodTo)
+        editedEntity.details
+            ?.filter { it.getLocalDate()!!.isAfter(editedEntity.periodTo) ||
+                    it.getLocalDate()!!.isBefore(editedEntity.periodFrom) }
+            ?.forEach {
+                dataContext.remove(it)
+            }
+    }
 
     private fun initPivotGrid() {
         val pivotStaticProperties = listOf(
