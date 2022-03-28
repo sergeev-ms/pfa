@@ -1,13 +1,12 @@
 package com.borets.pfa.report.salesteam;
 
 import com.haulmont.yarg.structure.BandData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -15,8 +14,6 @@ import java.util.Objects;
 import java.util.Set;
 
 public class SalesTeamReportDataAdapter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SalesTeamReportDataAdapter.class);
 
     private static final String COLUMN_ANALYTIC_TITLE = "ANALYTIC_TITLE";
     private static final String COLUMN_ANALYTIC_ORDER = "ANALYTIC_ORDER";
@@ -35,6 +32,8 @@ public class SalesTeamReportDataAdapter {
         for (BandData row :
                 data) {
             Map<String, Object> kv = row.getData();
+
+            // pre-filling complete periods and analyticSets from whole dataset
             if (kv.containsKey(COLUMN_PERIOD)) {
                 periods.add((Date) kv.get(COLUMN_PERIOD));
             }
@@ -42,15 +41,38 @@ public class SalesTeamReportDataAdapter {
                 analyticSets.add((String) kv.get(COLUMN_ANALYTIC_TITLE));
             }
 
+            // creating accounts without analyticSet values
             AccountDto accountDto = AccountDto.createFromMap(kv);
             if (!accounts.contains(accountDto)) {
                 accounts.add(accountDto);
             }
         }
 
+        // filling analyticSetOrders
+        Map<String, Integer> analyticSetOrders = new HashMap<>();
+        for (BandData row :
+                data) {
+            Map<String, Object> kv = row.getData();
+            if (kv.containsKey(COLUMN_ANALYTIC_TITLE) && kv.containsKey(COLUMN_ANALYTIC_ORDER)) {
+                String analyticSet = (String) kv.get(COLUMN_ANALYTIC_TITLE);
+                int analyticOrder = (int) kv.get(COLUMN_ANALYTIC_ORDER);
+                if (!analyticSetOrders.containsKey(analyticSet)) {
+                    analyticSetOrders.put(analyticSet, analyticOrder);
+                } else {
+                    Integer prevOrder = analyticSetOrders.get(analyticSet);
+                    if (!prevOrder.equals(analyticOrder)) {
+                        throw new RuntimeException("Inconsistent orders for analytic set: " + analyticSet +
+                                "! Values differ: " + prevOrder + "; " + analyticOrder);
+                    }
+                }
+            }
+        }
+
         for (AccountDto accountDto :
                 accounts) {
             int periodOrder = 0;
+
+            // creating all periods for each account
             for (Date period :
                     periods) {
                 PeriodDto p = new PeriodDto();
@@ -58,12 +80,13 @@ public class SalesTeamReportDataAdapter {
                 p.setOrder(periodOrder++);
                 accountDto.getPeriods().add(p);
 
+                // creating analytic set cells for each period
                 int cellOrder = 0;
                 for (String analyticSet :
                         analyticSets) {
                     CellDto cellDto = new CellDto();
                     cellDto.setName(analyticSet);
-                    cellDto.setOrder(cellOrder++);
+                    cellDto.setAnalyticOrder(analyticSetOrders.get(analyticSet));
                     p.getCells().add(cellDto);
 
                     for (BandData row :
@@ -78,8 +101,6 @@ public class SalesTeamReportDataAdapter {
                             if (value instanceof Integer) {
                                 cellDto.setValue(new BigDecimal((int) value));
                             }
-                            int analyticOrder = (int) kv.getOrDefault(COLUMN_ANALYTIC_ORDER, -1);
-                            cellDto.setAnalyticOrder(analyticOrder);
                             break;
                         }
                     }
@@ -95,16 +116,7 @@ public class SalesTeamReportDataAdapter {
                     acc.getPeriods()) {
 
                 List<CellDto> cells = period.getCells();
-                // Add some order to unordered (order is null) elements
-                setAnalyticOrderToUnorderedCells(cells);
-                cells.sort(Comparator.comparing(CellDto::getOrder));
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("ACCOUNT {} PERIOD {}", acc.getCustomer(), period.getPeriodName());
-                    cells.forEach(cellDto -> {
-                        LOGGER.debug("{} - {}", cellDto.getOrder(), cellDto.getAnalyticOrder());
-                    });
-                    LOGGER.debug("----------------------------------------------");
-                }
+                cells.sort(Comparator.comparing(CellDto::getAnalyticOrder));
             }
         }
         fillSubtotals(resultDto.getSubtotals(), accounts);
@@ -116,21 +128,6 @@ public class SalesTeamReportDataAdapter {
                 .thenComparing(AccountDto::getParent, Comparator.nullsLast(Comparator.naturalOrder()))
                 .thenComparing(AccountDto::getCustomer)
                 .thenComparing(AccountDto::getAccountManager));
-    }
-
-    private void setAnalyticOrderToUnorderedCells(List<CellDto> cells) {
-        if (cells.stream().anyMatch(c -> c.getAnalyticOrder() <= 0)) {
-            int nextOrderValue = cells.stream().mapToInt(CellDto::getAnalyticOrder).max().orElseThrow() + 10000;
-            for (CellDto c :
-                    cells) {
-                if (c.getAnalyticOrder() <= 0) {
-                    nextOrderValue++;
-                    LOGGER.debug("UNORDERED CELL: {}, VALUE: {}, DEFINED NEW ANALYTIC ORDER: {}",
-                            c.getName(), c.getValue(), nextOrderValue);
-                    c.setAnalyticOrder(nextOrderValue);
-                }
-            }
-        }
     }
 
     private void fillSubtotals(AccountDto subtotals, List<AccountDto> accounts) {
@@ -173,7 +170,6 @@ public class SalesTeamReportDataAdapter {
                     if (subtotalCell == null) {
                         subtotalCell = new CellDto();
                         subtotalCell.setName(cell.getName());
-                        subtotalCell.setOrder(cell.getOrder());
                         subtotalCell.setAnalyticOrder(cell.getAnalyticOrder());
                         subtotalPeriod.getCells().add(subtotalCell);
                     }

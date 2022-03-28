@@ -128,7 +128,7 @@ public class SalesTeamReport implements CustomReport {
         for (PeriodDto period :
                 periods) {
             int mergeSize = period.getCells().size();
-            period.getCells().sort(Comparator.comparing(CellDto::getOrder));
+            period.getCells().sort(Comparator.comparing(CellDto::getAnalyticOrder));
 
             Cell decorativeCell = createCell(upperDecorativeRow.getC().get(cellIndex));
             Cell periodCell = createCell(periodsRow.getC().get(cellIndex));

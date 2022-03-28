@@ -3,18 +3,9 @@ package com.borets.pfa.report.salesteam;
 import java.math.BigDecimal;
 
 public class CellDto {
-    private int order;
     private String name;
     private BigDecimal value;
     private int analyticOrder;
-
-    public int getOrder() {
-        return order;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-    }
 
     public String getName() {
         return name;
@@ -39,4 +30,5 @@ public class CellDto {
     public void setAnalyticOrder(int analyticOrder) {
         this.analyticOrder = analyticOrder;
     }
+
 }
