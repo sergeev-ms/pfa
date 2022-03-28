@@ -97,7 +97,7 @@ public class SalesTeamReportDataAdapter {
                 List<CellDto> cells = period.getCells();
                 // Add some order to unordered (order is null) elements
                 setAnalyticOrderToUnorderedCells(cells);
-                cells.sort(Comparator.comparing(CellDto::getOrder)); // TODO switch to sorting over analyticOrder?
+                cells.sort(Comparator.comparing(CellDto::getOrder));
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("ACCOUNT {} PERIOD {}", acc.getCustomer(), period.getPeriodName());
                     cells.forEach(cellDto -> {
@@ -112,9 +112,10 @@ public class SalesTeamReportDataAdapter {
     }
 
     private static void sortAccounts(List<AccountDto> accounts) {
-        accounts.sort(Comparator.comparing(AccountDto::getAccountType)
-                .thenComparing(AccountDto::getAccountManager)
-                .thenComparing(AccountDto::getCustomer));
+        accounts.sort(Comparator.comparing(AccountDto::getAccountOrder)
+                .thenComparing(AccountDto::getParent, Comparator.nullsLast(Comparator.naturalOrder()))
+                .thenComparing(AccountDto::getCustomer)
+                .thenComparing(AccountDto::getAccountManager));
     }
 
     private void setAnalyticOrderToUnorderedCells(List<CellDto> cells) {

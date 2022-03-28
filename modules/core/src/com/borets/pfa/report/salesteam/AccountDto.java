@@ -1,5 +1,7 @@
 package com.borets.pfa.report.salesteam;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +13,10 @@ public class AccountDto {
     private static final String COLUMN_ACCOUNT_TYPE = "ACCOUNT_TYPE";
     private static final String COLUMN_ACCOUNT_MANAGER = "ACCOUNT_MANAGER";
     private static final String COLUMN_BUSINESS_MODEL = "BUSINESS_MODEL";
-    private static final String COLUMN_AREA_BASIN = "AREA_BASIN";
-    private static final String COLUMN_REGION = "REGION";
+    private static final String COLUMN_PARENT_ACCOUNT_NAME = "PARENT_ACCOUNT_NAME";
+    private static final String COLUMN_ACCOUNT_ORDER = "ACCOUNT_ORDER";
+    private static final String COLUMN_ACTIVE = "ACTIVE";
+    private static final String COLUMN_APPLICATION_TYPE = "APPLICATION_TYPE";
     private static final String COLUMN_IS_DELETED = "IS_DELETED";
 
     private final List<PeriodDto> periods = new ArrayList<>();
@@ -21,8 +25,10 @@ public class AccountDto {
     private String customer;
     private String accountManager;
     private String businessModel;
-    private String areaBasin;
-    private String region;
+    private String parent;
+    private boolean active;
+    private String applicationType;
+    private int accountOrder;
     private boolean isDeleted;
 
     public static AccountDto createFromMap(Map<String, Object> kv) {
@@ -31,9 +37,12 @@ public class AccountDto {
         accountDto.setAccountManager(getValue(kv, COLUMN_ACCOUNT_MANAGER));
         accountDto.setBusinessModel(getValue(kv, COLUMN_BUSINESS_MODEL));
         accountDto.setCustomer(getValue(kv, COLUMN_ACCOUNT_NAME)); // deliberately set account name as customer
-        accountDto.setAreaBasin(getValue(kv, COLUMN_AREA_BASIN));
-        accountDto.setRegion(getValue(kv, COLUMN_REGION));
+        accountDto.setAccountOrder((int) kv.getOrDefault(COLUMN_ACCOUNT_ORDER, 0));
+        accountDto.setActive((int) kv.getOrDefault(COLUMN_ACTIVE, 0) > 0);
+        accountDto.setApplicationType(getValue(kv, COLUMN_APPLICATION_TYPE));
         accountDto.setDeleted((int) kv.getOrDefault(COLUMN_IS_DELETED, 0) > 0);
+        String parent = getValue(kv, COLUMN_PARENT_ACCOUNT_NAME);
+        accountDto.setParent(StringUtils.isBlank(parent) ? null : parent);
         return accountDto;
     }
 
@@ -52,13 +61,15 @@ public class AccountDto {
         AccountDto that = (AccountDto) o;
         return isDeleted == that.isDeleted && Objects.equals(accountType, that.accountType)
                 && Objects.equals(customer, that.customer) && Objects.equals(accountManager, that.accountManager)
-                && Objects.equals(businessModel, that.businessModel) && Objects.equals(areaBasin, that.areaBasin)
-                && Objects.equals(region, that.region);
+                && Objects.equals(businessModel, that.businessModel) && Objects.equals(parent, that.parent)
+                && Objects.equals(active, that.active) && Objects.equals(applicationType, that.applicationType)
+                && Objects.equals(accountOrder, that.accountOrder);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountType, customer, accountManager, businessModel, areaBasin, region, isDeleted);
+        return Objects.hash(accountType, customer, accountManager, businessModel, parent, active,
+                applicationType, accountOrder, isDeleted);
     }
 
     public String getAccountType() {
@@ -93,22 +104,6 @@ public class AccountDto {
         this.businessModel = businessModel;
     }
 
-    public String getAreaBasin() {
-        return areaBasin;
-    }
-
-    public void setAreaBasin(String areaBasin) {
-        this.areaBasin = areaBasin;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
     public List<PeriodDto> getPeriods() {
         return periods;
     }
@@ -120,4 +115,41 @@ public class AccountDto {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getActiveStr() {
+        return isActive() ? "Active" : "Inactive";
+    }
+
+    public String getApplicationType() {
+        return applicationType;
+    }
+
+    public void setApplicationType(String applicationType) {
+        this.applicationType = applicationType;
+    }
+
+    public int getAccountOrder() {
+        return accountOrder;
+    }
+
+    public void setAccountOrder(int accountOrder) {
+        this.accountOrder = accountOrder;
+    }
+
 }

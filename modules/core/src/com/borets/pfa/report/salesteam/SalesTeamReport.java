@@ -29,7 +29,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class SalesTeamReport implements CustomReport {
 
-    private static final int ACCOUNT_COLUMN_COUNT = 6;
+    private static final int ACCOUNT_COLUMN_COUNT = 7;
 
     private Document document;
     private CTMergeCells mergeCells;
@@ -186,11 +186,12 @@ public class SalesTeamReport implements CustomReport {
             cells.get(i).setT(STCellType.STR);
         }
         cells.get(0).setV(dto.getAccountType());
-        cells.get(1).setV(dto.getCustomer());
-        cells.get(2).setV(dto.getAccountManager());
-        cells.get(3).setV(dto.getBusinessModel());
-        cells.get(4).setV(dto.getAreaBasin());
-        cells.get(5).setV(dto.getRegion());
+        cells.get(1).setV(dto.getParent());
+        cells.get(2).setV(dto.getCustomer());
+        cells.get(3).setV(dto.getAccountManager());
+        cells.get(4).setV(dto.getBusinessModel());
+        cells.get(5).setV(dto.getApplicationType());
+        cells.get(6).setV(dto.getActiveStr());
     }
 
     private void fillRowValues(Row row, AccountDto dto) {
