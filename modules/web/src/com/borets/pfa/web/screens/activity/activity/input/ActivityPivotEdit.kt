@@ -18,6 +18,7 @@ import com.haulmont.cuba.gui.model.KeyValueCollectionContainer
 import com.haulmont.cuba.gui.screen.*
 import com.haulmont.cuba.gui.screen.Target
 import com.haulmont.cuba.security.global.UserSession
+import java.time.LocalDate
 import java.time.Period
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -62,6 +63,8 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     private lateinit var filterWellTagField: LookupField<WellTag>
     @Inject
     private lateinit var headerForm: Form
+    @Inject
+    private lateinit var validToField: DatePicker<LocalDate>
 
     private lateinit var pivotGridHelper : PivotGridInitializer
 
@@ -233,6 +236,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
         dataManager.reload(copyFromActivityPlan, view ).let { prevAct ->
             editedEntity.periodFrom = prevAct.periodFrom
             editedEntity.periodTo = prevAct.periodTo
+            validToField.rangeStart = prevAct.periodTo!!
 
             prevAct.details?.map {
                 dataContext.create(ActivityDetail::class.java).apply {
