@@ -1,5 +1,9 @@
 package com.borets.pfa.report.salesteam;
 
+import com.borets.pfa.entity.activity.RecordType;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Messages;
+import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.yarg.exception.ReportFormattingException;
 import com.haulmont.yarg.formatters.CustomReport;
 import com.haulmont.yarg.formatters.impl.xlsx.CellReference;
@@ -20,16 +24,24 @@ import org.xlsx4j.sml.STCellType;
 import org.xlsx4j.sml.SheetData;
 import org.xlsx4j.sml.Worksheet;
 
+import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @SuppressWarnings("unused")
 public class SalesTeamReport implements CustomReport {
 
     private static final int ACCOUNT_COLUMN_COUNT = 7;
+
+    private static final String PARAM_DATE_THRESHOLD = "dateThreshold";
+    private static final String PARAM_MODE = "mode";
 
     private Document document;
     private CTMergeCells mergeCells;
@@ -69,7 +81,10 @@ public class SalesTeamReport implements CustomReport {
                 fillRowKey(row, dto);
                 fillRowValues(row, dto);
             }
-            setRowCellValues(summaryRow, ACCOUNT_COLUMN_COUNT, salesTeamReportDto.getSubtotals());
+            setRowCellValues(summaryRow, salesTeamReportDto.getSubtotals());
+
+            Object dateThresholdObj = params.get(PARAM_DATE_THRESHOLD);
+            signReport(dateThresholdObj != null ? (Date) dateThresholdObj : null, (RecordType) params.get(PARAM_MODE));
 
             Save save = new Save(document.getPackage());
             save.save(outputStream);
@@ -78,6 +93,26 @@ public class SalesTeamReport implements CustomReport {
         } catch (Exception ex) {
             throw new ReportFormattingException("Exception thrown on init", ex);
         }
+    }
+
+    private void signReport(@Nullable Date dateThreshold, RecordType mode) {
+        UserSessionSource uss = AppBeans.get(UserSessionSource.class);
+        Messages mes = AppBeans.get(Messages.class);
+
+        StringBuilder sb = new StringBuilder("Created at ")
+                .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yy HH:mm", Locale.US)))
+                .append(" by ").append(uss.getUserSession().getUser().getName())
+                .append(" (mode: \"").append(mes.getMessage(mode)).append('"');
+
+        if (dateThreshold != null) {
+            sb.append(", threshold: ").append(new SimpleDateFormat("dd.MM.yy", Locale.US).format(dateThreshold));
+        }
+        sb.append(")");
+
+        Row row = rows.get(0);
+        Cell cell = row.getC().get(3);
+        cell.setT(STCellType.STR);
+        cell.setV(sb.toString());
     }
 
     private void init(Report report) throws Docx4JException {
@@ -212,7 +247,8 @@ public class SalesTeamReport implements CustomReport {
         }
     }
 
-    private void setRowCellValues(Row row, int firstCellColumnIndex, AccountDto dto) {
+    private void setRowCellValues(Row row, AccountDto dto) {
+        int firstCellColumnIndex = ACCOUNT_COLUMN_COUNT;
         List<Cell> cells = row.getC();
         List<PeriodDto> periodDtos = dto.getPeriods();
         for (PeriodDto period :
