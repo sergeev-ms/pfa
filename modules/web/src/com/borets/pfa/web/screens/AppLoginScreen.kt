@@ -26,13 +26,13 @@ class AppLoginScreen : LoginScreen(){
     private lateinit var poweredByLink: Label<String>
 
     @Subscribe
-    fun onAppLoginScreenInit(event: InitEvent) {
+    fun onAppLoginScreenInit(@Suppress("UNUSED_PARAMETER") event: InitEvent) {
         loadStyles()
         initBottomPanel()
     }
 
     @Subscribe("submit")
-    fun onSubmit(event: Action.ActionPerformedEvent) {
+    fun onSubmit(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         login()
     }
 

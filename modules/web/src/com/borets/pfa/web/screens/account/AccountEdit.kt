@@ -168,7 +168,7 @@ class AccountEdit : StandardEditor<Account>() {
     private lateinit var deleteCustomerBtn: Button
 
     @Subscribe
-    private fun onInit(event: InitEvent) {
+    private fun onInit(@Suppress("UNUSED_PARAMETER") event: InitEvent) {
         applicationDataFragment.setEditable(false)
         equipmentUtilizationFragment.setEditable(false)
         marketDataFragment.setEditable(false)
@@ -344,7 +344,7 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Install(to = "projectsOptionDl", target = Target.DATA_LOADER, type = Any::class, subject = "", required = true)
-    private fun projectsOptionDlLoadDelegate(loadContext: LoadContext<Project>?): MutableList<Project> {
+    private fun projectsOptionDlLoadDelegate(@Suppress("UNUSED_PARAMETER") loadContext: LoadContext<Project>?): MutableList<Project> {
         val customerIds = editedEntity.customers?.map { it.dimCustomerId }
         if (customerIds != null) {
             return dataManager.load(Project::class.java)
@@ -448,11 +448,13 @@ class AccountEdit : StandardEditor<Account>() {
 
     @Subscribe("createUtilizationBtn")
     private fun onCreateUtilizationBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
+        @Suppress("UNCHECKED_CAST")
+        val copyFromOption = MapScreenOptions(mutableMapOf(Pair("copyFrom", editedEntity.actualEquipmentUtilization)) as Map<String, Any>)
         screenBuilders.editor(EquipmentUtilization::class.java, this)
             .newEntity()
             .withParentDataContext(dataContext)
             .withInitializer { it.account = editedEntity }
-            .withOptions(MapScreenOptions(mutableMapOf(Pair("copyFrom", editedEntity.actualEquipmentUtilization)) as Map<String, Any>))
+            .withOptions(copyFromOption)
             .withOpenMode(OpenMode.NEW_TAB)
             .build()
             .also { screen ->
@@ -479,7 +481,7 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Subscribe("showUtilizationsBtn")
-    private fun onShowUtilizationsBtnClick(event: Button.ClickEvent) {
+    private fun onShowUtilizationsBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
         screenBuilders.lookup(EquipmentUtilization::class.java, this)
             .withOptions(MapScreenOptions(mutableMapOf(Pair("account", editedEntity)) as Map<String, Any>))
             .show()
@@ -505,7 +507,7 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Subscribe("directSalesTable.create")
-    private fun onDirectSalesTableCreate(event: Action.ActionPerformedEvent) {
+    private fun onDirectSalesTableCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(directSalesTable)
             .newEntity()
             .withInitializer { it.account = editedEntity }
@@ -513,7 +515,7 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Subscribe("directSalesTable.addForecast")
-    private fun onDirectSalesTableAddForecast(event: Action.ActionPerformedEvent) {
+    private fun onDirectSalesTableAddForecast(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(directSalesTable)
             .newEntity()
             .withInitializer {
@@ -561,12 +563,12 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Subscribe("projectOptionTable.assignToAccount")
-    private fun onProjectOptionTableAssignToAccount(event: Action.ActionPerformedEvent) {
+    private fun onProjectOptionTableAssignToAccount(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         moveToRight(projectOptionTable.selected)
     }
 
     @Subscribe("assignedProjectsTable.removeAssign")
-    private fun onAssignedProjectsTableRemoveAssign(event: Action.ActionPerformedEvent) {
+    private fun onAssignedProjectsTableRemoveAssign(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         dialogs.createInputDialog(this)
             .withCaption(messageBundle.getMessage("projectRemoveAssignInputDialog.caption"))
             .withParameter(InputParameter
@@ -671,7 +673,7 @@ class AccountEdit : StandardEditor<Account>() {
     }
 
     @Subscribe("addCustomerBtn")
-    private fun onAddCustomerButtonClick(event: Button.ClickEvent) {
+    private fun onAddCustomerButtonClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
         screenBuilders.lookup(DimCustomers::class.java, this)
             .withOpenMode(OpenMode.DIALOG)
             .withSelectHandler {

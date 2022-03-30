@@ -42,13 +42,13 @@ class DirectSaleEdit : StandardEditor<DirectSale>() {
     private lateinit var detailsTable: Table<DirectSaleDetail>
 
     @Subscribe
-    private fun onAfterShow(event: AfterShowEvent) {
+    private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
         setCaptions()
     }
 
 
     @Subscribe("detailsTable.create")
-    private fun onDetailsTableCreate(event: Action.ActionPerformedEvent) {
+    private fun onDetailsTableCreate(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         dataContext.create(DirectSaleDetail::class.java).apply {
             directSale = editedEntity
         }.let {

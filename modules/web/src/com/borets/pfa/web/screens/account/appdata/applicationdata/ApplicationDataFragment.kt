@@ -121,7 +121,7 @@ class ApplicationDataFragment : ScreenFragment() {
     }
 
     @Subscribe("systemsAllocationGrid.view")
-    private fun onSystemsAllocationGridView(event: Action.ActionPerformedEvent) {
+    private fun onSystemsAllocationGridView(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         val screen = screenBuilders.editor(SystemStd::class.java, this)
             .withScreenClass(SystemStdEdit::class.java)
             .editEntity(systemsAllocationGrid.singleSelected!!.system!!)
@@ -131,7 +131,7 @@ class ApplicationDataFragment : ScreenFragment() {
     }
 
     @Subscribe("systemsAllocationGrid.edit")
-    private fun onSystemsAllocationGridEdit(event: Action.ActionPerformedEvent) {
+    private fun onSystemsAllocationGridEdit(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.editor(SystemStd::class.java, this)
             .withParentDataContext(dataContext)
             .withScreenClass(SystemStdEdit::class.java)

@@ -39,7 +39,7 @@ class CountrySettingEdit : StandardEditor<CountrySetting>() {
     private lateinit var utilizationValueTypeSettingsDc: CollectionPropertyContainer<CountrySettingUtilizationValueType>
 
     @Subscribe("analyticSettingsTable.add")
-    private fun onAnalyticSettingsTableAdd(event: Action.ActionPerformedEvent) {
+    private fun onAnalyticSettingsTableAdd(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.lookup(AnalyticSet::class.java, this)
             .withOpenMode(OpenMode.NEW_TAB)
             .withSelectHandler {
@@ -55,7 +55,7 @@ class CountrySettingEdit : StandardEditor<CountrySetting>() {
     }
 
     @Subscribe("revenueTypeSettingsTable.add")
-    private fun onRevenueTypeSettingsTableAdd(event: Action.ActionPerformedEvent) {
+    private fun onRevenueTypeSettingsTableAdd(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.lookup(RevenueType::class.java, this)
             .withOpenMode(OpenMode.NEW_TAB)
             .withSelectHandler {
@@ -71,7 +71,7 @@ class CountrySettingEdit : StandardEditor<CountrySetting>() {
     }
 
     @Subscribe("equipmentTypeSettingsTable.add")
-    private fun onEquipmentTypeSettingsTableAdd(event: Action.ActionPerformedEvent) {
+    private fun onEquipmentTypeSettingsTableAdd(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.lookup(EquipmentType::class.java, this)
             .withOpenMode(OpenMode.NEW_TAB)
             .withSelectHandler {
@@ -89,7 +89,7 @@ class CountrySettingEdit : StandardEditor<CountrySetting>() {
     }
 
     @Subscribe("utilizationValueTypeSettingsTable.add")
-    private fun onUtilizationValueTypeSettingsTableAdd(event: Action.ActionPerformedEvent) {
+    private fun onUtilizationValueTypeSettingsTableAdd(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         screenBuilders.lookup(EquipmentUtilizationValueType::class.java, this)
             .withOpenMode(OpenMode.NEW_TAB)
             .withSelectHandler {
@@ -108,19 +108,19 @@ class CountrySettingEdit : StandardEditor<CountrySetting>() {
         target = Target.COMPONENT, type = Any::class, required = true)
     private fun revenueTypeSettingsTableAnalyticSetsColumnGenerator(countrySettingRevenueType: CountrySettingRevenueType?): Component {
         val analyticSetAsString = countrySettingRevenueType?.analyticSets
-            ?.joinToString("; ") { metadataTools.getInstanceName(it) }
+            ?.joinToString("; ") { metadataTools.getInstanceName(it) } ?: ""
         return Table.PlainTextCell(analyticSetAsString)
     }
 
     @Install(to = "utilizationValueTypeSettingsTable.analyticSets", subject = "columnGenerator")
     private fun utilizationValueTypeSettingsTableAnalyticSetsColumnGenerator(countrySettingUtilizationValueType: CountrySettingUtilizationValueType?): Component {
         val analyticSetAsString = countrySettingUtilizationValueType?.analyticSets
-            ?.joinToString("; ") { metadataTools.getInstanceName(it) }
+            ?.joinToString("; ") { metadataTools.getInstanceName(it) } ?: ""
         return Table.PlainTextCell(analyticSetAsString)
     }
 
     @Subscribe("revenueTypeSettingsTable.selectAnalytics")
-    private fun onRevenueTypeSettingsTableSelectAnalytics(event: Action.ActionPerformedEvent) {
+    private fun onRevenueTypeSettingsTableSelectAnalytics(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         selectAnalytic(revenueTypeSettingsDc.item.analyticSets) {
             revenueTypeSettingsDc.item.analyticSets = it.toMutableList()
         }
@@ -128,7 +128,7 @@ class CountrySettingEdit : StandardEditor<CountrySetting>() {
 
 
     @Subscribe("utilizationValueTypeSettingsTable.selectAnalytics")
-    private fun onUtilizationValueTypeSettingsTableSelectAnalytics(event: Action.ActionPerformedEvent) {
+    private fun onUtilizationValueTypeSettingsTableSelectAnalytics(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
         selectAnalytic(utilizationValueTypeSettingsDc.item.analyticSets) {
             utilizationValueTypeSettingsDc.item.analyticSets = it.toMutableList()
         }

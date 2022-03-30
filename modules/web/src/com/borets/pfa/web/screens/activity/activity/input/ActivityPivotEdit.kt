@@ -98,7 +98,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     }
 
     @Subscribe
-    private fun onBeforeCommitChanges(event: BeforeCommitChangesEvent) {
+    private fun onBeforeCommitChanges(@Suppress("UNUSED_PARAMETER") event: BeforeCommitChangesEvent) {
         //remove details if it's not in the window (periodFrom - periodTo)
         editedEntity.details
             ?.filter { it.getLocalDate()!!.isAfter(editedEntity.periodTo) ||
@@ -162,8 +162,9 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
 
         months.map {
             DynamicPropertyData(it.toString(), it.format(DateTimeFormatter.ofPattern("MMM yy", userSession.locale)), null,
-                Int::class.javaObjectType, TextField::class.java, "60px")
-        }.let { dynamicProperties ->
+                Int::class.javaObjectType, TextField::class.java, "60px", { true }, true)
+        }
+            .let { dynamicProperties ->
             pivotGridHelper.initDynamicProperties(dynamicProperties)
             pivotGridHelper.setDynamicPropertiesValues { kvDc : KeyValueCollectionContainer ->
                 detailsDc.items.forEach { detail ->
@@ -212,7 +213,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
 
 
     @Subscribe("fillFromPrevBtn")
-    private fun onFillFromPrevBtnClick(event: Button.ClickEvent) {
+    private fun onFillFromPrevBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
         if (!validate())
             return
 

@@ -39,7 +39,7 @@ class EquipmentUtilizationEdit : StandardEditor<EquipmentUtilization>() {
     }
 
     @Subscribe
-    private fun onBeforeShow(event: BeforeShowEvent) {
+    private fun onBeforeShow(@Suppress("UNUSED_PARAMETER") event: BeforeShowEvent) {
         equipmentUtilizationDl.load()
 
         equipmentUtilizationDetailValueDl.setParameter("container_equipmentUtilizationDc", editedEntity)
