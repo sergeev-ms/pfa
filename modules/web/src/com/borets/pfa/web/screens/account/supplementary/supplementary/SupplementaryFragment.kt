@@ -51,12 +51,12 @@ class SupplementaryFragment : ScreenFragment() {
     private lateinit var pivotGridHelper : PivotGridInitializer
 
     @Subscribe
-    private fun onAfterInit(event: AfterInitEvent) {
+    private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
         pivotGridHelper = AppBeans.getPrototype(PivotGridInitializer::class.java, pivotGrid)
     }
 
     @Subscribe(target = Target.PARENT_CONTROLLER)
-    private fun onBeforeShow(event: Screen.BeforeShowEvent) {
+    private fun onBeforeShow(@Suppress("UNUSED_PARAMETER") event: Screen.BeforeShowEvent) {
         val pivotStaticProperties = listOf(
             PivotGridInitializer.StaticPropertyData("type", "Type", true,
                 SupplementaryDetailType::class.java, null, null, true),
@@ -80,7 +80,7 @@ class SupplementaryFragment : ScreenFragment() {
     }
 
     @Subscribe(id = "supplementaryDc", target = Target.DATA_CONTAINER)
-    private fun onSupplementaryDcItemChange(event: InstanceContainer.ItemChangeEvent<Supplementary>) {
+    private fun onSupplementaryDcItemChange(@Suppress("UNUSED_PARAMETER") event: InstanceContainer.ItemChangeEvent<Supplementary>) {
         setPeriod()
         periodFromField.addValueChangeListener { initDynamic() }
         periodToField.addValueChangeListener { initDynamic() }

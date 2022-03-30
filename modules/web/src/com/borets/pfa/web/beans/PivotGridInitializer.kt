@@ -77,6 +77,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
         addKvContainerProperties(properties)
 
         val keyProperty = properties.find { it.key }
+        @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
         Preconditions.checkNotNullArgument(keyProperty, "Setup key-property for pivot-grid")
         this.keyPropertyName = keyProperty!!.property
 
@@ -137,6 +138,7 @@ class PivotGridInitializer(private var pivotGrid: GridLayout) {
                 }
 
                 if (component is LookupField<*> && EnumClass::class.java.isAssignableFrom(staticData.clazz)) {
+                    @Suppress("UNCHECKED_CAST")
                     component.options = EnumOptions(staticData.clazz as Class<EnumClass<*>>)
                 }
             }

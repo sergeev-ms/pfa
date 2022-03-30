@@ -38,7 +38,7 @@ class AnalyticSetBrowse : StandardLookup<AnalyticSet>() {
     }
 
     @Subscribe
-    private fun onAfterShow(event: AfterShowEvent) {
+    private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
         selectedAnalyticSets?.let {
             analyticSetsTable.setSelected(it)
         }

@@ -213,7 +213,7 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     }
 
     @Subscribe("fillFromPrevBtn")
-    private fun onFillFromPrevBtnClick(event: Button.ClickEvent) {
+    private fun onFillFromPrevBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
         if (!validate())
             return
 

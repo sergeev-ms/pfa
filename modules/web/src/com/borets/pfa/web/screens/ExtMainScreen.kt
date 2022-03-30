@@ -19,7 +19,7 @@ class ExtMainScreen : MainScreen() {
     private lateinit var initialLayoutLabel: Label<String>
 
     @Subscribe
-    private fun onInit(event: InitEvent) {
+    private fun onInit(@Suppress("UNUSED_PARAMETER") event: InitEvent) {
         initialLayoutLabel.value = messageBundle.getMessage("initialLayoutLabel.value")
     }
 

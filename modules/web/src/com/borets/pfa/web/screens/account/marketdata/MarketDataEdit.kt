@@ -47,7 +47,7 @@ class MarketDataEdit : StandardEditor<MarketData>() {
     }
 
     @Subscribe("marketDateFragment.calculateCustomerDataBtn")
-    private fun onCalculateCustomerDataBtnClick(event: Button.ClickEvent) {
+    private fun onCalculateCustomerDataBtnClick(@Suppress("UNUSED_PARAMETER") event: Button.ClickEvent) {
         val errors = listOf("arlField", "conversionRateField", "delayFactorField", "wellCountField", "newWellYearField")
             .map { marketDateFragment.fragment.getComponent(it) }
             .toList()

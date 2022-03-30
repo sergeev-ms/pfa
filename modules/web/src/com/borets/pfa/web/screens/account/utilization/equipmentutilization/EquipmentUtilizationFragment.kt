@@ -57,13 +57,13 @@ class EquipmentUtilizationFragment : ScreenFragment() {
 
 
     @Subscribe
-    private fun onAfterInit(event: AfterInitEvent) {
+    private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
         pivotGridHelper = AppBeans.getPrototype(PivotGridInitializer::class.java, pivotGrid)
         pivotGridHelper.initStaticPivotProperties(prepareStaticProperties())
     }
 
     @Subscribe(target = Target.PARENT_CONTROLLER)
-    private fun onAfterShow(event: Screen.AfterShowEvent) {
+    private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: Screen.AfterShowEvent) {
         equipmentUtilizationDc.itemOrNull?.let {
             initPivot()
         }

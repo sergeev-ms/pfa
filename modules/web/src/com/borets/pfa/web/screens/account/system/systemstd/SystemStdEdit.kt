@@ -63,7 +63,7 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
     }
 
     @Subscribe
-    private fun onAfterShow(event: AfterShowEvent) {
+    private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
         detailsDc.sorter.sort(Sort.by("equipmentType.order"))
     }
 

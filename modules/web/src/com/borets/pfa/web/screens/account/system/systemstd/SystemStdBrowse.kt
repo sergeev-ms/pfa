@@ -28,7 +28,7 @@ class SystemStdBrowse : StandardLookup<SystemStd>() {
     private lateinit var systemStdsDl: CollectionLoader<SystemStd>
 
     @Subscribe
-    private fun onAfterInit(event: AfterInitEvent) {
+    private fun onAfterInit(@Suppress("UNUSED_PARAMETER") event: AfterInitEvent) {
         systemStdsDl.setParameter("type", SystemStd::class.java)
     }
 
