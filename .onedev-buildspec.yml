@@ -9,7 +9,7 @@ jobs:
     withSubmodules: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
-    name: Trying to build
+    name: Build (without tests)
     runInContainer: true
     image: pk-sp-git1.pk.borets.gc:8124/bellsoft/liberica-openjdk-alpine:11
     interpreter: !DefaultInterpreter
@@ -21,7 +21,7 @@ jobs:
       - systemProp.https.proxyPort=3128
       - EOL
       - ''
-      - ./gradlew clean build
+      - ./gradlew clean build -x test
     useTTY: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
