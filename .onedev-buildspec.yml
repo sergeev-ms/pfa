@@ -21,8 +21,14 @@ jobs:
       - systemProp.https.proxyPort=3128
       - EOL
       - ''
-      - ./gradlew clean build -x test
+      - ./gradlew clean deploy -x test
+      - ''
+      - tar -czvf pfa.tar.gz ./deploy
     useTTY: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !PublishArtifactStep
+    name: Publish
+    artifacts: pfa.tar.gz
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
