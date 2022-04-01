@@ -67,6 +67,7 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     private lateinit var validToField: DatePicker<LocalDate>
 
     private lateinit var pivotGridHelper : PivotGridInitializer
+    private val months: MutableList<YearMonth> = mutableListOf()
 
 
     @Subscribe
@@ -81,18 +82,62 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
         event.entity.periodTo = YearMonth.now().withMonth(12).atEndOfMonth()
     }
 
+    @Subscribe
+    private fun onBeforeShow(event: BeforeShowEvent) {
+        recalculateMonths()
+    }
+
+    private fun recalculateMonths() {
+        var startMonth = YearMonth.from(editedEntity.periodFrom)
+        val endMonth = YearMonth.from(editedEntity.periodTo)
+
+        months.clear()
+
+        while (startMonth <= endMonth) {
+            months.add(startMonth)
+            startMonth = startMonth.plus(Period.ofMonths(1))
+        }
+    }
 
     @Subscribe
     private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
         initPivotGrid()
+        createDetails()
         initDynamic()
         setWindowCaption()
         autoFillFromPreviousActivity()
     }
 
+    private fun createDetails() {
+        countrySettings.getActivityAnalyticSets(editedEntity.account!!.country!!)
+            .forEach { analyticSet ->
+                months.forEach { yearMonth ->
+                    val existingDetail = detailsDc.items
+                        .find {
+                            it.analytic == analyticSet &&
+                                    it.year == yearMonth.year &&
+                                    it.month == yearMonth.monthValue
+                        }
+                    if (existingDetail == null) {
+                        dataContext.create(ActivityDetail::class.java).apply {
+                            activity = editedEntity
+                            analytic = analyticSet
+                            year = yearMonth.year
+                            month = yearMonth.monthValue
+                            value = 0
+                        }.run {
+                            detailsDc.mutableItems.add(this)
+                        }
+                    }
+                }
+            }
+    }
+
     @Subscribe(id = "activityDc", target = Target.DATA_CONTAINER)
     private fun onActivityDcItemPropertyChange(event: InstanceContainer.ItemPropertyChangeEvent<Activity>) {
         if ((event.property == "periodFrom" || event.property == "periodTo") && event.value != null) {
+            recalculateMonths()
+            createDetails()
             initDynamic()
         }
     }
@@ -150,21 +195,10 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
     }
 
     private fun initDynamic() {
-        var startMonth = YearMonth.from(editedEntity.periodFrom)
-        val endMonth = YearMonth.from(editedEntity.periodTo)
-
-        val months : MutableList<YearMonth> = mutableListOf()
-
-        while (startMonth <= endMonth) {
-            months.add(startMonth)
-            startMonth = startMonth.plus(Period.ofMonths(1))
-        }
-
         months.map {
             DynamicPropertyData(it.toString(), it.format(DateTimeFormatter.ofPattern("MMM yy", userSession.locale)), null,
                 Int::class.javaObjectType, TextField::class.java, "60px", { true }, true)
-        }
-            .let { dynamicProperties ->
+        }.let { dynamicProperties ->
             pivotGridHelper.initDynamicProperties(dynamicProperties)
             pivotGridHelper.setDynamicPropertiesValues { kvDc : KeyValueCollectionContainer ->
                 detailsDc.items.forEach { detail ->
@@ -234,20 +268,18 @@ class ActivityPivotEdit : StandardEditor<Activity>() {
                 it.addView(View.LOCAL)
                     .add("analytic", View.MINIMAL)
             }.build()
-        dataManager.reload(copyFromActivityPlan, view ).let { prevAct ->
+        dataManager.reload(copyFromActivityPlan, view).let { prevAct ->
+            validToField.rangeStart = prevAct.periodTo!!
             editedEntity.periodFrom = prevAct.periodFrom
             editedEntity.periodTo = prevAct.periodTo
-            validToField.rangeStart = prevAct.periodTo!!
 
-            prevAct.details?.map {
-                dataContext.create(ActivityDetail::class.java).apply {
-                    this.activity = editedEntity
-                    this.analytic = it.analytic
-                    this.year = it.year
-                    this.month = it.month
-                    this.value = it.value
-                }
-            }?.forEach { detailsDc.mutableItems.add(it) }
+            detailsDc.items.forEach { detail ->
+                prevAct.details?.find { prevDetail ->
+                    detail.analytic == prevDetail.analytic &&
+                            detail.year == prevDetail.year &&
+                            detail.month == prevDetail.month
+                }?.let { detail.value = it.value }
+            }
 
             initDynamic()
         }
