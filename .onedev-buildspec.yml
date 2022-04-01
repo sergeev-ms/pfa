@@ -1,0 +1,24 @@
+version: 15
+jobs:
+- name: Test 0
+  steps:
+  - !CheckoutStep
+    name: Checkout 1
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Trying to build
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - gradlew clean build
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  cpuRequirement: 250
+  memoryRequirement: 256
+  timeout: 3600
