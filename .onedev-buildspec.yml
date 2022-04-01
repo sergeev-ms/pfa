@@ -40,6 +40,8 @@ jobs:
     path: /root/.m2/repository
   - key: gradle-wrapper
     path: /root/.gradle/wrapper
+  - key: gradle-local-repo
+    path: /root/.gradle/caches/modules-2/files-2.1
   timeout: 3600
   postBuildActions:
   - !SendNotificationAction
