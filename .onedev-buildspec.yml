@@ -23,11 +23,12 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
     name: Trying to build
-    runInContainer: false
+    runInContainer: true
+    image: pk-sp-git1.pk.borets.gc:8124/bellsoft/liberica-openjdk-alpine:11
     interpreter: !DefaultInterpreter
       commands:
       - ./gradlew clean build
-    useTTY: false
+    useTTY: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
