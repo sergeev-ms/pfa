@@ -9,8 +9,9 @@ jobs:
     withSubmodules: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
-    name: Setup proxy for gradle
-    runInContainer: false
+    name: Trying to build
+    runInContainer: true
+    image: pk-sp-git1.pk.borets.gc:8124/bellsoft/liberica-openjdk-alpine:11
     interpreter: !DefaultInterpreter
       commands:
       - cat >> gradle.properties <<EOL
@@ -19,14 +20,7 @@ jobs:
       - systemProp.https.proxyHost=172.17.16.202
       - systemProp.https.proxyPort=3128
       - EOL
-    useTTY: false
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !CommandStep
-    name: Trying to build
-    runInContainer: true
-    image: pk-sp-git1.pk.borets.gc:8124/bellsoft/liberica-openjdk-alpine:11
-    interpreter: !DefaultInterpreter
-      commands:
+      - ''
       - ./gradlew clean build
     useTTY: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
