@@ -9,6 +9,19 @@ jobs:
     withSubmodules: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
+    name: Setup proxy for gradle
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - cat >> gradle.properties <<EOL
+      - systemProp.http.proxyHost=172.17.16.202
+      - systemProp.http.proxyPort=3128
+      - systemProp.https.proxyHost=172.17.16.202
+      - systemProp.https.proxyPort=3128
+      - EOL
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
     name: Trying to build
     runInContainer: false
     interpreter: !DefaultInterpreter
