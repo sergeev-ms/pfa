@@ -46,4 +46,4 @@ jobs:
   postBuildActions:
   - !SendNotificationAction
     condition: always
-    receivers: user(baranov_sv)
+    receivers: user(baranov_sv) and user(sergeev_ms)
