@@ -19,6 +19,7 @@ jobs:
       - systemProp.http.proxyPort=3128
       - systemProp.https.proxyHost=172.17.16.202
       - systemProp.https.proxyPort=3128
+      - org.gradle.daemon=false
       - EOL
       - ''
       - ./gradlew clean deploy -x test
