@@ -1,0 +1,49 @@
+version: 15
+jobs:
+- name: Build and Publish
+  steps:
+  - !CheckoutStep
+    name: Checkout source code
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Build (without tests)
+    runInContainer: true
+    image: pk-sp-git1.pk.borets.gc:8124/bellsoft/liberica-openjdk-alpine:11
+    interpreter: !DefaultInterpreter
+      commands:
+      - cat >> gradle.properties <<EOL
+      - systemProp.http.proxyHost=172.17.16.202
+      - systemProp.http.proxyPort=3128
+      - systemProp.https.proxyHost=172.17.16.202
+      - systemProp.https.proxyPort=3128
+      - EOL
+      - ''
+      - ./gradlew clean deploy -x test
+      - ''
+      - tar -czvf pfa-@commit_hash@.tar.gz ./deploy
+    useTTY: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !PublishArtifactStep
+    name: Publish
+    artifacts: pfa-@commit_hash@.tar.gz
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  cpuRequirement: 250
+  memoryRequirement: 256
+  caches:
+  - key: maven-local-repo
+    path: /root/.m2/repository
+  - key: gradle-wrapper
+    path: /root/.gradle/wrapper
+  - key: gradle-local-repo
+    path: /root/.gradle/caches/modules-2/files-2.1
+  timeout: 3600
+  postBuildActions:
+  - !SendNotificationAction
+    condition: always
+    receivers: user(baranov_sv)
