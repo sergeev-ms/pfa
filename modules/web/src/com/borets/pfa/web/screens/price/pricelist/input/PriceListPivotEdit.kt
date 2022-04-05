@@ -250,17 +250,12 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
 
     private fun fillPrevData(copyFromPriceList: PriceList) {
         val view = ViewBuilder.of(PriceList::class.java)
-            .addAll("rentalRate", "remoteMonitoring", "wellCheck")
             .add("details") {
                 it.addView(View.LOCAL)
                     .add("analytic", View.MINIMAL)
                     .add("revenueType", View.MINIMAL)
             }.build()
         dataManager.reload(copyFromPriceList, view ).let { prevPrice ->
-            editedEntity.rentalRate = prevPrice.rentalRate
-            editedEntity.remoteMonitoring = prevPrice.remoteMonitoring
-            editedEntity.wellCheck = prevPrice.wellCheck
-
             detailsDc.items.forEach { detail ->
                 prevPrice.details?.find { prevDetail ->
                     detail.analytic == prevDetail.analytic && detail.revenueType == prevDetail.revenueType

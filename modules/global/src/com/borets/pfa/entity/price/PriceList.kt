@@ -23,15 +23,6 @@ open class PriceList : StandardEntity() {
     @Column(name = "RECORD_TYPE")
     private var recordType: String? = RecordType.FORECAST.id
 
-    @Column(name = "RENTAL_RATE")
-    var rentalRate: Int? = null
-
-    @Column(name = "REMOTE_MONITORING")
-    var remoteMonitoring: Int? = null
-
-    @Column(name = "WELL_CHECK")
-    var wellCheck: Int? = null
-
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "priceList")
