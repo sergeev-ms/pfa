@@ -1,8 +1,6 @@
 package com.borets.pfa.web.screens.price.pricelist.input
 
 import com.borets.pfa.config.PriceInputConfig
-import com.borets.pfa.entity.activity.Activity
-import com.borets.pfa.web.beans.CountrySettingsBean
 import com.borets.pfa.entity.activity.JobType
 import com.borets.pfa.entity.activity.WellEquip
 import com.borets.pfa.entity.activity.WellTag
@@ -10,6 +8,7 @@ import com.borets.pfa.entity.analytic.AnalyticSet
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.price.PriceListDetail
 import com.borets.pfa.entity.price.RevenueType
+import com.borets.pfa.web.beans.CountrySettingsBean
 import com.borets.pfa.web.beans.PivotGridInitializer
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.*
@@ -79,6 +78,7 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
     @Subscribe
     private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
         initPivotGrid()
+        createDetails()
         initDynamic()
         setWindowCaption()
         editedEntity.getYearMonth()?.let {
@@ -166,6 +166,30 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
             }
     }
 
+    private fun createDetails() {
+        countrySettings.getActivityAnalyticSets(editedEntity.account!!.country!!)
+            .forEach { analyticSet ->
+                countrySettings.getRevenueTypes(editedEntity.account!!.country!!)
+                    .filter { revenueType ->
+                        val settingsAnalyticSet = revenueType.settings?.flatMap { it.analyticSets!! }
+                        return@filter settingsAnalyticSet?.contains(analyticSet) ?: true }
+                    .forEach { revenueType ->
+                        val existingDetail = detailsDc.items
+                            .find { it.analytic == analyticSet && it.revenueType == revenueType }
+                        if (existingDetail == null) {
+                            dataContext.create(PriceListDetail::class.java).apply {
+                                priceList = editedEntity
+                                analytic = analyticSet
+                                this.revenueType = revenueType
+                                value = BigDecimal.ZERO
+                            }.run {
+                                detailsDc.mutableItems.add(this)
+                            }
+                        }
+                    }
+            }
+    }
+
     private fun isDynamicPropertyEnabled(revenueType: RevenueType, analyticSetId: String) : Boolean {
         return revenueType.settings
             ?.flatMap { it.analyticSets!! }
@@ -236,14 +260,12 @@ class PriceListPivotEdit : StandardEditor<PriceList>() {
             editedEntity.rentalRate = prevPrice.rentalRate
             editedEntity.remoteMonitoring = prevPrice.remoteMonitoring
             editedEntity.wellCheck = prevPrice.wellCheck
-            prevPrice.details?.map {
-                dataContext.create(PriceListDetail::class.java).apply {
-                    this.priceList = editedEntity
-                    this.analytic = it.analytic
-                    this.revenueType = it.revenueType
-                    this.value = it.value
-                }
-            }?.forEach { detailsDc.mutableItems.add(it) }
+
+            detailsDc.items.forEach { detail ->
+                prevPrice.details?.find { prevDetail ->
+                    detail.analytic == prevDetail.analytic && detail.revenueType == prevDetail.revenueType
+                }?.let { detail.value = it.value }
+            }
 
             initDynamic()
         }
