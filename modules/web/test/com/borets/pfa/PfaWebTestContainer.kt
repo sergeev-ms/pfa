@@ -15,7 +15,8 @@ open class PfaWebTestContainer : TestContainer() {
             "com.borets.addon.mu",
             "com.borets.attachments",
             "com.borets.addon.country",
-            "com.haulmont.reports"
+            "com.haulmont.reports",
+            "com.haulmont.charts"
         )
         appPropertiesFiles = Arrays.asList( // List the files defined in your web.xml
                 // in appPropertiesConfig context parameter of the web module
