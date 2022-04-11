@@ -95,7 +95,7 @@ public class SalesTeamReport implements CustomReport {
             outputStream.flush();
             return outputStream.toByteArray();
         } catch (Exception ex) {
-            throw new ReportFormattingException("Exception thrown on init", ex);
+            throw new ReportFormattingException("Exception thrown while generating report", ex);
         }
     }
 
