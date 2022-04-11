@@ -9,7 +9,7 @@ jobs:
     withSubmodules: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
-    name: Build (without tests)
+    name: Build
     runInContainer: true
     image: pk-sp-git1.pk.borets.gc:8124/bellsoft/liberica-openjdk-alpine:11
     interpreter: !DefaultInterpreter
@@ -22,15 +22,20 @@ jobs:
       - org.gradle.daemon=false
       - EOL
       - ''
-      - ./gradlew clean deploy -x test
+      - ./gradlew clean deploy
       - ''
       - tar -czvf pfa-@commit_hash@.tar.gz ./deploy
     useTTY: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !PublishJUnitReportStep
+    name: Publish test report
+    reportName: pfa tests
+    filePatterns: modules/core/build/test-results/test//TEST-*.xml
+    condition: ALWAYS
   - !PublishArtifactStep
-    name: Publish
+    name: Publish (temp. disabled)
     artifacts: pfa-@commit_hash@.tar.gz
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+    condition: NEVER
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
