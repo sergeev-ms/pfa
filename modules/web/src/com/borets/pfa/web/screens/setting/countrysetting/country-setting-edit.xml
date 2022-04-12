@@ -51,8 +51,8 @@
                     </actions>
                     <columns>
                         <column id="analyticSet.jobType"/>
-                        <column id="analyticSet.wellTag"/>
                         <column id="analyticSet.wellEquip"/>
+                        <column id="analyticSet.wellTag"/>
                         <column id="priceList" editable="true"/>
                         <column id="activityPlan" editable="true"/>
                         <column id="order" editable="true"/>

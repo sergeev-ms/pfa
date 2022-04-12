@@ -8,7 +8,7 @@ import com.haulmont.cuba.core.entity.StandardEntity
 import javax.persistence.Column
 import javax.persistence.Table
 
-@NamePattern(value = "%s-%s-%s|jobType,wellTag,wellEquip")
+@NamePattern(value = "%s-%s-%s|jobType,wellEquip,wellTag")
 @Table(name = "PFA_ANALYTIC_SET")
 @javax.persistence.Entity(name = "pfa_AnalyticSet")
 open class AnalyticSet : StandardEntity() {
