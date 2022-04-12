@@ -5,10 +5,13 @@ import com.borets.pfa.entity.activity.WellEquip
 import com.borets.pfa.entity.activity.WellTag
 import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity
+import com.haulmont.cuba.core.global.AppBeans
+import com.haulmont.cuba.core.global.Messages
+import java.util.*
 import javax.persistence.Column
 import javax.persistence.Table
 
-@NamePattern(value = "%s-%s-%s|jobType,wellEquip,wellTag")
+@NamePattern(value = "#getNameOfInstance|jobType,wellEquip,wellTag")
 @Table(name = "PFA_ANALYTIC_SET")
 @javax.persistence.Entity(name = "pfa_AnalyticSet")
 open class AnalyticSet : StandardEntity() {
@@ -40,4 +43,10 @@ open class AnalyticSet : StandardEntity() {
         this.jobType = jobType?.id
     }
 
+    fun getNameOfInstance() : String {
+        val messages = AppBeans.get(Messages.NAME, Messages::class.java)
+        return listOfNotNull(getJobType(), getWellEquip(), getWellTag())
+            .map { messages.getMessage(it, Locale.getDefault()) }
+            .joinToString("-")
+    }
 }
