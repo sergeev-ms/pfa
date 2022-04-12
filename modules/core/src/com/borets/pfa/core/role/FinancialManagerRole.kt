@@ -93,7 +93,7 @@ class FinancialManagerRole : AnnotatedRoleDefinition() {
             operations = [EntityOp.CREATE, EntityOp.UPDATE, EntityOp.READ, EntityOp.DELETE]
         ),
         EntityAccess(entityClass = DimCustomers::class, operations = [EntityOp.READ]),
-        EntityAccess(entityClass = AnalyticSet::class, operations = [EntityOp.READ]),
+        EntityAccess(entityClass = AnalyticSet::class, operations = [EntityOp.READ, EntityOp.CREATE, EntityOp.UPDATE]),
         EntityAccess(entityClass = RevenueType::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = EquipmentType::class, operations = [EntityOp.READ]),
         EntityAccess(entityClass = EquipmentCategory::class, operations = [EntityOp.READ]),
