@@ -1,4 +1,4 @@
-CREATE FUNCTION report_Revenue (
+CREATE OR ALTER FUNCTION report_Revenue (
     @threshold_date Datetime2 = NULL,
     @query_mode varchar(50) = 'FC',
     @start_period DATETIME2 = '0001-01-01',
