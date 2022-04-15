@@ -171,8 +171,10 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
         for (Date date : dates) {
             long style = ++columnGroupIndex % 2 == 0 ? evenHeaderStyle : oddHeaderStyle;
             boolean firstColumnForDate = true;
-            CellReference mergeBegin = null;
-            CellReference mergeEnd = null;
+            CellReference subheaderMergeBegin = null;
+            CellReference subheaderMergeEnd = null;
+            CellReference decorativeMergeBegin = null;
+            CellReference decorativeMergeEnd = null;
             for (Integer order :
                     ordersToRevenues.keySet()) {
                 String revenueTypeName = ordersToRevenues.get(order);
@@ -188,23 +190,25 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
                 headerCell.setS(style);
                 headerRow.getC().add(headerCell);
 
+                Cell decorativeCell = createFormattedCell(decorativeRow.getC().get(decorativeRow.getC().size() - 1));
+                decorativeRow.getC().add(decorativeCell);
+
                 if (firstColumnForDate) {
                     headerCell.setV(new SimpleDateFormat("yyyy - MM", Locale.US).format(date));
-                    mergeBegin = new CellReference(sheetWrapper.getName(), Math.toIntExact(headerRow.getR()), headerRow.getC().size());
+                    subheaderMergeBegin = new CellReference(sheetWrapper.getName(), Math.toIntExact(headerRow.getR()), headerRow.getC().size());
+                    decorativeMergeBegin = new CellReference(sheetWrapper.getName(), Math.toIntExact(decorativeRow.getR()), decorativeRow.getC().size());
                 }
                 firstColumnForDate = false;
-                mergeEnd = new CellReference(sheetWrapper.getName(), Math.toIntExact(headerRow.getR()), headerRow.getC().size());
+                subheaderMergeEnd = new CellReference(sheetWrapper.getName(), Math.toIntExact(headerRow.getR()), headerRow.getC().size());
+                decorativeMergeEnd = new CellReference(sheetWrapper.getName(), Math.toIntExact(decorativeRow.getR()), decorativeRow.getC().size());
             }
             CTMergeCell mc = new CTMergeCell();
-            mc.setRef(mergeBegin.toReference() + ":" + mergeEnd.toReference());
+            mc.setRef(subheaderMergeBegin.toReference() + ":" + subheaderMergeEnd.toReference());
             mergeCells.getMergeCell().add(mc);
 
             mc = new CTMergeCell();
-            CellReference decorativeBegin = new CellReference(sheetWrapper.getName(), Math.toIntExact(decorativeRow.getR()), CELL_MERGE_DECORATIVE_BEGIN_IDX);
-            CellReference decorativeEnd = new CellReference(sheetWrapper.getName(), Math.toIntExact(decorativeRow.getR()), subheaderRow.getC().size());
-            mc.setRef(decorativeBegin.toReference() + ":" + decorativeEnd.toReference());
+            mc.setRef(decorativeMergeBegin.toReference() + ":" + decorativeMergeEnd.toReference());
             mergeCells.getMergeCell().add(mc);
-
         }
 
         for (Account account :
