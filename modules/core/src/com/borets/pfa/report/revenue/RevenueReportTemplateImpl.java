@@ -2,9 +2,9 @@ package com.borets.pfa.report.revenue;
 
 import com.borets.pfa.entity.activity.RecordType;
 import com.borets.pfa.report.custom.Account;
-import com.borets.pfa.report.custom.ReportCell;
 import com.borets.pfa.report.custom.CustomExcelReportTemplate;
 import com.borets.pfa.report.custom.HorizontalPosition;
+import com.borets.pfa.report.custom.ReportCell;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.UserSessionSource;
@@ -16,11 +16,9 @@ import org.apache.commons.collections4.OrderedBidiMap;
 import org.apache.commons.collections4.bidimap.TreeBidiMap;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.parts.SpreadsheetML.WorksheetPart;
-import org.docx4j.vml.CTFormulas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xlsx4j.jaxb.Context;
-import org.xlsx4j.sml.CTAutoFilter;
 import org.xlsx4j.sml.CTCellFormula;
 import org.xlsx4j.sml.CTMergeCell;
 import org.xlsx4j.sml.CTMergeCells;
@@ -223,10 +221,7 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
         // tune autofilter
         CellReference cr1 = new CellReference(sheetWrapper.getName(), Math.toIntExact(subheaderRow.getR()), 1);
         CellReference cr2 = new CellReference(sheetWrapper.getName(), Math.toIntExact(subheaderRow.getR()), subheaderRow.getC().size());
-        CTAutoFilter ctAutoFilter = new CTAutoFilter();
-        ctAutoFilter.setRef(cr1.toReference() + ":" + cr2.toReference());
-        ctAutoFilter.setParent(contents.getAutoFilter().getParent());
-        contents.setAutoFilter(ctAutoFilter);
+        contents.getAutoFilter().setRef(cr1.toReference() + ":" + cr2.toReference());
 
         for (Account account :
                 orderedAccounts) {

@@ -45,7 +45,7 @@ public class RevenueReportIntegrationTest {
         reportingApi = Objects.requireNonNull(AppBeans.get(ReportingApi.class));
     }
 
-    //@org.junit.jupiter.api.Disabled
+    @org.junit.jupiter.api.Disabled
     @Test
     void createReport() throws IOException {
         Report report = loadCustomReport(RevenueReport.class);
