@@ -763,6 +763,7 @@ create table PFA_DIRECT_SALE_DETAIL (
     REVENUE_TYPE_ID uniqueidentifier,
     LENGTH decimal(19,6),
     PRICE decimal(19, 2),
+    DATE_ datetime2,
     --
     primary key nonclustered (ID)
 )^
@@ -780,7 +781,6 @@ create table PFA_DIRECT_SALE (
     --
     ACCOUNT_ID uniqueidentifier,
     TITLE nvarchar(255),
-    DATE_ datetime2,
     RECORD_TYPE nvarchar(50),
     STATUS nvarchar(50),
     PROBABILITY decimal(19, 2),

@@ -9,7 +9,6 @@ import com.haulmont.cuba.core.entity.StandardEntity
 import com.haulmont.cuba.core.entity.annotation.OnDelete
 import com.haulmont.cuba.core.global.DeletePolicy
 import java.math.BigDecimal
-import java.time.LocalDate
 import javax.persistence.*
 
 @NamePattern(value = "%s|title")
@@ -22,9 +21,6 @@ open class DirectSale : StandardEntity() {
 
     @Column(name = "TITLE")
     var title: String? = null
-
-    @Column(name = "DATE_")
-    var date: LocalDate? = null
 
     @Column(name = "RECORD_TYPE")
     private var recordType: String? = RecordType.FORECAST.id

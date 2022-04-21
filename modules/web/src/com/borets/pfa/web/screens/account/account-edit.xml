@@ -262,7 +262,6 @@
                         <column id="createTs"/>
                         <column id="recordType"/>
                         <column id="status"/>
-                        <column id="date" caption="msg://directSalesTable.date"/>
                         <column id="probability"/>
                         <column id="bShare"/>
                     </columns>

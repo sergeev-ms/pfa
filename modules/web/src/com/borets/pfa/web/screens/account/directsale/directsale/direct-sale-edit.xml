@@ -37,13 +37,11 @@
                 </pickerField>
                 <textField id="titleField" property="title" required="true"/>
                 <lookupField id="recordTypeField" property="recordType" required="true"/>
-                <lookupField id="statusField" property="status" required="true"/>
             </column>
             <column width="450px">
-                <datePicker id="datePicker" property="date" resolution="MONTH" stylename="custom-height"
-                            caption="msg://datePicker.caption"/>
                 <textField id="probabilityField" property="probability" required="true"/>
                 <textField id="bShareField" property="bShare" required="true"/>
+                <lookupField id="statusField" property="status" required="true"/>
             </column>
         </form>
         <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.account.directsale/DirectSale.details"
@@ -58,6 +56,7 @@
                     <column id="revenueType"/>
                     <column id="price" width="200px"/>
                     <column id="length" width="200px"/>
+                    <column id="date" width="220px"/>
                 </columns>
                 <buttonsPanel>
                     <button action="detailsTable.create"/>

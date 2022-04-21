@@ -45,7 +45,6 @@ import com.vaadin.shared.ui.dnd.EffectAllowed
 import com.vaadin.shared.ui.grid.DropMode
 import com.vaadin.ui.components.grid.GridDragSource
 import com.vaadin.ui.components.grid.GridDropTarget
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -636,12 +635,6 @@ class AccountEdit : StandardEditor<Account>() {
                     moveToRight(ImmutableSet.copyOf(dragged))
             }
         }
-    }
-
-    @Install(to = "directSalesTable.date", subject = "formatter", type = Any::class, required = true,
-        target = Target.COMPONENT)
-    private fun directSalesTableDateFormatter(localDate: LocalDate?): String {
-        return localDate?.format(DateTimeFormatter.ofPattern("MMM yyyy", userSession.locale)) ?: ""
     }
 
     private fun DirectSale.copyFrom(item: DirectSale) {

@@ -5,6 +5,7 @@ import com.borets.pfa.entity.price.RevenueType
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.cuba.core.entity.StandardEntity
 import java.math.BigDecimal
+import java.time.LocalDate
 import javax.persistence.*
 
 @Table(name = "PFA_DIRECT_SALE_DETAIL")
@@ -31,6 +32,9 @@ open class DirectSaleDetail : StandardEntity() {
 
     @Column(name = "PRICE")
     var price: BigDecimal? = null
+
+    @Column(name = "DATE_")
+    var date: LocalDate? = null
 
     companion object {
         private const val serialVersionUID = 3874006177258997456L

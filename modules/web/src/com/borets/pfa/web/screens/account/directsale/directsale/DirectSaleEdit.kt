@@ -122,6 +122,15 @@ class DirectSaleEdit : StandardEditor<DirectSale>() {
         }
     }
 
+    @Install(to = "detailsTable.date", subject = "columnGenerator")
+    private fun detailsTableDateColumnGenerator(directSaleDetail: DirectSaleDetail): Component {
+        return uiComponents.create(DatePicker::class.java).apply {
+            resolution = DatePicker.Resolution.MONTH
+            styleName = "custom-height"
+            valueSource = ContainerValueSource(detailsTable.getInstanceContainer(directSaleDetail), "date")
+        }
+    }
+
     private fun setCaptions() {
         val measurementUnit: MeasurementUnit? = measurementService.getMeasurementUnit(MuType.LENGTH)
         val lengthColumn = detailsTable.getColumn("length")
