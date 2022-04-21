@@ -123,7 +123,8 @@
     <layout expand="tabSheet" spacing="false">
         <label id="screenHeader" stylename="h2 bold colored" align="MIDDLE_CENTER"/>
         <tabSheet id="tabSheet">
-            <tab id="generalTab" caption="msg://generalTab.caption" spacing="true" margin="true,false,false,false" expand="accountDataGb">
+            <tab id="generalTab" caption="msg://generalTab.caption" spacing="true" margin="true,false,false,false"
+                 expand="accountDataGb">
                 <groupBox id="accountDataGb" caption="msg://accountDataGb.caption" spacing="true">
                     <form id="form" dataContainer="accountDc" width="100%" childrenCaptionWidth="80px">
                         <column width="130px">
@@ -131,13 +132,15 @@
                             <textField property="name" colspan="2" width="100%"/>
                             <dataGrid id="customersGrid" caption="msg://accountDataCustomerGrid.caption"
                                       dataContainer="customersDc" width="100%"
-                                      headerVisible="true" headerRowHeight="1px" contextMenuEnabled="false" settingsEnabled="false"
+                                      headerVisible="true" headerRowHeight="1px" contextMenuEnabled="false"
+                                      settingsEnabled="false"
                                       textSelectionEnabled="true" columnsCollapsingAllowed="false"
                                       emptyStateMessage="msg://accountDataCustomerGrid.empty"
                                       stylename="no-stripes no-vertical-lines no-horizontal-lines"
                                       colspan="2" minHeight="87px" height="87px">
                                 <actions>
-                                    <action id="remove" type="remove" icon="REMOVE_ACTION" caption="msg://accountDataDeleteCustomerButton.caption"/>
+                                    <action id="remove" type="remove" icon="REMOVE_ACTION"
+                                            caption="msg://accountDataDeleteCustomerButton.caption"/>
                                 </actions>
                                 <columns>
                                     <column property="name" expandRatio="1" caption="" sortable="false"/>
@@ -145,12 +148,12 @@
                             </dataGrid>
                             <!-- aligning buttons to right end -->
                             <hbox colspan="2" width="100%">
-                                <label box.expandRatio="1" />
-                                <linkButton id="addCustomerBtn" caption="msg://accountDataAddCustomerButton.caption" icon="PLUS_CIRCLE" />
-                                <linkButton id="deleteCustomerBtn" action="customersGrid.remove" />
+                                <label box.expandRatio="1"/>
+                                <linkButton id="addCustomerBtn" caption="msg://accountDataAddCustomerButton.caption"
+                                            icon="PLUS_CIRCLE"/>
+                                <linkButton id="deleteCustomerBtn" action="customersGrid.remove"/>
                             </hbox>
                         </column>
-
                         <column flex="1">
                             <pickerField id="parentField" property="parent" width="100%">
                                 <actions>
@@ -183,7 +186,8 @@
             </tab>
             <tab id="marketTab" caption="msg://marketTab.caption" spacing="true" margin="true,false,false,false"
                  expand="marketDataGb">
-                <groupBox id="marketDataGb" caption="msg://marketDataGb.caption" spacing="true" expand="marketDataFragment">
+                <groupBox id="marketDataGb" caption="msg://marketDataGb.caption" spacing="true"
+                          expand="marketDataFragment">
                     <fragment id="marketDataFragment" screen="pfa_MarketDataFragment"/>
                 </groupBox>
                 <hbox spacing="true" align="MIDDLE_RIGHT">
@@ -254,6 +258,7 @@
                  spacing="true" margin="true,false,false,false">
                 <treeTable id="directSalesTable" dataContainer="directSalesDc" width="100%" hierarchyProperty="parent">
                     <columns>
+                        <column id="title" required="true"/>
                         <column id="createTs"/>
                         <column id="recordType"/>
                         <column id="status"/>
@@ -262,7 +267,8 @@
                         <column id="bShare"/>
                     </columns>
                     <actions>
-                        <action id="view" type="edit" trackSelection="true" caption="msg://directSalesTable.view.caption"/>
+                        <action id="view" type="edit" trackSelection="true"
+                                caption="msg://directSalesTable.view.caption"/>
                         <action id="create" type="create" icon="CREATE_ACTION"
                                 caption="msg://directSalesTable.create.caption"/>
                         <action id="addForecast" caption="msg://detailsTable.addForecast.caption"

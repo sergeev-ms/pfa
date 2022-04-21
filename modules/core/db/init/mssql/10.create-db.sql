@@ -778,6 +778,7 @@ create table PFA_DIRECT_SALE (
     DELETED_BY nvarchar(50),
     --
     ACCOUNT_ID uniqueidentifier,
+    TITLE nvarchar(255),
     DATE_ datetime2,
     RECORD_TYPE nvarchar(50),
     STATUS nvarchar(50),

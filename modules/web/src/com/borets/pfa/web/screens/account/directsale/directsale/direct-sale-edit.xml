@@ -25,6 +25,7 @@
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
+                <textField id="titleField" property="title" required="true"/>
                 <lookupField id="recordTypeField" property="recordType" required="true"/>
                 <lookupField id="statusField" property="status" required="true"/>
             </column>
@@ -35,7 +36,8 @@
                 <textField id="bShareField" property="bShare" required="true"/>
             </column>
         </form>
-        <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.account.directsale/DirectSale.details" expand="detailsTable">
+        <groupBox id="detailsBox" caption="msg://com.borets.pfa.entity.account.directsale/DirectSale.details"
+                  expand="detailsTable">
             <table id="detailsTable" dataContainer="detailsDc" width="100%">
                 <actions>
                     <action id="create" type="create"/>
