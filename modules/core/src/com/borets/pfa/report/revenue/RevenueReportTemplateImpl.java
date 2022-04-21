@@ -16,11 +16,15 @@ import org.apache.commons.collections4.OrderedBidiMap;
 import org.apache.commons.collections4.bidimap.TreeBidiMap;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.parts.SpreadsheetML.WorksheetPart;
+import org.docx4j.vml.CTFormulas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xlsx4j.jaxb.Context;
+import org.xlsx4j.sml.CTAutoFilter;
+import org.xlsx4j.sml.CTCellFormula;
 import org.xlsx4j.sml.CTMergeCell;
 import org.xlsx4j.sml.CTMergeCells;
+import org.xlsx4j.sml.CTSheetCalcPr;
 import org.xlsx4j.sml.Cell;
 import org.xlsx4j.sml.Row;
 import org.xlsx4j.sml.STCellType;
@@ -71,14 +75,13 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
 
     private static final int ROW_DECORATIVE_IDX = 1;
     private static final int ROW_HEADER_IDX = 2;
-    private static final int ROW_SUBHEADER_IDX = 3;
-    private static final int ROW_SUMMARY_IDX = 4;
+    private static final int ROW_SUBHEADER_IDX = 4;
+    private static final int ROW_SUMMARY_IDX = 3;
 
-    private static final int COL_HEADER_ODD_STYLE_IDX = 0;
+    private static final int COL_HEADER_ODD_STYLE_IDX = 1;
     private static final int COL_HEADER_EVEN_STYLE_IDX = 3;
     private static final int COL_REFERENCE_HEADER_IDX = 3;
     private static final int COL_REFERENCE_SUBHEADER_IDX = 0;
-    private static final int CELL_MERGE_DECORATIVE_BEGIN_IDX = 4;
 
     private static final int SIGN_REPORT_ROW = 0;
     private static final int SIGN_REPORT_COL = 3;
@@ -148,6 +151,9 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
         Worksheet contents = worksheetPart.getContents();
         SheetData sheetData = contents.getSheetData();
         List<Row> rows = sheetData.getRow();
+        CTSheetCalcPr ctSheetCalcPr = new CTSheetCalcPr();
+        ctSheetCalcPr.setFullCalcOnLoad(true);
+        contents.setSheetCalcPr(ctSheetCalcPr);
 
         Row referenceRow = rows.get(rows.size() - 1);
 
@@ -164,10 +170,13 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
         long oddHeaderStyle = headerRow.getC().get(COL_HEADER_ODD_STYLE_IDX).getS();
         long evenHeaderStyle = headerRow.getC().get(COL_HEADER_EVEN_STYLE_IDX).getS();
 
+        long lastRevenueTypeInDateHasRightBorderStyle = rows.get(0).getC().get(1).getS();
+
         Row subheaderRow = rows.get(ROW_SUBHEADER_IDX);
         CTMergeCells mergeCells = contents.getMergeCells();
         int columnGroupIndex = 0;
         BidiMap<Integer, String> ordersToRevenues = revenueTypeOrders.inverseBidiMap();
+
         for (Date date : dates) {
             long style = ++columnGroupIndex % 2 == 0 ? evenHeaderStyle : oddHeaderStyle;
             boolean firstColumnForDate = true;
@@ -211,6 +220,14 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
             mergeCells.getMergeCell().add(mc);
         }
 
+        // tune autofilter
+        CellReference cr1 = new CellReference(sheetWrapper.getName(), Math.toIntExact(subheaderRow.getR()), 1);
+        CellReference cr2 = new CellReference(sheetWrapper.getName(), Math.toIntExact(subheaderRow.getR()), subheaderRow.getC().size());
+        CTAutoFilter ctAutoFilter = new CTAutoFilter();
+        ctAutoFilter.setRef(cr1.toReference() + ":" + cr2.toReference());
+        ctAutoFilter.setParent(contents.getAutoFilter().getParent());
+        contents.setAutoFilter(ctAutoFilter);
+
         for (Account account :
                 orderedAccounts) {
             Row row = createFormattedRow(referenceRow);
@@ -221,6 +238,7 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
 
             // iterating over all data columns
             for (Date date : dates) {
+                Cell lastCell = null;
                 for (Integer order :
                         ordersToRevenues.keySet()) {
                     String revenueTypeName = ordersToRevenues.get(order);
@@ -248,6 +266,11 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
                             break;
                         }
                     }
+                    lastCell = dataCell;
+                }
+                // Set black vertical line border for each period
+                if (lastCell != null) {
+                    lastCell.setS(lastRevenueTypeInDateHasRightBorderStyle);
                 }
             }
         }
@@ -268,8 +291,13 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
                     }
                 }
                 Cell totalCell = createFormattedCell(summaryRow.getC().get(summaryRow.getC().size() - 1));
-                totalCell.setV(total.toString());
+                //totalCell.setV(total.toString());
                 summaryRow.getC().add(totalCell);
+                CellReference x1 = new CellReference(sheetWrapper.getName(), Math.toIntExact(subheaderRow.getR() + 1), summaryRow.getC().size());
+                CellReference x2 = new CellReference(sheetWrapper.getName(), Math.toIntExact(rows.size() - 1), summaryRow.getC().size());
+                CTCellFormula formula = new CTCellFormula();
+                formula.setValue("SUBTOTAL(109," + x1.toReference() + ":" + x2.toReference() + ")");
+                totalCell.setF(formula);
             }
         }
 
