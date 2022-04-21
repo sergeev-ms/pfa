@@ -329,6 +329,7 @@ create table PFA_EQUIPMENT_TYPE (
     CATEGORY_ID uniqueidentifier,
     MANDATORY tinyint,
     REVENUE_TYPE_ID uniqueidentifier,
+    PART_TYPE integer,
     ORDER_ integer,
     --
     primary key nonclustered (ID)
