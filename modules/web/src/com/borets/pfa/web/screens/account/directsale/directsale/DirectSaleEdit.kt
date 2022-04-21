@@ -6,13 +6,17 @@ import com.borets.addon.mu.entity.MuType
 import com.borets.addon.mu.service.MeasurementService
 import com.borets.addon.pn.entity.Part
 import com.borets.addon.pn.entity.PartCable
+import com.borets.pfa.entity.account.appdata.EquipmentType
 import com.borets.pfa.entity.account.directsale.DirectSale
 import com.borets.pfa.entity.account.directsale.DirectSaleDetail
+import com.borets.pfa.entity.price.RevenueType
 import com.haulmont.chile.core.datatypes.DatatypeRegistry
 import com.haulmont.cuba.core.global.DataManager
+import com.haulmont.cuba.core.global.View
 import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.components.data.value.ContainerValueSource
+import com.haulmont.cuba.gui.model.CollectionContainer
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer
 import com.haulmont.cuba.gui.model.DataContext
 import com.haulmont.cuba.gui.screen.*
@@ -37,9 +41,12 @@ class DirectSaleEdit : StandardEditor<DirectSale>() {
 
     @Inject
     private lateinit var detailsDc: CollectionPropertyContainer<DirectSaleDetail>
+    @Inject
+    private lateinit var revenueTypeOptionsDc: CollectionContainer<RevenueType>
 
     @Inject
     private lateinit var detailsTable: Table<DirectSaleDetail>
+
 
     @Subscribe
     private fun onAfterShow(@Suppress("UNUSED_PARAMETER") event: AfterShowEvent) {
@@ -71,6 +78,25 @@ class DirectSaleEdit : StandardEditor<DirectSale>() {
                     .list() as List<Any>
             }
             valueSource = ContainerValueSource(detailsTable.getInstanceContainer(directSaleDetail), "part")
+            addValueChangeListener { part ->
+                part.value?.partType?.let { partType ->
+                    dataManager.load(EquipmentType::class.java)
+                        .query("where e.partType = ?1", partType)
+                        .view { it.add("revenueType", View.MINIMAL) }
+                        .optional()
+                        .ifPresent { directSaleDetail.revenueType = it.revenueType }
+                }
+            }
+        }
+    }
+
+    @Install(to = "detailsTable.revenueType", subject = "columnGenerator")
+    private fun detailsTableRevenueTypeColumnGenerator(directSaleDetail: DirectSaleDetail): Component {
+        @Suppress("UnstableApiUsage")
+        return uiComponents.create(LookupField.of(RevenueType::class.java)).apply {
+            setWidthFull()
+            setOptionsList(revenueTypeOptionsDc.items)
+            valueSource = ContainerValueSource(detailsTable.getInstanceContainer(directSaleDetail), "revenueType")
         }
     }
 
@@ -101,4 +127,6 @@ class DirectSaleEdit : StandardEditor<DirectSale>() {
         val lengthColumn = detailsTable.getColumn("length")
         lengthColumn.caption = lengthColumn.caption?.format(measurementUnit?.name)
     }
+
+
 }

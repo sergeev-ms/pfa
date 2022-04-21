@@ -1,6 +1,7 @@
 package com.borets.pfa.entity.account.directsale
 
 import com.borets.addon.pn.entity.Part
+import com.borets.pfa.entity.price.RevenueType
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.cuba.core.entity.StandardEntity
 import java.math.BigDecimal
@@ -19,6 +20,10 @@ open class DirectSaleDetail : StandardEntity() {
 
 //    @Column(name = "QTY")
 //    var qty: Int? = null
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REVENUE_TYPE_ID")
+    var revenueType: RevenueType? = null
 
     @MetaProperty(datatype = "Length")
     @Column(name = "LENGTH")

@@ -760,6 +760,7 @@ create table PFA_DIRECT_SALE_DETAIL (
     --
     DIRECT_SALE_ID uniqueidentifier not null,
     PART_ID uniqueidentifier,
+    REVENUE_TYPE_ID uniqueidentifier,
     LENGTH decimal(19,6),
     PRICE decimal(19, 2),
     --
