@@ -4,13 +4,14 @@ import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.activity.RecordType
 import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.chile.core.annotations.MetaProperty
+import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity
 import com.haulmont.cuba.core.entity.annotation.OnDelete
 import com.haulmont.cuba.core.global.DeletePolicy
 import java.math.BigDecimal
-import java.time.LocalDate
 import javax.persistence.*
 
+@NamePattern(value = "%s|title")
 @Table(name = "PFA_DIRECT_SALE")
 @Entity(name = "pfa_DirectSale")
 open class DirectSale : StandardEntity() {
@@ -18,8 +19,8 @@ open class DirectSale : StandardEntity() {
     @JoinColumn(name = "ACCOUNT_ID")
     var account: Account? = null
 
-    @Column(name = "DATE_")
-    var date: LocalDate? = null
+    @Column(name = "TITLE")
+    var title: String? = null
 
     @Column(name = "RECORD_TYPE")
     private var recordType: String? = RecordType.FORECAST.id

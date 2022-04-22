@@ -329,6 +329,7 @@ create table PFA_EQUIPMENT_TYPE (
     CATEGORY_ID uniqueidentifier,
     MANDATORY tinyint,
     REVENUE_TYPE_ID uniqueidentifier,
+    PART_TYPE integer,
     ORDER_ integer,
     --
     primary key nonclustered (ID)
@@ -759,8 +760,10 @@ create table PFA_DIRECT_SALE_DETAIL (
     --
     DIRECT_SALE_ID uniqueidentifier not null,
     PART_ID uniqueidentifier,
+    REVENUE_TYPE_ID uniqueidentifier,
     LENGTH decimal(19,6),
     PRICE decimal(19, 2),
+    DATE_ datetime2,
     --
     primary key nonclustered (ID)
 )^
@@ -777,7 +780,7 @@ create table PFA_DIRECT_SALE (
     DELETED_BY nvarchar(50),
     --
     ACCOUNT_ID uniqueidentifier,
-    DATE_ datetime2,
+    TITLE nvarchar(255),
     RECORD_TYPE nvarchar(50),
     STATUS nvarchar(50),
     PROBABILITY decimal(19, 2),
