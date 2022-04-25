@@ -1,4 +1,4 @@
-package com.borets.pfa.report.revenue;
+package com.borets.pfa.report.salesteam;
 
 import com.borets.pfa.entity.activity.RecordType;
 import com.borets.pfa.report.custom.AbstractReportIntegrationTest;
@@ -6,7 +6,6 @@ import com.haulmont.reports.entity.Report;
 import com.haulmont.yarg.reporting.ReportOutputDocument;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.OS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,13 +18,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RevenueReportIntegrationTest extends AbstractReportIntegrationTest {
+class SalesTeamReportIntegrationTest extends AbstractReportIntegrationTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RevenueReportIntegrationTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SalesTeamReportIntegrationTest.class);
     @Test
     @Disabled
     void createReport() throws IOException {
-        Report report = loadCustomReport(RevenueReport.class);
+        Report report = loadCustomReport(SalesTeamReport.class);
 
         Map<String, Object> params = new HashMap<>();
         params.put("mode", RecordType.FORECAST);
@@ -35,12 +34,11 @@ public class RevenueReportIntegrationTest extends AbstractReportIntegrationTest 
 
         ReportOutputDocument reportOutputDocument = reportingApi.createReport(report, params);
 
-        File tempFile = File.createTempFile("pfa-revenue-report-test", ".xlsx");
+        File tempFile = File.createTempFile("pfa-salesteam-report-test", ".xlsx");
         try (OutputStream os = new FileOutputStream(tempFile)) {
             os.write(reportOutputDocument.getContent());
         }
         LOGGER.info(" libreoffice {}", tempFile.getAbsolutePath());
         open(tempFile);
     }
-
 }

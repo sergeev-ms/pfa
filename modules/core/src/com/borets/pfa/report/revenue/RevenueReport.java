@@ -15,7 +15,7 @@ public class RevenueReport implements CustomReport {
     @Override
     public byte[] createReport(Report report, BandData rootBand, Map<String, Object> params) {
 
-        RevenueReportTemplateImpl reportHolder = new CustomExcelReportTemplate.Builder()
+        CustomExcelReportTemplate reportHolder = new CustomExcelReportTemplate.Builder()
                 .withTitle("Revenue Report")
                 .withReport(report)
                 .withData(rootBand, "ReportData")

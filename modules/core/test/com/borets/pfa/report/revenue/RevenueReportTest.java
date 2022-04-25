@@ -3,13 +3,16 @@ package com.borets.pfa.report.revenue;
 import com.borets.pfa.entity.activity.RecordType;
 import com.borets.pfa.report.custom.CustomExcelReportTemplate;
 import com.haulmont.yarg.structure.BandData;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.OS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,6 +26,7 @@ public class RevenueReportTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(RevenueReportTest.class);
 
     @Test
+    @Disabled
     void testCreateReport() throws IOException {
 
         Map<String, Object> params = new HashMap<>();
@@ -45,8 +49,8 @@ public class RevenueReportTest {
         data.put("ACCOUNT_ORDER", Integer.valueOf(20));
         bandData.setData(data);
 
-        RevenueReportTemplateImpl template = new CustomExcelReportTemplate.Builder()
-                .withTemplate(this.getClass().getResourceAsStream("/com/borets/pfa/report/revenue/test_revenue_template.xlsx"))
+        CustomExcelReportTemplate template = new CustomExcelReportTemplate.Builder()
+                .withTemplate(this.getClass().getResourceAsStream("/com/borets/pfa/report/revenue/Borets_Template_RevenueReport_12.xlsx"))
                 .withData(bandData)
                 .withTitle("test")
                 .withParameters(params)
@@ -55,8 +59,16 @@ public class RevenueReportTest {
         byte[] report = template.getReport();
 
         assertNotNull(report);
-//        File tempFile = File.createTempFile("pfa-report-test", ".xlsx");
-//        new FileOutputStream(tempFile).write(report);
-//        LOGGER.info(" libreoffice {}", tempFile.getAbsolutePath());
+        File tempFile = File.createTempFile("pfa-report-test", ".xlsx");
+
+        try (OutputStream os = new FileOutputStream(tempFile)) {
+            os.write(report);
+        }
+        LOGGER.info(" libreoffice {}", tempFile.getAbsolutePath());
+        if (OS.LINUX.isCurrentOs()) {
+            Runtime.getRuntime().exec(" libreoffice " + tempFile.getAbsolutePath());
+        } else if (OS.WINDOWS.isCurrentOs()) {
+            Runtime.getRuntime().exec("start excel \"" + tempFile.getAbsolutePath() + "\"");
+        }
     }
 }
