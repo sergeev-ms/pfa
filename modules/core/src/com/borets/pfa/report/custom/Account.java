@@ -37,6 +37,32 @@ public class Account {
 
     public static Account from(BandData dataElement) {
         Map<String, Object> data = dataElement.getData();
+
+        int accountOrder = 0, active = 0, isDeleted = 0;
+        Object rawAccountOrder = data.get(ACCOUNT_ORDER_FIELD);
+        if (rawAccountOrder instanceof Integer) {
+            accountOrder = (Integer) rawAccountOrder;
+        }
+        if (rawAccountOrder instanceof Short) {
+            accountOrder = ((Short) rawAccountOrder).intValue();
+        }
+
+        Object rawActive = data.get(ACCOUNT_ACTIVE_FIELD);
+        if (rawActive instanceof Short) {
+            active = ((Short) rawActive).intValue();
+        }
+        if (rawActive instanceof Integer) {
+            active = (Integer) rawActive;
+        }
+
+        Object rawIsDeleted = data.get(ACCOUNT_IS_DELETED_FIELD);
+        if (rawIsDeleted instanceof Short) {
+            isDeleted = ((Short) rawIsDeleted).intValue();
+        }
+        if (rawIsDeleted instanceof Integer) {
+            isDeleted = (Integer) rawIsDeleted;
+        }
+
         return new Account(
                 (String) data.getOrDefault(ACCOUNT_TYPE_FIELD, "---"),
                 (String) data.get(ACCOUNT_PARENT_FIELD),
@@ -44,9 +70,9 @@ public class Account {
                 (String) data.getOrDefault(ACCOUNT_MANAGER_FIELD, ""),
                 (String) data.getOrDefault(ACCOUNT_BUSINESS_MODEL_FIELD, "n/a"),
                 (String) data.getOrDefault(ACCOUNT_APPLICATION_TYPE_FIELD, "n/a"),
-                (Integer) data.getOrDefault(ACCOUNT_ORDER_FIELD, 0),
-                (int) data.getOrDefault(ACCOUNT_ACTIVE_FIELD, 0) > 0,
-                (int) data.getOrDefault(ACCOUNT_IS_DELETED_FIELD, 0) > 0
+                accountOrder,
+                active > 0,
+                isDeleted > 0
         );
     }
 

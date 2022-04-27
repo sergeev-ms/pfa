@@ -1,4 +1,4 @@
-package com.borets.pfa.report.revenue;
+package com.borets.pfa.report.pricelist;
 
 import com.borets.pfa.entity.activity.RecordType;
 import com.borets.pfa.report.custom.Account;
@@ -11,7 +11,8 @@ import com.haulmont.yarg.structure.BandData;
 import org.apache.commons.collections4.BidiMap;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.parts.SpreadsheetML.WorksheetPart;
-import org.xlsx4j.sml.CTCellFormula;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xlsx4j.sml.CTMergeCell;
 import org.xlsx4j.sml.CTMergeCells;
 import org.xlsx4j.sml.CTSheetCalcPr;
@@ -27,11 +28,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
-/**
- * Revenue Report data and logic container.
- */
-public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
+public class PriceListReportTemplateImpl extends CustomExcelReportTemplate {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PriceListReportTemplateImpl.class);
+
+    private static final String FULL_TITLE_NAME_FIELD = "TITLE";
+    private static final String FULL_TITLE_ORDER_FIELD = "ORDER";
+    private static final String PERIOD_FIELD = "P";
+
+    private static final String CELL_VALUE = "VALUE_";
 
     /**
      * Amount of columns related to Account Description (Account Type, Parent, Customer, Manager and so on).
@@ -39,27 +46,14 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
     private static final int ACCOUNT_INFO_COLUMNS = 6;
 
     /**
-     * Result DataSet SQL column names.
-     */
-    private static final String REVENUE_TYPE_NAME_FIELD = "REVENUE_TYPE_NAME";
-    private static final String REVENUE_TYPE_ORDER_FIELD = "REVENUE_TYPE_ORDER";
-    private static final String REVENUE_PERIOD_FIELD = "P";
-    private static final String REVENUE_VALUE = "REVENUE";
-
-    /**
      * Indices of columns and rows (these values must be correlated with concrete Excel template).
      */
     private static final int ROW_DECORATIVE_IDX = 1;
-    private static final int ROW_HEADER_IDX = 2;
-    private static final int ROW_SUBHEADER_IDX = 8;
-    private static final int ROW_FIRST_DATA_IDX = 9;
-    private static final int ROW_SUMMARY_PER_MONTH_IDX = 3;
-    private static final int ROW_SUMMARY_IDX = 4;
-    private static final int ROW_SUMMARY_STRATEGIC_IDX = 5;
-    private static final int ROW_SUMMARY_KEY_IDX = 6;
-    private static final int ROW_SUMMARY_OTHER_IDX = 7;
-    private static final int COL_HEADER_ODD_STYLE_IDX = 1;
-    private static final int COL_HEADER_EVEN_STYLE_IDX = 3;
+    private static final int ROW_DATE_IDX = 2;
+    private static final int ROW_REVENUE_TITLE_IDX = 3;
+    private static final int ROW_ANALYTIC_TITLE_IDX = 4;
+    private static final int ROW_FIRST_DATA_IDX = 5;
+
     private static final int COL_REFERENCE_HEADER_IDX = 3;
     private static final int COL_REFERENCE_SUBHEADER_IDX = 0;
 
@@ -68,14 +62,15 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
      */
     private static final int SIGN_REPORT_ROW = 0;
     private static final int SIGN_REPORT_COL = 3;
+
     @Override
     protected void preProcessDataElement(String bandName, BandData dataElement) {
         Map<String, Object> data = dataElement.getData();
-        String revenueType = (String) data.get(REVENUE_TYPE_NAME_FIELD);
+        String fullTitle = (String) data.get(FULL_TITLE_NAME_FIELD);
         // map revenue types to their orders
-        columnNamesToOrders.computeIfAbsent(revenueType, String -> (Integer) data.get(REVENUE_TYPE_ORDER_FIELD));
+        columnNamesToOrders.computeIfAbsent(fullTitle, String -> (Integer) data.get(FULL_TITLE_ORDER_FIELD));
         // get distinct dates of report
-        Date d = (Date) data.get(REVENUE_PERIOD_FIELD);
+        Date d = (Date) data.get(PERIOD_FIELD);
         if (!dates.contains(d)) {
             dates.add(d);
         }
@@ -107,9 +102,18 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
                 }
             }
             // Create new cell
-            ReportCell reportCell = ReportCell.newDigit(dataElement.getData().getOrDefault(REVENUE_VALUE, 0), x, y);
+            ReportCell reportCell = ReportCell.newDigit(dataElement.getData().getOrDefault(CELL_VALUE, 0), x, y);
             reportCells.add(reportCell);
         }
+    }
+
+    private static HorizontalPosition getHorizontalPosition(BandData dataElement) {
+        Map<String, Object> data = dataElement.getData();
+        return new HorizontalPosition(
+                (String) data.get(FULL_TITLE_NAME_FIELD),
+                (Integer) data.get(FULL_TITLE_ORDER_FIELD),
+                (Date) data.get(PERIOD_FIELD)
+        );
     }
 
     @Override
@@ -128,19 +132,15 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
 
         // Headers
         Row decorativeRow = rows.get(ROW_DECORATIVE_IDX); // Upper red line without values
-        Row dateTitleRow = rows.get(ROW_HEADER_IDX); // Period titles: "Apr 2022", "May 2022", ...
-        Row monthSummaryRow = rows.get(ROW_SUMMARY_PER_MONTH_IDX); // Summaries for period
+        Row dateTitleRow = rows.get(ROW_DATE_IDX); // Period titles: "Apr 2022", "May 2022", ...
+        Row revenueTitlesRow = rows.get(ROW_REVENUE_TITLE_IDX);
+        Row analyticTitlesRow = rows.get(ROW_ANALYTIC_TITLE_IDX);
 
-        // Styles for period interleaving (i.g. lighter/darker)
-        long oddDateTitleStyle = dateTitleRow.getC().get(COL_HEADER_ODD_STYLE_IDX).getS();
-        long evenDateTitleStyle = dateTitleRow.getC().get(COL_HEADER_EVEN_STYLE_IDX).getS();
-
-        long revenueValueStyle = rows.get(0).getC().get(0).getS();
-        // last column of each period contains vertical black border at right side
-        long lastRevenueTypeInDateHasRightBorderStyle = rows.get(0).getC().get(1).getS();
-        long accountSectionLastColumnStyle = rows.get(0).getC().get(2).getS();
-
-        Row revenueTypesRow = rows.get(ROW_SUBHEADER_IDX);
+        // TODO add enumeration
+        long valueCellStyle = getStyle("valueCell");
+        long valueLastCellForDateStyle = getStyle("valueLastCellForDate");
+        long accountCellStyle = getStyle("accountCell");
+        long accountLastCellStyle = getStyle("accountLastCell");
 
         // Initializing structure for merging cells
         CTMergeCells mergeCells = contents.getMergeCells();
@@ -149,55 +149,71 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
             contents.setMergeCells(mergeCells);
         }
         int columnGroupIndex = 0;
-        BidiMap<Integer, String> ordersToRevenues = columnNamesToOrders.inverseBidiMap();
+        BidiMap<Integer, String> ordersToTitles = columnNamesToOrders.inverseBidiMap();
 
         for (Date date : dates) {
-            long style = ++columnGroupIndex % 2 == 0 ? evenDateTitleStyle : oddDateTitleStyle;
             boolean firstColumnForDate = true;
             CellReference decorativeMergeBegin = null;
             CellReference decorativeMergeEnd = null;
             CellReference dateMergeBegin = null;
             CellReference dateMergeEnd = null;
-            CellReference monthSummaryMergeBegin = null;
-            CellReference monthSummaryMergeEnd = null;
-            Cell monthSumCell = null; // Only first cell of period contains formula for sum
+
+            CellReference revenueBegin = null;
+            CellReference revenueEnd = null;
+            String prevRevenueTitle = null;
 
             for (Integer order :
-                    ordersToRevenues.keySet()) {
-
-                // Filling revenue types header
-                String revenueTypeName = ordersToRevenues.get(order);
-
-                Cell revenueTypeCell = createFormattedCell(revenueTypesRow.getC().get(COL_REFERENCE_SUBHEADER_IDX));
-                revenueTypeCell.setT(STCellType.STR);
-                revenueTypeCell.setV(revenueTypeName);
-                revenueTypesRow.getC().add(revenueTypeCell);
-
-                // Filling period header
-                Cell headerCell = createFormattedCell(dateTitleRow.getC().get(COL_REFERENCE_HEADER_IDX));
-                headerCell.setParent(dateTitleRow);
-                headerCell.setT(STCellType.STR);
-                headerCell.setS(style);
-                dateTitleRow.getC().add(headerCell);
+                    ordersToTitles.keySet()) {
 
                 // Creating red decorative cell
                 createFormattedCellAppendingToRow(decorativeRow);
 
-                // Creating cell with summary for period
-                Cell msc = createFormattedCellAppendingToRow(monthSummaryRow);
+                // Filling date (period) header
+                Cell dateCell = createFormattedCell(dateTitleRow.getC().get(COL_REFERENCE_HEADER_IDX));
+                dateCell.setParent(dateTitleRow);
+                dateCell.setT(STCellType.STR);
+                dateTitleRow.getC().add(dateCell);
+
+                String fullTitle = ordersToTitles.get(order);
+                String[] titles = fullTitle.split("##");
+
+                // Filling revenue title header
+                String revenueTitle = titles[0];
+                Cell revenueTitleCell = createFormattedCell(revenueTitlesRow.getC().get(COL_REFERENCE_SUBHEADER_IDX));
+                revenueTitlesRow.getC().add(revenueTitleCell);
+
+                if (Objects.equals(revenueTitle, prevRevenueTitle)) {
+                    revenueEnd = createCellRef(sheetName, revenueTitlesRow);
+                } else {
+                    revenueTitleCell.setT(STCellType.STR);
+                    revenueTitleCell.setV(revenueTitle);
+                    if (revenueEnd != null && revenueBegin != null
+                            && !Objects.equals(revenueBegin.toReference(), revenueEnd.toReference())) {
+                        CTMergeCell mc = new CTMergeCell();
+                        mc.setRef(getStrRef(revenueBegin, revenueEnd));
+                        mergeCells.getMergeCell().add(mc);
+                        revenueEnd = null;
+                    }
+                    revenueBegin = createCellRef(sheetName, revenueTitlesRow);
+                }
+                prevRevenueTitle = revenueTitle;
+
+                // Filling analytic title header
+                String analyticTitle = titles[1];
+                Cell analyticTitleCell = createFormattedCell(analyticTitlesRow.getC().get(COL_REFERENCE_SUBHEADER_IDX));
+                analyticTitleCell.setT(STCellType.STR);
+                analyticTitleCell.setV(analyticTitle);
+                analyticTitlesRow.getC().add(analyticTitleCell);
 
                 if (firstColumnForDate) {
-                    headerCell.setV(new SimpleDateFormat("yyyy - MM", Locale.US).format(date));
+                    dateCell.setV(new SimpleDateFormat("yyyy - MM", Locale.US).format(date));
                     dateMergeBegin = createCellRef(sheetName, dateTitleRow);
                     decorativeMergeBegin = createCellRef(sheetName, decorativeRow);
-                    monthSummaryMergeBegin = createCellRef(sheetName, monthSummaryRow);
-                    monthSumCell = msc;
                 }
 
                 firstColumnForDate = false;
                 dateMergeEnd = createCellRef(sheetName, dateTitleRow);
                 decorativeMergeEnd = createCellRef(sheetName, decorativeRow);
-                monthSummaryMergeEnd = createCellRef(sheetName, monthSummaryRow);
             }
             CTMergeCell mc = new CTMergeCell();
             mc.setRef(getStrRef(dateMergeBegin, dateMergeEnd));
@@ -206,24 +222,9 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
             mc = new CTMergeCell();
             mc.setRef(getStrRef(decorativeMergeBegin, decorativeMergeEnd));
             mergeCells.getMergeCell().add(mc);
-
-            mc = new CTMergeCell();
-            mc.setRef(getStrRef(monthSummaryMergeBegin, monthSummaryMergeEnd));
-            mergeCells.getMergeCell().add(mc);
-
-            if (monthSumCell != null) {
-                int summaryRowIdx = Math.toIntExact(rows.get(ROW_SUMMARY_IDX).getR());
-                CTCellFormula formula = new CTCellFormula();
-                String monthRange = getStrRef(
-                        new CellReference(sheetName, summaryRowIdx, monthSummaryMergeBegin.getColumn()),
-                        new CellReference(sheetName, summaryRowIdx, monthSummaryMergeEnd.getColumn()));
-                formula.setValue("SUM(" + monthRange + ")");
-                monthSumCell.setF(formula);
-            }
         }
 
-        // Setup AutoFilters (NB: these settings does not work well in LibreOffice)
-        setupAutoFilter(sheetName, contents, revenueTypesRow);
+        setupAutoFilter(sheetName, contents, analyticTitlesRow);
 
         for (Account account :
                 getOrderedAccounts()) {
@@ -232,14 +233,14 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
             rows.add(row);
 
             // Filling account information for each row
-            addAccountInfo(row, ACCOUNT_INFO_COLUMNS, account, accountSectionLastColumnStyle, null);
+            addAccountInfo(row, ACCOUNT_INFO_COLUMNS, account, accountLastCellStyle, accountCellStyle);
 
             // iterating over all data columns
             for (Date date : dates) {
                 Cell lastCell = null;
                 for (Integer order :
-                        ordersToRevenues.keySet()) {
-                    String revenueTypeName = ordersToRevenues.get(order);
+                        ordersToTitles.keySet()) {
+                    String revenueTypeName = ordersToTitles.get(order);
                     // account, revenueTypeName, date
 
                     List<Cell> c = row.getC();
@@ -249,7 +250,7 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
                     dataCell.setT(STCellType.N);
                     c.add(dataCell);
                     dataCell.setV("0");
-                    dataCell.setS(revenueValueStyle);
+                    dataCell.setS(valueCellStyle);
 
                     List<HorizontalPosition> existingCoords = coordinates.get(account);
                     for (HorizontalPosition horcoord : existingCoords) {
@@ -269,52 +270,11 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
                 }
                 // Set black vertical line border for each period
                 if (lastCell != null) {
-                    lastCell.setS(lastRevenueTypeInDateHasRightBorderStyle);
+                    lastCell.setS(valueLastCellForDateStyle);
                 }
-            }
-        }
-
-        // Summary
-        Row summaryRow = rows.get(ROW_SUMMARY_IDX);
-        Row summaryStrategicRow = rows.get(ROW_SUMMARY_STRATEGIC_IDX);
-        Row summaryKeyRow = rows.get(ROW_SUMMARY_KEY_IDX);
-        Row summaryOtherRow = rows.get(ROW_SUMMARY_OTHER_IDX);
-
-        for (Date date : dates) {
-            for (Integer order :
-                    ordersToRevenues.keySet()) {
-                String revenueTypeName = ordersToRevenues.get(order);
-
-/*
- * The block below was intended for calculating total for each column.
- * After adopting of Excel native formulas was made there is no necessity to calculate total here.
- */
-//                BigDecimal total = BigDecimal.ZERO;
-//                for (Account account : orderedAccounts) {
-//                    ReportCell cell = findCell(account, revenueTypeName, date);
-//                    if (cell != null) {
-//                        total = total.add(cell.getValueNumber());
-//                    }
-//                }
-
-                //String criteriaColumn = "A" + rows.get(ROW_FIRST_DATA_IDX).getR() + ":A" + (rows.size() -1 );
-                createSummaryFormulaCell(sheetName, rows, ROW_FIRST_DATA_IDX, summaryRow, "SUBTOTAL(109,");
-                createSummaryFormulaCell(sheetName, rows, ROW_FIRST_DATA_IDX, summaryStrategicRow, null /*"SUMIF(" + criteriaColumn +", \"Strategic\","*/);
-                createSummaryFormulaCell(sheetName, rows, ROW_FIRST_DATA_IDX, summaryKeyRow, null /*"SUMIF(" + criteriaColumn +", \"Key\","*/);
-                createSummaryFormulaCell(sheetName, rows, ROW_FIRST_DATA_IDX, summaryOtherRow, null /*"SUMIF(" + criteriaColumn +", \"Other\","*/);
             }
         }
 
         signReport(rows.get(SIGN_REPORT_ROW).getC().get(SIGN_REPORT_COL), (Date) params.get(PARAMS_THRESHOLD_DATE), (RecordType) params.get(PARAMS_MODE));
     }
-
-    private static HorizontalPosition getHorizontalPosition(BandData dataElement) {
-        Map<String, Object> data = dataElement.getData();
-        return new HorizontalPosition(
-                (String) data.get(REVENUE_TYPE_NAME_FIELD),
-                (Integer) data.get(REVENUE_TYPE_ORDER_FIELD),
-                (Date) data.get(REVENUE_PERIOD_FIELD)
-        );
-    }
-
 }

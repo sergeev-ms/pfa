@@ -15,11 +15,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.io3.Save;
 import org.docx4j.openpackaging.packages.SpreadsheetMLPackage;
+import org.docx4j.openpackaging.parts.PartName;
+import org.docx4j.openpackaging.parts.SpreadsheetML.SharedStrings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xlsx4j.jaxb.Context;
 import org.xlsx4j.sml.CTAutoFilter;
 import org.xlsx4j.sml.CTCellFormula;
+import org.xlsx4j.sml.CTRst;
 import org.xlsx4j.sml.Cell;
 import org.xlsx4j.sml.Row;
 import org.xlsx4j.sml.STCellType;
@@ -37,6 +40,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -44,10 +48,18 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public abstract class CustomExcelReportTemplate {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomExcelReportTemplate.class);
+
+    /**
+     * Input data params.
+     */
+    protected static final String PARAMS_THRESHOLD_DATE = "dateThreshold";
+    protected static final String PARAMS_MODE = "mode";
+    protected static final String DATA_BAND_NAME = "ReportData";
 
     protected final Map<Account, List<HorizontalPosition>> coordinates = new HashMap<>();
     protected final List<ReportCell> reportCells = new ArrayList<>();
@@ -55,7 +67,10 @@ public abstract class CustomExcelReportTemplate {
     protected final List<Date> dates = new ArrayList<>();
     protected String title;
 
-    protected Document document;
+    protected Document document; // TODO make private and accessor
+
+    private boolean styleDetection;
+    private Map<String, Long> styles = new HashMap<>();
 
     protected Map<String, Object> params;
 
@@ -65,15 +80,48 @@ public abstract class CustomExcelReportTemplate {
 
     protected void afterPreProcess() {
         // Could be overridden in subclasses
+        // Dates must be sorted in natural order
+        Collections.sort(dates);
     }
 
     protected abstract void processDataElement(String bandName, BandData dataElement);
 
-    protected abstract void generateReport() throws Docx4JException;
+    protected abstract void generateReport(List<Document.SheetWrapper> sheetWrappers) throws Docx4JException;
 
     public byte[] getReport() {
         try {
-            generateReport();
+            if (styleDetection) {
+                try {
+                    SharedStrings sharedStrings = (SharedStrings) document.getPackage().getParts()
+                            .get(new PartName("/xl/sharedStrings.xml"));
+                    List<CTRst> sharedStringsValues = sharedStrings.getJaxbElement().getSi();
+
+                    for (Document.SheetWrapper sheetWrapper :
+                            document.getWorksheets()) {
+                        for (Row row :
+                                sheetWrapper.getWorksheet().getContents().getSheetData().getRow()) {
+                            for (Cell cell :
+                                    row.getC()) {
+                                if (StringUtils.isNotBlank(cell.getV()) && cell.getT() == STCellType.S) {
+                                    int valuePos = Integer.parseInt(cell.getV());
+                                    if (sharedStringsValues.size() > valuePos) {
+                                        String value = sharedStringsValues.get(valuePos).getT().getValue();
+                                        if (value.startsWith("{") && value.endsWith("}")) {
+                                            String key = value.replace("{", "").replace("}", "");
+                                            long style = cell.getS();
+                                            styles.put(key, style);
+                                            cell.setV(null);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    LOGGER.error("STYLE DETECTION IS ON: error thrown while autodetecting styles from cells", ex);
+                }
+            }
+            generateReport(document.getWorksheets());
         } catch (Docx4JException ex) {
             throw new ReportFormattingException("Exception thrown while generating report " + title, ex);
         }
@@ -98,6 +146,10 @@ public abstract class CustomExcelReportTemplate {
 
     protected void setParams(Map<String, Object> params) {
         this.params = params;
+    }
+
+    protected void setStyleDetection(boolean styleDetection) {
+        this.styleDetection = styleDetection;
     }
 
     protected static void setupAutoFilter(String sheetName, Worksheet contents, Row filterRow) {
@@ -239,6 +291,14 @@ public abstract class CustomExcelReportTemplate {
         }
     }
 
+    protected List<Account> getOrderedAccounts() {
+        return coordinates.keySet().stream()
+                .sorted(Comparator.comparing(Account::getOrder)
+                        .thenComparing(Account::getParent, Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(Account::getCustomer))
+                .collect(Collectors.toList());
+    }
+
     protected @Nullable ReportCell findCell(Account account, String columnName, Date date) {
         return reportCells.stream().filter(dc -> account.equals(dc.getCoordinates().getRow())
                 && columnName.equals(dc.getCoordinates().getColumn().getName())
@@ -246,7 +306,9 @@ public abstract class CustomExcelReportTemplate {
         ).findFirst().orElse(null);
     }
 
-
+    protected @Nullable Long getStyle(String styleName) {
+        return styles.get(styleName);
+    }
 
     public static class Builder {
 
@@ -262,6 +324,7 @@ public abstract class CustomExcelReportTemplate {
 
         private Map<String, List<BandData>> data = new HashMap<>();
 
+        private boolean styleDetection;
         public Builder withTitle(String title) {
             this.title = title;
             return this;
@@ -304,6 +367,10 @@ public abstract class CustomExcelReportTemplate {
             return this;
         }
 
+        public Builder withStyleDetection() {
+            this.styleDetection = true;
+            return this;
+        }
         public <T extends CustomExcelReportTemplate> T build(Class<T> clazz) {
             if (report != null && templateInputStream != null) {
                 throw new ReportFormattingException("Ambiguous input parameters: use report or templateInputStream but not both");
@@ -323,6 +390,8 @@ public abstract class CustomExcelReportTemplate {
                 }
                 instance.setParams(Objects.requireNonNull(parameters));
                 instance.setTitle(Objects.requireNonNull(title));
+                instance.setStyleDetection(styleDetection);
+
                 iterateOverBandData(instance::preProcessDataElement);
                 instance.afterPreProcess();
                 iterateOverBandData(instance::processDataElement);

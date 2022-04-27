@@ -22,13 +22,10 @@ import org.xlsx4j.sml.Worksheet;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class SalesTeamReportTemplateImpl extends CustomExcelReportTemplate {
 
@@ -36,13 +33,6 @@ public class SalesTeamReportTemplateImpl extends CustomExcelReportTemplate {
      * Amount of columns related to Account Description (Account Type, Parent, Customer, Manager and so on).
      */
     private static final int ACCOUNT_INFO_COLUMNS = 7;
-
-    /**
-     * Input data params.
-     */
-    private static final String PARAMS_THRESHOLD_DATE = "dateThreshold";
-    private static final String PARAMS_MODE = "mode";
-    private static final String DATA_BAND_NAME = "ReportData";
 
     private static final String ANALYTIC_TITLE_NAME_FIELD = "ANALYTIC_TITLE";
     private static final String ANALYTIC_TITLE_ORDER_FIELD = "ANALYTIC_ORDER";
@@ -80,11 +70,6 @@ public class SalesTeamReportTemplateImpl extends CustomExcelReportTemplate {
         }
     }
 
-    @Override
-    protected void afterPreProcess() {
-        // Dates must be sorted in natural order
-        Collections.sort(dates);
-    }
     @Override
     protected void processDataElement(String bandName, BandData dataElement) {
         if (DATA_BAND_NAME.equals(bandName)) {
@@ -126,8 +111,8 @@ public class SalesTeamReportTemplateImpl extends CustomExcelReportTemplate {
     }
 
     @Override
-    protected void generateReport() throws Docx4JException {
-        Document.SheetWrapper sheetWrapper = document.getWorksheets().get(0);
+    protected void generateReport(List<Document.SheetWrapper> sheetWrappers) throws Docx4JException {
+        Document.SheetWrapper sheetWrapper = sheetWrappers.get(0);
         String sheetName = sheetWrapper.getName();
         WorksheetPart worksheetPart = sheetWrapper.getWorksheet();
         Worksheet contents = worksheetPart.getContents();
@@ -138,13 +123,6 @@ public class SalesTeamReportTemplateImpl extends CustomExcelReportTemplate {
         contents.setSheetCalcPr(ctSheetCalcPr);
 
         Row referenceRow = rows.get(rows.size() - 1);
-
-        // Sorted accounts
-        List<Account> orderedAccounts = coordinates.keySet().stream()
-                .sorted(Comparator.comparing(Account::getOrder)
-                        .thenComparing(Account::getParent, Comparator.nullsLast(Comparator.naturalOrder()))
-                        .thenComparing(Account::getCustomer))
-                .collect(Collectors.toList());
 
         // Headers
         Row decorativeRow = rows.get(ROW_DECORATIVE_IDX); // Upper red line without values
@@ -214,9 +192,8 @@ public class SalesTeamReportTemplateImpl extends CustomExcelReportTemplate {
         // Setup AutoFilters (NB: these settings does not work well in LibreOffice)
         setupAutoFilter(sheetName, contents, analyticTitlesRow);
 
-
         for (Account account :
-                orderedAccounts) {
+                getOrderedAccounts()) {
             Row row = createFormattedRow(referenceRow);
             row.setR((long) rows.size());
             rows.add(row);
