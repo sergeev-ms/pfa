@@ -1,8 +1,8 @@
 package com.borets.pfa.report.pricelist;
 
 import com.borets.pfa.entity.activity.RecordType;
+import com.borets.pfa.report.custom.Account;
 import com.borets.pfa.report.custom.CustomExcelReportTemplate;
-import com.borets.pfa.report.revenue.RevenueReportTemplateImpl;
 import com.haulmont.yarg.structure.BandData;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -37,36 +38,14 @@ public class PriceListReportTest {
         params.put("dateThreshold", new Date());
 
         BandData rootBandData = new BandData("rootBandData");
-
-        BandData bandData = new BandData("ReportData");
-        Map<String, Object> data = new HashMap<>();
-        data.put("P", new Date(121, Calendar.JULY, 1));
-        data.put("ACCOUNT_NAME", "Avad");
-        data.put("PARENT_ACCOUNT_NAME", "Avad");
-        data.put("ACCOUNT_TYPE", "Key");
-        data.put("BUSINESS_MODEL", "Sale");
-        data.put("APPLICATION_TYPE", "Conventional");
-        data.put("ACCOUNT_ORDER", 20);
-        data.put("VALUE_", BigDecimal.TEN);
-        data.put("ORDER", 110);
-        data.put("TITLE", "Downhole (Sales)##Install-None-Newly drilled");
-        bandData.setData(data);
-        rootBandData.addChild(bandData);
-
-        bandData = new BandData("ReportData");
-        data = new HashMap<>();
-        data.put("P", new Date(121, Calendar.JULY, 1));
-        data.put("ACCOUNT_NAME", "Avad");
-        data.put("PARENT_ACCOUNT_NAME", "Avad");
-        data.put("ACCOUNT_TYPE", "Key");
-        data.put("BUSINESS_MODEL", "Sale");
-        data.put("APPLICATION_TYPE", "Conventional");
-        data.put("ACCOUNT_ORDER", 20);
-        data.put("VALUE_", BigDecimal.ONE);
-        data.put("ORDER", 111);
-        data.put("TITLE", "Downhole (Sales)##Install-CompetitorWell-Run>1");
-        bandData.setData(data);
-        rootBandData.addChild(bandData);
+        rootBandData.addChild(createTestData((Date) params.get("startPeriod"), 110, "Downhole (Sales)##Install-None-Newly drilled"));
+        rootBandData.addChild(createTestData((Date) params.get("startPeriod"), 111, "Downhole (Sales)##Install-CompetitorWell-Run>1"));
+        rootBandData.addChild(createTestData((Date) params.get("startPeriod"), 112, "Downhole (Sales)##Some analytic title"));
+        rootBandData.addChild(createTestData((Date) params.get("startPeriod"), 209, "Another revenue##Another analytic"));
+        rootBandData.addChild(createTestData((Date) params.get("endPeriod"), 110, "Downhole (Sales)##Install-None-Newly drilled"));
+        rootBandData.addChild(createTestData((Date) params.get("endPeriod"), 111, "Downhole (Sales)##Install-CompetitorWell-Run>1"));
+        rootBandData.addChild(createTestData((Date) params.get("endPeriod"), 112, "Downhole (Sales)##Some analytic title"));
+        rootBandData.addChild(createTestData((Date) params.get("endPeriod"), 209, "Another revenue##Another analytic"));
 
         CustomExcelReportTemplate template = new CustomExcelReportTemplate.Builder()
                 .withTemplate(this.getClass().getResourceAsStream("/com/borets/pfa/report/pricelist/Borets_Template_PriceListReport_1.xlsx"))
@@ -90,6 +69,23 @@ public class PriceListReportTest {
         } else if (OS.WINDOWS.isCurrentOs()) {
             Runtime.getRuntime().exec("start excel \"" + tempFile.getAbsolutePath() + "\"");
         }
+    }
+
+    private BandData createTestData(Date date, int order, String title) {
+        BandData bandData = new BandData("ReportData");
+        Map<String, Object> data = new HashMap<>();
+        data.put("P", date);
+        data.put(Account.ACCOUNT_CUSTOMER_FIELD, "Avad");
+        data.put(Account.ACCOUNT_PARENT_FIELD, "Avad");
+        data.put(Account.ACCOUNT_TYPE_FIELD, "Key");
+        data.put(Account.ACCOUNT_BUSINESS_MODEL_FIELD, "Sale");
+        data.put(Account.ACCOUNT_APPLICATION_TYPE_FIELD, "Conventional");
+        data.put(Account.ACCOUNT_ORDER_FIELD, 20);
+        data.put("VALUE_", BigDecimal.valueOf(new Random().nextInt(100000)));
+        data.put("ORDER", order);
+        data.put("TITLE", title);
+        bandData.setData(data);
+        return bandData;
     }
 
 }
