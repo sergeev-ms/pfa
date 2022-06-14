@@ -1,34 +1,10 @@
 buildscript {
     ext.cubaVersion = '7.2.19'
     ext.kotlinVersion = '1.4.32'
-    repositories { 
+    repositories {
         mavenLocal()
         maven {
             url 'http://pk-sp-git1.pk.borets.gc:8081/repository/cuba-group/'
-        }
-
-        maven {
-            url 'https://repo.cuba-platform.com/content/groups/work'
-            credentials {
-                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
-                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
-            }
-        }
-
-        maven {
-            url 'https://maven.pkg.github.com/sergeev-ms/maven'
-            credentials {
-                username(project.findProperty("github.user") ?: System.getenv("GITHUB_USER"))
-                password(project.findProperty("github.key") ?: System.getenv("GITHUB_TOKEN"))
-            }
-        }
-
-        maven {
-            url 'https://maven.pkg.github.com/borets-com/maven'
-            credentials {
-                username(project.findProperty("github.user") ?: System.getenv("GITHUB_USER"))
-                password(project.findProperty("github.key") ?: System.getenv("GITHUB_TOKEN"))
-            }
         }
     }
     dependencies {
