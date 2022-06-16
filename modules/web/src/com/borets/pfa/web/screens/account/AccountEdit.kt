@@ -523,7 +523,9 @@ class AccountEdit : StandardEditor<Account>() {
                         .addView(View.LOCAL)
                         .add("account", View.MINIMAL)
                         .add("details") { detailsVb ->
-                            detailsVb.addView(View.LOCAL).add("part", View.MINIMAL) }
+                            detailsVb.addView(View.LOCAL)
+                                .add("part", View.MINIMAL)
+                                .add("revenueType", View.MINIMAL)}
                         .build()
                 )
                 it.copyFrom(directSaleReloaded)
@@ -649,6 +651,8 @@ class AccountEdit : StandardEditor<Account>() {
                     part = it.part
                     price = it.price
                     length = it.length
+                    revenueType = it.revenueType
+                    date = it.date
                 }
             }
             ?.toMutableList()
