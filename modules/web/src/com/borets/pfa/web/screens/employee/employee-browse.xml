@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
         caption="msg://employeeBrowse.caption" focusComponent="employeesTable"
         messagesPack="com.borets.pfa.web.screens.employee">
     <data readOnly="true">
         <collection id="employeesDc" class="com.borets.pfa.entity.Employee">
             <view extends="_local">
                 <property name="user" view="_minimal"/>
+                <property name="country" view="_minimal"/>
             </view>
             <loader id="employeesDl">
                 <query>
@@ -29,6 +29,7 @@
             <columns>
                 <column id="name"/>
                 <column id="user"/>
+                <column id="country"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">

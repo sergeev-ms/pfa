@@ -6,6 +6,7 @@
         <instance id="employeeDc" class="com.borets.pfa.entity.Employee">
             <view extends="_local">
                 <property name="user" view="_minimal"/>
+                <property name="country" view="_minimal"/>
             </view>
             <loader/>
         </instance>
@@ -14,6 +15,7 @@
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="employeeDc">
             <column width="450px">
+                <pickerField id="countryField" property="country" required="true"/>
                 <textField id="lastNameField" property="lastName" required="true"/>
                 <textField id="firstNameField" property="firstName" required="true"/>
                 <textField id="nameField" property="name" editable="false"/>

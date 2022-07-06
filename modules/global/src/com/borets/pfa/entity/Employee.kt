@@ -1,5 +1,6 @@
 package com.borets.pfa.entity
 
+import com.borets.addon.country.entity.Country
 import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.cuba.core.entity.StandardEntity
 import com.haulmont.cuba.security.entity.User
@@ -9,6 +10,10 @@ import javax.persistence.*
 @Table(name = "PFA_EMPLOYEE")
 @javax.persistence.Entity(name = "pfa_Employee")
 open class Employee : StandardEntity() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COUNTRY_ID")
+    var country: Country? = null
+
     @Column(name = "FIRST_NAME")
     var firstName: String? = null
 

@@ -1,0 +1,2 @@
+alter table PFA_EMPLOYEE add constraint FK_PFA_EMPLOYEE_ON_COUNTRY foreign key (COUNTRY_ID) references COUNTRY_COUNTRY(ID);
+create index IDX_PFA_EMPLOYEE_ON_COUNTRY on PFA_EMPLOYEE (COUNTRY_ID);
