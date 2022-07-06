@@ -4,6 +4,7 @@ import com.borets.addon.country.entity.Country
 import com.borets.pfa.core.secgroup.RootGroup
 import com.borets.pfa.entity.Employee
 import com.borets.pfa.entity.account.Account
+import com.borets.pfa.entity.account.system.SystemStd
 import com.borets.pfa.entity.activity.Activity
 import com.borets.pfa.entity.price.PriceList
 import com.borets.pfa.entity.setting.CountrySetting
@@ -22,7 +23,8 @@ class RegionGroup : AnnotatedAccessGroupDefinition() {
         JpqlConstraint(target = PriceList::class, where = "{E}.account.country.iso = :session\$countryCode"),
         JpqlConstraint(target = Activity::class, where = "{E}.account.country.iso = :session\$countryCode"),
         JpqlConstraint(target = CountrySetting::class, where = "{E}.country.iso = :session\$countryCode"),
-        JpqlConstraint(target = Employee::class, where = "{E}.country.iso = :session\$countryCode")
+        JpqlConstraint(target = Employee::class, where = "{E}.country.iso = :session\$countryCode"),
+        JpqlConstraint(target = SystemStd::class, where = "{E}.country.iso = :session\$countryCode")
     )
     override fun accessConstraints(): ConstraintsContainer {
         return super.accessConstraints()

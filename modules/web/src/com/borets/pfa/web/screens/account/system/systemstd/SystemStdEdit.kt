@@ -1,5 +1,6 @@
 package com.borets.pfa.web.screens.account.system.systemstd
 
+import com.borets.addon.country.entity.Country
 import com.borets.addon.mu.datatypes.Length
 import com.borets.addon.mu.entity.MeasurementUnit
 import com.borets.addon.mu.entity.MuType
@@ -59,6 +60,16 @@ class SystemStdEdit : StandardEditor<SystemStd>() {
             newDetail.system = editedEntity
             var index = detailsDc.getItemIndex(detailsTable.singleSelected!!)
             detailsDc.mutableItems.add(++index, newDetail)
+        }
+    }
+
+    @Subscribe
+    private fun onInitEntity(event: InitEntityEvent<SystemStd>) {
+        val countries = dataManager.load(Country::class.java)
+            .list()
+
+        if (countries.size == 1) {
+            event.entity.country = countries[0]
         }
     }
 

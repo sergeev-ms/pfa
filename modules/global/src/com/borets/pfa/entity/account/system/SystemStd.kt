@@ -1,5 +1,6 @@
 package com.borets.pfa.entity.account.system
 
+import com.borets.addon.country.entity.Country
 import com.borets.pfa.entity.account.system.classification.*
 import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.cuba.core.entity.StandardEntity
@@ -10,6 +11,10 @@ import javax.persistence.*
 @Table(name = "PFA_SYSTEM_STD")
 @Entity(name = "pfa_SystemStd")
 open class SystemStd : StandardEntity() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COUNTRY_ID")
+    var country: Country? = null
+
     @Column(name = "SYSTEM_ID")
     var systemId: String? = null
 

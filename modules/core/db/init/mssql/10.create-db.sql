@@ -241,6 +241,7 @@ create table PFA_SYSTEM_STD (
     DELETED_BY nvarchar(50),
     DTYPE nvarchar(31),
     --
+    COUNTRY_ID uniqueidentifier,
     SYSTEM_ID nvarchar(255),
     CASING_SIZE nvarchar(50),
     CASING_WEIGHT nvarchar(50),

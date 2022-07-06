@@ -28,6 +28,7 @@
                 <property name="motorType"/>
                 <property name="intakeConfig"/>
                 <property name="vaproConfig"/>
+                <property name="country" view="_minimal"/>
             </view>
         </collection>
     </data>
@@ -47,6 +48,7 @@
             </actions>
             <columns>
                 <column id="systemId" collapsed="true"/>
+                <column id="country" collapsed="true"/>
                 <column id="casingSize"/>
                 <column id="casingWeight"/>
                 <column id="pumpModel"/>

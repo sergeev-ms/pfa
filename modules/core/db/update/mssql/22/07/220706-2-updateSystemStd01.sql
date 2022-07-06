@@ -1,0 +1,2 @@
+alter table PFA_SYSTEM_STD add constraint FK_PFA_SYSTEM_STD_ON_COUNTRY foreign key (COUNTRY_ID) references COUNTRY_COUNTRY(ID);
+create index IDX_PFA_SYSTEM_STD_ON_COUNTRY on PFA_SYSTEM_STD (COUNTRY_ID);

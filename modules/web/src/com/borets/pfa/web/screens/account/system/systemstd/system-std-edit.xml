@@ -21,6 +21,7 @@
                     </property>
                     <property name="partNumber" view="_local"/>
                 </property>
+                <property name="country" view="_minimal"/>
             </view>
             <collection id="detailsDc" property="details"/>
             <loader/>
@@ -84,6 +85,7 @@
         <groupBox id="generalGb" caption="msg://generalGb.caption">
             <form id="form" dataContainer="systemStdDc" width="100%">
                 <column width="100%">
+                    <pickerField id="countryField" property="country" required="true"/>
                     <lookupField id="casingSizeField" property="casingSize" required="true"/>
                     <lookupField id="casingWeightField" property="casingWeight" required="true"/>
                     <lookupField id="pumpModelField" property="pumpModel" optionsContainer="pumpTypeOptionsDc" required="true"/>
