@@ -165,7 +165,7 @@ class SalesManagerRole : AnnotatedRoleDefinition() {
         EntityAttributeAccess(entityClass = RevenueType::class, view = ["*"]),
         EntityAttributeAccess(entityClass = EquipmentType::class, view = ["*"]),
         EntityAttributeAccess(entityClass = EquipmentCategory::class, view = ["*"]),
-        EntityAttributeAccess(entityClass = Employee::class, view = ["*"]),
+        EntityAttributeAccess(entityClass = Employee::class, modify = ["*"]),
         EntityAttributeAccess(entityClass = EquipmentUtilization::class, modify = ["*"], view = ["recordType"]),
         EntityAttributeAccess(entityClass = EquipmentUtilizationDetail::class, modify = ["*"]),
         EntityAttributeAccess(entityClass = Supplementary::class, view = ["*"]),
