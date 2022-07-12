@@ -1,0 +1,2 @@
+alter table PFA_PRICE_LIST add constraint FK_PFA_PRICE_LIST_ON_COUNTRY foreign key (COUNTRY_ID) references COUNTRY_COUNTRY(ID);
+create index IDX_PFA_PRICE_LIST_ON_COUNTRY on PFA_PRICE_LIST (COUNTRY_ID);

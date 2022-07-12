@@ -1,5 +1,6 @@
 package com.borets.pfa.entity.price
 
+import com.borets.addon.country.entity.Country
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.activity.RecordType
 import com.haulmont.chile.core.annotations.Composition
@@ -8,10 +9,12 @@ import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity
 import com.haulmont.cuba.core.entity.annotation.OnDelete
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents
 import com.haulmont.cuba.core.global.DeletePolicy
 import java.time.YearMonth
 import javax.persistence.*
 
+@PublishEntityChangedEvents
 @NamePattern(value = "%s - %s|account,yearMonth")
 @Table(name = "PFA_PRICE_LIST")
 @Entity(name = "pfa_PriceList")
@@ -19,6 +22,10 @@ open class PriceList : StandardEntity() {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID")
     var account: Account? = null
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COUNTRY_ID")
+    var country: Country? = null
 
     @Column(name = "RECORD_TYPE")
     private var recordType: String? = RecordType.FORECAST.id

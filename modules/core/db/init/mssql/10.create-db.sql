@@ -72,6 +72,7 @@ create table PFA_PRICE_LIST (
     DELETED_BY nvarchar(50),
     --
     ACCOUNT_ID uniqueidentifier,
+    COUNTRY_ID uniqueidentifier,
     RECORD_TYPE nvarchar(50),
     YEAR_ integer,
     MONTH_ integer,
