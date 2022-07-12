@@ -1,5 +1,6 @@
 package com.borets.pfa.entity.activity
 
+import com.borets.addon.country.entity.Country
 import com.borets.pfa.entity.account.Account
 import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.chile.core.annotations.MetaProperty
@@ -7,15 +8,21 @@ import com.haulmont.chile.core.annotations.NamePattern
 import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity
 import com.haulmont.cuba.core.entity.annotation.OnDelete
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents
 import com.haulmont.cuba.core.global.DeletePolicy
 import java.time.LocalDate
 import java.time.YearMonth
 import javax.persistence.*
 
+@PublishEntityChangedEvents
 @NamePattern(value = "%s - %s|account,year")
 @Table(name = "PFA_ACTIVITY")
 @Entity(name = "pfa_Activity")
 open class Activity : StandardEntity() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COUNTRY_ID")
+    var country: Country? = null
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID")
     var account: Account? = null

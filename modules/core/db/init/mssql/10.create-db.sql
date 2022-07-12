@@ -28,6 +28,7 @@ create table PFA_ACTIVITY (
     DELETE_TS datetime2,
     DELETED_BY nvarchar(50),
     --
+    COUNTRY_ID uniqueidentifier,
     ACCOUNT_ID uniqueidentifier,
     RECORD_TYPE nvarchar(50),
     YEAR_ integer,
