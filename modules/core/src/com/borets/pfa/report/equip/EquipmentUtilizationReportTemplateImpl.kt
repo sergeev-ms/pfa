@@ -216,6 +216,7 @@ class EquipmentUtilizationReportTemplateImpl : CustomExcelReportTemplate<Equipme
         return coordinates.keys.sortedWith(
             compareBy(
                 { it.equipmentSystem.customerOrder },
+                { it.equipmentSystem.referenceCode },
                 { it.equipmentSystem.customer },
                 { it.equipmentSystem.systemNumber },
                 { it.equipmentTypeOrder },
@@ -231,10 +232,10 @@ class EquipmentUtilizationReportTemplateImpl : CustomExcelReportTemplate<Equipme
         addCellToRow(row, equipment.partNumber, getStyle("textValue")!!)
         addCellToRow(row, equipment.productDescription, getStyle("textValue")!!)
         addNumberCellToRow(row, equipment.qty)
-        addCellToRow(row, equipment.uom, getStyle("textValue")!!)
-        addCellToRow(row, equipment.revenueMode, getStyle("textValue")!!)
+        addCellToRow(row, equipment.uom, getStyle("textWithBoldBorderValue")!!)
         addColorPercentCellToRow(row, equipment.value1stRun)
         addColorPercentCellToRow(row, equipment.valueNextRuns)
+        addCellToRow(row, equipment.revenueMode, getStyle("textValue")!!)
     }
 
     private fun addNumberCellToRow(row: Row, value: Any) {

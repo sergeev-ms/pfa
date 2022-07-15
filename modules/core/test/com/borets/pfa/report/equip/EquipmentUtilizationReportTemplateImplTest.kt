@@ -140,7 +140,7 @@ class EquipmentUtilizationReportTemplateImplTest {
         }
 
         val template: CustomExcelReportTemplate<EquipmentItem> = CustomExcelReportTemplate.Builder()
-            .withTemplate(this.javaClass.getResourceAsStream("/com/borets/pfa/report/equip/Equipment_Utilization_Report_Template_1_1.xlsx"))
+            .withTemplate(this.javaClass.getResourceAsStream("/com/borets/pfa/report/equip/Equipment_Utilization_Report_Template_1_2.xlsx"))
             .withData(rootBandData, CustomExcelReportTemplate.DATA_BAND_NAME)
             .withTitle("test")
             .withParameters(params)
