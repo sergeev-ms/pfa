@@ -2,7 +2,7 @@ package com.borets.pfa.report.revenue;
 
 import com.borets.pfa.entity.activity.RecordType;
 import com.borets.pfa.report.custom.Account;
-import com.borets.pfa.report.custom.CustomExcelReportTemplate;
+import com.borets.pfa.report.custom.AccountBasedReportTemplate;
 import com.borets.pfa.report.custom.HorizontalPosition;
 import com.borets.pfa.report.custom.ReportCell;
 import com.haulmont.yarg.formatters.impl.xlsx.CellReference;
@@ -31,7 +31,7 @@ import java.util.Map;
 /**
  * Revenue Report data and logic container.
  */
-public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
+public class RevenueReportTemplateImpl extends AccountBasedReportTemplate {
 
     /**
      * Amount of columns related to Account Description (Account Type, Parent, Customer, Manager and so on).
@@ -43,7 +43,6 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
      */
     private static final String REVENUE_TYPE_NAME_FIELD = "REVENUE_TYPE_NAME";
     private static final String REVENUE_TYPE_ORDER_FIELD = "REVENUE_TYPE_ORDER";
-    private static final String REVENUE_PERIOD_FIELD = "P";
     private static final String REVENUE_VALUE = "REVENUE";
 
     /**
@@ -75,7 +74,7 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
         // map revenue types to their orders
         columnNamesToOrders.computeIfAbsent(revenueType, String -> (Integer) data.get(REVENUE_TYPE_ORDER_FIELD));
         // get distinct dates of report
-        Date d = (Date) data.get(REVENUE_PERIOD_FIELD);
+        Date d = (Date) data.get(PERIOD_FIELD);
         if (!dates.contains(d)) {
             dates.add(d);
         }
@@ -107,7 +106,7 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
                 }
             }
             // Create new cell
-            ReportCell reportCell = ReportCell.newDigit(dataElement.getData().getOrDefault(REVENUE_VALUE, 0), x, y);
+            ReportCell<Account> reportCell = ReportCell.newDigit(dataElement.getData().getOrDefault(REVENUE_VALUE, 0), x, y);
             reportCells.add(reportCell);
         }
     }
@@ -313,7 +312,7 @@ public class RevenueReportTemplateImpl extends CustomExcelReportTemplate {
         return new HorizontalPosition(
                 (String) data.get(REVENUE_TYPE_NAME_FIELD),
                 (Integer) data.get(REVENUE_TYPE_ORDER_FIELD),
-                (Date) data.get(REVENUE_PERIOD_FIELD)
+                (Date) data.get(PERIOD_FIELD)
         );
     }
 

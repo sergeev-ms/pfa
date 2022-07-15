@@ -2,6 +2,7 @@ package com.borets.pfa.report.salesteam;
 
 import com.borets.pfa.entity.activity.RecordType;
 import com.borets.pfa.report.custom.Account;
+import com.borets.pfa.report.custom.AccountBasedReportTemplate;
 import com.borets.pfa.report.custom.CustomExcelReportTemplate;
 import com.borets.pfa.report.custom.HorizontalPosition;
 import com.borets.pfa.report.custom.ReportCell;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class SalesTeamReportTemplateImpl extends CustomExcelReportTemplate {
+public class SalesTeamReportTemplateImpl extends AccountBasedReportTemplate {
 
     /**
      * Amount of columns related to Account Description (Account Type, Parent, Customer, Manager and so on).
@@ -36,8 +37,6 @@ public class SalesTeamReportTemplateImpl extends CustomExcelReportTemplate {
 
     private static final String ANALYTIC_TITLE_NAME_FIELD = "ANALYTIC_TITLE";
     private static final String ANALYTIC_TITLE_ORDER_FIELD = "ANALYTIC_ORDER";
-    private static final String PERIOD_FIELD = "P";
-    private static final String CELL_VALUE = "VALUE_";
 
     /**
      * Indices of columns and rows (these values must be correlated with concrete Excel template).

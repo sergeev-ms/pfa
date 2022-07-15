@@ -5,6 +5,7 @@ buildscript {
         mavenLocal()
         maven {
             url 'http://pk-sp-git1.pk.borets.gc:8081/repository/cuba-group/'
+            allowInsecureProtocol true
         }
     }
     dependencies {

@@ -2,7 +2,7 @@ package com.borets.pfa.report.pricelist;
 
 import com.borets.pfa.entity.activity.RecordType;
 import com.borets.pfa.report.custom.Account;
-import com.borets.pfa.report.custom.CustomExcelReportTemplate;
+import com.borets.pfa.report.custom.AccountBasedReportTemplate;
 import com.borets.pfa.report.custom.HorizontalPosition;
 import com.borets.pfa.report.custom.ReportCell;
 import com.haulmont.yarg.formatters.impl.xlsx.CellReference;
@@ -30,15 +30,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-public class PriceListReportTemplateImpl extends CustomExcelReportTemplate {
+public class PriceListReportTemplateImpl extends AccountBasedReportTemplate {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PriceListReportTemplateImpl.class);
 
     private static final String FULL_TITLE_NAME_FIELD = "TITLE";
     private static final String FULL_TITLE_ORDER_FIELD = "ORDER";
-    private static final String PERIOD_FIELD = "P";
-
-    private static final String CELL_VALUE = "VALUE_";
 
     /**
      * Amount of columns related to Account Description (Account Type, Parent, Customer, Manager and so on).
@@ -79,30 +76,30 @@ public class PriceListReportTemplateImpl extends CustomExcelReportTemplate {
     @Override
     protected void processDataElement(String bandName, BandData dataElement) {
         if (DATA_BAND_NAME.equals(bandName)) {
-            Account x = Account.from(dataElement);
-            coordinates.computeIfAbsent(x, Account -> new ArrayList<>());
-            List<HorizontalPosition> horizontalPositions = coordinates.get(x);
-            HorizontalPosition y = getHorizontalPosition(dataElement);
-            if (!horizontalPositions.contains(y)) {
-                horizontalPositions.add(y);
+            Account account = Account.from(dataElement);
+            coordinates.computeIfAbsent(account, Account -> new ArrayList<>());
+            List<HorizontalPosition> horizontalPositions = coordinates.get(account);
+            HorizontalPosition horizontalPosition = getHorizontalPosition(dataElement);
+            if (!horizontalPositions.contains(horizontalPosition)) {
+                horizontalPositions.add(horizontalPosition);
             }
             // Getting existing objects instead of newly created
             for (Account a :
                     coordinates.keySet()) {
-                if (a.equals(x)) {
-                    x = a;
+                if (a.equals(account)) {
+                    account = a;
                     break;
                 }
             }
-            for (HorizontalPosition a :
-                    coordinates.get(x)) {
-                if (a.equals(y)) {
-                    y = a;
+            for (HorizontalPosition hp :
+                    coordinates.get(account)) {
+                if (hp.equals(horizontalPosition)) {
+                    horizontalPosition = hp;
                     break;
                 }
             }
             // Create new cell
-            ReportCell reportCell = ReportCell.newDigit(dataElement.getData().getOrDefault(CELL_VALUE, 0), x, y);
+            ReportCell<Account> reportCell = ReportCell.newDigit(dataElement.getData().getOrDefault(CELL_VALUE, 0), account, horizontalPosition);
             reportCells.add(reportCell);
         }
     }
