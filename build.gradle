@@ -249,6 +249,4 @@ task buildWar(type: CubaWarBuilding) {
     includeJdbcDriver = true
     webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
     logbackConfigurationFile = 'etc/war-logback.xml'
-    includeContextXml = true
-    coreContextXmlPath = 'modules/core/web/META-INF/war-context.xml'
 }
