@@ -245,30 +245,8 @@ task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefi
 }
 restart.finalizedBy start
 
-task buildWarTest(type: CubaWarBuilding) {
-    includeJdbcDriver = true
-    appProperties = ['cuba.automaticDatabaseUpdate'   : true,
-                     'cuba.dataSourceProvider'        : 'jndi',
-                     'cuba.webHostName'               : 'us-cuba-test.us.borets.gc',
-                     'cuba.webPort'                   : '90']
-    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
-    logbackConfigurationFile = 'etc/war-logback.xml'
-    includeContextXml = true
-    coreContextXmlPath = 'modules/core/web/META-INF/war-context-test.xml'
-}
-
 task buildWar(type: CubaWarBuilding) {
     includeJdbcDriver = true
-    appProperties = ['cuba.automaticDatabaseUpdate'       : true,
-                     'cuba.dataSourceProvider'            : 'jndi',
-                     'cuba.webHostName'                   : 'us-pro.us.borets.gc',
-                     'cuba.webPort'                       : '80',
-                     'cuba.webAppUrl'                     : 'http://us-borets-pro.us.borets.gc',
-                     'cuba.web.productionMode'            : true,
-                     'cuba.performanceLogDisabled'        : true,
-                     'cuba.web.loginDialogDefaultUser'    : '<disabled>',
-                     'cuba.web.loginDialogDefaultPassword': '<disabled>',
-                     'cuba.bruteForceProtection.enabled'  : true]
     webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
     logbackConfigurationFile = 'etc/war-logback.xml'
     includeContextXml = true
