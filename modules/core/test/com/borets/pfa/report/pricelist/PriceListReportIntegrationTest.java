@@ -1,11 +1,11 @@
 package com.borets.pfa.report.pricelist;
 
+import com.borets.addon.country.entity.Country;
 import com.borets.pfa.entity.activity.RecordType;
 import com.borets.pfa.report.custom.AbstractReportIntegrationTest;
-import com.borets.pfa.report.revenue.RevenueReport;
+import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.reports.entity.Report;
 import com.haulmont.yarg.reporting.ReportOutputDocument;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.*;
 
 class PriceListReportIntegrationTest extends AbstractReportIntegrationTest {
 
@@ -31,6 +26,8 @@ class PriceListReportIntegrationTest extends AbstractReportIntegrationTest {
         Report report = loadCustomReport(PriceListReport.class);
 
         Map<String, Object> params = new HashMap<>();
+        final UUID countryId = UUID.fromString("1b51b2ef-8864-f9ed-3ace-b4b3942387cf"); //USA
+        params.put("country", dataManager.load(Id.of(countryId, Country.class)).one());
         params.put("mode", RecordType.FORECAST);
         params.put("startPeriod", new Date(121, Calendar.JANUARY, 11));
         params.put("endPeriod", new Date(122, Calendar.DECEMBER, 11));
