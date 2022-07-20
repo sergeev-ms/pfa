@@ -6,6 +6,7 @@ import com.borets.pfa.report.custom.AbstractReportIntegrationTest;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.reports.entity.Report;
 import com.haulmont.yarg.reporting.ReportOutputDocument;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

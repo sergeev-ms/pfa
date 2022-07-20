@@ -51,6 +51,7 @@ class EquipmentUtilizationReportTemplateImplTest {
         equipmentSystem1.equipmentItems.add(
             EquipmentItem(
                 equipmentSystem1,
+                "BODH",
                 "10006707",
                 "Bolt on discharge head, ESP B 400 2.875 EUE SS",
                 BigDecimal.ONE,
@@ -64,7 +65,8 @@ class EquipmentUtilizationReportTemplateImplTest {
         equipmentSystem1.equipmentItems.add(
             EquipmentItem(
                 equipmentSystem1,
-                "10006707",
+                "Pump",
+                "10006708",
                 "Second product description",
                 BigDecimal.ONE,
                 "ea",
@@ -85,6 +87,7 @@ class EquipmentUtilizationReportTemplateImplTest {
         equipmentSystem2.equipmentItems.add(
             EquipmentItem(
                 equipmentSystem2,
+                "Motor",
                 "10006788",
                 "Product description 1",
                 BigDecimal.ONE,
@@ -98,6 +101,7 @@ class EquipmentUtilizationReportTemplateImplTest {
         equipmentSystem2.equipmentItems.add(
             EquipmentItem(
                 equipmentSystem2,
+                "Cable",
                 "10006900",
                 "Product description 2",
                 BigDecimal.ONE,
@@ -157,7 +161,7 @@ class EquipmentUtilizationReportTemplateImplTest {
         if (OS.LINUX.isCurrentOs) {
             Runtime.getRuntime().exec(" libreoffice " + tempFile.absolutePath)
         } else if (OS.WINDOWS.isCurrentOs) {
-            Runtime.getRuntime().exec("start excel \"" + tempFile.absolutePath + "\"")
+//            Runtime.getRuntime().exec("start excel " + tempFile.absolutePath)
         }
     }
 
@@ -206,6 +210,10 @@ class EquipmentUtilizationReportTemplateImplTest {
         data[EquipmentSystem.SYSTEM_NUMBER] = equipmentSystem.systemNumber
         data[EquipmentItem.FIRST_RUN] = equipmentItem.value1stRun
         data[EquipmentItem.NEXT_RUNS] = equipmentItem.valueNextRuns
+        data[EquipmentSystem.CUSTOMER_ORDER] = equipmentSystem.customerOrder
+        data[EquipmentItem.EQUIPMENT_TYPE] = equipmentItem.equipmentType
+        data[EquipmentItem.EQUIPMENT_TYPE_ORDER] = equipmentItem.equipmentTypeOrder
+        data[EquipmentItem.REVENUE_MODE] = equipmentItem.revenueMode
     }
 
 }

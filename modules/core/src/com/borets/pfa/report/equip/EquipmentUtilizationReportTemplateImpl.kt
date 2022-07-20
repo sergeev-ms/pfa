@@ -10,11 +10,7 @@ import com.haulmont.yarg.formatters.impl.xlsx.Document
 import com.haulmont.yarg.structure.BandData
 import org.slf4j.LoggerFactory.getLogger
 import org.xlsx4j.jaxb.Context
-import org.xlsx4j.sml.CTMergeCells
-import org.xlsx4j.sml.CTSheetCalcPr
-import org.xlsx4j.sml.Cell
-import org.xlsx4j.sml.Row
-import org.xlsx4j.sml.STCellType
+import org.xlsx4j.sml.*
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
@@ -100,6 +96,7 @@ class EquipmentUtilizationReportTemplateImpl : CustomExcelReportTemplate<Equipme
         )
         val equipmentItem = EquipmentItem(
             system,
+            d.data[EquipmentItem.EQUIPMENT_TYPE] as String,
             d.data[EquipmentItem.PART_NUMBER] as String,
             d.data[EquipmentItem.PRODUCT_DESCRIPTION] as String,
             d.data[EquipmentItem.QTY] as BigDecimal,
@@ -229,6 +226,7 @@ class EquipmentUtilizationReportTemplateImpl : CustomExcelReportTemplate<Equipme
         addCellToRow(row, equipment.equipmentSystem.customer, getStyle("textValue")!!)
         addCellToRow(row, equipment.equipmentSystem.rentalOrSale, getStyle("textValue")!!)
         addCellToRow(row, equipment.equipmentSystem.systemNumber, getStyle("textValue")!!)
+        addCellToRow(row, equipment.equipmentType, getStyle("textValue")!!)
         addCellToRow(row, equipment.partNumber, getStyle("textValue")!!)
         addCellToRow(row, equipment.productDescription, getStyle("textValue")!!)
         addNumberCellToRow(row, equipment.qty)
