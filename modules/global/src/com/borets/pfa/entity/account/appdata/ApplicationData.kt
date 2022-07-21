@@ -1,15 +1,18 @@
 package com.borets.pfa.entity.account.appdata
 
+import com.borets.addon.country.entity.Country
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.activity.RecordType
 import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.cuba.core.entity.StandardEntity
 import com.haulmont.cuba.core.entity.annotation.OnDelete
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents
 import com.haulmont.cuba.core.global.DeletePolicy
 import java.time.YearMonth
 import javax.persistence.*
 
+@PublishEntityChangedEvents
 @Table(name = "PFA_APPLICATION_DATA")
 @javax.persistence.Entity(name = "pfa_ApplicationData")
 open class ApplicationData : StandardEntity() {
@@ -35,6 +38,11 @@ open class ApplicationData : StandardEntity() {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "applicationData")
     var systemAllocations: MutableList<SystemAllocation>? = mutableListOf()
+
+    @OnDelete(DeletePolicy.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COUNTRY_ID")
+    var country: Country? = null
 
     fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
 

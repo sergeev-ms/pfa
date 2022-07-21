@@ -1,5 +1,6 @@
 package com.borets.pfa.entity.account.utilization
 
+import com.borets.addon.country.entity.Country
 import com.borets.pfa.entity.account.Account
 import com.borets.pfa.entity.activity.RecordType
 import com.haulmont.chile.core.annotations.Composition
@@ -7,11 +8,13 @@ import com.haulmont.chile.core.annotations.MetaProperty
 import com.haulmont.chile.core.annotations.NumberFormat
 import com.haulmont.cuba.core.entity.StandardEntity
 import com.haulmont.cuba.core.entity.annotation.OnDelete
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents
 import com.haulmont.cuba.core.global.DeletePolicy
 import java.time.LocalDate
 import java.time.YearMonth
 import javax.persistence.*
 
+@PublishEntityChangedEvents
 @Table(name = "PFA_EQUIPMENT_UTILIZATION")
 @javax.persistence.Entity(name = "pfa_EquipmentUtilization")
 open class EquipmentUtilization : StandardEntity() {
@@ -41,6 +44,10 @@ open class EquipmentUtilization : StandardEntity() {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "equipmentUtilization")
     var details: MutableList<EquipmentUtilizationDetail>? = mutableListOf()
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COUNTRY_ID")
+    var country: Country? = null
 
     fun getRecordType(): RecordType? = recordType?.let { RecordType.fromId(it) }
 

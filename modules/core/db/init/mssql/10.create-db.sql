@@ -277,6 +277,7 @@ create table PFA_APPLICATION_DATA (
     MONTH_ integer,
     RECORD_TYPE nvarchar(50),
     ACCOUNT_ID uniqueidentifier not null,
+    COUNTRY_ID uniqueidentifier,
     --
     primary key nonclustered (ID)
 )^
@@ -297,6 +298,7 @@ create table PFA_EQUIPMENT_UTILIZATION (
     VALID_FROM datetime2,
     YEAR_ integer,
     MONTH_ integer,
+    COUNTRY_ID uniqueidentifier,
     --
     primary key nonclustered (ID)
 )^
