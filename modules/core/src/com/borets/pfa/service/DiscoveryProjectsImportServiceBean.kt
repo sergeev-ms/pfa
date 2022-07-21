@@ -187,7 +187,9 @@ class DiscoveryProjectsImportServiceBean : DiscoveryProjectsImportService {
             }
             try {
                     val accounts = dataManager.load(Account::class.java)
-                        .query("select a from pfa_Account a where a.customerId = :customerNo")
+                        .query("""select a from pfa_Account a
+                            |join a.customers c
+                            |where c.dimCustomerId = :customerNo""".trimMargin())
                         .parameter("customerNo", project.customerNo!!)
                         .list()
 
