@@ -10,6 +10,7 @@ inline fun<reified T : SystemStd> SystemStd.copyToSystem(dataManager: DataManage
     val newSystem = dataManager.create(T::class.java)
 
     arrayOf(
+        "country",
         "casingSize",
         "casingWeight",
         "pumpModel",
@@ -44,6 +45,7 @@ fun SystemStd.reloadForCopy(dataManager: DataManager) : SystemStd {
     return dataManager.reload(
         this, ViewBuilder.of(SystemStd::class.java)
             .addView(View.LOCAL)
+            .add("country", View.MINIMAL)
             .add("pumpModel", View.MINIMAL)
             .add("depth", View.MINIMAL)
             .add("sealConfig", View.MINIMAL)
