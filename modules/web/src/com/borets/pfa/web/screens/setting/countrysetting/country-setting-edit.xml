@@ -20,12 +20,16 @@
                     <property name="utilizationValueType" view="_minimal"/>
                     <property name="analyticSets" view="_local"/>
                 </property>
+                <property name="allocationRemap" view="_local">
+                    <property name="utilizationValueType"/>
+                </property>
             </view>
             <loader/>
             <collection id="analyticSettingsDc" property="analyticSettings"/>
             <collection id="revenueTypeSettingsDc" property="revenueTypeSettings"/>
             <collection id="equipmentTypeSettingsDc" property="equipmentTypeSettings"/>
             <collection id="utilizationValueTypeSettingsDc" property="utilizationValueTypeSettings"/>
+            <collection id="allocationRemapDc" property="allocationRemap"/>
         </instance>
     </data>
     <dialogMode height="600" width="800"/>
@@ -124,6 +128,25 @@
                         <button action="utilizationValueTypeSettingsTable.add"/>
                         <button action="utilizationValueTypeSettingsTable.remove"/>
                         <button action="utilizationValueTypeSettingsTable.selectAnalytics"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="systemAllocationRemapTab" spacing="true"  margin="true,true,true,true"
+                 caption="msg://systemAllocationRemapTab.caption" expand="systemAllocationRemapTable">
+                <table id="systemAllocationRemapTable" dataContainer="allocationRemapDc" width="100%"
+                       sortable="false" reorderingAllowed="false" multiselect="true" editable="true">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="utilizationValueType"/>
+                        <column id="remapScript"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button action="systemAllocationRemapTable.create"/>
+                        <button action="systemAllocationRemapTable.remove"/>
                     </buttonsPanel>
                 </table>
             </tab>

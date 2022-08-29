@@ -46,5 +46,6 @@
         <class>com.borets.pfa.entity.account.directsale.DirectSale</class>
         <class>com.borets.pfa.entity.account.directsale.DirectSaleDetail</class>
         <class>com.borets.pfa.entity.customer.Customer</class>
+        <class>com.borets.pfa.entity.setting.CountrySettingSystemAllocationRemap</class>
     </persistence-unit>
 </persistence>

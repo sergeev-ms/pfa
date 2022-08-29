@@ -1,6 +1,7 @@
 package com.borets.pfa.report.equipext
 
 import com.borets.pfa.report.custom.CustomExcelReportTemplate
+import com.borets.pfa.report.custom.CustomExcelReportWithMultipleBandsTemplate
 import com.borets.pfa.report.equipext.dto.EquipmentItem
 import com.borets.pfa.report.equipext.dto.EquipmentSystem
 import com.haulmont.yarg.structure.BandData
@@ -11,7 +12,6 @@ import org.slf4j.LoggerFactory.getLogger
 import java.io.File
 import java.io.FileOutputStream
 import java.math.BigDecimal
-import java.math.MathContext
 import java.security.SecureRandom
 import java.util.*
 
@@ -58,11 +58,11 @@ class EquipmentUtilizationReportTemplateExtImplTest {
                 "ea",
                 BigDecimal("0.10"),
                 BigDecimal("0.41"),
-                BigDecimal("0.6"),
-                BigDecimal("0.4"),
-                BigDecimal.ZERO,
+//                BigDecimal("0.6"),
+//                BigDecimal("0.4"),
+//                BigDecimal.ZERO,
                 50010,
-                "rental"
+//                "rental"
             )
         )
         equipmentSystem1.equipmentItems.add(
@@ -75,11 +75,11 @@ class EquipmentUtilizationReportTemplateExtImplTest {
                 "ea",
                 BigDecimal("0.10"),
                 BigDecimal("0.41"),
-                BigDecimal("0.6"),
-                BigDecimal("0.4"),
-                BigDecimal.ZERO,
+//                BigDecimal("0.6"),
+//                BigDecimal("0.4"),
+//                BigDecimal.ZERO,
                 50020,
-                "rental"
+//                "rental"
             )
         )
 
@@ -100,11 +100,11 @@ class EquipmentUtilizationReportTemplateExtImplTest {
                 "ea",
                 BigDecimal("0.41"),
                 BigDecimal("0.41"),
-                BigDecimal("0.6"),
-                BigDecimal("0.4"),
-                BigDecimal.ZERO,
+//                BigDecimal("0.6"),
+//                BigDecimal("0.4"),
+//                BigDecimal.ZERO,
                 10010,
-                "rental"
+//                "rental"
             )
         )
         equipmentSystem2.equipmentItems.add(
@@ -117,11 +117,11 @@ class EquipmentUtilizationReportTemplateExtImplTest {
                 "ea",
                 BigDecimal("0.72"),
                 BigDecimal("0.41"),
-                BigDecimal("0.6"),
-                BigDecimal("0.4"),
-                BigDecimal.ZERO,
+//                BigDecimal("0.6"),
+//                BigDecimal("0.4"),
+//                BigDecimal.ZERO,
                 10020,
-                "rental"
+//                "rental"
             )
         )
         equipmentSystems.add(equipmentSystem2)
@@ -147,15 +147,16 @@ class EquipmentUtilizationReportTemplateExtImplTest {
                 rootBandData.addChild(
                     createTestDataWithActivityValue(s, e, ++order, "Pull", BigDecimal(random.nextInt(51)))
                 )
-                dates.forEach { d ->
-                    rootBandData.addChild(
-                        createTestDataWithPeriodValue(s, e, ++order, d, BigDecimal(random.nextInt(101)).divide(BigDecimal("100"), MathContext(2)))
-                    )
-                }
+//                dates.forEach { d ->
+//                    rootBandData.addChild(
+//                        createTestDataWithPeriodValue(s, e, ++order, d, BigDecimal(random.nextInt(101)).divide(BigDecimal("100"), MathContext(2)))
+//                    )
+//                }
             }
         }
 
-        val template: CustomExcelReportTemplate<EquipmentItem> = CustomExcelReportTemplate.Builder()
+        val template: CustomExcelReportWithMultipleBandsTemplate<EquipmentItem> =
+            CustomExcelReportWithMultipleBandsTemplate.Builder()
             .withTemplate(this.javaClass.getResourceAsStream("/com/borets/pfa/report/equipext/Equipment_Utilization_Ext_Report_Template_1_0.xlsx"))
             .withData(rootBandData, CustomExcelReportTemplate.DATA_BAND_NAME)
             .withTitle("test")
@@ -222,13 +223,13 @@ class EquipmentUtilizationReportTemplateExtImplTest {
         data[EquipmentSystem.SYSTEM_NUMBER] = equipmentSystem.systemNumber
         data[EquipmentItem.FIRST_RUN] = equipmentItem.value1stRun
         data[EquipmentItem.NEXT_RUNS] = equipmentItem.valueNextRuns
-        data[EquipmentItem.NEXT_RUNS_COMP] = equipmentItem.valueNextRunsCompetitor
-        data[EquipmentItem.PULL_FIRST_RUN] = equipmentItem.valuePullFirstRun
-        data[EquipmentItem.PULL_NEXT_RUNS] = equipmentItem.valuePullNextRuns
+//        data[EquipmentItem.NEXT_RUNS_COMP] = equipmentItem.valueNextRunsCompetitor
+//        data[EquipmentItem.PULL_FIRST_RUN] = equipmentItem.valuePullFirstRun
+//        data[EquipmentItem.PULL_NEXT_RUNS] = equipmentItem.valuePullNextRuns
         data[EquipmentSystem.CUSTOMER_ORDER] = equipmentSystem.customerOrder
         data[EquipmentItem.EQUIPMENT_TYPE] = equipmentItem.equipmentType
         data[EquipmentItem.EQUIPMENT_TYPE_ORDER] = equipmentItem.equipmentTypeOrder
-        data[EquipmentItem.REVENUE_MODE] = equipmentItem.revenueMode
+//        data[EquipmentItem.REVENUE_MODE] = equipmentItem.revenueMode
     }
 
 }

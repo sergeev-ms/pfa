@@ -827,3 +827,22 @@ create table PFA_COUNTRY_SETTING_UTILIZATION_VALUE_TYPE_ANALYTIC_SET_LINK (
     primary key (COUNTRY_SETTING_UTILIZATION_VALUE_TYPE_ID, ANALYTIC_SET_ID)
 )^
 -- end PFA_COUNTRY_SETTING_UTILIZATION_VALUE_TYPE_ANALYTIC_SET_LINK
+
+-- begin PFA_COUNTRY_SETTING_SYSTEM_ALLOCATION_REMAP
+create table PFA_COUNTRY_SETTING_SYSTEM_ALLOCATION_REMAP (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    COUNTRY_SETTING_ID uniqueidentifier,
+    UTILIZATION_VALUE_TYPE_ID uniqueidentifier,
+    REMAP_SCRIPT nvarchar(max),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_COUNTRY_SETTING_SYSTEM_ALLOCATION_REMAP
