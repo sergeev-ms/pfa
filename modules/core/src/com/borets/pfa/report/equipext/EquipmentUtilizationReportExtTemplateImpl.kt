@@ -1,5 +1,6 @@
 package com.borets.pfa.report.equipext
 
+import com.borets.pfa.entity.activity.JobType
 import com.borets.pfa.entity.activity.WellTag
 import com.borets.pfa.report.custom.Column
 import com.borets.pfa.report.custom.CustomExcelReportWithMultipleBandsTemplate
@@ -17,16 +18,21 @@ import java.util.*
 class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleBandsTemplate<EquipmentItem>() {
     private val LOGGER = getLogger(EquipmentUtilizationReportExtTemplateImpl::class.java)
 
-    var equipmentList = mutableListOf<EquipmentItem>()
-    var equipmentUtilizationList = mutableListOf<EquipmentUtilizationItem>()
-    var countrySettingAllocationRemapList = mutableListOf<CountrySettingsAllocationRemapItem>()
-    var activityStatsList = mutableListOf<ActivityStat>()
+    val equipmentList = mutableListOf<EquipmentItem>()
+    val equipmentUtilizationList = mutableListOf<EquipmentUtilizationItem>()
+    val countrySettingAllocationRemapList = mutableListOf<CountrySettingsAllocationRemapItem>()
+    val activityStatsItemList = mutableListOf<ActivityStatItem>()
+//    val activityStatsMap = mutableMapOf<String, Map<String, Int>>()
+    val demandRulesList = mutableListOf<DemandRuleItem>()
+
+    val scripting : Scripting = AppBeans.get(Scripting.NAME, Scripting::class.java)
 
     companion object {
         const val ALLOCATION_BAND_NAME = "SystemAllocationData"
         const val UTILIZATION_BAND_NAME = "EquipmentUtilization"
         const val COUNTRY_SETTINGS_ALLOCATION_REMAP_BAND_NAME = "CountrySettingsAllocationRemap"
         const val ACTIVITY_STATS_BAND_NAME = "ActivityStats"
+        const val COUNTRY_SETTINGS_DEMAND_RULES_BAND_NAME = "SettingsDemandRules"
 
         //must presents it xlsx template with {stylename} syntax
         const val CELL_STYLE_TEXT = "textValue"
@@ -41,6 +47,7 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
             COUNTRY_SETTINGS_ALLOCATION_REMAP_BAND_NAME -> columns.add(getAllocationColumn(bandData))
             UTILIZATION_BAND_NAME -> columns.add(getUtilizationColumn(bandData))
 //            ALLOCATION_BAND_NAME ->  columns.add(getAllocationColumn(bandData))
+            COUNTRY_SETTINGS_DEMAND_RULES_BAND_NAME -> columns.addAll(getDemandColumnList(bandData))
         }
 
     }
@@ -49,7 +56,7 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
         when (bandName) {
             DATA_BAND_NAME -> {
                 getEquipment(bandData).let {
-                    it.equipmentAllocations = processSubBand(bandData)
+//                    it.equipmentAllocations = processSubBand(bandData)
                     equipmentList.add(it)
                 }
             }
@@ -60,12 +67,18 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
                 getUtilization(bandData).let { equipmentUtilizationList.add(it) }
             }
             ACTIVITY_STATS_BAND_NAME -> {
-                getAnalyticStats(bandData).let { activityStatsList.add(it) }
+                getActivityStatItem(bandData).let { activityStatsItemList.add(it) }
+            }
+            COUNTRY_SETTINGS_DEMAND_RULES_BAND_NAME -> {
+                getDemandRules(bandData).let { demandRulesList.add(it) }
             }
         }
     }
 
+
     override fun afterProcess() {
+//        computeActivityStats()
+
         equipmentList.forEach {equipmentItem ->
             equipmentUtilizationList.filter { it.rowKey == equipmentItem.rowKey }
                 .forEach {
@@ -77,11 +90,22 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
         //process equipment allocation
         equipmentList.forEach {equipment ->
             countrySettingAllocationRemapList.map { remap ->
-                EquipmentAllocation(remap.utilizationValueTypeItem, evaluateScript(remap.remapScript, equipment))
+                EquipmentAllocation(remap.utilizationValueTypeItem, evaluateUsageScript(remap.remapScript, equipment))
             }.toList()
                 .let {
                     equipment.equipmentAllocations = it
                 }
+        }
+
+        equipmentList.forEach { equipment ->
+            demandRulesList.flatMap { demandRule ->
+                dates.map {
+                    EquipmentDemandItem(demandRule.id, demandRule.name, it,
+                        evaluateEquipmentDemandScript(demandRule.script, equipment, it))
+                }.toList()
+            }.let {
+                equipment.equipmentDemands.addAll(it)
+            }
         }
 
         //additional columns
@@ -92,15 +116,7 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
         )
     }
 
-    private fun getAnalyticStats(bandData: BandData): ActivityStat {
-        return ActivityStat(
-            bandData.data[ActivityStat.ACCOUNT_ID_COLUMN].toString(),
-            bandData.data[ActivityStat.ANALYTIC_COLUMN].toString(),
-            bandData.data[ActivityStat.WELL_TAG_COLUMN].toString(),
-            bandData.data[ActivityStat.YEAR_MONTH_COLUMN] as Date,
-            bandData.data[ActivityStat.VALUE_COLUMN] as Int
-        )
-    }
+
 
     override fun generateReport(sheetWrappers: List<Document.SheetWrapper>) {
         val sheetWrapper = sheetWrappers[0]
@@ -143,11 +159,40 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
 //        signReport(rows[0].c[2], Date(), RecordType.KPI)
     }
 
-    private fun evaluateScript(remapScript: String, equipment: EquipmentItem): BigDecimal {
-        val scripting = AppBeans.get(Scripting.NAME, Scripting::class.java)
 
-        val accountActivityStats = activityStatsList.filter {
-            it.accountId == equipment.equipmentSystem.accountId
+    private fun getActivityStatItem(bandData: BandData): ActivityStatItem {
+        return ActivityStatItem(
+            bandData.data[ActivityStatItem.ACCOUNT_ID_COLUMN].toString(),
+            bandData.data[ActivityStatItem.ANALYTIC_COLUMN].toString(),
+            bandData.data[ActivityStatItem.JOB_TYPE_COLUMN].toString(),
+            bandData.data[ActivityStatItem.WELL_TAG_COLUMN].toString(),
+            bandData.data[ActivityStatItem.VARIABLE_NAME_COLUMN] as String?,
+            bandData.data[ActivityStatItem.YEAR_MONTH_COLUMN] as Date,
+            bandData.data[ActivityStatItem.VALUE_COLUMN] as Int
+        )
+    }
+
+//    private fun computeActivityStats() {
+//        activityStatsItemList.groupBy { it.accountId }.entries
+//            .associateTo(activityStatsMap) { entry ->
+//                entry.key to
+//                        entry.value.groupingBy { it.analyticId }
+//                            .fold(0) { acc, el -> acc + el.value }
+//            }
+//    }
+
+    private fun getDemandRules(bandData: BandData): DemandRuleItem {
+        return DemandRuleItem(
+            bandData.data[DemandRuleItem.DEMAND_TYPE_ID_COLUMN].toString(),
+            bandData.data[DemandRuleItem.DEMAND_TYPE_NAME_COLUMN] as String,
+            bandData.data[DemandRuleItem.DEMAND_SCRIPT_COLUMN] as String
+        )
+    }
+
+    private fun evaluateUsageScript(remapScript: String, equipment: EquipmentItem): BigDecimal {
+        val accountActivityStats = activityStatsItemList.filter {
+            it.accountId == equipment.equipmentSystem.accountId &&
+                    it.jobType == JobType.INSTALL.id //only installs
         }.toList()
 
         //Replace with analyticSet from Country Settings. Look at Country Settings -> Utilization Value Types
@@ -166,23 +211,45 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
         )
     }
 
+    private fun evaluateEquipmentDemandScript(script: String, equipment: EquipmentItem, date: Date): BigDecimal {
+        val activityVariableValueMap = activityStatsItemList
+            .filter {
+                it.accountId == equipment.equipmentSystem.accountId && it.yearMonth == date
+            }
+            .filter { !it.variableName.isNullOrBlank() }
+            .associate { it.variableName!! to it.value }
+
+        val usageVariableValueMap = equipment.equipmentAllocations
+            .associate { it.allocationValueTypeItem.variableName!! to it.value }
+        val utilizationVariableValueMap = equipment.equipmentUtilizations
+            .associate { it.utilizationValueTypeItem.variableName!! to it.value }
+
+        val bindingMap: MutableMap<String, Any?> = (activityVariableValueMap + usageVariableValueMap + utilizationVariableValueMap)
+            .toMutableMap()
+
+        bindingMap["revenueMode"] = equipment.equipmentUtilizations.getOrNull(0)?.revenueModeId
+        bindingMap["qty"] = equipment.qty
+
+        return scripting.evaluateGroovy(script, bindingMap)
+    }
 
     private fun getCountrySettingsAllocationRemap(bandData: BandData): CountrySettingsAllocationRemapItem {
         return CountrySettingsAllocationRemapItem(
             bandData.data[CountrySettingsAllocationRemapItem.COUNTRY_ID_COLUMN].toString(),
             bandData.data[CountrySettingsAllocationRemapItem.UTILIZATION_VALUE_TYPE_ID_COLUMN].toString(),
             bandData.data[CountrySettingsAllocationRemapItem.UTILIZATION_VALUE_TYPE_NAME_COLUMN].toString(),
+            bandData.data[CountrySettingsAllocationRemapItem.UTILIZATION_VALUE_TYPE_VARIABLE_NAME_COLUMN] as String?,
             bandData.data[CountrySettingsAllocationRemapItem.UTILIZATION_VALUE_TYPE_ORDER_COLUMN] as Int,
             bandData.data[CountrySettingsAllocationRemapItem.REMAP_SCRIPT_COLUMN] as String,
         )
     }
 
-    private fun processSubBand(subBandData: BandData): List<EquipmentAllocation> {
-        val subBandDataList = subBandData.findBandsRecursively(ALLOCATION_BAND_NAME)
-        return subBandDataList?.map { bandData -> getAllocation(bandData) }
-            ?.toList()
-            ?: emptyList()
-    }
+//    private fun processSubBand(subBandData: BandData): List<EquipmentAllocation> {
+//        val subBandDataList = subBandData.findBandsRecursively(ALLOCATION_BAND_NAME)
+//        return subBandDataList?.map { bandData -> getAllocation(bandData) }
+//            ?.toList()
+//            ?: emptyList()
+//    }
 
 
     private fun getAllocationColumn(bandData: BandData) = Column(
@@ -202,6 +269,26 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
         CELL_STYLE_ACTIVITY_TYPE,
         CELL_STYLE_PERCENT_COLORED
     )
+
+    var dateStartOrder = 0
+
+    private fun getDemandColumnList(bandData: BandData): Collection<Column> {
+        val columns = dates.map {
+            return@map Column(
+                EquipmentDemandItem.DEMAND_COLUMN_TYPE,
+                EquipmentDemandItem.formatDate(it),
+                EquipmentDemandItem.formatColumnId(bandData.data[DemandRuleItem.DEMAND_TYPE_ID_COLUMN].toString(), it),
+                it.toInstant().epochSecond.toInt() + dateStartOrder,
+                CELL_STYLE_ACTIVITY_TYPE,
+                CELL_STYLE_TEXT
+            )
+        }.toList()
+
+        // TODO: It's quickfix. implement order.
+        dateStartOrder+=100000000
+
+        return columns
+    }
 
     private fun getEquipment(d: BandData): EquipmentItem {
         val system = EquipmentSystem(
@@ -223,25 +310,22 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
             d.data[EquipmentItem.UOM] as String,
             d.data[EquipmentItem.FIRST_RUN] as BigDecimal,
             d.data[EquipmentItem.NEXT_RUNS] as BigDecimal,
-//            d.data[EquipmentItem.NEXT_RUNS_COMP] as BigDecimal,
-//            d.data[EquipmentItem.PULL_FIRST_RUN] as BigDecimal,
-//            d.data[EquipmentItem.PULL_NEXT_RUNS] as BigDecimal,
             d.data[EquipmentItem.EQUIPMENT_TYPE_ORDER] as Int
-//            d.data[EquipmentItem.REVENUE_MODE] as String
         )
         system.equipmentItems.add(equipmentItem)
         return equipmentItem
     }
-    private fun getAllocation(bandData: BandData): EquipmentAllocation {
-        return EquipmentAllocation(
-            bandData.data[EquipmentAllocation.APPLICATION_DATA_ID_COLUMN].toString(),
-            bandData.data[EquipmentAllocation.SYSTEM_ID_COLUMN].toString(),
-            bandData.data[EquipmentAllocation.UTILIZATION_VALUE_TYPE_ID_COLUMN].toString(),
-            bandData.data[EquipmentAllocation.UTILIZATION_VALUE_TYPE_NAME_COLUMN].toString(),
-            bandData.data[EquipmentAllocation.UTILIZATION_VALUE_TYPE_ORDER_COLUMN] as Int,
-            bandData.data[EquipmentAllocation.VALUE_COLUMN] as BigDecimal,
-        )
-    }
+//    private fun getAllocation(bandData: BandData): EquipmentAllocation {
+//        return EquipmentAllocation(
+//            bandData.data[EquipmentAllocation.APPLICATION_DATA_ID_COLUMN].toString(),
+//            bandData.data[EquipmentAllocation.SYSTEM_ID_COLUMN].toString(),
+//            bandData.data[EquipmentAllocation.UTILIZATION_VALUE_TYPE_ID_COLUMN].toString(),
+//            bandData.data[EquipmentAllocation.UTILIZATION_VALUE_TYPE_NAME_COLUMN].toString(),
+//            bandData.data[EquipmentAllocation.UTILIZATION_VALUE_TYPE_VARIABLE_COLUMN] as String,
+//            bandData.data[EquipmentAllocation.UTILIZATION_VALUE_TYPE_ORDER_COLUMN] as Int,
+//            bandData.data[EquipmentAllocation.VALUE_COLUMN] as BigDecimal,
+//        )
+//    }
 
     private fun getUtilization(bandData: BandData): EquipmentUtilizationItem {
         return EquipmentUtilizationItem(
@@ -250,6 +334,7 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
             bandData.data[EquipmentUtilizationItem.UTIL_REVENUE_MODE_COLUMN] as String,
             bandData.data[EquipmentUtilizationItem.UTIL_VALUE_TYPE_ID_COLUMN] as String,
             bandData.data[EquipmentUtilizationItem.UTIL_VALUE_TYPE_NAME_COLUMN] as String,
+            bandData.data[EquipmentUtilizationItem.UTIL_VALUE_TYPE_VARIABLE_NAME_COLUMN] as String,
             bandData.data[EquipmentUtilizationItem.UTIL_VALUE_TYPE_ORDER_COLUMN] as Int,
             bandData.data[EquipmentUtilizationItem.UTIL_VALUE_COLUMN] as BigDecimal
         )
@@ -261,18 +346,6 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
         }
     }
 
-//    private fun getOrderedEquipment(): List<EquipmentItem> {
-//        return coordinates.keys.sortedWith(
-//            compareBy(
-//                { it.equipmentSystem.customerOrder },
-//                { it.equipmentSystem.referenceCode },
-//                { it.equipmentSystem.customer },
-//                { it.equipmentSystem.systemNumber },
-//                { it.equipmentTypeOrder },
-//            )
-//        )
-//    }
-
     private fun addEquipmentItemInfo(row: Row, equipment: EquipmentItem) {
         addCellToRow(row, equipment.equipmentSystem.referenceCode, getStyle(CELL_STYLE_TEXT)!!)
         addCellToRow(row, equipment.equipmentSystem.customer, getStyle(CELL_STYLE_TEXT)!!)
@@ -283,39 +356,45 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
         addCellToRow(row, equipment.productDescription, getStyle(CELL_STYLE_TEXT)!!)
         addNumberCellToRow(row, equipment.qty)
         addCellToRow(row, equipment.uom, getStyle(CELL_STYLE_BOLD_BORDER)!!)
-//        addColorPercentCellToRow(row, equipment.value1stRun)
-//        addColorPercentCellToRow(row, equipment.valueNextRuns)
-//        addColorPercentCellToRow(row, equipment.valueNextRunsCompetitor)
-//        addColorPercentCellToRow(row, equipment.valuePullFirstRun)
-//        addColorPercentCellToRow(row, equipment.valuePullNextRuns)
-//        addCellToRow(row, equipment.revenueMode, getStyle("textValue")!!)
 
         columns.forEach { reportColumn ->
-            if (EquipmentUtilizationItem.REVENUE_TYPE_COLUMN_TYPE == reportColumn.type) {
-                val revenueModeValue = equipment.equipmentUtilizations.firstOrNull()?.revenueModeId ?: ""
-                addCellToRow(row, revenueModeValue, getStyle(reportColumn.valueStyleName)!!)
-            }
-            else {
-                var value : BigDecimal?
+            when (reportColumn.type) {
+                EquipmentUtilizationItem.REVENUE_TYPE_COLUMN_TYPE -> {
+                    val revenueModeValue = equipment.equipmentUtilizations.firstOrNull()?.revenueModeId ?: ""
+                    addCellToRow(row, revenueModeValue, getStyle(reportColumn.valueStyleName)!!)
+                }
 
-                //search in allocations
-                value = equipment.equipmentAllocations.find {
-                    reportColumn == it.getColumn()
-                }?.value
+                EquipmentDemandItem.DEMAND_COLUMN_TYPE -> {
+                    equipment.equipmentDemands.find { reportColumn == it.getColumn() }?.let {
+                        addNumberCellToRow(row, it.value, reportColumn.valueStyleName)
+                    }
+                }
+                else -> {
+                    var value : BigDecimal?
 
-                //search in utilization
-                if (value == null) {
-                    value = equipment.equipmentUtilizations.find {
+                    //search in allocations
+                    value = equipment.equipmentAllocations.find {
                         reportColumn == it.getColumn()
                     }?.value
+
+                    //search in utilization
+                    if (value == null) {
+                        value = equipment.equipmentUtilizations.find {
+                            reportColumn == it.getColumn()
+                        }?.value
+                    }
+                    addPercentCellToRow(row, value ?: "")
                 }
-                addPercentCellToRow(row, value ?: "")
             }
         }
     }
 
     private fun addNumberCellToRow(row: Row, value: Any) {
-        val c = addCellToRow(row, value, getStyle(CELL_STYLE_TEXT)!!)
+        addNumberCellToRow(row, value, CELL_STYLE_TEXT)
+    }
+
+    private fun addNumberCellToRow(row: Row, value: Any, style: String) {
+        val c = addCellToRow(row, value, getStyle(style)!!)
         c.t = STCellType.N
     }
 

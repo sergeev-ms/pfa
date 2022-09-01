@@ -12,6 +12,12 @@ open class EquipmentUtilizationValueType : StandardEntity() {
     @Column(name = "NAME")
     var name: String? = null
 
+    @Column(name = "UTILIZATION_VARIABLE_NAME")
+    var utilizationVariableName: String? = null
+
+    @Column(name = "USAGE_VARIABLE_NAME")
+    var usageVariableName: String? = null
+
     companion object {
         private const val serialVersionUID = 8955668344592233460L
     }

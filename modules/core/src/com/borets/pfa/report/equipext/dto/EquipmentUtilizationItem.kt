@@ -4,29 +4,25 @@ import com.borets.pfa.report.custom.Column
 import com.borets.pfa.report.custom.IsColumn
 import java.math.BigDecimal
 
-class EquipmentUtilizationItem : IsColumn {
-    val accountId: String
-    val equipmentTypeId: String
-    val revenueModeId: String
-    val valueType: UtilizationValueTypeItem
+class EquipmentUtilizationItem(
+    val accountId: String,
+    val equipmentTypeId: String,
+    val revenueModeId: String,
+    utilizationValueTypeId: String,
+    utilizationValueTypeName: String,
+    utilizationValueTypeVariableName: String,
+    utilizationValueTypeOrder: Int,
     val value: BigDecimal
+) : IsColumn {
+    val utilizationValueTypeItem: UtilizationValueTypeItem
     val rowKey: RowKey
     var equipmentItem : EquipmentItem? = null
 
-    constructor(
-        accountId: String,
-        equipmentTypeId: String,
-        revenueModeId: String,
-        utilizationValueTypeId: String,
-        utilizationValueTypeName: String,
-        utilizationValueTypeOrder: Int,
-        value: BigDecimal
-    ) {
-        this.accountId = accountId
-        this.equipmentTypeId = equipmentTypeId
-        this.revenueModeId = revenueModeId
-        this.valueType = UtilizationValueTypeItem(utilizationValueTypeId, utilizationValueTypeName, utilizationValueTypeOrder)
-        this.value = value
+    init {
+        this.utilizationValueTypeItem = UtilizationValueTypeItem(utilizationValueTypeId,
+            utilizationValueTypeName,
+            utilizationValueTypeVariableName,
+            utilizationValueTypeOrder)
         this.rowKey = RowKey(accountId, equipmentTypeId)
     }
 
@@ -36,6 +32,7 @@ class EquipmentUtilizationItem : IsColumn {
         const val UTIL_REVENUE_MODE_COLUMN = "REVENUE_MODE"
         const val UTIL_VALUE_TYPE_ID_COLUMN = "VALUE_TYPE_ID"
         const val UTIL_VALUE_TYPE_NAME_COLUMN = "VALUE_TYPE_NAME"
+        const val UTIL_VALUE_TYPE_VARIABLE_NAME_COLUMN = "VARIABLE_NAME"
         const val UTIL_VALUE_TYPE_ORDER_COLUMN = "VALUE_TYPE_ORDER"
         const val UTIL_VALUE_COLUMN = "VALUE_"
         const val COLUMN_TYPE = "utilization"
@@ -43,6 +40,6 @@ class EquipmentUtilizationItem : IsColumn {
     }
 
     override fun getColumn(): Column {
-        return Column(COLUMN_TYPE, valueType.typeName, valueType.typeId)
+        return Column(COLUMN_TYPE, utilizationValueTypeItem.typeName, utilizationValueTypeItem.typeId)
     }
 }

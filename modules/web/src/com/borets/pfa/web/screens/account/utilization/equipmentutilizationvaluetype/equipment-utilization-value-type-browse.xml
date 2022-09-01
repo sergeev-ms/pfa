@@ -28,6 +28,8 @@
             </actions>
             <columns>
                 <column id="name"/>
+                <column id="utilizationVariableName" collapsed="true"/>
+                <column id="usageVariableName" collapsed="true"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true">

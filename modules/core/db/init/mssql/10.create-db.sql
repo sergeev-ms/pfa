@@ -141,6 +141,7 @@ create table PFA_ANALYTIC_SET (
     JOB_TYPE nvarchar(50),
     WELL_EQUIP nvarchar(50),
     WELL_TAG nvarchar(50),
+    VARIABLE_NAME nvarchar(255),
     --
     primary key nonclustered (ID)
 )^
@@ -666,6 +667,8 @@ create table PFA_EQUIPMENT_UTILIZATION_VALUE_TYPE (
     DELETED_BY nvarchar(50),
     --
     NAME nvarchar(255),
+    UTILIZATION_VARIABLE_NAME nvarchar(255),
+    USAGE_VARIABLE_NAME nvarchar(255),
     --
     primary key nonclustered (ID)
 )^
@@ -846,3 +849,37 @@ create table PFA_COUNTRY_SETTING_SYSTEM_ALLOCATION_REMAP (
     primary key nonclustered (ID)
 )^
 -- end PFA_COUNTRY_SETTING_SYSTEM_ALLOCATION_REMAP
+-- begin PFA_DEMAND_TYPE
+create table PFA_DEMAND_TYPE (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    NAME nvarchar(255),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_DEMAND_TYPE
+-- begin PFA_COUNTRY_SETTING_DEMAND_TYPE
+create table PFA_COUNTRY_SETTING_DEMAND_TYPE (
+    ID uniqueidentifier,
+    VERSION integer not null,
+    CREATE_TS datetime2,
+    CREATED_BY nvarchar(50),
+    UPDATE_TS datetime2,
+    UPDATED_BY nvarchar(50),
+    DELETE_TS datetime2,
+    DELETED_BY nvarchar(50),
+    --
+    COUNTRY_SETTING_ID uniqueidentifier not null,
+    TYPE_ID uniqueidentifier,
+    SCRIPT nvarchar(max),
+    --
+    primary key nonclustered (ID)
+)^
+-- end PFA_COUNTRY_SETTING_DEMAND_TYPE

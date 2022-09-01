@@ -2,54 +2,30 @@ package com.borets.pfa.report.equipext.dto
 
 import java.math.BigDecimal
 
-class EquipmentItem : Comparable<EquipmentItem> {
-
-    val equipmentSystem: EquipmentSystem
-    val applicationDataId: String
-    val equipmentTypeId: String
-    val equipmentType: String
-    val partNumber: String
-    val productDescription: String
-    val qty: BigDecimal
-    val uom: String
-    val value1stRun: BigDecimal
-    val valueNextRuns: BigDecimal
+class EquipmentItem(
+    val equipmentSystem: EquipmentSystem,
+    val applicationDataId: String,
+    val equipmentTypeId: String,
+    val equipmentType: String,
+    val partNumber: String,
+    val productDescription: String,
+    val qty: BigDecimal,
+    val uom: String,
+    val value1stRun: BigDecimal,
+    val valueNextRuns: BigDecimal,
     val equipmentTypeOrder: Int
+) : Comparable<EquipmentItem> {
+
     val rowKey: RowKey
     var equipmentAllocations: List<EquipmentAllocation>
     val equipmentUtilizations: MutableList<EquipmentUtilizationItem>
+    val equipmentDemands: MutableList<EquipmentDemandItem>
 
-    //    val valueNextRunsCompetitor: BigDecimal,
-//    val valuePullFirstRun: BigDecimal,
-//    val valuePullNextRuns: BigDecimal,
-//    val revenueMode: String,
-    constructor(
-        equipmentSystem: EquipmentSystem,
-        applicationDataId: String,
-        equipmentTypeId: String,
-        equipmentType: String,
-        partNumber: String,
-        productDescription: String,
-        qty: BigDecimal,
-        uom: String,
-        value1stRun: BigDecimal,
-        valueNextRuns: BigDecimal,
-        equipmentTypeOrder: Int
-    ) {
-        this.equipmentSystem = equipmentSystem
-        this.applicationDataId = applicationDataId
-        this.equipmentTypeId = equipmentTypeId
-        this.equipmentType = equipmentType
-        this.partNumber = partNumber
-        this.productDescription = productDescription
-        this.qty = qty
-        this.uom = uom
-        this.value1stRun = value1stRun
-        this.valueNextRuns = valueNextRuns
-        this.equipmentTypeOrder = equipmentTypeOrder
+    init {
         this.rowKey = RowKey(equipmentSystem.accountId, equipmentTypeId)
         this.equipmentUtilizations =  mutableListOf()
         this.equipmentAllocations = mutableListOf()
+        this.equipmentDemands = mutableListOf()
     }
 
     companion object {
@@ -60,11 +36,7 @@ class EquipmentItem : Comparable<EquipmentItem> {
         const val UOM = "uom"
         const val FIRST_RUN = "valueFirstRun"
         const val NEXT_RUNS = "valueNextRuns"
-        const val NEXT_RUNS_COMP = "valueNextRunsCompetitor"
-        const val PULL_FIRST_RUN = "valuePullFirstRun"
-        const val PULL_NEXT_RUNS = "valuePullNextRuns"
         const val EQUIPMENT_TYPE_ORDER = "equipmentTypeOrder"
-        const val REVENUE_MODE = "revenueMode"
         const val EQUIPMENT_TYPE = "equipmentType"
         const val EQUIPMENT_TYPE_ID_COLUMN = "EQUIPMENT_TYPE_ID"
     }
@@ -95,7 +67,6 @@ class EquipmentItem : Comparable<EquipmentItem> {
         if (value1stRun != other.value1stRun) return false
         if (valueNextRuns != other.valueNextRuns) return false
         if (equipmentTypeOrder != other.equipmentTypeOrder) return false
-//        if (revenueMode != other.revenueMode) return false
 
         return true
     }
@@ -112,7 +83,6 @@ class EquipmentItem : Comparable<EquipmentItem> {
         result = 31 * result + value1stRun.hashCode()
         result = 31 * result + valueNextRuns.hashCode()
         result = 31 * result + equipmentTypeOrder
-//        result = 31 * result + revenueMode.hashCode()
         return result
     }
 

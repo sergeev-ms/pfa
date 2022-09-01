@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        caption="msg://analyticSetEdit.caption"
+        caption="msg://demandTypeEdit.caption"
         focusComponent="form"
-        messagesPack="com.borets.pfa.web.screens.analytic.analyticset">
+        messagesPack="com.borets.pfa.web.screens.demand.demandtype">
     <data>
-        <instance id="analyticSetDc" class="com.borets.pfa.entity.analytic.AnalyticSet">
+        <instance id="demandTypeDc"
+                  class="com.borets.pfa.entity.demand.DemandType">
             <view extends="_local"/>
             <loader/>
         </instance>
     </data>
-    <dialogMode height="600" width="800"/>
+    <dialogMode height="600"
+                width="800"/>
     <layout expand="editActions" spacing="true">
-        <form id="form" dataContainer="analyticSetDc">
+        <form id="form" dataContainer="demandTypeDc">
             <column width="450px">
-                <lookupField id="jobTypeField" property="jobType"/>
-                <lookupField id="wellTagField" property="wellTag"/>
-                <lookupField id="wellEquipField" property="wellEquip"/>
-                <textField id="variableNameField" property="variableName"/>
+                <textField id="nameField" property="name"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

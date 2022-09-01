@@ -29,6 +29,7 @@
                 <item screen="pfa_PumpMaterials.browse" caption="mainMsg://menu_config.pfa_PumpMaterials.browse"/>
                 <item screen="pfa_OtherMaterials.browse" caption="mainMsg://menu_config.pfa_OtherMaterials.browse"/>
             </menu>
+            <item screen="pfa_DemandType.browse" caption="mainMsg://menu_config.pfa_DemandType.browse"/>
         </menu>
     </menu>
 </menu-config>

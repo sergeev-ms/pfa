@@ -16,6 +16,7 @@ class EquipmentUtilizationReportExt : CustomReport {
             .withData(rootBand, "EquipmentUtilization")
             .withData(rootBand, "CountrySettingsAllocationRemap")
             .withData(rootBand, "ActivityStats")
+            .withData(rootBand, "SettingsDemandRules")
             .withParameters(params)
             .withStyleDetection()
             .build(EquipmentUtilizationReportExtTemplateImpl::class.java)

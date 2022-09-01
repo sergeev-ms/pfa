@@ -28,6 +28,9 @@ open class AnalyticSet : StandardEntity() {
     @Column(name = "WELL_TAG")
     private var wellTag: String? = null
 
+    @Column(name = "VARIABLE_NAME")
+    var variableName: String? = null
+
     fun getWellTag(): WellTag? = wellTag?.let { WellTag.fromId(it) }
     fun setWellTag(wellTag: WellTag?) {
         this.wellTag = wellTag?.id

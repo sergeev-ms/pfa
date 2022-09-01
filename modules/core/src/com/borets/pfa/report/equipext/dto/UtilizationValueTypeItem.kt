@@ -2,6 +2,7 @@ package com.borets.pfa.report.equipext.dto
 
 class UtilizationValueTypeItem (val typeId :String,
                                 val typeName: String,
+                                val variableName: String?,
                                 val order : Int) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -25,14 +26,16 @@ class UtilizationValueTypeItem (val typeId :String,
 
     override fun toString(): String {
         return buildString {
-        append("UtilizationValueType(utilizationValueTypeId='")
-        append(typeId)
-        append("', utilizationValueTypeName='")
-        append(typeName)
-        append("', utilizationValueTypeOrder=")
-        append(order)
-        append(")")
-    }
+            append("UtilizationValueType(utilizationValueTypeId='")
+            append(typeId)
+            append("', utilizationValueTypeName='")
+            append(typeName)
+            append("', utilizationValueTypeVariableName=")
+            append(variableName)
+            append("', utilizationValueTypeOrder=")
+            append(order)
+            append(")")
+        }
     }
 
 

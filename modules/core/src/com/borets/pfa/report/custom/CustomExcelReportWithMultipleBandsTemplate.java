@@ -40,18 +40,14 @@ public abstract class CustomExcelReportWithMultipleBandsTemplate<T> {
      * Input data params.
      */
     public static final String DATA_BAND_NAME = "ReportData";
-    public static final String PERIOD_FIELD = "P";
-    public static final String CELL_VALUE = "VALUE_";
-    public static final String ORDER_FIELD = "ORDER";
 
     protected static final String PARAMS_THRESHOLD_DATE = "dateThreshold";
     protected static final String PARAMS_MODE = "mode";
+    protected static final String PARAMS_START_PERIOD = "startPeriod";
+    protected static final String PARAMS_END_PERIOD = "endPeriod";
 
-    protected final Map<T, List<HorizontalPosition>> coordinates = new HashMap<>();
-    protected final List<ReportCell<T>> reportCells = new ArrayList<>();
-    protected final SortedSet<Column> columns = new TreeSet<>() {
-    };
     protected final List<Date> dates = new ArrayList<>();
+    protected final SortedSet<Column> columns = new TreeSet<>();
 
     protected String title;
 
@@ -323,6 +319,7 @@ public abstract class CustomExcelReportWithMultipleBandsTemplate<T> {
                 instance.setTitle(Objects.requireNonNull(title));
                 instance.setStyleDetection(styleDetection);
 
+                instance.preProcess();
                 iterateOverBandData(List.of(instance::preProcessColumns, instance::processDataElement));
                 instance.afterProcess();
 
@@ -350,4 +347,18 @@ public abstract class CustomExcelReportWithMultipleBandsTemplate<T> {
             }
         }
     }
+
+    protected void preProcess() {
+        Date startPeriod = ((Date) params.get(PARAMS_START_PERIOD));
+        Date endPeriod = ((Date) params.get(PARAMS_END_PERIOD));
+
+        final Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(startPeriod);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        while (calendar.getTime().before(endPeriod)) {
+            dates.add(calendar.getTime());
+            calendar.add(Calendar.MONTH, 1);
+        }
+    };
 }

@@ -23,6 +23,9 @@
                 <property name="allocationRemap" view="_local">
                     <property name="utilizationValueType"/>
                 </property>
+                <property name="demandTypeSettings" view="_local">
+                    <property name="type" view="_minimal"/>
+                </property>
             </view>
             <loader/>
             <collection id="analyticSettingsDc" property="analyticSettings"/>
@@ -30,6 +33,7 @@
             <collection id="equipmentTypeSettingsDc" property="equipmentTypeSettings"/>
             <collection id="utilizationValueTypeSettingsDc" property="utilizationValueTypeSettings"/>
             <collection id="allocationRemapDc" property="allocationRemap"/>
+            <collection id="demandTypeSettingsDc" property="demandTypeSettings"/>
         </instance>
     </data>
     <dialogMode height="600" width="800"/>
@@ -112,7 +116,7 @@
             <tab id="utilizationValueTypeSettingsTab" spacing="true"  margin="true,true,true,true"
                  caption="msg://utilizationValueTypeSettingsTab.caption" expand="utilizationValueTypeSettingsTable">
                 <table id="utilizationValueTypeSettingsTable" dataContainer="utilizationValueTypeSettingsDc" width="100%"
-                       sortable="false" reorderingAllowed="false" multiselect="true" editable="true">
+                       sortable="true" reorderingAllowed="false" multiselect="true" editable="true">
                     <actions>
                         <action id="add" caption="msg://analyticSettingsTable.add.caption" icon="ADD_ACTION"/>
                         <action id="remove" type="remove"/>
@@ -121,7 +125,7 @@
                     </actions>
                     <columns>
                         <column id="utilizationValueType"/>
-                        <column id="order" editable="true" width="70"/>
+                        <column id="order" editable="true" width="70" sort="ASCENDING"/>
                         <column id="analyticSets"/>
                     </columns>
                     <buttonsPanel>
@@ -142,11 +146,30 @@
                     </actions>
                     <columns>
                         <column id="utilizationValueType"/>
-                        <column id="remapScript"/>
+                        <column id="remapScript" maxTextLength="150"/>
                     </columns>
                     <buttonsPanel>
                         <button action="systemAllocationRemapTable.create"/>
                         <button action="systemAllocationRemapTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="demandTypeSettingsTab" spacing="true"  margin="true,true,true,true"
+                 caption="msg://demandTypeSettingsTab.caption" expand="demandTypeSettingsTabTable">
+                <table id="demandTypeSettingsTabTable" dataContainer="demandTypeSettingsDc" width="100%"
+                       sortable="false" reorderingAllowed="false" multiselect="true" editable="true">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="type"/>
+                        <column id="script" maxTextLength="150"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button action="demandTypeSettingsTabTable.create"/>
+                        <button action="demandTypeSettingsTabTable.remove"/>
                     </buttonsPanel>
                 </table>
             </tab>
