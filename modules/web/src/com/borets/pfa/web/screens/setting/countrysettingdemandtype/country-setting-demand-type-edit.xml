@@ -24,7 +24,7 @@
                     </actions>
                 </pickerField>
                 <sourceCodeEditor id="scriptField" dataContainer="countrySettingDemandTypeDc"
-                                  property="script" mode="Groovy" required="true"/>
+                                  property="script" mode="Groovy" required="true" height="600px"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">
