@@ -15,6 +15,9 @@ open class CountrySettingDemandType : StandardEntity() {
     @JoinColumn(name = "TYPE_ID")
     var type: DemandType? = null
 
+    @Column(name = "ORDER_")
+    var order: Int? = 0
+
     @Lob
     @Column(name = "SCRIPT")
     var script: String? = "return 0.0"

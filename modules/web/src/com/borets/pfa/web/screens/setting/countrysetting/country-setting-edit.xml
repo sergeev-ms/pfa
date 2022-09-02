@@ -165,6 +165,7 @@
                     </actions>
                     <columns>
                         <column id="type"/>
+                        <column id="order" sort="ASCENDING"/>
                         <column id="script" maxTextLength="150"/>
                     </columns>
                     <buttonsPanel>

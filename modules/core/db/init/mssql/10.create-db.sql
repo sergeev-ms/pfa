@@ -878,6 +878,7 @@ create table PFA_COUNTRY_SETTING_DEMAND_TYPE (
     --
     COUNTRY_SETTING_ID uniqueidentifier not null,
     TYPE_ID uniqueidentifier,
+    ORDER_ integer,
     SCRIPT nvarchar(max),
     --
     primary key nonclustered (ID)

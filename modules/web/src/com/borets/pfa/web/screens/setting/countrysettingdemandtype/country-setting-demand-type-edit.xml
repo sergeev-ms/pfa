@@ -12,17 +12,17 @@
             <loader/>
         </instance>
     </data>
-    <dialogMode height="600"
-                width="800"/>
+    <dialogMode height="600" width="800"/>
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="countrySettingDemandTypeDc">
-            <column width="850px">
+            <column width="1000px">
                 <pickerField id="typeField" property="type" required="true">
                     <actions>
                         <action id="lookup" type="picker_lookup"/>
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
+                <textField property="order" required="true"/>
                 <sourceCodeEditor id="scriptField" dataContainer="countrySettingDemandTypeDc"
                                   property="script" mode="Groovy" required="true" height="600px"/>
             </column>

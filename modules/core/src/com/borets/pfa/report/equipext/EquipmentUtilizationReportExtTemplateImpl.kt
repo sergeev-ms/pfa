@@ -7,8 +7,10 @@ import com.borets.pfa.report.custom.CustomExcelReportWithMultipleBandsTemplate
 import com.borets.pfa.report.equipext.dto.*
 import com.haulmont.cuba.core.global.AppBeans
 import com.haulmont.cuba.core.global.Scripting
+import com.haulmont.yarg.formatters.impl.xlsx.CellReference
 import com.haulmont.yarg.formatters.impl.xlsx.Document
 import com.haulmont.yarg.structure.BandData
+import org.perf4j.StopWatch
 import org.slf4j.LoggerFactory.getLogger
 import org.xlsx4j.jaxb.Context
 import org.xlsx4j.sml.*
@@ -22,10 +24,12 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
     val equipmentUtilizationList = mutableListOf<EquipmentUtilizationItem>()
     val countrySettingAllocationRemapList = mutableListOf<CountrySettingsAllocationRemapItem>()
     val activityStatsItemList = mutableListOf<ActivityStatItem>()
-//    val activityStatsMap = mutableMapOf<String, Map<String, Int>>()
+    val activityInstallStatsMap = mutableMapOf<String, Map<String, Int>>()
     val demandRulesList = mutableListOf<DemandRuleItem>()
 
     val scripting : Scripting = AppBeans.get(Scripting.NAME, Scripting::class.java)
+
+
 
     companion object {
         const val ALLOCATION_BAND_NAME = "SystemAllocationData"
@@ -49,7 +53,6 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
 //            ALLOCATION_BAND_NAME ->  columns.add(getAllocationColumn(bandData))
             COUNTRY_SETTINGS_DEMAND_RULES_BAND_NAME -> columns.addAll(getDemandColumnList(bandData))
         }
-
     }
 
     override fun processDataElement(bandName: String, bandData: BandData) {
@@ -77,8 +80,10 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
 
 
     override fun afterProcess() {
-//        computeActivityStats()
+        computeActivityInstallStats()
 
+        //process equipment utilization
+        val stopWatch = StopWatch()
         equipmentList.forEach {equipmentItem ->
             equipmentUtilizationList.filter { it.rowKey == equipmentItem.rowKey }
                 .forEach {
@@ -86,27 +91,30 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
                     equipmentItem.equipmentUtilizations.add(it)
                 }
         }
+        LOGGER.info("equipmentUtilization computing completed: {}", stopWatch.stop())
 
         //process equipment allocation
+        stopWatch.start()
         equipmentList.forEach {equipment ->
-            countrySettingAllocationRemapList.map { remap ->
+            equipment.equipmentAllocations = countrySettingAllocationRemapList.map { remap ->
                 EquipmentAllocation(remap.utilizationValueTypeItem, evaluateUsageScript(remap.remapScript, equipment))
             }.toList()
-                .let {
-                    equipment.equipmentAllocations = it
-                }
         }
+        LOGGER.info("equipmentAllocation computing completed: {}", stopWatch.stop())
 
+        //process equipment demand
+        stopWatch.start()
         equipmentList.forEach { equipment ->
             demandRulesList.flatMap { demandRule ->
                 dates.map {
-                    EquipmentDemandItem(demandRule.id, demandRule.name, it,
-                        evaluateEquipmentDemandScript(demandRule.script, equipment, it))
+                    val value = evaluateEquipmentDemandScript(demandRule.script, equipment, it)
+                    EquipmentDemandItem(demandRule.id, demandRule.name, it, value)
                 }.toList()
             }.let {
                 equipment.equipmentDemands.addAll(it)
             }
         }
+        LOGGER.info("equipmentDemand computing completed: {}", stopWatch.stop())
 
         //additional columns
         columns.add(Column(
@@ -119,6 +127,8 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
 
 
     override fun generateReport(sheetWrappers: List<Document.SheetWrapper>) {
+        val stopWatch = StopWatch()
+
         val sheetWrapper = sheetWrappers[0]
         val sheetName = sheetWrapper.name
         val worksheetPart = sheetWrapper.worksheet
@@ -130,7 +140,7 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
         ctSheetCalcPr.isFullCalcOnLoad = true
         contents.sheetCalcPr = ctSheetCalcPr
 
-        val yearRow = rows[0]
+        val headerGroupRow = rows[0]
         val headerRow = rows[1]
 
         // Initializing structure for merging cells
@@ -154,9 +164,10 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
             addEquipmentItemInfo(row, equipment)
 
         }
-        setupHeader(headerRow)
+        setupHeader(sheetName, headerRow, headerGroupRow, mergeCells)
         setupAutoFilter(sheetName, contents, headerRow)
 //        signReport(rows[0].c[2], Date(), RecordType.KPI)
+        LOGGER.info("generateReport method completed: {}", stopWatch.stop())
     }
 
 
@@ -172,14 +183,16 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
         )
     }
 
-//    private fun computeActivityStats() {
-//        activityStatsItemList.groupBy { it.accountId }.entries
-//            .associateTo(activityStatsMap) { entry ->
-//                entry.key to
-//                        entry.value.groupingBy { it.analyticId }
-//                            .fold(0) { acc, el -> acc + el.value }
-//            }
-//    }
+    private fun computeActivityInstallStats() {
+        activityStatsItemList
+            .filter { it.jobType == JobType.INSTALL.id }
+            .groupBy { it.accountId }.entries
+            .associateTo(activityInstallStatsMap) { entry ->
+                entry.key to
+                        entry.value.groupingBy { it.wellTag }
+                            .fold(0) { acc, el -> acc + el.value }
+            }
+    }
 
     private fun getDemandRules(bandData: BandData): DemandRuleItem {
         return DemandRuleItem(
@@ -190,15 +203,13 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
     }
 
     private fun evaluateUsageScript(remapScript: String, equipment: EquipmentItem): BigDecimal {
-        val accountActivityStats = activityStatsItemList.filter {
-            it.accountId == equipment.equipmentSystem.accountId &&
-                    it.jobType == JobType.INSTALL.id //only installs
-        }.toList()
+        val totalSum = activityInstallStatsMap[equipment.equipmentSystem.accountId]
+            ?.values
+            ?.sumOf { it } ?: 0
 
-        //Replace with analyticSet from Country Settings. Look at Country Settings -> Utilization Value Types
-        val totalSum = accountActivityStats.sumOf { it.value }
-        val firstInstallSum = accountActivityStats.filter { it.wellTag == WellTag.FIRST.id }.sumOf { it.value }
-        val sequentInstallSum = accountActivityStats.filter { it.wellTag == WellTag.SEQUENT.id }.sumOf { it.value }
+        val firstInstallSum = activityInstallStatsMap[equipment.equipmentSystem.accountId]?.get(WellTag.FIRST.id) ?: 0
+        val sequentInstallSum = activityInstallStatsMap[equipment.equipmentSystem.accountId]?.get(WellTag.SEQUENT.id) ?: 0
+
 
         return scripting.evaluateGroovy(remapScript,
             mutableMapOf<String, Any>(
@@ -258,7 +269,8 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
         bandData.data[CountrySettingsAllocationRemapItem.UTILIZATION_VALUE_TYPE_ID_COLUMN].toString(),
         bandData.data[CountrySettingsAllocationRemapItem.UTILIZATION_VALUE_TYPE_ORDER_COLUMN] as Int,
         CELL_STYLE_ACTIVITY_TYPE,
-        CELL_STYLE_PERCENT
+        CELL_STYLE_PERCENT,
+        "Usage"
     )
 
     private fun getUtilizationColumn(bandData: BandData) = Column(
@@ -267,7 +279,8 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
         bandData.data[EquipmentUtilizationItem.UTIL_VALUE_TYPE_ID_COLUMN] as String,
         bandData.data[EquipmentUtilizationItem.UTIL_VALUE_TYPE_ORDER_COLUMN] as Int * 10,
         CELL_STYLE_ACTIVITY_TYPE,
-        CELL_STYLE_PERCENT_COLORED
+        CELL_STYLE_PERCENT_COLORED,
+        "Utilization"
     )
 
     var dateStartOrder = 0
@@ -280,7 +293,8 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
                 EquipmentDemandItem.formatColumnId(bandData.data[DemandRuleItem.DEMAND_TYPE_ID_COLUMN].toString(), it),
                 it.toInstant().epochSecond.toInt() + dateStartOrder,
                 CELL_STYLE_ACTIVITY_TYPE,
-                CELL_STYLE_TEXT
+                CELL_STYLE_TEXT,
+                bandData.data[DemandRuleItem.DEMAND_TYPE_NAME_COLUMN] as String
             )
         }.toList()
 
@@ -340,50 +354,60 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
         )
     }
 
-    private fun setupHeader(headerRow: Row) {
-        columns.forEach { reportColumn ->
-            addCellToRow(headerRow, reportColumn.name, getStyle(reportColumn.headerStyleName)!!)
-        }
+    private fun setupHeader(sheetName: String, headerRow: Row, headerGroupRow: Row, mergeCells: CTMergeCells) {
+        columns.groupBy { it.parentHeader }
+            .forEach { entry ->
+                addTextCellToRow(headerGroupRow, entry.key ?: "")
+
+                val columnSize = entry.value.size
+                if (columnSize > 1) {
+                    val cr1 = CellReference(sheetName, headerGroupRow.r.toInt(), headerGroupRow.c.size)
+                    val cr2 = CellReference(sheetName, headerGroupRow.r.toInt(), headerGroupRow.c.size + columnSize - 1)
+                    val mergeRef = getStrRef(cr1, cr2)
+                    mergeCells.mergeCell.add(CTMergeCell().apply { ref = mergeRef })
+                }
+
+                for (i in 1 until columnSize) {
+                    addTextCellToRow(headerGroupRow, "")
+                }
+
+                entry.value.forEach { reportColumn ->
+                    addTextCellToRow(headerRow, reportColumn.name, getStyle(reportColumn.headerStyleName)!!)
+                }
+            }
     }
 
     private fun addEquipmentItemInfo(row: Row, equipment: EquipmentItem) {
-        addCellToRow(row, equipment.equipmentSystem.referenceCode, getStyle(CELL_STYLE_TEXT)!!)
-        addCellToRow(row, equipment.equipmentSystem.customer, getStyle(CELL_STYLE_TEXT)!!)
-        addCellToRow(row, equipment.equipmentSystem.rentalOrSale, getStyle(CELL_STYLE_TEXT)!!)
-        addCellToRow(row, equipment.equipmentSystem.systemNumber, getStyle(CELL_STYLE_TEXT)!!)
-        addCellToRow(row, equipment.equipmentType, getStyle(CELL_STYLE_TEXT)!!)
-        addCellToRow(row, equipment.partNumber, getStyle(CELL_STYLE_TEXT)!!)
-        addCellToRow(row, equipment.productDescription, getStyle(CELL_STYLE_TEXT)!!)
+        addTextCellToRow(row, equipment.equipmentSystem.referenceCode, getStyle(CELL_STYLE_TEXT)!!)
+        addTextCellToRow(row, equipment.equipmentSystem.customer, getStyle(CELL_STYLE_TEXT)!!)
+        addTextCellToRow(row, equipment.equipmentSystem.rentalOrSale, getStyle(CELL_STYLE_TEXT)!!)
+        addTextCellToRow(row, equipment.equipmentSystem.systemNumber, getStyle(CELL_STYLE_TEXT)!!)
+        addTextCellToRow(row, equipment.equipmentType, getStyle(CELL_STYLE_TEXT)!!)
+        addTextCellToRow(row, equipment.partNumber, getStyle(CELL_STYLE_TEXT)!!)
+        addTextCellToRow(row, equipment.productDescription, getStyle(CELL_STYLE_TEXT)!!)
         addNumberCellToRow(row, equipment.qty)
-        addCellToRow(row, equipment.uom, getStyle(CELL_STYLE_BOLD_BORDER)!!)
+        addTextCellToRow(row, equipment.uom, getStyle(CELL_STYLE_BOLD_BORDER)!!)
 
         columns.forEach { reportColumn ->
             when (reportColumn.type) {
+                EquipmentAllocation.COLUMN_TYPE -> {
+                    equipment.equipmentAllocations.find { reportColumn == it.getColumn() }.let {
+                        addPercentCellToRow(row, it?.value ?: "")
+                    }
+                }
+                EquipmentUtilizationItem.COLUMN_TYPE -> {
+                    equipment.equipmentUtilizations.find { reportColumn == it.getColumn() }.let {
+                        addPercentCellToRow(row, it?.value ?: "")
+                    }
+                }
                 EquipmentUtilizationItem.REVENUE_TYPE_COLUMN_TYPE -> {
                     val revenueModeValue = equipment.equipmentUtilizations.firstOrNull()?.revenueModeId ?: ""
-                    addCellToRow(row, revenueModeValue, getStyle(reportColumn.valueStyleName)!!)
+                    addTextCellToRow(row, revenueModeValue, getStyle(reportColumn.valueStyleName)!!)
                 }
-
                 EquipmentDemandItem.DEMAND_COLUMN_TYPE -> {
-                    equipment.equipmentDemands.find { reportColumn == it.getColumn() }?.let {
-                        addNumberCellToRow(row, it.value, reportColumn.valueStyleName)
+                    equipment.equipmentDemands.find { reportColumn == it.getColumn() }.let {
+                        addNumberCellToRow(row, it?.value ?: "", reportColumn.valueStyleName)
                     }
-                }
-                else -> {
-                    var value : BigDecimal?
-
-                    //search in allocations
-                    value = equipment.equipmentAllocations.find {
-                        reportColumn == it.getColumn()
-                    }?.value
-
-                    //search in utilization
-                    if (value == null) {
-                        value = equipment.equipmentUtilizations.find {
-                            reportColumn == it.getColumn()
-                        }?.value
-                    }
-                    addPercentCellToRow(row, value ?: "")
                 }
             }
         }
@@ -394,29 +418,33 @@ class EquipmentUtilizationReportExtTemplateImpl : CustomExcelReportWithMultipleB
     }
 
     private fun addNumberCellToRow(row: Row, value: Any, style: String) {
-        val c = addCellToRow(row, value, getStyle(style)!!)
+        val c = addTextCellToRow(row, value, getStyle(style)!!)
         c.t = STCellType.N
     }
 
     private fun addPercentCellToRow(row: Row, value: Any) {
-        val c = addCellToRow(row, value, getStyle(CELL_STYLE_PERCENT)!!)
+        val c = addTextCellToRow(row, value, getStyle(CELL_STYLE_PERCENT)!!)
         c.t = STCellType.N
     }
 
     private fun addColorPercentCellToRow(row: Row, value: Any) {
-        val c = addCellToRow(row, value, getStyle(CELL_STYLE_PERCENT_COLORED)!!)
+        val c = addTextCellToRow(row, value, getStyle(CELL_STYLE_PERCENT_COLORED)!!)
         c.t = STCellType.N
     }
 
-    private fun addCellToRow(row: Row, value: Any, style: Long) : Cell {
-        val c = addCellToRow(row)
+    private fun addTextCellToRow(row: Row, value: Any, style: Long) : Cell {
+        val c = addTextCellToRow(row)
         c.t = STCellType.STR
         c.v = value.toString()
         c.s = style
         return c
     }
 
-    private fun addCellToRow(row: Row) : Cell {
+    private fun addTextCellToRow(row: Row, value: Any) : Cell {
+        return addTextCellToRow(row, value, getStyle(CELL_STYLE_ACTIVITY_TYPE)!!)
+    }
+
+    private fun addTextCellToRow(row: Row) : Cell {
         val c = Cell()
         c.parent = row
         row.c.add(c)

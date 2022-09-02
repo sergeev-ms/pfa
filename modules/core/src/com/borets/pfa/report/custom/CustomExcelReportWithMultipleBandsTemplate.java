@@ -15,6 +15,7 @@ import org.docx4j.openpackaging.io3.Save;
 import org.docx4j.openpackaging.packages.SpreadsheetMLPackage;
 import org.docx4j.openpackaging.parts.PartName;
 import org.docx4j.openpackaging.parts.SpreadsheetML.SharedStrings;
+import org.perf4j.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xlsx4j.jaxb.Context;
@@ -57,6 +58,7 @@ public abstract class CustomExcelReportWithMultipleBandsTemplate<T> {
     private final Map<String, Long> styles = new HashMap<>();
 
     protected Map<String, Object> params;
+
 
     protected void preProcessColumns(String bandName, BandData dataElement) {
         // Could be overridden in subclasses
@@ -247,9 +249,9 @@ public abstract class CustomExcelReportWithMultipleBandsTemplate<T> {
 
         private InputStream templateInputStream;
 
-        private Map<String, Object> parameters = Collections.EMPTY_MAP;
+        private Map<String, Object> parameters = Map.of();
 
-        private Map<String, List<BandData>> data = new HashMap<>();
+        private final Map<String, List<BandData>> data = new HashMap<>();
 
         private boolean styleDetection;
         public Builder withTitle(String title) {
@@ -319,9 +321,17 @@ public abstract class CustomExcelReportWithMultipleBandsTemplate<T> {
                 instance.setTitle(Objects.requireNonNull(title));
                 instance.setStyleDetection(styleDetection);
 
+                final StopWatch stopWatch = new StopWatch();
                 instance.preProcess();
+                LOGGER.info("preProcess method completed: {}", stopWatch.stop());
+
+                stopWatch.start();
                 iterateOverBandData(List.of(instance::preProcessColumns, instance::processDataElement));
+                LOGGER.info("iterateOverBandData method completed: {}", stopWatch.stop());
+
+                stopWatch.start();
                 instance.afterProcess();
+                LOGGER.info("afterProcess method completed: {}", stopWatch.stop());
 
                 return instance;
             } catch (IOException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
@@ -336,8 +346,9 @@ public abstract class CustomExcelReportWithMultipleBandsTemplate<T> {
             for (Map.Entry<String, List<BandData>> dataEntry : data.entrySet()) {
                 String bandName = dataEntry.getKey();
                 for (BandData bandData : dataEntry.getValue()) {
-                    forEachDataElement.forEach(stringBandDataBiConsumer ->
-                            stringBandDataBiConsumer.accept(bandName, bandData));
+                    forEachDataElement.forEach(stringBandDataBiConsumer -> {
+                        stringBandDataBiConsumer.accept(bandName, bandData);
+                    });
 
                     bandData.getChildrenBands().forEach((subBandName, subBandDataList) ->
                             subBandDataList.forEach(subBandData ->

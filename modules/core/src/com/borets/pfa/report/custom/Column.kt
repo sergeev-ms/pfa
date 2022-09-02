@@ -5,7 +5,8 @@ class Column(var type: String,
              var id: String,
              var order: Int,
              val headerStyleName: String = "activityType",
-             val valueStyleName: String = "textValue"
+             val valueStyleName: String = "textValue",
+             var parentHeader: String? = null
              ) : Comparable<Column> {
 
     constructor(type: String, name: String, id: String) : this(type, name, id, 1000)
@@ -39,7 +40,7 @@ class Column(var type: String,
     }
 
     override fun toString(): String {
-        return "Column(type='$type', name='$name', id='$id', order=$order)"
+        return "Column(parentHeader='$parentHeader' type='$type', name='$name', id='$id', order=$order)"
     }
 
 }
