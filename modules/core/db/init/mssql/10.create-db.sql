@@ -705,6 +705,7 @@ create table PFA_COUNTRY_SETTING_UTILIZATION_VALUE_TYPE (
     COUNTRY_SETTING_ID uniqueidentifier not null,
     UTILIZATION_VALUE_TYPE_ID uniqueidentifier,
     ORDER_ integer,
+    REMAP_SCRIPT nvarchar(max),
     --
     primary key nonclustered (ID)
 )^
@@ -831,24 +832,6 @@ create table PFA_COUNTRY_SETTING_UTILIZATION_VALUE_TYPE_ANALYTIC_SET_LINK (
 )^
 -- end PFA_COUNTRY_SETTING_UTILIZATION_VALUE_TYPE_ANALYTIC_SET_LINK
 
--- begin PFA_COUNTRY_SETTING_SYSTEM_ALLOCATION_REMAP
-create table PFA_COUNTRY_SETTING_SYSTEM_ALLOCATION_REMAP (
-    ID uniqueidentifier,
-    VERSION integer not null,
-    CREATE_TS datetime2,
-    CREATED_BY nvarchar(50),
-    UPDATE_TS datetime2,
-    UPDATED_BY nvarchar(50),
-    DELETE_TS datetime2,
-    DELETED_BY nvarchar(50),
-    --
-    COUNTRY_SETTING_ID uniqueidentifier,
-    UTILIZATION_VALUE_TYPE_ID uniqueidentifier,
-    REMAP_SCRIPT nvarchar(max),
-    --
-    primary key nonclustered (ID)
-)^
--- end PFA_COUNTRY_SETTING_SYSTEM_ALLOCATION_REMAP
 -- begin PFA_DEMAND_TYPE
 create table PFA_DEMAND_TYPE (
     ID uniqueidentifier,

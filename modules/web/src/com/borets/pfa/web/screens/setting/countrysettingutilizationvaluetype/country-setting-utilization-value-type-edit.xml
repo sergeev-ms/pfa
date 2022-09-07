@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://countrySettingUtilizationValueTypeEdit.caption"
+        focusComponent="form"
+        messagesPack="com.borets.pfa.web.screens.setting.countrysettingutilizationvaluetype">
+    <data>
+        <instance id="countrySettingUtilizationValueTypeDc" class="com.borets.pfa.entity.setting.CountrySettingUtilizationValueType">
+            <view extends="_local">
+                <property name="utilizationValueType" view="_minimal"/>
+                <property name="analyticSets" view="_minimal"/>
+            </view>
+            <loader/>
+            <collection id="analyticSetsDc" property="analyticSets"/>
+        </instance>
+        <collection id="analyticSetsOptionsDc" class="com.borets.pfa.entity.analytic.AnalyticSet" view="_minimal">
+            <loader>
+                <query>select e from pfa_AnalyticSet e</query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600" width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="countrySettingUtilizationValueTypeDc">
+            <column width="800">
+                <pickerField id="utilizationValueTypeField" property="utilizationValueType" required="true">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <sourceCodeEditor id="remapScriptField" property="remapScript" mode="Groovy" colspan="2" height="500"
+                                  width="100%" contextHelpTextHtmlEnabled="true" required="true"
+                                  contextHelpText="msg://remapScriptField.contextHelpText"/>
+                <tokenList id="analyticSetsField" dataContainer="countrySettingUtilizationValueTypeDc"
+                           property="analyticSets" colspan="2" width="100%">
+                    <lookup optionsContainer="analyticSetsOptionsDc" inputPrompt="msg://analyticSetsField.inputPrompt"/>
+                </tokenList>
+            </column>
+            <column width="100">
+                <textField id="orderField" property="order" required="true"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

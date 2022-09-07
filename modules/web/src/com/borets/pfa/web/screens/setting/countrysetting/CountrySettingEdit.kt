@@ -126,14 +126,6 @@ class CountrySettingEdit : StandardEditor<CountrySetting>() {
         }
     }
 
-
-    @Subscribe("utilizationValueTypeSettingsTable.selectAnalytics")
-    private fun onUtilizationValueTypeSettingsTableSelectAnalytics(@Suppress("UNUSED_PARAMETER") event: Action.ActionPerformedEvent) {
-        selectAnalytic(utilizationValueTypeSettingsDc.item.analyticSets) {
-            utilizationValueTypeSettingsDc.item.analyticSets = it.toMutableList()
-        }
-    }
-
     private fun selectAnalytic(
         analyticSets: MutableList<AnalyticSet>?,
         selectHandler: (selected: MutableCollection<AnalyticSet>) -> Unit

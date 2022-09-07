@@ -1,0 +1,1 @@
+alter table PFA_COUNTRY_SETTING_UTILIZATION_VALUE_TYPE add REMAP_SCRIPT nvarchar(max) ;

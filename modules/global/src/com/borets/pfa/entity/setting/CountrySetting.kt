@@ -39,11 +39,6 @@ open class CountrySetting : StandardEntity() {
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "countrySetting")
-    var allocationRemap: MutableList<CountrySettingSystemAllocationRemap>? = mutableListOf()
-
-    @Composition
-    @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "countrySetting")
     var demandTypeSettings: MutableList<CountrySettingDemandType>? = mutableListOf()
 
     companion object {

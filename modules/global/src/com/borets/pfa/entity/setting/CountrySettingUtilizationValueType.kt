@@ -24,6 +24,10 @@ open class CountrySettingUtilizationValueType : StandardEntity() {
     @Column(name = "ORDER_")
     var order: Int? = null
 
+    @Lob
+    @Column(name = "REMAP_SCRIPT")
+    var remapScript: String? = "return 0.0"
+
     @JoinTable(
         name = "PFA_COUNTRY_SETTING_UTILIZATION_VALUE_TYPE_ANALYTIC_SET_LINK",
     joinColumns = [JoinColumn(name = "COUNTRY_SETTING_UTILIZATION_VALUE_TYPE_ID")],
