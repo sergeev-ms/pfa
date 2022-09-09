@@ -42,7 +42,6 @@ import com.haulmont.cuba.security.app.role.annotation.*
 import com.haulmont.cuba.security.entity.EntityOp
 import com.haulmont.cuba.security.role.EntityAttributePermissionsContainer
 import com.haulmont.cuba.security.role.EntityPermissionsContainer
-import com.haulmont.cuba.security.role.ScreenComponentPermissionsContainer
 import com.haulmont.cuba.security.role.ScreenPermissionsContainer
 
 @Role(name = GlobalMarketingRole.NAME, description = GlobalMarketingRole.DESCRIPTION)
@@ -59,7 +58,7 @@ class GlobalMarketingRole : AnnotatedRoleDefinition() {
         "pfa_ApplicationData.edit", "pfa_ApplicationData.browse", "pfa_EquipmentUtilizationFragment",
         "pfa_EquipmentUtilization.edit", "pfa_EquipmentUtilization.browse", "pfa_RevenueType.browse",
         "pfa_EquipmentType.browse", "pfa_SupplementaryDetailType.browse", "pfa_SupplementaryFragment",
-        "pfa_SupplementaryDetailType.edit", "pfa_DirectSale.edit"])
+        "pfa_SupplementaryDetailType.edit", "pfa_DirectSale.edit", "reports"])
     override fun screenPermissions(): ScreenPermissionsContainer {
         return super.screenPermissions()
     }

@@ -55,7 +55,8 @@ class CommercialDirectorRole : AnnotatedRoleDefinition() {
         "pfa_MarketData.edit",
         "pfa_MarketDataFragment", "pfa_AccountRevision.browse", "pfa_AccountRevision.edit", "pfa_SystemStd.edit",
         "pfa_ApplicationData.edit", "pfa_ApplicationData.browse", "pfa_EquipmentUtilizationFragment",
-        "pfa_EquipmentUtilization.edit", "pfa_EquipmentUtilization.browse", "pfa_Project.browse", "pfa_DirectSale.edit"])
+        "pfa_EquipmentUtilization.edit", "pfa_EquipmentUtilization.browse", "pfa_Project.browse", "pfa_DirectSale.edit",
+        "reports"])
     override fun screenPermissions(): ScreenPermissionsContainer {
         return super.screenPermissions()
     }

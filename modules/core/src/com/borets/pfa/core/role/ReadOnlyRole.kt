@@ -69,7 +69,7 @@ class ReadOnlyRole : AnnotatedRoleDefinition() {
             "pfa_RevenueType.edit", "pfa_SealConfig.edit", "pfa_VaproConfig.edit", "pn_PartBoltDischargeHead.edit",
             "pn_PartBoltIntake.edit", "pn_PartCable.edit", "pn_PartDrive.edit", "pn_PartGC.edit", "pn_PartGH.edit",
             "pn_PartGS.edit", "pn_PartMLE.edit", "pn_PartMotor.edit", "pn_PartMotorSeal.edit", "pn_PartPump.edit",
-            "pn_PartSensor.edit", "pn_PartXFMR.edit", "help", "aboutWindow", "settings", "pfa_DirectSale.edit"]
+            "pn_PartSensor.edit", "pn_PartXFMR.edit", "help", "aboutWindow", "settings", "pfa_DirectSale.edit", "reports"]
     )
     override fun screenPermissions(): ScreenPermissionsContainer {
         return super.screenPermissions()
