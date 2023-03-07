@@ -31,5 +31,8 @@
             </menu>
             <item screen="pfa_DemandType.browse" caption="mainMsg://menu_config.pfa_DemandType.browse"/>
         </menu>
+        <menu id="data-administration" caption="mainMsg://menu_config.data-administration">
+            <item screen="pfa_SystemDetail.browse" caption="mainMsg://menu_config.pfa_SystemDetail.browse"/>
+        </menu>
     </menu>
 </menu-config>

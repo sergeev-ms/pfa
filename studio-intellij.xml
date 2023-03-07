@@ -3,6 +3,7 @@
   <component name="CubaPluginProjectSettings">
     <option name="checkModelDbComp" value="false" />
     <option name="repeatEntityPackageScreens" value="true" />
+    <option name="hotDeployCompiledClasses" value="false" />
     <option name="hotDeploySrcDirectories">
       <list>
         <option value="modules\global\src" />

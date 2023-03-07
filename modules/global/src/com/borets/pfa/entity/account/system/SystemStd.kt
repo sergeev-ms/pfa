@@ -1,6 +1,7 @@
 package com.borets.pfa.entity.account.system
 
 import com.borets.addon.country.entity.Country
+import com.borets.pfa.entity.account.appdata.SystemAllocation
 import com.borets.pfa.entity.account.system.classification.*
 import com.haulmont.chile.core.annotations.Composition
 import com.haulmont.cuba.core.entity.StandardEntity
@@ -71,6 +72,10 @@ open class SystemStd : StandardEntity() {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "system")
     var details: MutableList<SystemDetail>? = mutableListOf()
+
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "system")
+    var allocation: SystemAllocation? = null
 
     fun getCasingWeight(): WellCasingWeight? = casingWeight?.let { WellCasingWeight.fromId(it) }
 
