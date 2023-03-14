@@ -22,11 +22,12 @@
                 <query>
                     <![CDATA[select e
                             from pfa_SystemDetail e
-                            join e.system s
-                            join pfa_SystemAllocation sa on sa.system = s
-                            join sa.applicationData ad
-                            join ad.account a
+                                join e.system s
+                                join pfa_SystemAllocation sa on sa.system = s
+                                join sa.applicationData ad
+                                join ad.account a
                             where a.actualRevision.active = true
+                                and sa.applicationData = a.actualAppDetail
                             order by a.name, s.id, e.equipmentType.order]]>
                 </query>
             </loader>
