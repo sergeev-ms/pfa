@@ -14,10 +14,10 @@
     </option>
     <option name="hotDeployDstDirectories">
       <list>
-        <option value="deploy\app_home\ROOT-core\conf" />
-        <option value="deploy\app_home\ROOT-core\conf" />
-        <option value="deploy\app_home\ROOT\conf" />
-        <option value="deploy\app_home\ROOT\conf" />
+        <option value="deploy\app_home\pro-core\conf" />
+        <option value="deploy\app_home\pro-core\conf" />
+        <option value="deploy\app_home\pro\conf" />
+        <option value="deploy\app_home\pro\conf" />
       </list>
     </option>
     <option name="useNvarcharForMssql" value="true" />
